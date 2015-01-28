@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+    form {
+      font-family: monospace;
+    }
+    form span {
+      padding-right: 15px;
+    }
+    form label {
+      padding-right: 20px;
+    }
+  </style>
+</head>
+<body>
+  <form id="form">
+    <div>
+      <span>&nbsp;&nbsp;1.9&nbsp;&nbsp;&nbsp;-> </span>
+      <label><input type="radio" name="radio0" value="0"></input>&nbsp;1</label>
+      <label><input type="radio" name="radio0" value="1"></input>&nbsp;2</label>
+    </div>
+    <div>
+      <span>&nbsp;&nbsp;1.1&nbsp;&nbsp;&nbsp;-> </span>
+      <label><input type="radio" name="radio1" value="0"></input>&nbsp;1</label>
+      <label><input type="radio" name="radio1" value="1"></input>&nbsp;2</label>
+    </div>
+    <div>
+      <span>&nbsp;-1.1&nbsp;&nbsp;&nbsp;-> </span>
+      <label><input type="radio" name="radio2" value="0"></input>-1</label>
+      <label><input type="radio" name="radio2" value="1"></input>-2</label>
+    </div>
+    <div>
+      <span>&nbsp;-1.9&nbsp;&nbsp;&nbsp;-> </span>
+      <label><input type="radio" name="radio3" value="0"></input>-1</label>
+      <label><input type="radio" name="radio3" value="1"></input>-2</label>
+    </div>
+  </form>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var setting = [1, 0, 0, 1];
+    var floatValue = NaN;
+
+    var formElement = document.getElementById('form');
+
+    formElement.addEventListener('change', function(event) {
+      var target = event.target;
+      var index = parseInt(target.name.replace('radio', ''));
+      var value = parseInt(target.value);
+      setting[index] = value;
+      piece.updateProperty('float2int');
+      piece.updateProperty('setting');
+    }, false);
+
+    function applySetting() {
+      for (var i = 0, len = setting.length; i < len; i += 1) {
+        formElement['radio' + i][setting[i]].checked = true;
+      }
+    }
+
+    applySetting();
+
+    piece.initialize({
+      label: 'Rounding',
+      prop: {
+        float2int: {
+          label: 'Decimal -> Integer',
+          in: function(value) {
+            floatValue = lib.util.parseNumber(value);
+            piece.updateProperty('float2int');
+          },
+          out: function() {
+            if (isNaN(floatValue))
+              return null;
+            var value = floatValue;
+            var radioIndex = (value > 0) ? 0 : 2;
+            if (Math.round(value) === Math.floor(value))
+              radioIndex += 1;
+            var radioValue = setting[radioIndex], func;
+            if (value > 0)
+              func = (radioValue === 0) ? 'floor' : 'ceil';
+            else
+              func = (radioValue === 0) ? 'ceil' : 'floor';
+            return Math[func](value);
+          },
+          default: true
+        },
+        setting: {
+          label: 'Setting',
+          in: function(value) {
+            value = lib.util.parseArray(value);
+            if (!lib.util.isArray(value) || value.length !== 4)
+              value = [1, 0, 0, 1];
+            setting = value;
+            applySetting();
+            piece.updateProperty('setting');
+          },
+          out: function() {
+            return setting;
+          },
+          serialize: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

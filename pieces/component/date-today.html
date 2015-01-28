@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+    #container {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      font-family: monospace;
+      font-size: 35px;
+      padding-right: 6px;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <span id="text"></span>
+  </div>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var date = new Date();
+    var current = {
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate()
+    };
+
+    var textElement = document.getElementById('text');
+    function updateTime() {
+      textElement.textContent = current.year + '/' + current.month + '/' + current.day;
+    }
+    updateTime();
+
+    setTimeout(function timer() {
+      var date = new Date();
+      var year = date.getFullYear();
+      if (year !== current.year) {
+        current.year = year;
+        updateTime();
+        piece.updateProperty('year');
+      }
+      var month = date.getMonth() + 1;
+      if (month !== current.month) {
+        current.month = month;
+        updateTime();
+        piece.updateProperty('month');
+      }
+      var day = date.getDate();
+      if (day !== current.day) {
+        current.day = day;
+        updateTime();
+        piece.updateProperty('day');
+      }
+      setTimeout(timer, 100);
+    }, 100);
+    
+    piece.initialize({
+      label: 'Date(Today)',
+      prop: {
+        year: {
+          label: 'Year',
+          out: function() {
+            return current.year;
+          },
+          default: true
+        },
+        month: {
+          label: 'Month',
+          out: function() {
+            return current.month;
+          },
+          default: true
+        },
+        day: {
+          label: 'Day',
+          out: function() {
+            return current.day;
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var keyword = null;
+    var category = null;
+    var feedData = null;
+
+    var ajax = (function() {
+      function noop() {}
+      function load(callback) {
+        callback(this.responseText);
+      }
+      function error(callback) {
+        callback();
+      }
+      function request(option) {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+          load.call(this, option.success || noop);
+          if (typeof option.complete === 'function')
+            option.complete();
+        };
+        xhr.onerror = function() {
+          error.call(this, option.error || noop);
+          if (typeof option.complete === 'function')
+            option.complete();
+        };
+        xhr.open(option.type || 'GET', option.url, true);
+        xhr.send(null);
+      }
+      return request;
+    }());
+
+    function updateFeedData(callback) {
+      var url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5';
+      if (keyword === null && category === null) {
+        feedData = null;
+        if (typeof callback === 'function')
+          callback();
+        return;
+      }
+      if (keyword !== null)
+        url = url + '&q=' + lib.util.escape(keyword);
+      if (category !== null)
+        url = url + '&category=' + lib.util.escape(category);
+      feedData = null;
+      ajax({
+        url: url,
+        type: 'GET',
+        success: function(responseText) {
+          try {
+            feedData = JSON.parse(responseText);
+          } catch (e) {
+            feedData = null;
+          }
+        },
+        error: function() {
+          feedData = null;
+        },
+        complete: function() {
+          if (typeof callback === 'function')
+            callback();
+        }
+      });
+    }
+
+    piece.initialize({
+      label: 'YouTube Search',
+      prop: {
+        keyword: {
+          label: 'Keyword',
+          in: function(value) {
+            keyword = lib.util.parseString(value) || null;
+          },
+          default: true
+        },
+        category: {
+          label: 'Category',
+          in: function(value) {
+            category = lib.util.parseString(value) || null;
+          }
+        },
+        videoIdList: {
+          label: 'Video ID List',
+          out: function() {
+            if (feedData === null || !lib.util.isObject(feedData.feed) || !lib.util.isArray(feedData.feed.entry))
+              return null;
+            var entries = feedData.feed.entry;
+            var videoIdList = [];
+            for (var i = 0, len = entries.length; i < len; i += 1) {
+              var entry = entries[i];
+              var videoIDText = entry.id.$t.split(":");
+              videoIDText = videoIDText[videoIDText.length - 1];
+              videoIdList.push(videoIDText);
+            }
+            return videoIdList;
+          },
+          default: true
+        }
+      },
+      event: {
+        search: {
+          label: 'Search',
+          in: function() {
+            updateFeedData(function() {
+              piece.updateProperty('videoIdList');
+            });
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

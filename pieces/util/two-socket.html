@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    piece.initialize({
+      label: 'Two-Socket',
+      event: {
+        a: {
+          label: 'A',
+          in: function(value) {
+            piece.dispatchEvent('a_or_b');
+          },
+          default: true
+        },
+        a_or_b: {
+          label: 'A or B',
+          out: piece.noop,
+          default: true
+        },
+        b: {
+          label: 'B',
+          in: function(value) {
+            piece.dispatchEvent('a_or_b');
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>
