@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+    #container {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      font-family: monospace;
+      font-size: 35px;
+      padding-right: 6px;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <span id="text"></span>
+  </div>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var date = new Date();
+    var current = {
+      hour: date.getHours(),
+      minute: date.getMinutes(),
+      second: date.getSeconds()
+    };
+
+    var textElement = document.getElementById('text');
+    function updateTime() {
+      var hour = ('0' + current.hour).slice(-2);
+      var minute = ('0' + current.minute).slice(-2);
+      var second = ('0' + current.second).slice(-2);
+      textElement.textContent = hour + ':' + minute + ':' + second;
+    }
+    updateTime();
+
+    setTimeout(function timer() {
+      var date = new Date();
+      var hour = date.getHours();
+      if (hour !== current.hour) {
+        current.hour = hour;
+        updateTime();
+        piece.updateProperty('hour');
+      }
+      var minute = date.getMinutes();
+      if (minute !== current.minute) {
+        current.minute = minute;
+        updateTime();
+        piece.updateProperty('minute');
+      }
+      var second = date.getSeconds();
+      if (second !== current.second) {
+        current.second = second;
+        updateTime();
+        piece.updateProperty('second');
+      }
+      setTimeout(timer, 100);
+    }, 100);
+    
+    piece.initialize({
+      label: 'Time(Now)',
+      prop: {
+        hour: {
+          label: 'Hour',
+          out: function() {
+            return current.hour;
+          },
+          default: true
+        },
+        minute: {
+          label: 'Minute',
+          out: function() {
+            return current.minute;
+          },
+          default: true
+        },
+        second: {
+          label: 'Second',
+          out: function() {
+            return current.second;
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

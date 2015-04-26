@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var propA = null;
+    var propB = null;
+    var timer = null;
+    piece.initialize({
+      label: 'List Constructor',
+      prop: {
+        head: {
+          label: 'Head',
+          in: function(value) {
+            propA = lib.util.parseArray(value);
+            if (propA === null && value !== null)
+              propA = value;
+            if (lib.util.isString(propA))
+              propA = propA.replace(/^`/, '');
+            if (timer !== null)
+              clearTimeout(timer);
+            timer = setTimeout(function() {
+              timer = null;
+              piece.updateProperty('list');
+            }, 1000 / 60);
+          },
+          default: true
+        },
+        rest: {
+          label: 'Rest',
+          in: function(value) {
+            propB = lib.util.parseArray(value);
+            if (propB === null && value !== null)
+              propB = value;
+            if (lib.util.isString(propB))
+              propB = propB.replace(/^`/, '');
+            if (timer !== null)
+              clearTimeout(timer);
+            timer = setTimeout(function() {
+              timer = null;
+              piece.updateProperty('list');
+            }, 1000 / 60);
+          },
+          default: true
+        },
+        list: {
+          label: '[Head, Rest]',
+          out: function() {
+            if (propA === null && propB === null)
+              return null;
+            var isArrayPropA = lib.util.isArray(propA);
+            var isArrayPropB = lib.util.isArray(propB);
+            var concatArray;
+            if (isArrayPropA && isArrayPropB) {
+              return propA.concat(propB);
+            } else if (isArrayPropA) {
+              concatArray = propA.concat();
+              concatArray.push(propB);
+              return (propB !== null) ? concatArray : propA;
+            } else if (isArrayPropB) {
+              concatArray = propB.concat();
+              concatArray.unshift(propA);
+              return (propA !== null) ? concatArray : propB;
+            } else {
+              if (propA !== null && propB !== null) {
+                return [propA, propB]
+              } else if (propA !== null) {
+                return [propA];
+              } else if (propB !== null) {
+                return [propB];
+              } else {
+                return null;
+              }
+            }
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

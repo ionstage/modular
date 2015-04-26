@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+    }
+    input {
+      -moz-box-sizing: border-box;
+      border-radius: 0;
+      box-sizing: border-box;
+      font-size: 14px;
+      height: 28px;
+      opacity: 1;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <input id="text" autocapitalize="off" autocorrect="off"></input>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var textElement = document.getElementById('text');
+    var textCache = '';
+
+    function updatePropertyListener(event) {
+      var value = event.target.value;
+      if (value !== textCache) {
+        textCache = textElement.value;
+        piece.updateProperty('text');
+      }
+    }
+
+    textElement.addEventListener('keyup', updatePropertyListener, false);
+    textElement.addEventListener('input', updatePropertyListener, false);
+
+    piece.initialize({
+      label: 'Text',
+      prop: {
+        text: {
+          label: 'Text',
+          in: function(value) {
+            if (value !== null) {
+              value = lib.util.parseString(value);
+              if (value !== textCache) {
+                textCache = value;
+                textElement.value = value;
+                piece.updateProperty('text');
+              }
+            }
+          },
+          out: function() {
+            return textCache;
+          },
+          default: true,
+          serialize: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

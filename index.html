@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <title>Board</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script id="piece_list_item_template" type="text/template">
+    <div class="piece-list-item">
+      <div class="piece-list-item-container">
+        <div class="piece-list-item-header"></div>
+        <div class="piece-list-item-content"></div>
+      </div>
+    </div>
+  </script>
+  <script id="piece_template" type="text/template">
+    <div class="piece loading">
+      <div class="piece-header">
+        <div class="piece-header-title loading"></div>
+        <div class="piece-header-delete-button">×</div>
+      </div>
+      <div class="piece-content loading">
+        <div class="piece-component-back hide"></div>
+        <iframe class="piece-component"></iframe>
+        <div class="piece-port-list hide"></div>
+      </div>
+      <div class="piece-footer loading">
+        <select class="piece-port-select hide">
+          <option value=""></option>
+          <optgroup class="piece-port-select-optgroup-prop" label="Property"></optgroup>
+          <optgroup class="piece-port-select-optgroup-event" label="Event"></optgroup>
+        </select>
+      </div>
+    </div>
+  </script>
+  <script id="port_template" type="text/template">
+    <div class="port">
+      <div class="port-connector">
+        <div class="port-connector-in"></div>
+        <div class="port-connector-connected"></div>
+        <div class="port-connector-out"></div>
+      </div>
+      <div class="port-content">
+        <div class="port-content-text"></div>
+        <div class="port-content-delete-button">×</div>
+      </div>
+    </div>
+  </script>
+</head>
+<body>
+  <div id="side_panel">
+    <div>
+      <input id="search_input" type="search" autocapitalize="off" autocorrect="off"></input>
+      <div id="piece_list_manager_button"><i class="fa fa-bars"></i></div>
+    </div>
+    <div id="piece_list">
+      <div id="piece_list_content"></div>
+    </div>
+  </div>
+  <div id="divider">
+    <div id="divider_icon"></div>
+  </div>
+  <div id="main_panel">
+    <svg id="path_container" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div id="board"></div>
+  </div>
+  <script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
+  <script src="//cdn.rawgit.com/dankogai/js-base64/master/base64.min.js"></script>
+  <script src="js/lib.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

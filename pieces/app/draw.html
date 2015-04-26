@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+    canvas {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      cursor: crosshair;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="228" height="171"></canvas>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+    var imageData = null;
+
+    function isString(obj) {
+      return Object.prototype.toString.call(obj) == '[object String]';
+    }
+
+    var isTouchEnabled = ('ontouchstart' in window);
+    var START = isTouchEnabled ? 'touchstart' : 'mousedown';
+    var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
+    var END = isTouchEnabled ? 'touchend' : 'mouseup';
+
+    canvas.addEventListener(START, function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event = isTouchEnabled ? event.changedTouches[0] : event;
+      ctx.beginPath();
+      ctx.moveTo(event.clientX, event.clientY);
+      document.addEventListener(MOVE, moveListener, false);
+      document.addEventListener(END, endListener, false);
+    }, false);
+
+    function moveListener(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event = isTouchEnabled ? event.changedTouches[0] : event;
+      ctx.lineTo(event.clientX, event.clientY);
+      ctx.stroke();
+    }
+
+    function endListener(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      document.removeEventListener(MOVE, moveListener, false);
+      document.removeEventListener(END, endListener, false);
+      imageData = canvas.toDataURL('image/png');
+      piece.updateProperty('data');
+    }
+
+    piece.initialize({
+      label: 'Draw',
+      prop: {
+        data: {
+          label: 'Image Data',
+          in: function(value) {
+            if (value === null || !isString(value) || value.indexOf('data:') !== 0)
+              return;
+            imageData = value;
+            var img = new Image();
+            img.onload = function() {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              ctx.drawImage(img, 0, 0);
+              piece.updateProperty('data');
+              img = null;
+            };
+            img.width = 228;
+            img.height = 171;
+            img.src = value;
+          },
+          out: function() {
+            return imageData;
+          },
+          default: true
+        }
+      },
+      event: {
+        clear: {
+          label: 'Clear',
+          in: function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            imageData = null;
+            piece.updateProperty('data');
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

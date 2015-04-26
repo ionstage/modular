@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var preValue = null;
+    piece.initialize({
+      label: 'Property Change',
+      prop: {
+        prop: {
+          label: 'Property',
+          in: function(value) {
+            var isEqual = (lib.util.parseString(value) === lib.util.parseString(preValue));
+            if (!isEqual && preValue !== null && value !== null)
+              piece.dispatchEvent('change');
+            preValue = value;
+          },
+          default: true
+        }
+      },
+      event: {
+        change: {
+          label: 'Change',
+          out: piece.noop,
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

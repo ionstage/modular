@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+    }
+    button {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      display: block;
+      font-size: 14px;
+      height: 28px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <button id="button" disabled>Export</button>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var buttonElement = document.getElementById('button');
+    var data = null;
+
+    buttonElement.addEventListener('click', function(event) {
+      var dataText = data;
+      if (dataText !== null) {
+        dataText = lib.util.parseString(dataText);
+        if (dataText.indexOf('data:') !== 0)
+          dataText = 'data:application/octet-stream,' + encodeURIComponent(dataText);
+        window.open(dataText, '');
+      }
+    }, false);
+
+    piece.initialize({
+      label: 'Data Export',
+      prop: {
+        data: {
+          label: 'Data',
+          in: function(value) {
+            data = value;
+            if (data)
+              buttonElement.removeAttribute('disabled');
+            else
+              buttonElement.setAttribute('disabled', true);
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>

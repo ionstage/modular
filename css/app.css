@@ -1,0 +1,408 @@
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-text-size-adjust: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  cursor: default;
+  font-family: Helvetica;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+.hide {
+  display: none;
+}
+
+#side_panel {
+  background-color: lightgray;
+  float: left;
+  height: 100%;
+  width: 280px;
+}
+
+#side_panel.close {
+  display: none;
+}
+
+#divider {
+  background-color: lightgray;
+  border-radius: 0px 10px 10px 0px;
+  display: table;
+  float: left;
+  height: 100%;
+  width: 32px;
+}
+
+#divider.tap {
+  opacity: 0.6;
+}
+
+#divider_icon {
+  display: table-cell;
+  font-size: 26px;
+  font-family: monospace;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+#main_panel {
+  height: 100%;
+  position: relative;
+}
+
+#search_input {
+  -moz-box-sizing: content-box;
+  -webkit-appearance: textfield;
+  box-sizing: content-box;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  height: 24px;
+  margin: 5px;
+  padding: 1px 4px;
+  position: absolute;
+  width: 240px;
+}
+
+#search_input.touch {
+  border-radius: 13px;
+}
+
+#search_input:focus {
+  outline-offset: -2px;
+}
+
+#search_input::-webkit-search-decoration {
+  display: none;
+}
+
+#piece_list_manager_button {
+  color: #333;
+  cursor: pointer;
+  float: right;
+  font-family: monospace;
+  margin: 10px 3px;
+}
+
+#piece_list_manager_button:hover {
+  opacity: 0.6;
+}
+
+#piece_list {
+  height: 100%;
+  padding-top: 36px;
+}
+
+#piece_list_title {
+  font-weight: bold;
+  margin: 8px;
+}
+
+#piece_list_content {
+  -webkit-overflow-scrolling: touch;
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.piece-list-item {
+  margin: 10px auto;
+  width: 240px;
+}
+
+.piece-list-item-container {
+  width: 240px;
+}
+
+.piece-list-item-container.drag {
+  left: -74px;
+  opacity: 0.6;
+  position: absolute;
+  top: -240px;
+  z-index: 2147483647;
+}
+
+.piece-list-item-header {
+  background-color: black;
+  border-radius: 10px 10px 0px 0px;
+  color: white;
+  height: 34px;
+  overflow: hidden;
+  padding: 10px 10px 0px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.piece-list-item-content, .piece-footer.loading {
+  background-color: white;
+  border-color: black;
+  border-radius: 0px 0px 10px 10px;
+  border-style: solid;
+  border-width: 0px 6px 6px;
+  font-size: 12px;
+  height: 40px;
+  overflow: hidden;
+  padding: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#main_panel {
+  -webkit-overflow-scrolling: touch;
+  overflow: auto;
+}
+
+#board {
+  position: absolute;
+  top: 0px;
+}
+
+#path_container {
+  height: 100%;
+  vertical-align: bottom;
+  width: 100%;
+}
+
+#path_container path {
+  fill: none;
+  stroke: black;
+  stroke-width: 4;
+}
+
+#path_container path.flush {
+  stroke: red;
+}
+
+.piece {
+  position: absolute;
+  width: 240px;
+}
+
+.piece.loading {
+  opacity: 0.6;
+}
+
+.piece-header {
+  background-color: black;
+  border-radius: 10px 10px 0px 0px;
+  color: white;
+  height: 34px;
+  overflow: hidden;
+}
+
+.piece-header.delete {
+  background-color: red;
+}
+
+.piece-header.drag {
+  background-color: orange;
+}
+
+.piece-header-title {
+  cursor: move;
+  height: 34px;
+  overflow: hidden;
+  padding: 10px 0px 0px 10px;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 206px;
+}
+
+.piece-header-title.loading {
+  cursor: default;
+}
+
+.piece-header-delete-button {
+  cursor: pointer;
+  float: right;
+  font-size: 19px;
+  padding: 6px 10px 6px 12px;
+}
+
+.piece-header-delete-button:hover {
+  opacity: 0.6;
+}
+
+.piece-content {
+  background-color: white;
+  border-left: 6px solid black;
+  border-right: 6px solid black;
+  width:  100%;
+}
+
+.piece-content.loading {
+  height: 0px;
+}
+
+.piece-component-back {
+  background-color: white;
+  opacity: 0;
+  position: absolute;
+  width:  228px;
+  z-index: 1;
+}
+
+.piece-component {
+  border: none;
+  height: 0px;
+  overflow: hidden;
+  vertical-align: bottom;
+  width: 100%;
+}
+
+.piece-port-list {
+  background-color: black;
+  border-top: 2px solid black;
+  position: relative;
+}
+
+.piece-port-list.no-component {
+  border: none;
+}
+
+.piece-footer {
+  background-color: black;
+  border-color: black;
+  border-radius: 0px 0px 10px 10px;
+  border-style: solid;
+  border-width: 0px 6px 6px;
+}
+
+.piece-footer.loading:before {
+  content: "Loading...";
+}
+
+.piece-port-select {
+  margin-top: 6px;
+  width: 100%;
+}
+
+
+.port {
+  background-color: white;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  height: 46px;
+  position: relative;
+  width: 100%;
+}
+
+.port.drag {
+  position: absolute;
+  z-index: 1;
+}
+
+.port.mark {
+  background-color: orange;
+}
+
+.port.placeholder {
+  visibility: hidden;
+}
+
+.port-connector {
+  position: absolute;
+}
+
+.port-connector-in {
+  border: 4px solid black;
+  height: 36px;
+  left: -52px;
+  margin: 3px;
+  position: absolute;
+  width: 36px;
+}
+
+.port-connector-in.flush {
+  border-color: red;
+}
+
+.port-connector-connected {
+  background-color: black;
+  cursor: crosshair;
+  height: 24px;
+  left: -52px;
+  margin: 9px;
+  position: absolute;
+  width: 24px;
+}
+
+.port-connector-connected.flush {
+  background-color: red;
+}
+
+.port-connector-out {
+  background-color: black;
+  cursor: crosshair;
+  height: 24px;
+  left: 234px;
+  margin: 9px;
+  position: absolute;
+  width: 24px;
+}
+
+.port-connector-out.flush {
+  background-color: red;
+}
+
+.port-connector-out.drag {
+  position: absolute;
+  z-index: 2147483647;
+}
+
+.port.prop .port-connector-in {
+  border-radius: 8px;
+}
+
+.port.prop .port-connector-out, .port.prop .port-connector-connected, .port-connector-out.drag.prop {
+  border-radius: 4px;
+}
+
+.port.event .port-connector-in {
+  border-radius: 18px;
+}
+
+.port.event .port-connector-out, .port.event .port-connector-connected, .port-connector-out.drag.event {
+  border-radius: 12px;
+}
+
+.port-content {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.port-content-text {
+  height: 42px;
+  overflow: hidden;
+  padding: 12px 0px 0px 8px;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 199px;
+}
+
+.port-content-delete-button {
+  cursor: pointer;
+  float: right;
+  padding: 12px 8px 12px 12px;
+}
+
+.port-content-delete-button:hover {
+  opacity: 0.6;
+}

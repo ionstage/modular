@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+    textarea {
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      display: block;
+      height: 114px;
+      margin: 0;
+      resize: none;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <textarea id="textarea" readonly></textarea>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var textareaElement = document.getElementById('textarea');
+
+    function printLog() {
+      if (window.console && typeof console.log === 'function') {
+        console.log.apply(console, arguments);
+      }
+    }
+
+    piece.initialize({
+      label: 'Console',
+      prop: {
+        data: {
+          label: 'Data',
+          in: function(value) {
+            textareaElement.textContent = lib.util.parseString(value, true);
+            printLog(value);
+          },
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>

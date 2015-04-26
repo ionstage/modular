@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <title>PieceList Manager</title>
+  <style>
+    body {
+      background-color: lightgray;
+      cursor: default;
+      font-family: Helvetica;
+      margin: 0;
+    }
+    #content {
+      margin: 0 auto;
+      width: 360px;
+    }
+    .piece-list {
+      height: 23px;
+      margin: 5px 0;
+      position: relative;
+    }
+    .piece-list-input {
+      position: absolute;
+      width: 330px;
+    }
+    .piece-list-delete-button {
+      float: right;
+      font-size: 18px;
+      height: 23px;
+      margin: 0 6px;
+    }
+    .piece-list-delete-button:hover {
+      cursor: pointer;
+      opacity: 0.6;
+    }
+    #add_piece_list_button {
+      margin: 5px auto;
+      text-align: center;
+      width: 24px;
+    }
+    #add_piece_list_button:hover {
+      cursor: pointer;
+      opacity: 0.6;
+    }
+    #load_button {
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 8px;
+      margin: 20px auto;
+      padding: 10px;
+      text-align: center;
+      width: 160px;
+    }
+    #load_button:hover {
+      background-color: orange;
+      cursor: pointer;
+    }
+  </style>
+  <script id="piece_list_template" type="text/template">
+    <div class="piece-list">
+      <input type="text" value="" class="piece-list-input"></input>
+      <div class="piece-list-delete-button">×</div>
+    </div>
+  </script>
+</head>
+<body>
+  <div id="content">
+    <div id="piece_list_container"></div>
+    <div id="add_piece_list_button">＋</div>
+    <div id="load_button">Load</div>
+  </div>
+  <script src="../js/lib.js"></script>
+  <script>
+  (function() {
+    var isTouchEnabled = lib.support.touch;
+    var START = isTouchEnabled ? 'touchstart' : 'mousedown';
+    var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
+    var END = isTouchEnabled ? 'touchend' : 'mouseup';
+    var storage = (function() {
+      var DOMAIN = 'org.ionstage.board';
+      var storage = lib.storage;
+      function load(key) {
+        return storage.get(DOMAIN + '.' + key);
+      }
+      function save(key, value) {
+        storage.set(DOMAIN + '.' + key, value);
+      }
+      return {
+        load: load,
+        save: save
+      };
+    }());
+    var requestAnimationFrame = (function() {
+      return window.requestAnimationFrame ||
+             window.webkitRequestAnimationFrame ||
+             window.mozRequestAnimationFrame ||
+             function(callback) {
+               window.setTimeout(callback, 1000 / 60);
+             };
+    }());
+    function getElement() {
+      var map = {};
+      var nodeList = document.querySelectorAll('[id]');
+      for (var i = 0, len = nodeList.length; i < len; i += 1) {
+        var node = nodeList[i];
+        map[lib.util.camelCase(node.id, '_')] = node;
+      }
+      return map;
+    }
+    function setTapEvent(element, option) {
+      element.addEventListener(START, function(event) {
+        startTapEvent(event, option);
+      }, false);
+    }
+    function startTapEvent(event, option) {
+      var target = event.currentTarget, startOffset;
+      function moveListener(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event = isTouchEnabled ? event.changedTouches[0] : event;
+        var dx = Math.abs(event.pageX - startOffset.left);
+        var dy = Math.abs(event.pageY - startOffset.top);
+        if (dx > 5 || dy > 5) {
+          target.removeEventListener(MOVE, moveListener, false);
+          target.removeEventListener(END, endListener, false);
+          if (typeof option.cancel === 'function')
+            requestAnimationFrame(option.cancel);
+        }
+      }
+      function endListener(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        target.removeEventListener(MOVE, moveListener, false);
+        target.removeEventListener(END, endListener, false);
+        if (typeof option.tap === 'function')
+          requestAnimationFrame(option.tap);
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      event = isTouchEnabled ? event.changedTouches[0] : event;
+      startOffset = {left: event.pageX, top: event.pageY};
+      target.addEventListener(MOVE, moveListener, false);
+      target.addEventListener(END, endListener, false);
+    }
+    function createNode(str) {
+      var node = document.createElement('div');
+      node.innerHTML = str.replace(/\r\n/g, '').trim();
+      return node.firstChild;
+    }
+
+    var element = getElement();
+
+    var pieceListCount = 0;
+
+    function addPieceList(inputText) {
+      var pieceListContainer = element.pieceListContainer;
+      var pieceListNode = createNode(element.pieceListTemplate.innerHTML);
+      if (inputText)
+        pieceListNode.children[0].value = inputText;
+      pieceListContainer.appendChild(pieceListNode);
+      pieceListCount += 1;
+    }
+
+    document.addEventListener(START, function(event) {
+      var target = event.target;
+      var className = target.className;
+      if (className === 'piece-list-delete-button') {
+        startTapEvent(event, {
+          tap: function() {
+            var pieceListContainer = element.pieceListContainer;
+            var pieceListNode = target.parentNode;
+            if (pieceListContainer.contains(pieceListNode))
+              pieceListContainer.removeChild(pieceListNode);
+          }
+        });
+      }
+    }, false);
+
+    setTapEvent(element.addPieceListButton, {
+      tap: function () {
+        addPieceList();
+      }
+    });
+
+    setTapEvent(element.loadButton, {
+      tap: function() {
+        var pieceLists = [];
+        var inputs = document.querySelectorAll('.piece-list-input');
+        for (var i = 0, len = inputs.length; i < len; i += 1) {
+          var value = inputs[i].value;
+          if (value)
+            pieceLists.push(value);
+        }
+        storage.save(storageKey, pieceLists);
+        window.close();
+      }
+    });
+
+    var storageKey = 'piece-lists';
+    var pieceLists = storage.load(storageKey);
+    
+    for (var i = 0, len = pieceLists.length; i < len; i += 1) {
+      addPieceList(pieceLists[i]);
+    }
+    addPieceList();
+
+  }());
+  </script>
+</body>
+</html>

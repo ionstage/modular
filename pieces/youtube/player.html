@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+    }
+    #player {
+      display: block;
+      height: 150px;
+      width: 228px;
+    }
+  </style>
+</head>
+<body>
+  <div id="player"></div>
+  <script src="../../js/lib.js"></script>
+  <script src="../../js/piece.js"></script>
+  <script src="http://www.youtube.com/iframe_api"></script>
+  <script>
+  (function() {
+    var player = null;
+    var videoId = null;
+
+    window.onYouTubeIframeAPIReady = function() {
+      try {
+        player = new YT.Player('player', {
+          height: '100%',
+          width: '100%',
+          videoId: '',
+          playerVars: {
+            origin: location.protocol + "//"  + location.host
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      } catch (e) {}
+
+      if (!player)
+        return;
+
+      piece.initialize({
+        label: 'YouTube Video Player',
+        prop: {
+          videoId: {
+            label: 'Video ID',
+            in: function(value) {
+              if (player.clearVideo)
+                player.clearVideo();
+              videoId = lib.util.parseString(value) || null;
+            },
+            default: true
+          }
+        },
+        event: {
+          load: {
+            label: 'Load',
+            in: function() {
+              if (videoId === null || !player.cueVideoById)
+                return;
+              player.cueVideoById(videoId);
+              (function dispatchLoadVideoEvent(count) {
+                if (count > 100)
+                  return;
+                if (player.getPlayerState() === 5) {
+                  piece.dispatchEvent('load');
+                } else {
+                  setTimeout(function() {
+                    count += 1;
+                    dispatchLoadVideoEvent(count);
+                  }, 100);
+                }
+              }(0));
+            },
+            out: piece.noop,
+            default: true
+          },
+          play: {
+            label: 'Play',
+            in: function() {
+              if (player.playVideo)
+                player.playVideo();
+            },
+            out: piece.noop
+          },
+          pause: {
+            label: 'Pause',
+            in: function() {
+              if (player.pauseVideo)
+                player.pauseVideo();
+            },
+            out: piece.noop
+          },
+          end: {
+            label: 'End',
+            out: piece.noop
+          }
+        }
+      });
+    };
+
+    window.onPlayerReady = function(event) {}
+    window.onPlayerStateChange = function(event) {
+      var status = event.data;
+      var eventType = null;
+      switch (status) {
+        case 0:
+          eventType = 'end';
+          break;
+        case 1: 
+          eventType = 'play';
+          break;
+        case 2: 
+          eventType = 'pause';
+          break;
+        default:
+          break;
+      }
+      if (eventType !== null)
+        piece.dispatchEvent(eventType);
+    }
+  }());
+  </script>
+</body>
+</html>

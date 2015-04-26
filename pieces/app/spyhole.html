@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <style>
+    body {
+      background-color: black;
+      margin: 0;
+    }
+    iframe {
+      -moz-border-radius: 114px;
+      -webkit-background-clip: padding;
+      background-color: white;
+      border: none;
+      border-radius: 114px;
+      display: block;
+      height: 228px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="iframe" scrolling="no"></iframe>
+  <script src="../../js/piece.js"></script>
+  <script>
+  (function() {
+    var iframe = document.getElementById('iframe');
+    var src = null;
+
+    iframe.addEventListener('load', function() {
+      piece.dispatchEvent('load');
+    });
+
+    piece.initialize({
+      label: 'Spyhole',
+      prop: {
+        url: {
+          label: 'URL',
+          in: function(value) {
+            src = (value !== null) ? encodeURI(value) : null;
+          },
+          default: true
+        }
+      },
+      event: {
+        load: {
+          label: 'Load',
+          in: function(value) {
+            if (src === null)
+              return;
+            iframe.setAttribute('src', src);
+          },
+          out: piece.noop,
+          default: true
+        }
+      }
+    });
+  }());
+  </script>
+</body>
+</html>
