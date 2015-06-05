@@ -102,6 +102,17 @@ body {
   opacity: 0.6;
 }
 
+#piece_list_manager_button .icon {
+  height: 16px;
+  width: 16px;
+}
+
+#piece_list_manager_button .icon g {
+  stroke: black;
+  stroke-linecap: round;
+  stroke-width: 2.2px;
+}
+
 #piece_list {
   height: 100%;
   padding-top: 36px;
