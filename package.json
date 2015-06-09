@@ -2,10 +2,16 @@
   "name": "board",
   "version": "0.1.0",
   "scripts": {
+    "bundle": "browserify -r crypto-js/sha1 -r js-base64 -i buffer -o js/bundle.js",
     "start": "browser-sync start --files='index.html, css/*.css, js/*.js' --server"
   },
+  "dependencies": {
+    "crypto-js": "^3.1.5",
+    "js-base64": "^2.1.8"
+  },
   "devDependencies": {
-    "browser-sync": "^2.7.7"
+    "browser-sync": "^2.7.7",
+    "browserify": "^10.2.4"
   },
   "private": true
 }
