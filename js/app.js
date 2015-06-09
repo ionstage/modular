@@ -1,6 +1,5 @@
 (function(window) {
   'use strict';
-  var SHA1 = require("crypto-js/sha1");
   var Base64 = require('js-base64').Base64;
 
   var document = window.document;
@@ -780,7 +779,7 @@
       var button = value.button;
       button.addEventListener('click', function() {
         var base = Math.floor(Math.random() * Math.pow(10, 16)).toString();
-        var managerWindow = window.open('piecelist/manager.html', SHA1(base).toString(),
+        var managerWindow = window.open('piecelist/manager.html', CryptoJS.SHA1(base).toString(),
                                         'height=380,width=380,menubar=no,toolbar=no,location=no,status=no');
         if (managerWindow) {
           setTimeout(function watchManagerWindow() {
@@ -991,7 +990,7 @@
       var base = Math.floor(Math.random() * Math.pow(10, 16));
       var count = 0;
       return function() {
-        var hash = SHA1(('0' + base + count).slice(-16) +
+        var hash = CryptoJS.SHA1(('0' + base + count).slice(-16) +
                                  Math.random().toString().substring(1));
         count += 1;
         return hash.toString();
