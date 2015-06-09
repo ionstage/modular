@@ -279,9 +279,6 @@
     var addClass = dom.addClass;
     var removeClass = dom.removeClass;
     var preKeyword = null;
-    function state() {
-      return _state;
-    }
     function element(value) {
       var self = this;
       _element = value;
@@ -565,7 +562,6 @@
   var pieceList = (function() {
     var _list = [];
     var urlList = [];
-    function noop() {}
     function list() {
       return _list;
     }
@@ -1001,8 +997,6 @@
         return hash.toString();
       };
     }());
-    var pinElement = document.createElement('div');
-    var zIndexCount = 0;
     var connectorSizeOffset = 21;
     function element(value) {
       mainPanel = value.mainPanel;
@@ -1385,7 +1379,6 @@
           var pieceID = createAndAppendPiece(pieceAttr);
           pieceIDMap[pieceAttr.id] = pieceID;
         }
-        var piecesLength = pieces.length;
         var retryCount = 0;
         setTimeout(function waitLoadPiece() {
           if (!board.isLoading()) {
@@ -1963,7 +1956,6 @@
   }());
 
   var piece = (function() {
-    var extend = lib.util.extend;
     var zIndexCount = 0;
     var addClass = dom.addClass;
     var removeClass = dom.removeClass;

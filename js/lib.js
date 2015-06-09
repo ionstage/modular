@@ -2,12 +2,6 @@
   'use strict';
   var util = (function() {
     var toString = Object.prototype.toString;
-    function extend(dest, src) {
-      for (var key in src) {
-        dest[key] = src[key];
-      }
-      return dest;
-    }
     function isObject(obj) {
       return obj === Object(obj);
     }
@@ -94,7 +88,6 @@
       });
     }
     return {
-      extend: extend,
       isObject: isObject,
       isArray: isArray,
       isString: isString,
