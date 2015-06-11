@@ -4,8 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
   <title>Board</title>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/app.min.css">
   <script id="piece_list_item_template" type="text/template">
     <div class="piece-list-item">
       <div class="piece-list-item-container">
@@ -52,7 +51,15 @@
   <div id="side_panel">
     <div>
       <input id="search_input" type="search" autocapitalize="off" autocorrect="off"></input>
-      <div id="piece_list_manager_button"><i class="fa fa-bars"></i></div>
+      <div id="piece_list_manager_button">
+        <svg class="icon">
+          <g>
+            <line x1="2" y1="3.5" x2="14" y2="3.5" />
+            <line x1="2" y1="8" x2="14" y2="8" />
+            <line x1="2" y1="12.5" x2="14" y2="12.5" />
+          </g>
+        </svg>
+      </div>
     </div>
     <div id="piece_list">
       <div id="piece_list_content"></div>
@@ -65,9 +72,8 @@
     <svg id="path_container" xmlns="http://www.w3.org/2000/svg"></svg>
     <div id="board"></div>
   </div>
-  <script src="//crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha1.js"></script>
-  <script src="//cdn.rawgit.com/dankogai/js-base64/master/base64.min.js"></script>
+  <script src="js/bundle.min.js"></script>
   <script src="js/lib.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/app.min.js"></script>
 </body>
 </html>
