@@ -87,6 +87,18 @@
         return chr ? chr.toUpperCase() : '';
       });
     }
+    function debounce(func, wait) {
+      if (typeof func !== 'function')
+        return;
+      var updateTimer = null, context, args;
+      return function() {
+        context = this;
+        args = arguments;
+        if (updateTimer !== null)
+          clearTimeout(updateTimer);
+        updateTimer = setTimeout(function() { func.apply(context, args); }, wait);
+      };
+    }
     return {
       isObject: isObject,
       isArray: isArray,
@@ -98,7 +110,8 @@
       parseString: parseString,
       parseNumber: parseNumber,
       escape: escape,
-      camelCase: camelCase
+      camelCase: camelCase,
+      debounce: debounce
     };
   }());
 

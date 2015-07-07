@@ -7,19 +7,6 @@
   var lib = window.lib;
   var dom = window.dom;
 
-  function debounce(func, wait) {
-    if (typeof func !== 'function')
-      return;
-    var updateTimer = null, context, args;
-    return function() {
-      context = this;
-      args = arguments;
-      if (updateTimer !== null)
-        clearTimeout(updateTimer);
-      updateTimer = setTimeout(function() { func.apply(context, args); }, wait);
-    };
-  }
-
   var cursor = (function() {
     var style = document.body.style;
     function type(value) {
@@ -1178,7 +1165,7 @@
           target: pieceIDMap[targetIDSet[0]] + '/' + targetIDSet[1] + '/' + targetIDSet[2]
         };
       }
-      return debounce(function() {
+      return lib.util.debounce(function() {
         if (isLoadingURLHash)
           return;
         var pieceMap = board.pieceMap();
@@ -1284,7 +1271,7 @@
       }
     }
     function setWindowResizeListener() {
-      window.addEventListener('resize', debounce(function() {
+      window.addEventListener('resize', lib.util.debounce(function() {
         pathContainer.size(board.size());
       }, 1000 / 60));
     }
@@ -2151,7 +2138,7 @@
 
     // searchInputView
     searchInputView.element(element.searchInput);
-    searchInputView.on('input', debounce(sideView.updatePieceListView, 1000 / 60));
+    searchInputView.on('input', lib.util.debounce(sideView.updatePieceListView, 1000 / 60));
 
     // nodeTemplate
     nodeTemplate.element({
