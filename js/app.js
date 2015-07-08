@@ -7,50 +7,6 @@
   var lib = window.lib;
   var dom = window.dom;
 
-  var cursor = (function() {
-    var style = document.body.style;
-    function type(value) {
-      style.cursor = value;
-    }
-    function setMouseHoverEffect(element) {
-      var self = this;
-      element.addEventListener('mouseover', function(event) {
-        self.type('pointer');
-      }, false);
-      element.addEventListener('mouseout', function(event) {
-        self.type('default');
-      }, false);
-    }
-    return {
-      type: type,
-      setMouseHoverEffect: setMouseHoverEffect
-    };
-  }());
-
-  var requestAnimationFrame = (function() {
-    return window.requestAnimationFrame ||
-           window.webkitRequestAnimationFrame ||
-           window.mozRequestAnimationFrame ||
-           function(callback) {
-             window.setTimeout(callback, 1000 / 60);
-           };
-  }());
-
-  var storage = (function() {
-    var DOMAIN = 'org.ionstage.board';
-    var storage = lib.storage;
-    function load(key) {
-      return storage.get(DOMAIN + '.' + key);
-    }
-    function save(key, value) {
-      storage.set(DOMAIN + '.' + key, value);
-    }
-    return {
-      load: load,
-      save: save
-    };
-  }());
-
   var nodeTemplate = (function() {
     var _element = null;
     var pieceListItemNode = null;
@@ -134,7 +90,7 @@
   var sideView = (function() {
     var _state = null;
     var _element = null;
-    var isTouchEnabled = lib.support.touch;
+    var isTouchEnabled = dom.supportsTouch();
     var addClass = dom.addClass;
     var removeClass = dom.removeClass;
     var preKeyword = null;
@@ -142,12 +98,12 @@
       var self = this;
       _element = value;
       var divider = _element.divider;
-      cursor.setMouseHoverEffect(divider);
+      dom.setMouseHoverEffect(divider);
       divider.addEventListener(dom.eventType.START, function(event) {
         dom.startTapEvent(event, {
           tap: function() {
             self.toggle();
-            cursor.type('default');
+            dom.setCursor('default');
             if (isTouchEnabled)
               removeClass(divider, 'tap');
           },
@@ -211,7 +167,7 @@
   var searchInputView = (function() {
     var _element = null;
     var preInputValue = '';
-    var isTouchEnabled = lib.support.touch;
+    var isTouchEnabled = dom.supportsTouch();
     var isFocus = false;
     function inElement(point) {
       return point.x < 280 && point.y < 46;
@@ -258,7 +214,7 @@
   var pieceListView = (function() {
     var _element = null;
     var _listItems = null;
-    var isTouchEnabled = lib.support.touch;
+    var isTouchEnabled = dom.supportsTouch();
     var setListItemDragEvent = (function() {
       var START = isTouchEnabled ? 'touchstart' : 'mousedown';
       var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
@@ -571,7 +527,7 @@
   var recentryUsedPieceList = (function() {
     var isObject = lib.util.isObject;
     var storageKey = 'recentry-used'
-    var _list = storage.load(storageKey);
+    var _list = dom.loadData(storageKey);
     if (_list === null)
       _list = [];
     var maxSize = 20;
@@ -609,7 +565,7 @@
         }
       }
       _list = newList;
-      storage.save(storageKey, _list);
+      dom.saveData(storageKey, _list);
     }
     function add(item) {
       var recentryUsedList = _list;
@@ -630,10 +586,10 @@
 
   var pieceListManager = (function() {
     var storageKey = 'piece-lists';
-    var pieceLists = storage.load(storageKey);
+    var pieceLists = dom.loadData(storageKey);
     if (pieceLists === null) {
       pieceLists = ['piecelist/default.html'];
-      storage.save(storageKey, pieceLists);
+      dom.saveData(storageKey, pieceLists);
     }
     function element(value) {
       var button = value.button;
@@ -645,7 +601,7 @@
           setTimeout(function watchManagerWindow() {
             if (managerWindow.closed) {
               pieceList.clear();
-              pieceList.load(storage.load(storageKey), function() {
+              pieceList.load(dom.loadData(storageKey), function() {
                 recentryUsedPieceList.update();
                 sideView.updatePieceListView();
               });
@@ -988,7 +944,7 @@
       return mainPanel.clientWidth;
     }
     function resetTouchScroll() {
-      if (lib.support.touch) {
+      if (dom.supportsTouch()) {
         mainPanel.style.cssText = '-webkit-overflow-scrolling: auto;';
         setTimeout(function() {
           mainPanel.style.cssText = '';
@@ -1018,7 +974,7 @@
   }());
 
   var boardEvent = (function() {
-    var isTouchEnabled = lib.support.touch;
+    var isTouchEnabled = dom.supportsTouch();
     var START = dom.eventType.START;
     var isLoadingURLHash = false;
     function createPorts(propData, eventData) {
@@ -1499,7 +1455,7 @@
       var isDragging = true;
       function updatePiecePosition() {
         if (isDragging) {
-          requestAnimationFrame(updatePiecePosition);
+          dom.requestAnimationFrame(updatePiecePosition);
           piece.updatePosition();
           pathContainer.updatePosition();
         }
@@ -1513,7 +1469,7 @@
           board.hideAllPieceComponentBack();
           pathContainer.size(board.size());
           isDragging = false;
-          requestAnimationFrame(function() {
+          dom.requestAnimationFrame(function() {
             piece.position({x: startX + dx, y: startY + dy});
             piece.updatePosition();
             updatePathPosition(pieceID);
@@ -1526,7 +1482,7 @@
         }
       });
       board.showAllPieceComponentBack();
-      requestAnimationFrame(updatePiecePosition);
+      dom.requestAnimationFrame(updatePiecePosition);
       if (isTouchEnabled)
         piece.addClassOfHeader('drag');
     }
@@ -1546,7 +1502,7 @@
       var pieceID = portID.split('/')[0];
       function updatePortPosition() {
         if (isDragging) {
-          requestAnimationFrame(updatePortPosition);
+          dom.requestAnimationFrame(updatePortPosition);
           portElement.style.cssText = dom.makeCSSText({top: portTop + 'px'});
           pathContainer.updatePosition();
         }
@@ -1554,7 +1510,7 @@
       dom.startDragEvent(event, {
         drag: function(dx, dy) {
           if (isDragging)
-            requestAnimationFrame(updatePortPosition);
+            dom.requestAnimationFrame(updatePortPosition);
           var top = startY + dy;
           if (top < 0)
             top = 0;
@@ -1572,7 +1528,7 @@
         end: function(dx, dy) {
           board.hideAllPieceComponentBack();
           isDragging = false;
-          requestAnimationFrame(function() {
+          dom.requestAnimationFrame(function() {
             portElement.style.cssText = '';
             portListElement.insertBefore(portElement, placeholderElement);
             dom.removeClass(portElement, 'drag');
@@ -1695,7 +1651,7 @@
         dom.startDragEvent(event, {
           drag: function(dx, dy) {
             if (isDragging)
-              requestAnimationFrame(updatePortConnector);
+              dom.requestAnimationFrame(updatePortConnector);
             connectorHandle.position({
               x: targetOffset.x + dx,
               y: targetOffset.y + dy,
@@ -1761,7 +1717,7 @@
           end: function(dx, dy) {
             board.hideAllPieceComponentBack();
             isDragging = false;
-            requestAnimationFrame(function() {
+            dom.requestAnimationFrame(function() {
               connectorHandle.hide();
               connectorHandle.position({
                 x: -connectorSizeOffset * 2,
@@ -1770,7 +1726,7 @@
               connectorHandle.update();
               pathContainer.remove(currentPathSourceID, 'drag');
               pathContainer.refreshPosition();
-              cursor.type('default');
+              dom.setCursor('default');
             });
             if (isTouchEnabled) {
               getPort(portID).clearMark();
@@ -1797,13 +1753,13 @@
         pathContainer.position(currentPathTargetID, targetPoint);
         pathContainer.updatePosition();
         if (isTouchEnabled) {
-          requestAnimationFrame(function() {
+          dom.requestAnimationFrame(function() {
             getPort(portID).mark();
             if (isConnected)
               getPort(connectedPortID).mark();
           });
         }
-        cursor.type('crosshair');
+        dom.setCursor('crosshair');
       };
     }());
     return {
@@ -2114,7 +2070,7 @@
 
   // application
   function initialize() {
-    if (!lib.support.svg) {
+    if (!dom.supportsSVG()) {
       alert('Sorry, your browser doesn\'t support this application.');
       return;
     }
@@ -2128,10 +2084,10 @@
       dividerIcon: element.dividerIcon,
       mainPanel: element.mainPanel
     });
-    var sideViewState = storage.load('side-view-state') || 'open';
+    var sideViewState = dom.loadData('side-view-state') || 'open';
     sideView[sideViewState]();
     sideView.on('change', function(event) {
-      storage.save('side-view-state', event.state);
+      dom.saveData('side-view-state', event.state);
       pathContainer.size(board.size());
       board.resetTouchScroll();
     });
@@ -2163,7 +2119,7 @@
     });
 
     // pieceList
-    pieceList.load(storage.load('piece-lists'), function() {
+    pieceList.load(dom.loadData('piece-lists'), function() {
       recentryUsedPieceList.update();
       sideView.updatePieceListView();
     });

@@ -2,7 +2,7 @@
   'use strict';
   var lib = global.lib;
 
-  var isTouchEnabled = lib.support.touch;
+  var isTouchEnabled = 'createTouch' in document;
   var START = isTouchEnabled ? 'touchstart' : 'mousedown';
   var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
   var END = isTouchEnabled ? 'touchend' : 'mouseup';
@@ -121,6 +121,52 @@
     return -1;
   }
 
+  function setCursor(value) {
+    document.body.style.cursor = value;
+  }
+
+  function setMouseHoverEffect(element) {
+    element.addEventListener('mouseover', function(event) {
+      setCursor('pointer');
+    }, false);
+    element.addEventListener('mouseout', function(event) {
+      setCursor('default');
+    }, false);
+  }
+
+  var requestAnimationFrame = (function() {
+    return window.requestAnimationFrame ||
+           window.webkitRequestAnimationFrame ||
+           window.mozRequestAnimationFrame ||
+           function(callback) {
+             window.setTimeout(callback, 1000 / 60);
+           };
+  })().bind(window);
+
+  function storageKey(key) {
+    return 'org.ionstage.board.' + key;
+  }
+
+  function loadData(key, defaultValue) {
+    var value = localStorage.getItem(storageKey(key));
+    if (value === null && typeof defaultValue !== 'undefined')
+      return defaultValue;
+    return JSON.parse(value);
+  }
+
+  function saveData(key, data) {
+    localStorage.setItem(storageKey(key), JSON.stringify(data));
+  }
+
+  function supportsTouch() {
+    return isTouchEnabled;
+  }
+
+  function supportsSVG() {
+    return !!(document.createElementNS &&
+              document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
+  }
+
   global.dom = {
     getElement: getElement,
     setTapEvent: setTapEvent,
@@ -135,6 +181,13 @@
     addClass: addClass,
     removeClass: removeClass,
     makeCSSText: makeCSSText,
-    indexOf: indexOf
+    indexOf: indexOf,
+    setCursor: setCursor,
+    setMouseHoverEffect: setMouseHoverEffect,
+    requestAnimationFrame: requestAnimationFrame,
+    loadData: loadData,
+    saveData: saveData,
+    supportsTouch: supportsTouch,
+    supportsSVG: supportsSVG
   };
 })(this);

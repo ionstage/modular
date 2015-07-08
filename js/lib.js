@@ -115,34 +115,6 @@
     };
   }());
 
-  var storage = (function() {
-    function get(key) {
-      try {
-        return JSON.parse(localStorage.getItem(key));
-      } catch (e) {
-        return null;
-      }
-    }
-    function set(key, value) {
-      localStorage.setItem(key, JSON.stringify(value));
-    }
-    return {
-      get: get,
-      set: set
-    }
-  }());
-
-  var support = (function() {
-    var isTouchEnabled = ('ontouchstart' in window);
-    var isSVGEnabled = !!(document.createElementNS &&
-                          document.createElementNS('http://www.w3.org/2000/svg',
-                                                   'svg').createSVGRect);
-    return {
-      touch: isTouchEnabled,
-      svg: isSVGEnabled
-    };
-  }());
-
   var eventModule = (function() {
     var isArray = Array.isArray;
     function enable(obj) {
@@ -188,8 +160,6 @@
 
   global.lib = {
     util: util,
-    storage: storage,
-    support: support,
     event: eventModule
   };
 
