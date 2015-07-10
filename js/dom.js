@@ -167,6 +167,12 @@
               document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
   }
 
+  function createNode(str) {
+    var node = document.createElement('div');
+    node.innerHTML = str.replace(/\r\n/g, '').trim();
+    return node.firstChild;
+  }
+
   global.dom = {
     getElement: getElement,
     setTapEvent: setTapEvent,
@@ -188,6 +194,7 @@
     loadData: loadData,
     saveData: saveData,
     supportsTouch: supportsTouch,
-    supportsSVG: supportsSVG
+    supportsSVG: supportsSVG,
+    createNode: createNode
   };
 })(this);

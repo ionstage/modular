@@ -7,85 +7,6 @@
   var lib = window.lib;
   var dom = window.dom;
 
-  var nodeTemplate = (function() {
-    var _element = null;
-    var pieceListItemNode = null;
-    var pieceNode = null;
-    var portNode = null;
-    function createNode(str) {
-      var node = document.createElement('div');
-      node.innerHTML = str.replace(/\r\n/g, '').trim();
-      return node.firstChild;
-    }
-    function element(value) {
-      _element = value;
-      pieceListItemNode = createNode(_element.pieceListItemTemplate.innerHTML);
-      pieceNode = createNode(_element.pieceTemplate.innerHTML);
-      portNode = createNode(_element.portTemplate.innerHTML);
-    }
-    function createPieceListItem(titleText, contentText, pieceSrc) {
-      var node = pieceListItemNode.cloneNode(true);
-      var map = {
-        element: node,
-        container: node.children[0],
-        containerHeader: node.children[0].children[0],
-        containerContent: node.children[0].children[1]
-      };
-      map.container.setAttribute('data-piece-src', pieceSrc);
-      map.containerHeader.textContent = titleText || '';
-      map.containerContent.textContent = contentText || '';
-      return map;
-    }
-    function createPiece(src) {
-      var node = pieceNode.cloneNode(true);
-      var map = {
-        element: node,
-        header: node.children[0],
-        headerTitle: node.children[0].children[0],
-        headerDeleteButton: node.children[0].children[1],
-        content: node.children[1],
-        componentBack: node.children[1].children[0],
-        component: node.children[1].children[1],
-        portList: node.children[1].children[2],
-        footer: node.children[2],
-        portSelect: node.children[2].children[0],
-        portSelectOptionGroup: {
-          prop: node.children[2].children[0].children[1],
-          event: node.children[2].children[0].children[2]
-        }
-      };
-      map.component.setAttribute('src', src);
-      return map;
-    }
-    function createPort(type, contentText, hasIn, hasOut) {
-      var node = portNode.cloneNode(true);
-      dom.addClass(node, type);
-      var map = {
-        element: node,
-        connector: node.children[0],
-        connectorIn: node.children[0].children[0],
-        connectorConnected: node.children[0].children[1],
-        connectorOut: node.children[0].children[2],
-        content: node.children[1],
-        contentText: node.children[1].children[0],
-        contentDeleteButton: node.children[1].children[1]
-      };
-      map.contentText.textContent = contentText;
-      if (!hasIn)
-        dom.addClass(map.connectorIn, 'hide');
-      if (!hasOut)
-        dom.addClass(map.connectorOut, 'hide');
-      return map;
-    }
-    return {
-      element: element,
-      createPieceListItem: createPieceListItem,
-      createPiece: createPiece,
-      createPort: createPort
-    };
-  }());
-
-
   // side panel
   var sideView = (function() {
     var _state = null;
@@ -215,6 +136,7 @@
     var _element = null;
     var _listItems = null;
     var isTouchEnabled = dom.supportsTouch();
+    var templateNode = null;
     var setListItemDragEvent = (function() {
       var START = isTouchEnabled ? 'touchstart' : 'mousedown';
       var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
@@ -327,6 +249,22 @@
       style.appendChild(document.createTextNode(styleText));
       document.getElementsByTagName('head')[0].appendChild(style);
     }
+    function template(node) {
+      templateNode = dom.createNode(node.innerHTML);
+    }
+    function createPieceListItem(titleText, contentText, pieceSrc) {
+      var node = templateNode.cloneNode(true);
+      var map = {
+        element: node,
+        container: node.children[0],
+        containerHeader: node.children[0].children[0],
+        containerContent: node.children[0].children[1]
+      };
+      map.container.setAttribute('data-piece-src', pieceSrc);
+      map.containerHeader.textContent = titleText || '';
+      map.containerContent.textContent = contentText || '';
+      return map;
+    }
     function element(value) {
       _element = value;
       setListItemDragEvent(_element);
@@ -348,7 +286,7 @@
         contentNode.innerHTML = titleHTMLText;
       for (var i = 0, len = listItems.length; i < len; i += 1) {
         var item = listItems[i];
-        var node = nodeTemplate.createPieceListItem(item.title, item.content, item.pieceSrc);
+        var node = createPieceListItem(item.title, item.content, item.pieceSrc);
         if (isTouchEnabled)
           preContentNode.appendChild(node.element);
         else
@@ -366,6 +304,7 @@
       this.update(true);
     }
     return lib.event.enable({
+      template: template,
       element: element,
       listItems: listItems,
       update: update,
@@ -1774,9 +1713,34 @@
     var zIndexCount = 0;
     var addClass = dom.addClass;
     var removeClass = dom.removeClass;
+    var templateNode = null;
+    function template(node) {
+      templateNode = dom.createNode(node.innerHTML);
+    }
+    function createPiece(src) {
+      var node = templateNode.cloneNode(true);
+      var map = {
+        element: node,
+        header: node.children[0],
+        headerTitle: node.children[0].children[0],
+        headerDeleteButton: node.children[0].children[1],
+        content: node.children[1],
+        componentBack: node.children[1].children[0],
+        component: node.children[1].children[1],
+        portList: node.children[1].children[2],
+        footer: node.children[2],
+        portSelect: node.children[2].children[0],
+        portSelectOptionGroup: {
+          prop: node.children[2].children[0].children[1],
+          event: node.children[2].children[0].children[2]
+        }
+      };
+      map.component.setAttribute('src', src);
+      return map;
+    }
     function create(src) {
       var p = Object.create(this);
-      var elementMap = nodeTemplate.createPiece(src);
+      var elementMap = createPiece(src);
       p._elementMap = elementMap;
       zIndexCount += 1;
       p._zIndex = zIndexCount;
@@ -1952,6 +1916,7 @@
       return this._elementMap.component;
     }
     return {
+      template: template,
       create: create,
       destroy: destroy,
       vitalize: vitalize,
@@ -1979,9 +1944,33 @@
   var port = (function() {
     var addClass = dom.addClass;
     var removeClass = dom.removeClass;
+    var templateNode = null;
+    function template(node) {
+      templateNode = dom.createNode(node.innerHTML);
+    }
+    function createPort(type, contentText, hasIn, hasOut) {
+      var node = templateNode.cloneNode(true);
+      dom.addClass(node, type);
+      var map = {
+        element: node,
+        connector: node.children[0],
+        connectorIn: node.children[0].children[0],
+        connectorConnected: node.children[0].children[1],
+        connectorOut: node.children[0].children[2],
+        content: node.children[1],
+        contentText: node.children[1].children[0],
+        contentDeleteButton: node.children[1].children[1]
+      };
+      map.contentText.textContent = contentText;
+      if (!hasIn)
+        dom.addClass(map.connectorIn, 'hide');
+      if (!hasOut)
+        dom.addClass(map.connectorOut, 'hide');
+      return map;
+    }
     function create(type, key, contentText, hasIn, hasOut, isDefault) {
       var p = Object.create(this);
-      var elementMap = nodeTemplate.createPort(type, contentText, hasIn, hasOut);
+      var elementMap = createPort(type, contentText, hasIn, hasOut);
       p._elementMap = elementMap;
       p._type = type;
       p._key = key;
@@ -2048,6 +2037,7 @@
       removeClass(this._elementMap.element, 'mark');
     }
     return {
+      template: template,
       create: create,
       id: id,
       type: type,
@@ -2096,12 +2086,10 @@
     searchInputView.element(element.searchInput);
     searchInputView.on('input', lib.util.debounce(sideView.updatePieceListView, 1000 / 60));
 
-    // nodeTemplate
-    nodeTemplate.element({
-      pieceListItemTemplate: element.pieceListItemTemplate,
-      pieceTemplate: element.pieceTemplate,
-      portTemplate: element.portTemplate
-    });
+    // template
+    pieceListView.template(element.pieceListItemTemplate);
+    piece.template(element.pieceTemplate);
+    port.template(element.portTemplate);
 
     // pieceListView
     pieceListView.element(element.pieceList);
