@@ -1,11 +1,6 @@
 (function() {
   'use strict';
   function initialize() {
-    if (!dom.supportsSVG()) {
-      alert('Sorry, your browser doesn\'t support this application.');
-      return;
-    }
-
     var element = dom.getElement();
 
     // sideView

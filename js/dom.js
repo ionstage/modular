@@ -162,11 +162,6 @@
     return isTouchEnabled;
   }
 
-  function supportsSVG() {
-    return !!(document.createElementNS &&
-              document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
-  }
-
   function createNode(str) {
     var node = document.createElement('div');
     node.innerHTML = str.replace(/\r\n/g, '').trim();
@@ -194,7 +189,6 @@
     loadData: loadData,
     saveData: saveData,
     supportsTouch: supportsTouch,
-    supportsSVG: supportsSVG,
     createNode: createNode
   };
 })(this);
