@@ -43,14 +43,9 @@
     });
 
     // pieceList
-    pieceList.load(dom.loadData('piece-lists'), function() {
+    pieceList.load(['piecelist/default.html'], function() {
       recentryUsedPieceList.update();
       sideView.updatePieceListView();
-    });
-
-    // pieceListManager
-    pieceListManager.element({
-      button: element.pieceListManagerButton
     });
 
     // drag connector handle

@@ -75,7 +75,7 @@ body {
   margin: 5px;
   padding: 1px 4px;
   position: absolute;
-  width: 240px;
+  width: 256px;
 }
 
 #search_input.touch {
@@ -88,29 +88,6 @@ body {
 
 #search_input::-webkit-search-decoration {
   display: none;
-}
-
-#piece_list_manager_button {
-  color: #333;
-  cursor: pointer;
-  float: right;
-  font-family: monospace;
-  margin: 10px 3px;
-}
-
-#piece_list_manager_button:hover {
-  opacity: 0.6;
-}
-
-#piece_list_manager_button .icon {
-  height: 16px;
-  width: 16px;
-}
-
-#piece_list_manager_button .icon g {
-  stroke: black;
-  stroke-linecap: round;
-  stroke-width: 2.2px;
 }
 
 #piece_list {
