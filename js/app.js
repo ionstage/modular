@@ -37,16 +37,11 @@
         p.position(localPoint);
         p.updatePosition();
         board.append(p);
-        recentryUsedPieceList.add({src: event.pieceSrc});
-        sideView.updatePieceListView();
       }
     });
 
     // pieceList
-    pieceList.load(['piecelist/default.json'], function() {
-      recentryUsedPieceList.update();
-      sideView.updatePieceListView();
-    });
+    pieceList.load(['piecelist/default.json']);
 
     // drag connector handle
     connectorHandle.element({

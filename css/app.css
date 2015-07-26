@@ -95,11 +95,6 @@ body {
   padding-top: 36px;
 }
 
-#piece_list_title {
-  font-weight: bold;
-  margin: 8px;
-}
-
 #piece_list_content {
   -webkit-overflow-scrolling: touch;
   height: 100%;

@@ -140,16 +140,11 @@ var pieceListView = (function() {
   function listItems(value) {
     _listItems = value;
   }
-  function update(isRecentryUsed) {
+  function update() {
     var listItems = _listItems;
     var contentNode = document.createElement('div');
     var preContentNode = _element.children[0];
     contentNode.id = 'piece_list_content';
-    var titleHTMLText = isRecentryUsed ? '<div id="piece_list_title">Recentry Used</div>' : '';
-    if (isTouchEnabled)
-      preContentNode.innerHTML = titleHTMLText;
-    else
-      contentNode.innerHTML = titleHTMLText;
     for (var i = 0, len = listItems.length; i < len; i += 1) {
       var item = listItems[i];
       var node = createPieceListItem(item.title, item.content, item.pieceSrc);
@@ -165,16 +160,11 @@ var pieceListView = (function() {
     this.listItems(listItems);
     this.update();
   }
-  function updateRecentryUsedListItems(listItems) {
-    this.listItems(listItems);
-    this.update(true);
-  }
   return lib.event.enable({
     template: template,
     element: element,
     listItems: listItems,
     update: update,
-    updateSearchedListItems: updateSearchedListItems,
-    updateRecentryUsedListItems: updateRecentryUsedListItems
+    updateSearchedListItems: updateSearchedListItems
   });
 }());

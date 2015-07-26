@@ -75,7 +75,7 @@ var pieceList = (function() {
     });
     _list = filteredList;
   }
-  function load(pieceLists, callback) {
+  function load(pieceLists) {
     var pieceListsLength = pieceLists.length;
     function loadPieceList(index) {
       var url = pieceLists[index];
@@ -104,7 +104,6 @@ var pieceList = (function() {
         loadPieceList(index);
       } else {
         filterList();
-        callback();
       }
     }
     loadPieceList(0);

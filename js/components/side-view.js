@@ -54,16 +54,11 @@ var sideView = (function() {
   }
   function updatePieceListView() {
     var keyword = searchInputView.inputValue();
-    var listItems;
-    if (keyword.length !== 0) {
-      if (preKeyword === keyword)
-        return;
-      listItems = pieceList.search(keyword).toListViewItems();
-      pieceListView.updateSearchedListItems(listItems);
-    } else {
-      listItems = recentryUsedPieceList.listViewItems();
-      pieceListView.updateRecentryUsedListItems(listItems);
-    }
+    var listItems = [];
+    if (preKeyword === keyword)
+      return;
+    listItems = pieceList.search(keyword).toListViewItems();
+    pieceListView.updateSearchedListItems(listItems);
     preKeyword = keyword;
   }
   return lib.event.enable({
