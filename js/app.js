@@ -43,7 +43,7 @@
     });
 
     // pieceList
-    pieceList.load(['piecelist/default.html'], function() {
+    pieceList.load(['piecelist/default.json'], function() {
       recentryUsedPieceList.update();
       sideView.updatePieceListView();
     });

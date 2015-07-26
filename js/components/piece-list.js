@@ -50,41 +50,14 @@ var pieceList = (function() {
     matchList.toListViewItems = toListViewItems;
     return matchList;
   }
-  function loadFrameName(src, callback) {
-    var iframeElement = document.createElement('iframe');
-    iframeElement.style.cssText = dom.makeCSSText({
-      position: 'absolute',
-      visibility: 'hidden',
-      width: '1px',
-      height: '1px'
-    });
-    iframeElement.setAttribute('name', '');
-    iframeElement.setAttribute('src', src);
-    function endLoadFrameName(name) {
-      document.body.removeChild(iframeElement);
-      if (typeof callback === 'function')
-        callback(name);
-    }
-    iframeElement.onload = function() {
-      var retryCount = 0;
-      setTimeout(function getFrameName() {
-        var name = '';
-        try {
-          name = iframeElement.contentWindow.name;
-        } catch (e) {}
-        if (name !== '') {
-          endLoadFrameName(name);
-          return;
-        }
-        if (retryCount < 30) {
-          retryCount += 1;
-          setTimeout(getFrameName, 100);
-        } else {
-          endLoadFrameName(null);
-        }
-      }, 100);
+  function loadFileText(src, callback) {
+    var request = new XMLHttpRequest();
+    request.open('GET', src, true);
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400)
+        callback(request.responseText);
     };
-    document.body.appendChild(iframeElement);
+    request.send();
   }
   function filterList() {
     var list = _list;
@@ -107,13 +80,13 @@ var pieceList = (function() {
     function loadPieceList(index) {
       var url = pieceLists[index];
       if (urlList.indexOf(url) === -1) {
-        loadFrameName(url, function(name) {
-          if (name === null) {
+        loadFileText(url, function(text) {
+          if (text === null) {
             endLoadPieceList(index);
             return;
           }
           try {
-            _list = _list.concat(JSON.parse(name));
+            _list = _list.concat(JSON.parse(text));
           } catch (e) {
             endLoadPieceList(index);
             return;
