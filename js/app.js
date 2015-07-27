@@ -10,10 +10,8 @@
       dividerIcon: element.dividerIcon,
       mainPanel: element.mainPanel
     });
-    var sideViewState = dom.loadData('side-view-state', 'open');
-    sideView[sideViewState]();
+    sideView.open();
     sideView.on('change', function(event) {
-      dom.saveData('side-view-state', event.state);
       pathContainer.size(board.size());
       board.resetTouchScroll();
     });
