@@ -3,15 +3,12 @@ var searchInputView = (function() {
   var preInputValue = '';
   var isTouchEnabled = dom.supportsTouch();
   var isFocus = false;
-  function inElement(point) {
-    return point.x < 280 && point.y < 46;
-  }
   function element(value) {
     _element = value;
     if (isTouchEnabled) {
       _element.className = 'touch';
       document.addEventListener('touchstart', function(event) {
-        if (!(inElement({x: event.pageX, y: event.pageY})))
+        if (event.target !== _element)
           _element.blur();
       }, false);
     } else {
