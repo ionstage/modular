@@ -1,7 +1,6 @@
 var sideView = (function() {
   var _state = null;
   var _element = null;
-  var isTouchEnabled = dom.supportsTouch();
   var addClass = dom.addClass;
   var removeClass = dom.removeClass;
   var preKeyword = null;
@@ -15,16 +14,13 @@ var sideView = (function() {
         tap: function() {
           self.toggle();
           dom.setCursor('default');
-          if (isTouchEnabled)
-            removeClass(divider, 'tap');
+          removeClass(divider, 'tap');
         },
         cancel: function() {
-          if (isTouchEnabled)
-            removeClass(divider, 'tap');
+          removeClass(divider, 'tap');
         }
       });
-      if (isTouchEnabled)
-        addClass(divider, 'tap');
+      addClass(divider, 'tap');
     }, false);
   }
   function open() {
