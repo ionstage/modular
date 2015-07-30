@@ -148,13 +148,9 @@ var pieceListView = (function() {
     for (var i = 0, len = listItems.length; i < len; i += 1) {
       var item = listItems[i];
       var node = createPieceListItem(item.title, item.content, item.pieceSrc);
-      if (isTouchEnabled)
-        preContentNode.appendChild(node.element);
-      else
-        contentNode.appendChild(node.element);
+      contentNode.appendChild(node.element);
     }
-    if (!isTouchEnabled)
-      _element.replaceChild(contentNode, preContentNode);
+    _element.replaceChild(contentNode, preContentNode);
   }
   function updateSearchedListItems(listItems) {
     this.listItems(listItems);
