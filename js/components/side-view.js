@@ -25,13 +25,13 @@ var sideView = (function() {
   }
   function open() {
     _state = 'open';
-    _element.dividerIcon.textContent = '<';
+    _element.dividerIcon.className = 'open';
     _element.sidePanel.className = '';
     this.trigger({type:'change'});
   }
   function close() {
     _state = 'close';
-    _element.dividerIcon.textContent = '>';
+    _element.dividerIcon.className = 'close';
     _element.sidePanel.className = 'close';
     this.trigger({type:'change'});
   }

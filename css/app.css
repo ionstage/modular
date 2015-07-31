@@ -59,6 +59,14 @@ body {
   white-space: nowrap;
 }
 
+#divider_icon.open:before {
+  content: '<';
+}
+
+#divider_icon.close:before {
+  content: '>';
+}
+
 #main_panel {
   height: 100%;
   position: relative;
