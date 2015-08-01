@@ -134,6 +134,15 @@
     }, false);
   }
 
+  function translate(el, x, y) {
+    var value = 'translate(' + x + 'px, ' + y + 'px)';
+    el.style.transform =  value;
+    el.style.webkitTransform = value;
+    el.style.MozTransform = value;
+    el.style.msTransform = value;
+    el.style.OTransform = value;
+  }
+
   var requestAnimationFrame = (function() {
     return window.requestAnimationFrame ||
            window.webkitRequestAnimationFrame ||
@@ -185,6 +194,7 @@
     indexOf: indexOf,
     setCursor: setCursor,
     setMouseHoverEffect: setMouseHoverEffect,
+    translate: translate,
     requestAnimationFrame: requestAnimationFrame,
     loadData: loadData,
     saveData: saveData,

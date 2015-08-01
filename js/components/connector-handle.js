@@ -18,11 +18,7 @@ var connectorHandle = (function() {
     dom.addClass(handleElement, 'hide');
   }
   function update() {
-    var cssText = dom.makeCSSText({
-      left: this._x + 'px',
-      top: this._y + 'px'
-    });
-    handleElement.style.cssText = cssText;
+    dom.translate(handleElement, this._x, this._y);
   }
   function position(point) {
     if (!point)

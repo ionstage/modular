@@ -352,7 +352,9 @@ body {
 }
 
 .port-connector-out.drag {
+  left: 0;
   position: absolute;
+  top: 0;
   z-index: 2147483647;
 }
 
