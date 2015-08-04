@@ -85,7 +85,7 @@ body {
 
 #search_input {
   -moz-box-sizing: content-box;
-  -webkit-appearance: textfield;
+  -webkit-appearance: none;
   box-sizing: content-box;
   border: none;
   border-radius: 6px;
@@ -96,10 +96,6 @@ body {
   position: absolute;
   width: 262px;
   z-index: 1;
-}
-
-#search_input.touch {
-  border-radius: 13px;
 }
 
 #search_input:focus {

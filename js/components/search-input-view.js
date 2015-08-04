@@ -6,7 +6,6 @@ var searchInputView = (function() {
   function element(value) {
     _element = value;
     if (isTouchEnabled) {
-      _element.className = 'touch';
       document.addEventListener('touchstart', function(event) {
         if (event.target !== _element)
           _element.blur();
