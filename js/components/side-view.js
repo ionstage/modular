@@ -14,24 +14,22 @@ var sideView = (function() {
         tap: function() {
           self.toggle();
           dom.setCursor('default');
-          removeClass(divider, 'tap');
+          removeClass(_element.dividerIcon, 'tap');
         },
         cancel: function() {
-          removeClass(divider, 'tap');
+          removeClass(_element.dividerIcon, 'tap');
         }
       });
-      addClass(divider, 'tap');
+      addClass(_element.dividerIcon, 'tap');
     }, false);
   }
   function open() {
     _state = 'open';
-    _element.dividerIcon.className = 'open';
     _element.sidePanel.className = '';
     this.trigger({type:'change'});
   }
   function close() {
     _state = 'close';
-    _element.dividerIcon.className = 'close';
     _element.sidePanel.className = 'close';
     this.trigger({type:'change'});
   }
