@@ -25,12 +25,12 @@ var sideView = (function() {
   }
   function open() {
     _state = 'open';
-    _element.sidePanel.className = '';
+    removeClass(_element.sidePanel, 'close');
     this.trigger({type:'change'});
   }
   function close() {
     _state = 'close';
-    _element.sidePanel.className = 'close';
+    addClass(_element.sidePanel, 'close');
     this.trigger({type:'change'});
   }
   function toggle() {
