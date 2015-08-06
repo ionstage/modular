@@ -56,7 +56,7 @@ body {
 
 #divider_icon {
   background-color: lightgray;
-  border-radius: 0px 10px 10px 0px;
+  border-radius: 0 10px 10px 0;
   display: table-cell;
   font-size: 26px;
   font-family: monospace;
@@ -138,11 +138,11 @@ body {
 
 .piece-list-item-header {
   background-color: black;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 10px 10px 0 0;
   color: white;
   height: 34px;
   overflow: hidden;
-  padding: 10px 10px 0px 10px;
+  padding: 10px 10px 0 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -150,9 +150,9 @@ body {
 .piece-list-item-content, .piece-footer.loading {
   background-color: white;
   border-color: black;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0 0 10px 10px;
   border-style: solid;
-  border-width: 0px 6px 6px;
+  border-width: 0 6px 6px;
   font-size: 12px;
   height: 40px;
   overflow: hidden;
@@ -168,7 +168,7 @@ body {
 
 #board {
   position: absolute;
-  top: 0px;
+  top: 0;
 }
 
 #path_container {
@@ -198,7 +198,7 @@ body {
 
 .piece-header {
   background-color: black;
-  border-radius: 10px 10px 0px 0px;
+  border-radius: 10px 10px 0 0;
   color: white;
   height: 34px;
   overflow: hidden;
@@ -216,7 +216,7 @@ body {
   cursor: move;
   height: 34px;
   overflow: hidden;
-  padding: 10px 0px 0px 10px;
+  padding: 10px 0 0 10px;
   position: absolute;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -246,7 +246,7 @@ body {
 }
 
 .piece-content.loading {
-  height: 0px;
+  height: 0;
 }
 
 .piece-component-back {
@@ -259,7 +259,7 @@ body {
 
 .piece-component {
   border: none;
-  height: 0px;
+  height: 0;
   overflow: hidden;
   vertical-align: bottom;
   width: 100%;
@@ -278,9 +278,9 @@ body {
 .piece-footer {
   background-color: black;
   border-color: black;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0 0 10px 10px;
   border-style: solid;
-  border-width: 0px 6px 6px;
+  border-width: 0 6px 6px;
 }
 
 .piece-footer.loading:before {
@@ -392,7 +392,7 @@ body {
 .port-content-text {
   height: 42px;
   overflow: hidden;
-  padding: 12px 0px 0px 8px;
+  padding: 12px 0 0 8px;
   position: absolute;
   text-overflow: ellipsis;
   white-space: nowrap;
