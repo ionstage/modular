@@ -112,13 +112,8 @@
     return cssText;
   }
 
-  function indexOf(parentNode, node) {
-    var children = parentNode.children;
-    for (var i = 0, len = children.length; i < len; i += 1) {
-      if (children[i] === node)
-        return i;
-    }
-    return -1;
+  function indexOf(parentNode, childNode) {
+    return Array.prototype.indexOf.call(parentNode.children, childNode);
   }
 
   function setCursor(value) {
