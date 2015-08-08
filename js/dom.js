@@ -147,21 +147,6 @@
            };
   })().bind(window);
 
-  function storageKey(key) {
-    return 'org.ionstage.board.' + key;
-  }
-
-  function loadData(key, defaultValue) {
-    var value = localStorage.getItem(storageKey(key));
-    if (value === null && typeof defaultValue !== 'undefined')
-      return defaultValue;
-    return JSON.parse(value);
-  }
-
-  function saveData(key, data) {
-    localStorage.setItem(storageKey(key), JSON.stringify(data));
-  }
-
   function supportsTouch() {
     return isTouchEnabled;
   }
@@ -191,8 +176,6 @@
     setMouseHoverEffect: setMouseHoverEffect,
     translate: translate,
     requestAnimationFrame: requestAnimationFrame,
-    loadData: loadData,
-    saveData: saveData,
     supportsTouch: supportsTouch,
     createNode: createNode
   };
