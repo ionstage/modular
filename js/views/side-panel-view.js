@@ -79,24 +79,30 @@
         config: function(element, isInitialized) {
           if (isInitialized)
             return;
-
           dom.setMouseHoverEffect(element);
-          element.addEventListener(dom.eventType.START, function(event) {
-            var deviderIconElement = event.currentTarget.children[0];
-            dom.startTapEvent(event, {
-              tap: function() {
-                ctrl.dispatchEvent({type: 'toggle'});
-                dom.setCursor('default');
-                dom.removeClass(deviderIconElement, 'tap');
-              },
-              cancel: function() {
-                dom.removeClass(deviderIconElement, 'tap');
-              }
-            });
-            dom.addClass(deviderIconElement, 'tap');
-          });
         }
-      }, [m('#divider_icon')])
+      }, [
+        m('#divider_icon', {
+          config: function(element, isInitialized) {
+            if (isInitialized)
+              return;
+            element.addEventListener(dom.eventType.START, function(event) {
+              var element = event.target;
+              dom.startTapEvent(event, {
+                tap: function() {
+                  ctrl.dispatchEvent({type: 'toggle'});
+                  dom.setCursor('default');
+                  dom.removeClass(element, 'tap');
+                },
+                cancel: function() {
+                  dom.removeClass(element, 'tap');
+                }
+              });
+              dom.addClass(element, 'tap');
+            });
+          }
+        })
+      ])
     ]);
   };
 
