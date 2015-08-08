@@ -139,12 +139,13 @@
             isAutoClose = true;
             sideView.close();
           }
+          var cssText = dom.makeCSSText({
+            left: cloneOffset.left + 'px',
+            top: cloneOffset.top + 'px'
+          });
+          cloneNode.style.cssText = cssText;
         }
-        var cssText = dom.makeCSSText({
-          left: (cloneOffset.left + dx) + 'px',
-          top: (cloneOffset.top + dy) + 'px'
-        });
-        cloneNode.style.cssText = cssText;
+        dom.translate(cloneNode, dx, dy);
       }
 
       function endListener(dx, dy) {
