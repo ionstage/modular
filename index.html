@@ -5,14 +5,6 @@
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
   <title>Board</title>
   <link rel="stylesheet" href="css/app.css">
-  <script id="piece_list_item_template" type="text/template">
-    <div class="piece-list-item">
-      <div class="piece-list-item-container">
-        <div class="piece-list-item-header"></div>
-        <div class="piece-list-item-content"></div>
-      </div>
-    </div>
-  </script>
   <script id="piece_template" type="text/template">
     <div class="piece loading">
       <div class="piece-header">
@@ -48,15 +40,7 @@
   </script>
 </head>
 <body class="unselectable">
-  <div id="side_panel">
-    <input id="search_input" type="search" autocapitalize="off" autocorrect="off"></input>
-    <div id="piece_list">
-      <div id="piece_list_content"></div>
-    </div>
-    <div id="divider">
-      <div id="divider_icon"></div>
-    </div>
-  </div>
+  <div id="side_panel_container"></div>
   <div id="main_panel">
     <svg id="path_container" xmlns="http://www.w3.org/2000/svg"></svg>
     <div id="board"></div>
@@ -64,10 +48,8 @@
   <script src="js/bundle.js"></script>
   <script src="js/lib.js"></script>
   <script src="js/dom.js"></script>
-  <script src="js/components/side-view.js"></script>
-  <script src="js/components/search-input-view.js"></script>
-  <script src="js/components/piece-list-view.js"></script>
-  <script src="js/components/piece-list.js"></script>
+  <script src="js/controllers/side-panel-controller.js"></script>
+  <script src="js/views/side-panel-view.js"></script>
   <script src="js/components/connector-handle.js"></script>
   <script src="js/components/path-container.js"></script>
   <script src="js/components/board.js"></script>

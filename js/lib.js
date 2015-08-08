@@ -115,52 +115,8 @@
     };
   }());
 
-  var eventModule = (function() {
-    var isArray = Array.isArray;
-    function enable(obj) {
-      obj._listener = {};
-      obj.on = on;
-      obj.off = off;
-      obj.trigger = trigger;
-      return obj;
-    }
-    function on(type, func) {
-      var listners = this._listener[type];
-      if (isArray(listners)) {
-        listners.push(func);
-      } else {
-        this._listener[type] = [func];
-      }
-    }
-    function off(type, func) {
-      var listners = this._listener[type];
-      if (isArray(listners)) {
-        if (!func) {
-          this._listener[type] = [];
-          return;
-        }
-        var index = listners.indexOf(func);
-        if (index !== -1) {
-          listners.splice(index, 1);
-        }
-      }
-    }
-    function trigger(event) {
-      var type = event.type, listeners = this._listener[type];
-      if (type && isArray(listeners)) {
-        for (var i = 0, len = listeners.length; i < len; i += 1) {
-          listeners[i](event);
-        }
-      }
-    }
-    return {
-      enable: enable
-    };
-  }());
-
   global.lib = {
-    util: util,
-    event: eventModule
+    util: util
   };
 
 }(this));

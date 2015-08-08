@@ -1,21 +1,118 @@
-var pieceListView = (function() {
-  var _element = null;
-  var _listItems = null;
-  var isTouchEnabled = dom.supportsTouch();
-  var templateNode = null;
+(function(app) {
+  'use strict';
+  var m = require('mithril');
+  var SidePanelController = app.SidePanelController || require('../controllers/side-panel-controller.js');
+
+  var sidePanelView = function(ctrl) {
+    var state = ctrl.state();
+    var searchKeyword = ctrl.searchKeyword();
+    var pieceList = ctrl.searchPieceList(searchKeyword);
+
+    return m('#side_panel', {
+      className: state
+    }, [
+      m('input#search_input', {
+        type:'search',
+        autocapitalize: 'off',
+        autocorrect: 'off',
+        value: searchKeyword,
+        config: function(element, isInitialized) {
+          if (isInitialized)
+            return;
+
+          var isFocus = false;
+          if (dom.supportsTouch()) {
+            document.addEventListener('touchstart', function(event) {
+              if (event.target !== element)
+                element.blur();
+            });
+          } else {
+            element.addEventListener('blur', function() {
+              isFocus = false;
+            });
+            element.addEventListener('click', function() {
+              if (!isFocus && element.selectionStart === element.selectionEnd) {
+                element.select();
+                isFocus = true;
+              }
+            });
+          }
+
+          var changeListener = function(event) {
+            var cache = ctrl.searchKeyword();
+            var value = event.target.value;
+
+            if (value === cache)
+              return;
+
+            ctrl.dispatchEvent({type: 'searchkeywordchange', value: value});
+          };
+          element.addEventListener('change', changeListener);
+          element.addEventListener('input', changeListener);
+        }
+      }),
+      m('#piece_list', {
+        config: function(element, isInitialized) {
+          if (isInitialized)
+            return;
+          setListItemDragEvent(element, function(event) {
+            ctrl.dispatchEvent(event);
+          });
+        }
+      }, [
+        m('#piece_list_content', pieceList.map(function(item) {
+          return m('.piece-list-item', [
+            m('.piece-list-item-container', {
+              className: dom.supportsTouch() ? '' : 'hoverable',
+              'data-piece-src': item.src
+            }, [
+              m('.piece-list-item-header', item.label),
+              m('.piece-list-item-content', item.description)
+            ])
+          ]);
+        }))
+      ]),
+      m('#divider', {
+        config: function(element, isInitialized) {
+          if (isInitialized)
+            return;
+
+          dom.setMouseHoverEffect(element);
+          element.addEventListener(dom.eventType.START, function(event) {
+            var deviderIconElement = event.currentTarget.children[0];
+            dom.startTapEvent(event, {
+              tap: function() {
+                ctrl.dispatchEvent({type: 'toggle'});
+                dom.setCursor('default');
+                dom.removeClass(deviderIconElement, 'tap');
+              },
+              cancel: function() {
+                dom.removeClass(deviderIconElement, 'tap');
+              }
+            });
+            dom.addClass(deviderIconElement, 'tap');
+          });
+        }
+      }, [m('#divider_icon')])
+    ]);
+  };
+
   var setListItemDragEvent = (function() {
+    var isTouchEnabled = 'createTouch' in document;
     var START = isTouchEnabled ? 'touchstart' : 'mousedown';
     var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
     var END = isTouchEnabled ? 'touchend' : 'mouseup';
-    return function(element, option) {
+
+    return function(element, ondragend) {
       var cloneNode;
       var cloneOffset;
       var draggingNode;
       var isFirstDrag;
       var isAutoClose;
+
       function startListener(event) {
         var node = event.target.parentNode;
-        if (node.className  === 'piece-list-item-container') {
+        if (dom.hasClass(node, 'piece-list-item-container')) {
           cloneNode = node.cloneNode(true);
           var pieceListContent = element.children[0];
           cloneOffset = {left: node.offsetLeft - pieceListContent.scrollLeft,
@@ -34,6 +131,7 @@ var pieceListView = (function() {
           });
         }
       }
+
       function dragListener(dx, dy) {
         if (isFirstDrag) {
           isFirstDrag = false;
@@ -48,6 +146,7 @@ var pieceListView = (function() {
         });
         cloneNode.style.cssText = cssText;
       }
+
       function endListener(dx, dy) {
         draggingNode.style.cssText = '';
         document.body.removeChild(cloneNode);
@@ -61,11 +160,12 @@ var pieceListView = (function() {
             pieceSrc: cloneNode.getAttribute('data-piece-src'),
             pieceLabel: cloneNode.children[0].textContent
           };
-          pieceListView.trigger(dragEndEvent);
+          ondragend(dragEndEvent);
         }
         if (isAutoClose)
           sideView.open();
       }
+
       function clearTouchEvent(target) {
         isHold = false;
         if (tapHoldTimer !== null)
@@ -73,6 +173,7 @@ var pieceListView = (function() {
         document.removeEventListener(MOVE, touchMoveListener, false);
         document.removeEventListener(END, touchEndListener, false);
       }
+
       function touchMoveListener(event) {
         event = isTouchEnabled ? event.touches[0] : event;
         var dx = Math.abs(event.pageX - startOffset.left);
@@ -80,9 +181,11 @@ var pieceListView = (function() {
         if (dx > 5 || dy > 5)
           clearTouchEvent();
       }
+
       function touchEndListener(event) {
         clearTouchEvent();
       }
+      
       if (isTouchEnabled) {
         var isHold = true;
         var tapHoldTimer = null;
@@ -108,59 +211,10 @@ var pieceListView = (function() {
         element.addEventListener(START, startListener, false);
       }
     };
-  }());
-  function setListItemHoverStyle() {
-    var styleText = '.piece-list-item-container:hover {opacity: 0.6;}';
-    var style = document.createElement('style');
-    style.appendChild(document.createTextNode(styleText));
-    document.getElementsByTagName('head')[0].appendChild(style);
-  }
-  function template(node) {
-    templateNode = dom.createNode(node.innerHTML);
-  }
-  function createPieceListItem(titleText, contentText, pieceSrc) {
-    var node = templateNode.cloneNode(true);
-    var map = {
-      element: node,
-      container: node.children[0],
-      containerHeader: node.children[0].children[0],
-      containerContent: node.children[0].children[1]
-    };
-    map.container.setAttribute('data-piece-src', pieceSrc);
-    map.containerHeader.textContent = titleText || '';
-    map.containerContent.textContent = contentText || '';
-    return map;
-  }
-  function element(value) {
-    _element = value;
-    setListItemDragEvent(_element);
-    if (!isTouchEnabled)
-      setListItemHoverStyle();
-  }
-  function listItems(value) {
-    _listItems = value;
-  }
-  function update() {
-    var listItems = _listItems;
-    var contentNode = document.createElement('div');
-    var preContentNode = _element.children[0];
-    contentNode.id = 'piece_list_content';
-    for (var i = 0, len = listItems.length; i < len; i += 1) {
-      var item = listItems[i];
-      var node = createPieceListItem(item.title, item.content, item.pieceSrc);
-      contentNode.appendChild(node.element);
-    }
-    _element.replaceChild(contentNode, preContentNode);
-  }
-  function updateSearchedListItems(listItems) {
-    this.listItems(listItems);
-    this.update();
-  }
-  return lib.event.enable({
-    template: template,
-    element: element,
-    listItems: listItems,
-    update: update,
-    updateSearchedListItems: updateSearchedListItems
-  });
-}());
+  })();
+
+  if (typeof module !== 'undefined' && module.exports)
+    module.exports = sidePanelView;
+  else
+    app.sidePanelView = sidePanelView;
+})(this.app || (this.app = {}));

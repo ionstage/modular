@@ -30,6 +30,15 @@ body {
   user-select: none;
 }
 
+.hoverable:hover {
+  opacity: 0.6;
+}
+
+#side_panel_container {
+  float: left;
+  height: 100%;
+}
+
 #side_panel {
   background-color: lightgray;
   float: left;
