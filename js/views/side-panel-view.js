@@ -12,7 +12,7 @@
       className: state
     }, [
       m('input#search_input', {
-        type:'search',
+        type: 'search',
         autocapitalize: 'off',
         autocorrect: 'off',
         value: searchKeyword,
@@ -31,10 +31,11 @@
               isFocus = false;
             });
             element.addEventListener('click', function() {
-              if (!isFocus && element.selectionStart === element.selectionEnd) {
+              if (isFocus)
+                return;
+              isFocus = true;
+              if (element.selectionStart === element.selectionEnd)
                 element.select();
-                isFocus = true;
-              }
             });
           }
 
@@ -121,47 +122,59 @@
 
       function startListener(event) {
         var node = event.target.parentNode;
-        if (dom.hasClass(node, 'piece-list-item-container')) {
-          cloneNode = node.cloneNode(true);
-          var pieceListContent = element.children[0];
-          cloneOffset = {
-            left: node.offsetLeft - pieceListContent.scrollLeft,
-            top: node.offsetTop - pieceListContent.scrollTop
-          };
-          node.style.cssText = dom.makeCSSText({opacity: 0.6});
-          draggingNode = node;
-          dom.addClass(cloneNode, 'drag');
-          document.body.appendChild(cloneNode);
-          if (document.activeElement && document.activeElement.blur)
-            document.activeElement.blur();
-          isFirstDrag = true;
-          isAutoClose = false;
-          dom.startDragEvent(event, {
-            drag: dragListener,
-            end: endListener
-          });
-        }
+
+        if (!dom.hasClass(node, 'piece-list-item-container'))
+          return;
+
+        var pieceListContent = element.children[0];
+
+        cloneOffset = {
+          left: node.offsetLeft - pieceListContent.scrollLeft,
+          top: node.offsetTop - pieceListContent.scrollTop
+        };
+        draggingNode = node;
+        isFirstDrag = true;
+        isAutoClose = false;
+
+        node.style.cssText = dom.makeCSSText({opacity: 0.6});
+
+        var activeElement = document.activeElement;
+        if (activeElement && activeElement.blur)
+          activeElement.blur();
+
+        cloneNode = node.cloneNode(true);
+        dom.addClass(cloneNode, 'drag');
+        document.body.appendChild(cloneNode);
+
+        dom.startDragEvent(event, {
+          drag: dragListener,
+          end: endListener
+        });
       }
 
       function dragListener(dx, dy) {
         if (isFirstDrag) {
           isFirstDrag = false;
+
           if (board.clientWidth() < 46) {
             isAutoClose = true;
             sideView.close();
           }
+
           var cssText = dom.makeCSSText({
             left: cloneOffset.left + 'px',
             top: cloneOffset.top + 'px'
           });
           cloneNode.style.cssText = cssText;
         }
+
         dom.translate(cloneNode, dx, dy);
       }
 
       function endListener(dx, dy) {
         draggingNode.style.cssText = '';
         document.body.removeChild(cloneNode);
+
         if (dx !== 0 || dy !== 0) {
           var pageX = cloneOffset.left + dx;
           var pageY = cloneOffset.top + dy;
@@ -174,6 +187,7 @@
           };
           ondragend(dragEndEvent);
         }
+
         if (isAutoClose)
           sideView.open();
       }
@@ -197,18 +211,21 @@
       function touchEndListener(event) {
         clearTouchEvent();
       }
-      
+
       if (isTouchEnabled) {
         var isHold = true;
         var tapHoldTimer = null;
         var startOffset;
+
         element.addEventListener(START, function(event) {
           isHold = true;
+
           var touch = event.touches[0];
           startOffset = {
             left: touch.pageX,
             top: touch.pageY
           };
+
           if (tapHoldTimer !== null)
             clearTimeout(tapHoldTimer);
           tapHoldTimer = setTimeout(function() {
@@ -219,6 +236,7 @@
               startListener(event);
             }
           }, 300);
+
           document.addEventListener(MOVE, touchMoveListener);
           document.addEventListener(END, touchEndListener);
         }, false);
