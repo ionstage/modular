@@ -124,14 +124,6 @@ var board = (function() {
   function clientWidth() {
     return mainPanel.clientWidth;
   }
-  function resetTouchScroll() {
-    if (dom.supportsTouch()) {
-      mainPanel.style.cssText = '-webkit-overflow-scrolling: auto;';
-      setTimeout(function() {
-        mainPanel.style.cssText = '';
-      }, 0);
-    }
-  }
   return {
     element: element,
     pageToLocal: pageToLocal,
@@ -148,7 +140,6 @@ var board = (function() {
     getConnectorPositionMap: getConnectorPositionMap,
     getConnectorSizeOffset: getConnectorSizeOffset,
     isLoading: isLoading,
-    clientWidth: clientWidth,
-    resetTouchScroll: resetTouchScroll
+    clientWidth: clientWidth
   };
 }());

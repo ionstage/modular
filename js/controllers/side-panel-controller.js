@@ -7,7 +7,6 @@
     this.state = m.prop(SidePanelController.STATE_OPEN);
     this.pieceList = m.prop([]);
     this.searchKeyword = m.prop('');
-    this.ontoggle = noop;
     this.ondragend = noop;
   };
 
@@ -54,7 +53,6 @@
       else if (state === SidePanelController.STATE_CLOSE)
         this.state(SidePanelController.STATE_OPEN);
       m.redraw();
-      this.ontoggle();
       break;
     case 'searchkeywordchange':
       this.searchKeyword(event.value);

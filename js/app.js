@@ -11,10 +11,6 @@
       controller: function() {
         var ctrl = new SidePanelController();
 
-        ctrl.ontoggle = function() {
-          board.resetTouchScroll();
-        };
-
         ctrl.ondragend = function(event) {
           var localPoint = board.pageToLocal({x: event.pageX, y: event.pageY});
 
