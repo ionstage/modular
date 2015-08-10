@@ -34,8 +34,7 @@ body {
   opacity: 0.6;
 }
 
-#side_panel_container {
-  float: left;
+#container {
   height: 100%;
 }
 

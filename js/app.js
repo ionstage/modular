@@ -4,60 +4,73 @@
   var SidePanelController = app.SidePanelController || require('./controllers/side-panel-controller.js');
   var sidePanelView = app.sidePanelView || require('./views/side-panel-view.js');
 
-  function initialize() {
-    var element = dom.getElement();
+  var controller = function() {
+    var sidePanelController = new SidePanelController();
 
-    var sideViewComponent = {
-      controller: function() {
-        var ctrl = new SidePanelController();
+    sidePanelController.ondragend = function(event) {
+      var localPoint = board.pageToLocal({x: event.pageX, y: event.pageY});
 
-        ctrl.ondragend = function(event) {
-          var localPoint = board.pageToLocal({x: event.pageX, y: event.pageY});
+      if (localPoint.x < 0 || localPoint.y < 0)
+        return;
 
-          if (localPoint.x < 0 || localPoint.y < 0)
-            return;
-
-          var p = piece.create(event.pieceSrc);
-          p.label(event.pieceLabel);
-          p.position(localPoint);
-          p.updatePosition();
-          board.append(p);
-        };
-
-        ctrl.loadPieceList('piecelist/default.json');
-
-        return ctrl;
-      },
-      view: sidePanelView
+      var p = piece.create(event.pieceSrc);
+      p.label(event.pieceLabel);
+      p.position(localPoint);
+      p.updatePosition();
+      board.append(p);
     };
 
-    m.mount(element.sidePanelContainer, sideViewComponent);
+    sidePanelController.loadPieceList('piecelist/default.json');
 
-    // template
-    piece.template(element.pieceTemplate);
-    port.template(element.portTemplate);
+    this.sidePanelController = sidePanelController;
+  };
 
-    // drag connector handle
-    connectorHandle.element({
-      mainPanel: element.mainPanel
-    });
+  var view = function(ctrl) {
+    return [
+      sidePanelView(ctrl.sidePanelController),
+      m('#main_panel', {
+        config: function(element, isInitialized) {
+          if (isInitialized)
+            return;
+          var pieceTemplateElement = dom.el('#piece_template');
+          var portTemplateElement = dom.el('#port_template');
+          var pathContainerElement = dom.el('#path_container');
+          var boardElement = dom.el('#board');
 
-    // path container
-    pathContainer.element(element.pathContainer);
+          // template
+          piece.template(pieceTemplateElement);
+          port.template(portTemplateElement);
 
-    // board
-    board.element({
-      mainPanel: element.mainPanel,
-      board: element.board
-    });
+          // drag connector handle
+          connectorHandle.element({
+            mainPanel: element
+          });
 
-    // board event
-    boardEvent.element({
-      mainPanel: element.mainPanel,
-      board: element.board
-    });
-    boardEvent.loadURLHash();
-  }
+          // path container
+          pathContainer.element(pathContainerElement);
 
-  initialize();
+          // board
+          board.element({
+            mainPanel: element,
+            board: boardElement
+          });
+
+          // board event
+          boardEvent.element({
+            mainPanel: element,
+            board: boardElement
+          });
+          boardEvent.loadURLHash();
+        }
+      }, [
+        m('svg#path_container'),
+        m('#board')
+      ])
+    ];
+  };
+
+  m.mount(dom.el('#container'), {
+    controller: controller,
+    view: view
+  });
 })(this.app || (this.app = {}));

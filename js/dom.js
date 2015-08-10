@@ -7,14 +7,8 @@
   var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
   var END = isTouchEnabled ? 'touchend' : 'mouseup';
 
-  function getElement() {
-    var map = {};
-    var nodeList = document.querySelectorAll('[id]');
-    for (var i = 0, len = nodeList.length; i < len; i += 1) {
-      var node = nodeList[i];
-      map[lib.util.camelCase(node.id, '_')] = node;
-    }
-    return map;
+  function el(selector) {
+    return document.querySelector(selector);
   }
 
   function setTapEvent(element, option) {
@@ -158,7 +152,7 @@
   }
 
   global.dom = {
-    getElement: getElement,
+    el: el,
     setTapEvent: setTapEvent,
     startTapEvent: startTapEvent,
     startDragEvent: startDragEvent,
