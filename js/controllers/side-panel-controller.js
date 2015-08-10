@@ -21,7 +21,7 @@
     if (!keyword)
       return [];
 
-    var list = this.pieceList();
+    var pieceList = this.pieceList();
 
     var labelMatchList = [];
     var tagMatchList = [];
@@ -30,14 +30,17 @@
 
     keyword = keyword.toLowerCase();
 
-    list.forEach(function(item) {
-      if (item.label.toLowerCase().indexOf(keyword) === 0)
+    pieceList.forEach(function(item) {
+      var label = item.label.toLowerCase();
+      var description = item.description.toLowerCase();
+
+      if (label.indexOf(keyword) === 0)
         labelMatchList.push(item);
       else if (isMatchTag(item.tag, keyword))
         tagMatchList.push(item);
-      else if (keyword.length >= 2 && item.label.toLowerCase().indexOf(keyword) !== -1)
+      else if (keyword.length >= 2 && label.indexOf(keyword) !== -1)
         labelMatchListSub.push(item);
-      else if (keyword.length >= 2 && item.description.toLowerCase().indexOf(keyword) !== -1)
+      else if (keyword.length >= 2 && description.indexOf(keyword) !== -1)
         descriptionMatchList.push(item);
     });
 
@@ -67,11 +70,9 @@
   };
 
   var isMatchTag = function(tagList, keyword) {
-    for (var i = 0, len = tagList.length; i < len; i++) {
-      if (tagList[i].toLowerCase().indexOf(keyword) !== -1)
-        return true;
-    }
-    return false;
+    return tagList.some(function(tag) {
+      return tag.toLowerCase().indexOf(keyword) !== -1;
+    });
   };
 
   SidePanelController.STATE_OPEN = 'open';
