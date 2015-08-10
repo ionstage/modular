@@ -235,7 +235,6 @@ var boardEvent = (function() {
             var connection = connections[i];
             createAndAppendConnection(connection, pieceIDMap);
           }
-          pathContainer.size(board.size());
           isLoadingURLHash = false;
         } else {
           if (retryCount < 100) {
@@ -252,11 +251,6 @@ var boardEvent = (function() {
       location.replace('index.html#');
       isLoadingURLHash = false;
     }
-  }
-  function setWindowResizeListener() {
-    window.addEventListener('resize', lib.util.debounce(function() {
-      pathContainer.size(board.size());
-    }, 1000 / 60));
   }
   function setWindowMessageListener() {
     window.addEventListener('message', function(event) {
@@ -361,7 +355,6 @@ var boardEvent = (function() {
     }, false);
   }
   function element(elementMap) {
-    setWindowResizeListener();
     setWindowMessageListener();
     setMainPanelStartListener(elementMap.mainPanel);
   }
@@ -459,7 +452,6 @@ var boardEvent = (function() {
         if (isTouchEnabled)
           piece.removeClassOfHeader('delete');
         updateURLHash();
-        pathContainer.size(board.size());
       },
       cancel: function() {
         if (isTouchEnabled)
@@ -494,7 +486,6 @@ var boardEvent = (function() {
       },
       end: function(dx, dy) {
         board.hideAllPieceComponentBack();
-        pathContainer.size(board.size());
         isDragging = false;
         dom.requestAnimationFrame(function() {
           piece.position({x: startX + dx, y: startY + dy});

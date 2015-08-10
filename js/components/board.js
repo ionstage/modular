@@ -48,25 +48,6 @@ var board = (function() {
       _pieceMap[key].hideComponentBack();
     }
   }
-  function size() {
-    var pieceMap = _pieceMap;
-    var maxX = 0, maxY = 0;
-    for (var key in pieceMap) {
-      var pieceElement = pieceMap[key].element();
-      var pieceX = pieceElement.offsetLeft + pieceElement.offsetWidth;
-      if (pieceX > maxX)
-        maxX = pieceX;
-      var pieceY = pieceElement.offsetTop + pieceElement.offsetHeight;
-      if (pieceY > maxY)
-        maxY = pieceY;
-    }
-    maxX = Math.max(mainPanel.clientWidth, maxX + 45);
-    maxY = Math.max(mainPanel.clientHeight, maxY + 3);
-    return {
-      width: maxX,
-      height: maxY,
-    };
-  }
   function getInConnectorNotConnectedElements(type) {
     var nodes = mainPanel.querySelectorAll('.port-connector-in');
     var notConnectedElements = [];
@@ -159,7 +140,6 @@ var board = (function() {
     pieceMap: pieceMap,
     showAllPieceComponentBack: showAllPieceComponentBack,
     hideAllPieceComponentBack: hideAllPieceComponentBack,
-    size: size,
     getInConnectorNotConnectedElements: getInConnectorNotConnectedElements,
     showPortConnectorConnected: showPortConnectorConnected,
     hidePortConnectorConnected: hidePortConnectorConnected,

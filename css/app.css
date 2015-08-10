@@ -182,6 +182,7 @@ body {
 
 #path_container {
   height: 100%;
+  overflow: visible;
   vertical-align: bottom;
   width: 100%;
 }

@@ -68,12 +68,6 @@ var pathContainer = (function() {
         delete positionMap[id];
     }
   }
-  function size(rect) {
-    if ('width' in rect)
-      _element.style.width = rect.width + 'px';
-    if ('height' in rect)
-      _element.style.height = rect.height + 'px';
-  }
   function getSourceID(targetID) {
     var path = _element.querySelector('[data-target-id="' + targetID + '"]');
     if (path)
@@ -119,7 +113,6 @@ var pathContainer = (function() {
     position: position,
     updatePosition: updatePosition,
     refreshPosition: refreshPosition,
-    size: size,
     getSourceID: getSourceID,
     getTargetIDs: getTargetIDs,
     setFlushPath: setFlushPath,

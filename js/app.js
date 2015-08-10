@@ -12,7 +12,6 @@
         var ctrl = new SidePanelController();
 
         ctrl.ontoggle = function() {
-          pathContainer.size(board.size());
           board.resetTouchScroll();
         };
 
