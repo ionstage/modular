@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
   var m = require('mithril');
+  var ConnectorHandle = app.ConnectorHandle || require('../components/connector-handle.js');
 
   var mainPanelView = function(ctrl) {
     return m('#main_panel', {
@@ -15,11 +16,6 @@
         // template
         piece.template(pieceTemplateElement);
         port.template(portTemplateElement);
-
-        // drag connector handle
-        connectorHandle.element({
-          mainPanel: element
-        });
 
         // path container
         pathContainer.element(pathContainerElement);
@@ -39,7 +35,14 @@
       }
     }, [
       m('svg#path_container'),
-      m('#board')
+      m('#board'),
+      m('.port-connector-out.drag.hide', {
+        config: function(element, isInitialized) {
+          if (isInitialized)
+            return;
+          boardEvent.setConnectorHandle(new ConnectorHandle(element));
+        }
+      })
     ]);
   };
 

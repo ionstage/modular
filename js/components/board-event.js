@@ -4,6 +4,7 @@ var boardEvent = (function() {
   var isTouchEnabled = dom.supportsTouch();
   var START = dom.eventType.START;
   var isLoadingURLHash = false;
+  var connectorHandle = null;
   function createPorts(propData, eventData) {
     var ports = [], key, item, p;
     if (propData) {
@@ -357,6 +358,9 @@ var boardEvent = (function() {
   function element(elementMap) {
     setWindowMessageListener();
     setMainPanelStartListener(elementMap.mainPanel);
+  }
+  function setConnectorHandle(component) {
+    connectorHandle = component;
   }
   function showPort(event) {
     var portIDSet = event.target.value.split('/');
@@ -782,6 +786,7 @@ var boardEvent = (function() {
   }());
   return {
     element: element,
+    setConnectorHandle: setConnectorHandle,
     showPort: showPort,
     removePortConnection: removePortConnection,
     loadURLHash: loadURLHash

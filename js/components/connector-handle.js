@@ -1,45 +1,41 @@
-var connectorHandle = (function() {
-  var handleElement = createHandleElement();
-  var mainPanel = null;
-  var currentType = null;
-  function createHandleElement() {
-    var node = document.createElement('div');
-    node.className = 'port-connector-out drag hide';
-    return node;
-  }
-  function element(value) {
-    mainPanel = value.mainPanel;
-    mainPanel.appendChild(handleElement);
-  }
-  function show() {
-    dom.removeClass(handleElement, 'hide');
-  }
-  function hide() {
-    dom.addClass(handleElement, 'hide');
-  }
-  function update() {
-    dom.translate(handleElement, this._x, this._y);
-  }
-  function position(point) {
-    if (!point)
-      return {x: this._x, y: this._y};
-    if ('x' in point)
-      this._x = point.x;
-    if ('y' in point)
-      this._y = point.y;
-  }
-  function type(value) {
-    if (currentType)
-      dom.removeClass(handleElement, currentType);
-    dom.addClass(handleElement, value);
-    currentType = value;
-  }
-  return {
-    element: element,
-    show: show,
-    hide: hide,
-    update: update,
-    position: position,
-    type: type
+(function(app) {
+  'use strict';
+
+  var ConnectorHandle = function(element) {
+    this._element = element;
+    this._x = 0;
+    this._y = 0;
+    this._type = '';
   };
-}());
+
+  ConnectorHandle.prototype.show = function() {
+    dom.removeClass(this._element, 'hide');
+  };
+
+  ConnectorHandle.prototype.hide = function() {
+    dom.addClass(this._element, 'hide');
+  };
+
+  ConnectorHandle.prototype.update = function() {
+    dom.translate(this._element, this._x, this._y);
+  };
+
+  ConnectorHandle.prototype.position = function(point) {
+    this._x = point.x;
+    this._y = point.y;
+  };
+
+  ConnectorHandle.prototype.type = function(value) {
+    var element = this._element;
+    var currentType = this._type;
+    if (currentType)
+      dom.removeClass(element, currentType);
+    dom.addClass(element, value);
+    this._type = value;
+  };
+
+  if (typeof module !== 'undefined' && module.exports)
+    module.exports = ConnectorHandle;
+  else
+    app.ConnectorHandle = ConnectorHandle;
+})(this.app || (this.app = {}));
