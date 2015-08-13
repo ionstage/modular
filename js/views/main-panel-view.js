@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
   var m = require('mithril');
-  var ConnectorHandle = app.ConnectorHandle || require('../components/connector-handle.js');
+  var boardView = app.boardView || require('../views/board-view.js');
 
   var mainPanelView = function(ctrl) {
     return m('#main_panel', {
@@ -33,17 +33,7 @@
         });
         boardEvent.loadURLHash();
       }
-    }, [
-      m('svg#path_container'),
-      m('#board'),
-      m('.port-connector-out.drag.hide', {
-        config: function(element, isInitialized) {
-          if (isInitialized)
-            return;
-          boardEvent.setConnectorHandle(new ConnectorHandle(element));
-        }
-      })
-    ]);
+    }, boardView());
   };
 
   if (typeof module !== 'undefined' && module.exports)
