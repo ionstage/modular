@@ -11,12 +11,6 @@
     return document.querySelector(selector);
   }
 
-  function setTapEvent(element, option) {
-    element.addEventListener(START, function(event) {
-      startTapEvent(event, option);
-    }, false);
-  }
-
   function startTapEvent(event, option) {
     var target = event.currentTarget, startOffset;
     function moveListener(event) {
@@ -153,7 +147,6 @@
 
   global.dom = {
     el: el,
-    setTapEvent: setTapEvent,
     startTapEvent: startTapEvent,
     startDragEvent: startDragEvent,
     eventType: {
