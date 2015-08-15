@@ -87,19 +87,23 @@
           config: function(element, isInitialized) {
             if (isInitialized)
               return;
-            element.addEventListener(dom.eventType.START, function(event) {
-              var element = event.target;
-              dom.startTapEvent(event, {
-                tap: function() {
-                  ctrl.dispatchEvent({type: 'toggle'});
-                  dom.setCursor('default');
-                  dom.removeClass(element, 'tap');
-                },
-                cancel: function() {
-                  dom.removeClass(element, 'tap');
-                }
-              });
-              dom.addClass(element, 'tap');
+
+            dom.tappable({
+              element: element,
+              ontap: function() {
+                ctrl.dispatchEvent({type: 'toggle'});
+                dom.setCursor('default');
+                dom.removeClass(element, 'tap');
+              },
+              onstart: function() {
+                dom.addClass(element, 'tap');
+              },
+              onout: function() {
+                dom.removeClass(element, 'tap');
+              },
+              onover: function() {
+                dom.addClass(element, 'tap');
+              }
             });
           }
         })

@@ -11,6 +11,66 @@
     return document.querySelector(selector);
   }
 
+  var tappable = (function() {
+    var Tappable = function(option) {
+      var noop = function() {};
+      var element = this._element = option.element;
+
+      this._move = move.bind(this);
+      this._end = end.bind(this);
+      this._ontap = option.ontap || noop;
+      this._onstart = option.onstart || noop;
+      this._onout = option.onout || noop;
+      this._onover = option.onover || noop;
+
+      element.addEventListener(START, start.bind(this));
+    };
+
+    var start = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      this._previousTarget = event.currentTarget;
+
+      document.addEventListener(MOVE, this._move);
+      document.addEventListener(END, this._end);
+
+      this._onstart();
+    };
+
+    var move = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var target = event.target;
+
+      if (target === this._previousTarget)
+        return;
+
+      if (target === this._element)
+        this._onover();
+      else
+        this._onout();
+
+      this._previousTarget = target;
+    };
+
+    var end = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      document.removeEventListener(MOVE, this._move);
+      document.removeEventListener(END, this._end);
+
+      if (event.target === this._element)
+        this._ontap();
+    };
+
+    return function(option) {
+      new Tappable(option);
+    };
+  })();
+
   function startTapEvent(event, option) {
     var target = event.currentTarget, startOffset;
     function moveListener(event) {
@@ -147,6 +207,7 @@
 
   global.dom = {
     el: el,
+    tappable: tappable,
     startTapEvent: startTapEvent,
     startDragEvent: startDragEvent,
     eventType: {
