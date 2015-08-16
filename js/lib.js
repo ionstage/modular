@@ -12,10 +12,6 @@
     function isNumber(obj) {
       return toString.call(obj) == '[object Number]';
     }
-    function isBoolean(obj) {
-      return obj === true || obj === false ||
-             toString.call(obj) == '[object Boolean]';
-    }
     function parseObject(obj) {
       if (obj === null || obj === undefined)
         return null;
@@ -80,13 +76,6 @@
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#x27;');
     }
-    function camelCase(str, separetor) {
-      separetor = separetor || '-';
-      var re = new RegExp(separetor + '+(.)?', 'g');
-      return str.replace(re, function(match, chr) {
-        return chr ? chr.toUpperCase() : '';
-      });
-    }
     function debounce(func, wait) {
       if (typeof func !== 'function')
         return;
@@ -104,13 +93,11 @@
       isArray: isArray,
       isString: isString,
       isNumber: isNumber,
-      isBoolean: isBoolean,
       parseObject: parseObject,
       parseArray: parseArray,
       parseString: parseString,
       parseNumber: parseNumber,
       escape: escape,
-      camelCase: camelCase,
       debounce: debounce
     };
   }());
