@@ -181,7 +181,7 @@ var boardEvent = (function() {
           data: cacheDataList
         }));
       }
-      location.replace('index.html#' + hashText);
+      location.replace('#' + hashText);
       var urlLen = location.href.length;
       if (urlLen > 2083)
         printLog('Too long URL(' + urlLen + ' words)');
@@ -242,14 +242,14 @@ var boardEvent = (function() {
             setTimeout(waitLoadPiece, 100);
             retryCount += 1;
           } else {
-            location.replace('index.html#' + hashText);
+            location.replace('#' + hashText);
             printLog('Load time out');
             isLoadingURLHash = false;
           }
         }
       }, 100);
     } else {
-      location.replace('index.html#');
+      location.replace('#');
       isLoadingURLHash = false;
     }
   }
