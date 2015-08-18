@@ -10,15 +10,11 @@
           return;
         var pieceTemplateElement = dom.el('#piece_template');
         var portTemplateElement = dom.el('#port_template');
-        var pathContainerElement = dom.el('#path_container');
         var boardElement = dom.el('#board');
 
         // template
         piece.template(pieceTemplateElement);
         port.template(portTemplateElement);
-
-        // path container
-        pathContainer.element(pathContainerElement);
 
         // board
         board.element({

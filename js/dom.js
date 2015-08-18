@@ -7,7 +7,14 @@
   var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
   var END = isTouchEnabled ? 'touchend' : 'mouseup';
 
-  function el(selector) {
+  function el(selector, namespace) {
+    if (selector[0] === '<') {
+      selector = selector.match(/<(.+)>/)[1];
+      if (namespace)
+        return document.createElementNS(namespace, selector);
+      else
+        return document.createElement(selector);
+    }
     return document.querySelector(selector);
   }
 

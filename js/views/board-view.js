@@ -2,10 +2,17 @@
   'use strict';
   var m = require('mithril');
   var ConnectorHandle = app.ConnectorHandle || require('../components/connector-handle.js');
+  var PathContainer = app.PathContainer || require('../components/path-container.js');
 
   var boardView = function() {
     return [
-      m('svg#path_container'),
+      m('svg#path_container', {
+        config: function(element, isInitialized) {
+          if (isInitialized)
+            return;
+          boardEvent.setPathContainer(new PathContainer(element));
+        }
+      }),
       m('#board'),
       m('.port-connector-out.drag.hide', {
         config: function(element, isInitialized) {

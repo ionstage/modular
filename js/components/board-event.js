@@ -5,6 +5,7 @@ var boardEvent = (function() {
   var START = dom.eventType.START;
   var isLoadingURLHash = false;
   var connectorHandle = null;
+  var pathContainer = null;
   function createPorts(propData, eventData) {
     var ports = [], key, item, p;
     if (propData) {
@@ -361,6 +362,9 @@ var boardEvent = (function() {
   }
   function setConnectorHandle(component) {
     connectorHandle = component;
+  }
+  function setPathContainer(component) {
+    pathContainer = component;
   }
   function showPort(event) {
     var portIDSet = event.target.value.split('/');
@@ -787,6 +791,7 @@ var boardEvent = (function() {
   return {
     element: element,
     setConnectorHandle: setConnectorHandle,
+    setPathContainer: setPathContainer,
     showPort: showPort,
     removePortConnection: removePortConnection,
     loadURLHash: loadURLHash

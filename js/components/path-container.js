@@ -1,121 +1,152 @@
-var pathContainer = (function() {
-  var _element = null;
-  var dirtyIDs = [];
-  var positionMap = {};
-  function createPathElement() {
-    return document.createElementNS('http://www.w3.org/2000/svg', 'path');
-  }
-  function element(value) {
-    _element = value;
-  }
-  function append(sourceID, targetID) {
-    var path = _element.querySelector('[data-source-id="' + sourceID + '"]' +
-                                      '[data-target-id="' + targetID + '"]');
-    if (!path) {
-      path = createPathElement();
-      path.setAttribute('data-source-id', sourceID);
-      path.setAttribute('data-target-id', targetID);
-      _element.appendChild(path);
-    }
-  }
-  function remove(sourceID, targetID) {
-    var path = _element.querySelector('[data-source-id="' + sourceID + '"]' +
-                                      '[data-target-id="' + targetID + '"]');
-    if (path)
-      _element.removeChild(path);
-  }
-  function change(oldIDSet, newIDSet) {
-    if (oldIDSet[0] === newIDSet[0] && oldIDSet[1] === newIDSet[1])
-      return;
-    var path = _element.querySelector('[data-source-id="' + oldIDSet[0] + '"]' +
-                                      '[data-target-id="' + oldIDSet[1] + '"]');
-    if (path) {
-      var newPath = _element.querySelector('[data-source-id="' + newIDSet[0] + '"]' +
-                                           '[data-target-id="' + newIDSet[1] + '"]');
-      if (newPath)
-        this.remove(newIDSet[0], newIDSet[1]);
-      path.setAttribute('data-source-id', newIDSet[0]);
-      path.setAttribute('data-target-id', newIDSet[1]);
+(function(app) {
+  'use strict';
 
-    }
-  }
-  function position(id, point) {
-    dirtyIDs.push(id);
-    positionMap[id] = point;
-  }
-  function updatePosition() {
-    for (var i = 0, i_len = dirtyIDs.length; i < i_len; i += 1) {
-      var id = dirtyIDs[i];
-      var paths = _element.querySelectorAll('[data-source-id="' + id + '"],' +
-                                            '[data-target-id="' + id + '"]');
-      for (var j = 0, j_len = paths.length; j < j_len; j += 1) {
-        var path = paths[j];
+  var PathContainer = function(element) {
+    this._element = element;
+    this._dirtyIDs = [];
+    this._positionMap = {};
+  };
+
+  PathContainer.prototype.append = function(sourceID, targetID) {
+    var path = getPath(this, sourceID, targetID);
+
+    if (path)
+      return;
+
+    path = dom.el('<path>', 'http://www.w3.org/2000/svg');
+    path.setAttribute('data-source-id', sourceID);
+    path.setAttribute('data-target-id', targetID);
+
+    this._element.appendChild(path);
+  };
+
+  PathContainer.prototype.remove = function(sourceID, targetID) {
+    var path = getPath(this, sourceID, targetID);
+
+    if (path)
+      this._element.removeChild(path);
+  };
+
+  PathContainer.prototype.change = function(oldIDSet, newIDSet) {
+    var oldSourceID = oldIDSet[0];
+    var oldTargetID = oldIDSet[1];
+    var newSourceID = newIDSet[0];
+    var newTargetID = newIDSet[1];
+
+    if (oldSourceID === newSourceID && oldTargetID === newTargetID)
+      return;
+
+    var path = getPath(this, oldSourceID, oldTargetID);
+
+    if (!path)
+      return;
+
+    var newPath = getPath(this, newSourceID, newTargetID);
+
+    if (newPath)
+      this.remove(newSourceID, newTargetID);
+
+    path.setAttribute('data-source-id', newSourceID);
+    path.setAttribute('data-target-id', newTargetID);
+  };
+
+  PathContainer.prototype.position = function(id, point) {
+    this._dirtyIDs.push(id);
+    this._positionMap[id] = point;
+  };
+
+  PathContainer.prototype.updatePosition = function() {
+    var dirtyIDs = this._dirtyIDs;
+    var positionMap = this._positionMap;
+
+    dirtyIDs.forEach(function(id) {
+      var paths = Array.prototype.slice.call(getAllPaths(this, id, id));
+      paths.forEach(function(path) {
         var sourceID = path.getAttribute('data-source-id');
         var targetID = path.getAttribute('data-target-id');
         var sourcePoint = positionMap[sourceID];
         var targetPoint = positionMap[targetID];
         path.setAttribute('d', 'M' + sourcePoint.x + ',' + sourcePoint.y +
                                'L' + targetPoint.x + ',' + targetPoint.y + 'Z');
-      }
-    }
-    dirtyIDs = [];
-  }
-  function refreshPosition() {
+      });
+    }.bind(this));
+
+    this._dirtyIDs = [];
+  };
+
+  PathContainer.prototype.refreshPosition = function() {
+    var positionMap = this._positionMap;
+
     for (var id in positionMap) {
-      var paths = _element.querySelectorAll('[data-source-id="' + id + '"],' +
-                                            '[data-target-id="' + id + '"]');
+      var paths = getAllPaths(this, id, id);
       if (paths.length === 0)
         delete positionMap[id];
     }
-  }
-  function getSourceID(targetID) {
-    var path = _element.querySelector('[data-target-id="' + targetID + '"]');
+  };
+
+  PathContainer.prototype.getSourceID = function(targetID) {
+    var path = getPath(this, null, targetID);
+
     if (path)
       return path.getAttribute('data-source-id');
     else
       return null;
-  }
-  function getTargetIDs(sourceID) {
-    var targetIDs = [];
-    var paths = _element.querySelectorAll('[data-source-id="' + sourceID + '"]');
-    for (var i = 0, len = paths.length; i < len; i += 1) {
-      targetIDs.push(paths[i].getAttribute('data-target-id'));
-    }
-    return targetIDs;
-  }
-  function setFlushPath(sourceID, targetID, flag) {
-    var path = _element.querySelector('[data-source-id="' + sourceID + '"]' +
-                                      '[data-target-id="' + targetID + '"]');
-    if (path) {
-      if (flag)
-        path.setAttribute('class', 'flush');
-      else
-        path.removeAttribute('class');
-    }
-  }
-  function getConnectionList() {
-    var list = [];
-    var paths = _element.childNodes;
-    for (var i = 0, len = paths.length; i < len; i += 1) {
-      var path = paths[i];
-      list.push({
+  };
+
+  PathContainer.prototype.getTargetIDs = function(sourceID) {
+    var paths = Array.prototype.slice.call(getAllPaths(this, sourceID));
+
+    return paths.map(function(path) {
+      return path.getAttribute('data-target-id');
+    });
+  };
+
+  PathContainer.prototype.setFlushPath = function(sourceID, targetID, flag) {
+    var path = getPath(this, sourceID, targetID);
+
+    if (!path)
+      return;
+
+    if (flag)
+      path.setAttribute('class', 'flush');
+    else
+      path.removeAttribute('class');
+  };
+
+  PathContainer.prototype.getConnectionList = function() {
+    var element = this._element;
+    var paths = Array.prototype.slice.call(element.childNodes);
+
+    return paths.map(function(path) {
+      return {
         sourceID: path.getAttribute('data-source-id'),
         targetID: path.getAttribute('data-target-id')
-      });
-    }
-    return list;
-  }
-  return {
-    element: element,
-    append: append,
-    remove: remove,
-    change: change,
-    position: position,
-    updatePosition: updatePosition,
-    refreshPosition: refreshPosition,
-    getSourceID: getSourceID,
-    getTargetIDs: getTargetIDs,
-    setFlushPath: setFlushPath,
-    getConnectionList: getConnectionList
+      };
+    });
   };
-}());
+
+  var getPath = function(self, sourceID, targetID) {
+    var element = self._element;
+
+    if (!sourceID)
+      return element.querySelector('[data-target-id="' + targetID + '"]');
+
+    return element.querySelector('[data-source-id="' + sourceID + '"]' +
+                                 '[data-target-id="' + targetID + '"]');
+  };
+
+  var getAllPaths = function(self, sourceID, targetID) {
+    var element = self._element;
+
+    if (!targetID)
+      return element.querySelectorAll('[data-source-id="' + sourceID + '"]');
+
+    return element.querySelectorAll('[data-source-id="' + sourceID + '"],' +
+                                    '[data-target-id="' + targetID + '"]');
+  };
+
+  if (typeof module !== 'undefined' && module.exports)
+    module.exports = PathContainer;
+  else
+    app.PathContainer = PathContainer;
+})(this.app || (this.app = {}));
