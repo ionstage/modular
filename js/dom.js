@@ -184,6 +184,12 @@
     }, false);
   }
 
+  function removeKeyboardFocus() {
+    var activeElement = document.activeElement;
+    if (activeElement && activeElement.blur)
+      activeElement.blur();
+  }
+
   function translate(el, x, y) {
     var value = 'translate(' + x + 'px, ' + y + 'px)';
     el.style.transform =  value;
@@ -229,6 +235,7 @@
     indexOf: indexOf,
     setCursor: setCursor,
     setMouseHoverEffect: setMouseHoverEffect,
+    removeKeyboardFocus: removeKeyboardFocus,
     translate: translate,
     requestAnimationFrame: requestAnimationFrame,
     supportsTouch: supportsTouch,

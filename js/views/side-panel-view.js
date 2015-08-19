@@ -97,6 +97,7 @@
               },
               onstart: function() {
                 dom.addClass(element, 'tap');
+                dom.removeKeyboardFocus();
               },
               onout: function() {
                 dom.removeClass(element, 'tap');
@@ -142,9 +143,7 @@
 
         node.style.cssText = dom.makeCSSText({opacity: 0.6});
 
-        var activeElement = document.activeElement;
-        if (activeElement && activeElement.blur)
-          activeElement.blur();
+        dom.removeKeyboardFocus();
 
         cloneNode = node.cloneNode(true);
         dom.addClass(cloneNode, 'drag');
