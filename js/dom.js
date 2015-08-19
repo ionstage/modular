@@ -18,6 +18,15 @@
     return document.querySelector(selector);
   }
 
+  function getTarget(event) {
+    if (isTouchEnabled) {
+      var touch = event.changedTouches[0];
+      return document.elementFromPoint(touch.clientX, touch.clientY);
+    } else {
+      return event.target;
+    }
+  }
+
   var tappable = (function() {
     var Tappable = function(option) {
       var noop = function() {};
@@ -49,7 +58,7 @@
       event.preventDefault();
       event.stopPropagation();
 
-      var target = event.target;
+      var target = getTarget(event);
 
       if (target === this._previousTarget)
         return;
@@ -69,7 +78,7 @@
       document.removeEventListener(MOVE, this._move);
       document.removeEventListener(END, this._end);
 
-      if (event.target === this._element)
+      if (getTarget(event) === this._element)
         this._ontap();
     };
 
