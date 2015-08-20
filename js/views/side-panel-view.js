@@ -59,7 +59,7 @@
         config: function(element, isInitialized) {
           if (isInitialized)
             return;
-          setListItemDragEvent(element, function(event) {
+          setListItemDragEvent(ctrl, element, function(event) {
             ctrl.dispatchEvent(event);
           });
         }
@@ -118,7 +118,7 @@
     var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
     var END = isTouchEnabled ? 'touchend' : 'mouseup';
 
-    return function(element, ondragend) {
+    return function(ctrl, element, ondragend) {
       var cloneNode;
       var cloneOffset;
       var draggingNode;
@@ -159,9 +159,9 @@
         if (isFirstDrag) {
           isFirstDrag = false;
 
-          if (board.clientWidth() < 46) {
+          if (dom.windowWidth() < 358) {
             isAutoClose = true;
-            sideView.close();
+            ctrl.dispatchEvent({type: 'close'});
           }
 
           var cssText = dom.makeCSSText({
@@ -192,7 +192,7 @@
         }
 
         if (isAutoClose)
-          sideView.open();
+          ctrl.dispatchEvent({type: 'open'});
       }
 
       function clearTouchEvent(target) {

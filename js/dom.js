@@ -199,6 +199,10 @@
       activeElement.blur();
   }
 
+  function windowWidth() {
+    return window.innerWidth;
+  }
+
   function translate(el, x, y) {
     var value = 'translate(' + x + 'px, ' + y + 'px)';
     el.style.transform =  value;
@@ -245,6 +249,7 @@
     setCursor: setCursor,
     setMouseHoverEffect: setMouseHoverEffect,
     removeKeyboardFocus: removeKeyboardFocus,
+    windowWidth: windowWidth,
     translate: translate,
     requestAnimationFrame: requestAnimationFrame,
     supportsTouch: supportsTouch,

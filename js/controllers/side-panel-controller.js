@@ -57,6 +57,14 @@
         this.state(SidePanelController.STATE_OPEN);
       m.redraw();
       break;
+    case 'open':
+      this.state(SidePanelController.STATE_OPEN);
+      m.redraw();
+      break;
+    case 'close':
+      this.state(SidePanelController.STATE_CLOSE);
+      m.redraw();
+      break;
     case 'searchkeywordchange':
       this.searchKeyword(event.value);
       m.redraw();

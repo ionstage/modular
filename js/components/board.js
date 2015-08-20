@@ -121,9 +121,6 @@ var board = (function() {
   function isLoading() {
     return (document.querySelectorAll('.piece.loading').length !== 0);
   }
-  function clientWidth() {
-    return mainPanel.clientWidth;
-  }
   return {
     element: element,
     pageToLocal: pageToLocal,
@@ -139,7 +136,6 @@ var board = (function() {
     getConnectorOffset: getConnectorOffset,
     getConnectorPositionMap: getConnectorPositionMap,
     getConnectorSizeOffset: getConnectorSizeOffset,
-    isLoading: isLoading,
-    clientWidth: clientWidth
+    isLoading: isLoading
   };
 }());
