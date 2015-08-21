@@ -17,12 +17,6 @@ var board = (function() {
     mainPanel = value.mainPanel;
     boardElement = value.board;
   }
-  function pageToLocal(point) {
-    return {
-      x: point.x - mainPanel.offsetLeft + mainPanel.scrollLeft,
-      y: point.y + mainPanel.scrollTop
-    };
-  }
   function append(piece) {
     var pieceID = generateID();
     piece.id(pieceID);
@@ -123,7 +117,6 @@ var board = (function() {
   }
   return {
     element: element,
-    pageToLocal: pageToLocal,
     append: append,
     remove: remove,
     pieceMap: pieceMap,

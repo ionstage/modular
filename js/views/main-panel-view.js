@@ -8,6 +8,12 @@
       config: function(element, isInitialized) {
         if (isInitialized)
           return;
+
+        ctrl.dispatchEvent({
+          type: 'init',
+          element: element
+        });
+
         var pieceTemplateElement = dom.el('#piece_template');
         var portTemplateElement = dom.el('#port_template');
         var boardElement = dom.el('#board');
