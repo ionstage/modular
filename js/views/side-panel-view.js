@@ -1,7 +1,6 @@
 (function(app) {
   'use strict';
   var m = require('mithril');
-  var SidePanelController = app.SidePanelController || require('../controllers/side-panel-controller.js');
 
   var sidePanelView = function(ctrl) {
     var state = ctrl.state();
