@@ -75,13 +75,7 @@
           ]);
         }))
       ]),
-      m('#divider', {
-        config: function(element, isInitialized) {
-          if (isInitialized)
-            return;
-          dom.setMouseHoverEffect(element);
-        }
-      }, [
+      m('#divider', [
         m('#divider_icon', {
           config: function(element, isInitialized) {
             if (isInitialized)
@@ -97,6 +91,7 @@
               onstart: function() {
                 dom.addClass(element, 'tap');
                 dom.removeKeyboardFocus();
+                dom.setCursor('pointer');
               },
               onout: function() {
                 dom.removeClass(element, 'tap');

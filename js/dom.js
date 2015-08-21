@@ -184,15 +184,6 @@
     document.body.style.cursor = value;
   }
 
-  function setMouseHoverEffect(element) {
-    element.addEventListener('mouseover', function(event) {
-      setCursor('pointer');
-    }, false);
-    element.addEventListener('mouseout', function(event) {
-      setCursor('default');
-    }, false);
-  }
-
   function removeKeyboardFocus() {
     var activeElement = document.activeElement;
     if (activeElement && activeElement.blur)
@@ -247,7 +238,6 @@
     makeCSSText: makeCSSText,
     indexOf: indexOf,
     setCursor: setCursor,
-    setMouseHoverEffect: setMouseHoverEffect,
     removeKeyboardFocus: removeKeyboardFocus,
     windowWidth: windowWidth,
     translate: translate,

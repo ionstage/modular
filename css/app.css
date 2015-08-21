@@ -62,6 +62,10 @@ body {
   width: 32px;
 }
 
+#divider:hover {
+  cursor: pointer;
+}
+
 #divider_icon {
   background-color: lightgray;
   border-radius: 0 6px 6px 0;
