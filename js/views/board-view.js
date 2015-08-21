@@ -13,7 +13,15 @@
           boardEvent.setPathContainer(new PathContainer(element));
         }
       }),
-      m('#board'),
+      m('#board', {
+        config: function(element, isInitialized) {
+          if (isInitialized)
+            return;
+          board.element({
+            board: element
+          });
+        }
+      }),
       m('.port-connector-out.drag.hide', {
         config: function(element, isInitialized) {
           if (isInitialized)

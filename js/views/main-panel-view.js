@@ -14,24 +14,14 @@
           element: element
         });
 
-        var pieceTemplateElement = dom.el('#piece_template');
-        var portTemplateElement = dom.el('#port_template');
-        var boardElement = dom.el('#board');
-
         // template
-        piece.template(pieceTemplateElement);
-        port.template(portTemplateElement);
-
-        // board
-        board.element({
-          mainPanel: element,
-          board: boardElement
-        });
+        piece.template(dom.el('#piece_template'));
+        port.template(dom.el('#port_template'));
 
         // board event
         boardEvent.element({
           mainPanel: element,
-          board: boardElement
+          board: dom.el('#board')
         });
         boardEvent.loadURLHash();
       }

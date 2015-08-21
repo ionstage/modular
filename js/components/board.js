@@ -1,5 +1,4 @@
 var board = (function() {
-  var mainPanel = null;
   var boardElement = null;
   var _pieceMap = {};
   var generateID = (function() {
@@ -14,7 +13,6 @@ var board = (function() {
   }());
   var connectorSizeOffset = 21;
   function element(value) {
-    mainPanel = value.mainPanel;
     boardElement = value.board;
   }
   function append(piece) {
@@ -43,7 +41,7 @@ var board = (function() {
     }
   }
   function getInConnectorNotConnectedElements(type) {
-    var nodes = mainPanel.querySelectorAll('.port-connector-in');
+    var nodes = boardElement.querySelectorAll('.port-connector-in');
     var notConnectedElements = [];
     for (var i = 0, len = nodes.length; i < len; i += 1) {
       var node = nodes[i];
