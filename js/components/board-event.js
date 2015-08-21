@@ -5,6 +5,7 @@ var boardEvent = (function() {
   var START = dom.eventType.START;
   var isLoadingURLHash = false;
   var connectorHandle = null;
+  var board = null;
   var pathContainer = null;
   function createPorts(propData, eventData) {
     var ports = [], key, item, p;
@@ -363,8 +364,18 @@ var boardEvent = (function() {
   function setConnectorHandle(component) {
     connectorHandle = component;
   }
+  function setBoard(component) {
+    board = component;
+  }
   function setPathContainer(component) {
     pathContainer = component;
+  }
+  function addPiece(x, y, label, src) {
+    var p = piece.create(src);
+    p.label(label);
+    p.position({x: x, y: y});
+    p.updatePosition();
+    board.append(p);
   }
   function showPort(event) {
     var portIDSet = event.target.value.split('/');
@@ -573,16 +584,15 @@ var boardEvent = (function() {
   }
   var dragPortConnectorOut = (function() {
     var hasClass = dom.hasClass;
-    var connectorSizeOffset = board.getConnectorSizeOffset();
-    var getConnectorOffset = board.getConnectorOffset;
     var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
     function getInConnectorPositionMap(type) {
       var inConnectorElements = board.getInConnectorNotConnectedElements(type);
+      var connectorSizeOffset = board.getConnectorSizeOffset();
       var map = {};
       for (var i = 0, len = inConnectorElements.length; i < len; i += 1) {
         var element = inConnectorElements[i];
         var portID = element.parentNode.parentNode.getAttribute('data-port-id');
-        var offset = getConnectorOffset(inConnectorElements[i]);
+        var offset = board.getConnectorOffset(inConnectorElements[i]);
         offset.x += connectorSizeOffset - (isFF ? 0 : 4);
         offset.y += connectorSizeOffset - (isFF ? 0 : 4);
         map[portID] = offset;
@@ -604,6 +614,7 @@ var boardEvent = (function() {
       return n > 0 ? n : -n;
     }
     function getIntersectConnector(searchMap, point) {
+      var connectorSizeOffset = board.getConnectorSizeOffset();
       var pointX = point.x, pointY = point.y;
       for (var x in searchMap) {
         if (abs(pointX - x) < connectorSizeOffset) {
@@ -627,6 +638,7 @@ var boardEvent = (function() {
         return 'event';
     }
     return function(event, isConnected) {
+      var connectorSizeOffset = board.getConnectorSizeOffset();
       var target = event.target;
       var connectorOutElement;
       if (isConnected) {
@@ -639,14 +651,14 @@ var boardEvent = (function() {
       }
       if (hasClass(connectorOutElement, 'drag'))
         return;
-      var connectorOffset = getConnectorOffset(connectorOutElement);
+      var connectorOffset = board.getConnectorOffset(connectorOutElement);
       var portElement = connectorOutElement.parentNode.parentNode;
       var portID = portElement.getAttribute('data-port-id');
       var connectorPoint = {
         x: connectorOffset.x + connectorSizeOffset,
         y: connectorOffset.y + connectorSizeOffset
       };
-      var targetOffset = getConnectorOffset(target);
+      var targetOffset = board.getConnectorOffset(target);
       var targetPoint = {
         x: targetOffset.x + connectorSizeOffset,
         y: targetOffset.y + connectorSizeOffset
@@ -791,7 +803,9 @@ var boardEvent = (function() {
   return {
     element: element,
     setConnectorHandle: setConnectorHandle,
+    setBoard: setBoard,
     setPathContainer: setPathContainer,
+    addPiece: addPiece,
     showPort: showPort,
     removePortConnection: removePortConnection,
     loadURLHash: loadURLHash

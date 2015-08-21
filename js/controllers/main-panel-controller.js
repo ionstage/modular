@@ -12,19 +12,13 @@
     if (!element)
       return;
 
-    var localPoint = {
-      x: pageX - element.offsetLeft + element.scrollLeft,
-      y: pageY + element.scrollTop
-    };
+    var x = pageX - element.offsetLeft + element.scrollLeft;
+    var y = pageY + element.scrollTop;
 
-    if (localPoint.x < 0 || localPoint.y < 0)
+    if (x < 0 || y < 0)
       return;
 
-    var p = piece.create(src);
-    p.label(label);
-    p.position(localPoint);
-    p.updatePosition();
-    board.append(p);
+    boardEvent.addPiece(x, y, label, src);
   };
 
   MainPanelController.prototype.dispatchEvent = function(event) {

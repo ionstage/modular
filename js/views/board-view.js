@@ -2,6 +2,7 @@
   'use strict';
   var m = require('mithril');
   var ConnectorHandle = app.ConnectorHandle || require('../components/connector-handle.js');
+  var Board = app.Board || require('../components/board.js');
   var PathContainer = app.PathContainer || require('../components/path-container.js');
 
   var boardView = function() {
@@ -17,9 +18,7 @@
         config: function(element, isInitialized) {
           if (isInitialized)
             return;
-          board.element({
-            board: element
-          });
+          boardEvent.setBoard(new Board(element));
         }
       }),
       m('.port-connector-out.drag.hide', {

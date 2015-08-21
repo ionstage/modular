@@ -1,6 +1,126 @@
-var board = (function() {
-  var boardElement = null;
-  var _pieceMap = {};
+(function(app) {
+  'use strict';
+
+  var Board = function(element) {
+    this._element = element;
+    this._pieceMap = {};
+    this._connectorSizeOffset = 21;
+  };
+
+  Board.prototype.append = function(piece) {
+    var pieceID = generateID();
+    piece.id(pieceID);
+    this._pieceMap[pieceID] = piece;
+    this._element.appendChild(piece.element());
+  };
+
+  Board.prototype.remove = function(piece) {
+    piece.destroy();
+    this._element.removeChild(piece.element());
+    var pieceID = piece.id();
+    delete this._pieceMap[pieceID];
+  };
+
+  Board.prototype.pieceMap = function() {
+    return this._pieceMap;
+  };
+
+  Board.prototype.showAllPieceComponentBack = function() {
+    var pieceMap = this._pieceMap;
+    for (var key in pieceMap) {
+      pieceMap[key].showComponentBack();
+    }
+  };
+
+  Board.prototype.hideAllPieceComponentBack = function() {
+    var pieceMap = this._pieceMap;
+    for (var key in pieceMap) {
+      pieceMap[key].hideComponentBack();
+    }
+  };
+
+  Board.prototype.getInConnectorNotConnectedElements = function(type) {
+    var nodes = this._element.querySelectorAll('.port-connector-in');
+    var notConnectedElements = [];
+    for (var i = 0, len = nodes.length; i < len; i++) {
+      var node = nodes[i];
+      var portElement = node.parentNode.parentNode;
+      if (dom.hasClass(portElement, type) &&
+          dom.hasClass(node.nextElementSibling, 'hide')) {
+        notConnectedElements.push(node);
+      }
+    }
+    return notConnectedElements;
+  };
+
+  Board.prototype.getPort = function(portID) {
+    var idSet = portID.split('/');
+    var pieceID = idSet[0];
+    var piece = this._pieceMap[pieceID];
+    var portMap = piece.portMap();
+    return portMap[idSet[1] + '/' + idSet[2]];
+  };
+
+  Board.prototype.showPortConnectorConnected = function(portID) {
+    var port = this.getPort(portID);
+    port.showConnectorConnected();
+  };
+
+  Board.prototype.hidePortConnectorConnected = function(portID) {
+    var port = this.getPort(portID);
+    port.hideConnectorConnected();
+  };
+
+  Board.prototype.getOutConnectorElement = function(portID) {
+    var port = this.getPort(portID);
+    return port.getOutConnectorElement();
+  };
+
+  Board.prototype.getConnectorOffset = function(element) {
+    var offsetX = 0, offsetY = 0, count = 0;
+    while (element && element.id !== 'main_panel') {
+      var elementStyle = getComputedStyle(element, null);
+      offsetX = offsetX + element.offsetLeft -
+                parseInt(elementStyle.marginLeft || 0) +
+                parseInt(isFF() ? 0 : (elementStyle.borderLeftWidth || 0));
+      offsetY = offsetY + element.offsetTop -
+                parseInt(elementStyle.marginTop || 0) +
+                parseInt(isFF() ? 0 : (elementStyle.borderTopWidth || 0));
+      element = element.offsetParent;
+      count += 1;
+    }
+    return {x: offsetX, y: offsetY};
+  };
+
+  Board.prototype.getConnectorPositionMap = function(pieceID) {
+    var map = {};
+    var piece = this._pieceMap[pieceID];
+    var portMap = piece.portMap();
+    var connectorSizeOffset = this._connectorSizeOffset;
+    for (var portName in portMap) {
+      var port = portMap[portName];
+      var outConnectorOffset = this.getConnectorOffset(port.getOutConnectorElement());
+      map[pieceID + '/' + portName + '/out'] = {
+        x: outConnectorOffset.x + connectorSizeOffset,
+        y: outConnectorOffset.y + connectorSizeOffset
+      };
+      var inConnectorOffset = this.getConnectorOffset(port.getInConnectorElement());
+      map[pieceID + '/' + portName + '/in'] = {
+        x: inConnectorOffset.x + connectorSizeOffset - (isFF() ? 0 : 4),
+        y: inConnectorOffset.y + connectorSizeOffset - (isFF() ? 0 : 4)
+      };
+    }
+    return map;
+  };
+
+  Board.prototype.getConnectorSizeOffset = function() {
+    return this._connectorSizeOffset;
+  };
+
+  Board.prototype.isLoading = function() {
+    return this._element.querySelectorAll('.piece.loading').length !== 0;
+  };
+
   var generateID = (function() {
     var base = Math.floor(Math.random() * Math.pow(10, 16));
     var count = 0;
@@ -10,123 +130,14 @@ var board = (function() {
       count += 1;
       return hash.toString();
     };
-  }());
-  var connectorSizeOffset = 21;
-  function element(value) {
-    boardElement = value.board;
-  }
-  function append(piece) {
-    var pieceID = generateID();
-    piece.id(pieceID);
-    _pieceMap[pieceID] = piece;
-    boardElement.appendChild(piece.element());
-  }
-  function remove(piece) {
-    piece.destroy();
-    boardElement.removeChild(piece.element());
-    var pieceID = piece.id();
-    delete _pieceMap[pieceID];
-  }
-  function pieceMap() {
-    return _pieceMap;
-  }
-  function showAllPieceComponentBack() {
-    for (var key in _pieceMap) {
-      _pieceMap[key].showComponentBack();
-    }
-  }
-  function hideAllPieceComponentBack() {
-    for (var key in _pieceMap) {
-      _pieceMap[key].hideComponentBack();
-    }
-  }
-  function getInConnectorNotConnectedElements(type) {
-    var nodes = boardElement.querySelectorAll('.port-connector-in');
-    var notConnectedElements = [];
-    for (var i = 0, len = nodes.length; i < len; i += 1) {
-      var node = nodes[i];
-      var portElement = node.parentNode.parentNode;
-      if (dom.hasClass(portElement, type) &&
-          dom.hasClass(node.nextElementSibling, 'hide')) {
-        notConnectedElements.push(node);
-      }
-    }
-    return notConnectedElements;
-  }
-  function getPort(portID) {
-    var idSet = portID.split('/');
-    var pieceID = idSet[0];
-    var piece = _pieceMap[pieceID];
-    var portMap = piece.portMap();
-    return portMap[idSet[1] + '/' + idSet[2]];
-  }
-  function showPortConnectorConnected(portID) {
-    var port = getPort(portID);
-    port.showConnectorConnected();
-  }
-  function hidePortConnectorConnected(portID) {
-    var port = getPort(portID);
-    port.hideConnectorConnected();
-  }
-  function getOutConnectorElement(portID) {
-    var port = getPort(portID);
-    return port.getOutConnectorElement();
-  }
-  var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
-  function getConnectorOffset(element) {
-    var offsetX = 0, offsetY = 0, count = 0;
-    while (element && element.id !== 'main_panel') {
-      var elementStyle = getComputedStyle(element, null);
-      offsetX = offsetX + element.offsetLeft -
-                parseInt(elementStyle.marginLeft || 0) +
-                parseInt(isFF ? 0 : (elementStyle.borderLeftWidth || 0));
-      offsetY = offsetY + element.offsetTop -
-                parseInt(elementStyle.marginTop || 0) +
-                parseInt(isFF ? 0 : (elementStyle.borderTopWidth || 0));
-      element = element.offsetParent;
-      count += 1;
-    }
-    return {x: offsetX, y: offsetY};
-  }
-  function getConnectorPositionMap(pieceID) {
-    var map = {};
-    var piece = _pieceMap[pieceID];
-    var portMap = piece.portMap();
-    for (var portName in portMap) {
-      var port = portMap[portName];
-      var outConnectorOffset = getConnectorOffset(port.getOutConnectorElement());
-      map[pieceID + '/' + portName + '/out'] = {
-        x: outConnectorOffset.x + connectorSizeOffset,
-        y: outConnectorOffset.y + connectorSizeOffset
-      };
-      var inConnectorOffset = getConnectorOffset(port.getInConnectorElement());
-      map[pieceID + '/' + portName + '/in'] = {
-        x: inConnectorOffset.x + connectorSizeOffset - (isFF ? 0 : 4),
-        y: inConnectorOffset.y + connectorSizeOffset - (isFF ? 0 : 4)
-      };
-    }
-    return map;
-  }
-  function getConnectorSizeOffset() {
-    return connectorSizeOffset;
-  }
-  function isLoading() {
-    return (document.querySelectorAll('.piece.loading').length !== 0);
-  }
-  return {
-    element: element,
-    append: append,
-    remove: remove,
-    pieceMap: pieceMap,
-    showAllPieceComponentBack: showAllPieceComponentBack,
-    hideAllPieceComponentBack: hideAllPieceComponentBack,
-    getInConnectorNotConnectedElements: getInConnectorNotConnectedElements,
-    showPortConnectorConnected: showPortConnectorConnected,
-    hidePortConnectorConnected: hidePortConnectorConnected,
-    getOutConnectorElement: getOutConnectorElement,
-    getConnectorOffset: getConnectorOffset,
-    getConnectorPositionMap: getConnectorPositionMap,
-    getConnectorSizeOffset: getConnectorSizeOffset,
-    isLoading: isLoading
+  })();
+
+  var isFF = function() {
+    return navigator.userAgent.toLowerCase().indexOf('firefox') !== -1;
   };
-}());
+
+  if (typeof module !== 'undefined' && module.exports)
+    module.exports = Board;
+  else
+    app.Board = Board;
+})(this.app || (this.app = {}));
