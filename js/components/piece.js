@@ -41,12 +41,6 @@ var piece = (function() {
     }
   }
   function vitalize() {
-    var elementMap = this._elementMap;
-    removeClass(elementMap.element, 'loading');
-    removeClass(elementMap.headerTitle, 'loading');
-    removeClass(elementMap.content, 'loading');
-    removeClass(elementMap.portList, 'hide');
-    removeClass(elementMap.footer, 'loading');
     this.updatePosition();
     this._isLoading = false;
   }

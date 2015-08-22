@@ -159,7 +159,7 @@ body {
   white-space: nowrap;
 }
 
-.piece-list-item-content, .piece-footer.loading {
+.piece-list-item-content, .piece.loading .piece-footer {
   background-color: white;
   border-color: black;
   border-radius: 0 0 10px 10px;
@@ -236,7 +236,7 @@ body {
   width: 206px;
 }
 
-.piece-header-title.loading {
+.piece.loading .piece-header-title {
   cursor: default;
 }
 
@@ -258,7 +258,7 @@ body {
   width:  100%;
 }
 
-.piece-content.loading {
+.piece.loading .piece-content {
   height: 0;
 }
 
@@ -284,6 +284,10 @@ body {
   position: relative;
 }
 
+.piece.loading .piece-port-list {
+  display: none;
+}
+
 .piece-port-list.no-component {
   border: none;
 }
@@ -296,7 +300,7 @@ body {
   border-width: 0 6px 6px;
 }
 
-.piece-footer.loading:before {
+.piece.loading .piece-footer:before {
   content: "Loading...";
 }
 

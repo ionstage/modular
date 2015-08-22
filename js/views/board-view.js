@@ -22,8 +22,9 @@
           boardEvent.setBoard(ctrl.board);
         }
       }, ctrl.board.pieces().map(function(piece) {
-        return m('.piece.loading', {
+        return m('.piece', {
           key: piece.id(),
+          className: piece.isLoading() ? 'loading' : '',
           'data-piece-id': piece.id(),
           config: function(element, isInitialized) {
             if (isInitialized)
@@ -32,15 +33,15 @@
           }
         }, [
           m('.piece-header', [
-            m('.piece-header-title.loading', piece.label()),
+            m('.piece-header-title', piece.label()),
             m('.piece-header-delete-button', '×')
           ]),
-          m('.piece-content.loading', [
+          m('.piece-content', [
             m('.piece-component-back.hide'),
             m('iframe.piece-component', {src: piece.src() + '#' + piece.id()}),
-            m('.piece-port-list.hide')
+            m('.piece-port-list')
           ]),
-          m('.piece-footer.loading', [
+          m('.piece-footer', [
             m('select.piece-port-select.hide', [
               m('option', {value: ''}),
               m('optgroup.piece-port-select-optgroup-prop', {label: 'Property'}),
