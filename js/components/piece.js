@@ -2,12 +2,15 @@ var piece = (function() {
   var zIndexCount = 0;
   var addClass = dom.addClass;
   var removeClass = dom.removeClass;
-  var templateNode = null;
-  function template(node) {
-    templateNode = dom.createNode(node.innerHTML);
+  function create(src) {
+    var p = Object.create(this);
+    zIndexCount += 1;
+    p._zIndex = zIndexCount;
+    p._src = src;
+    p._isLoading = true;
+    return p;
   }
-  function createPiece(src) {
-    var node = templateNode.cloneNode(true);
+  function initializeElement(node) {
     var map = {
       element: node,
       header: node.children[0],
@@ -24,19 +27,10 @@ var piece = (function() {
         event: node.children[2].children[0].children[2]
       }
     };
-    map.component.setAttribute('src', src);
-    return map;
-  }
-  function create(src) {
-    var p = Object.create(this);
-    var elementMap = createPiece(src);
-    p._elementMap = elementMap;
-    zIndexCount += 1;
-    p._zIndex = zIndexCount;
-    elementMap.portSelect.addEventListener('change', boardEvent.showPort, false);
-    p._src = src;
-    p._isLoading = true;
-    return p;
+
+    map.portSelect.addEventListener('change', boardEvent.showPort, false);
+    this._elementMap = map;
+    this.updatePosition();
   }
   function destroy() {
     this._elementMap.portSelect.removeEventListener('change', boardEvent.showPort, false);
@@ -60,12 +54,14 @@ var piece = (function() {
     if (!value)
       return this._id;
     this._id = value;
-    this._elementMap.element.setAttribute('data-piece-id', value);
-    this._elementMap.component.setAttribute('src', this._src + '#' + value);
   }
   function label(value) {
-    if (value)
-      this._elementMap.headerTitle.textContent = value;
+    if (!value)
+      return this._label || '';
+    this._label = value;
+  }
+  function src() {
+    return this._src;
   }
   function position(point) {
     if (!point)
@@ -93,7 +89,8 @@ var piece = (function() {
       top: this._y + 'px',
       'z-index': this._zIndex
     });
-    this._elementMap.element.style.cssText = cssText;
+    if (this._elementMap)
+      this._elementMap.element.style.cssText = cssText;
   }
   function element() {
     return this._elementMap.element;
@@ -205,12 +202,13 @@ var piece = (function() {
     return this._elementMap.component;
   }
   return {
-    template: template,
     create: create,
+    initializeElement: initializeElement,
     destroy: destroy,
     vitalize: vitalize,
     id: id,
     label: label,
+    src: src,
     position: position,
     componentHeight: componentHeight,
     updatePosition: updatePosition,

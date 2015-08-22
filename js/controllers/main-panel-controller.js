@@ -1,9 +1,11 @@
 (function(app) {
   'use strict';
   var m = require('mithril');
+  var BoardController = app.BoardController || require('../controller/board-controller.js');
 
   var MainPanelController = function() {
     this.element = m.prop(null);
+    this.boardController = new BoardController();
   };
 
   MainPanelController.prototype.addPiece = function(pageX, pageY, label, src) {

@@ -1,5 +1,6 @@
 (function(app) {
   'use strict';
+  var m = require('mithril');
 
   var Board = function(element) {
     this._element = element;
@@ -7,22 +8,33 @@
     this._connectorSizeOffset = 21;
   };
 
+  Board.prototype.element = function(element) {
+    this._element = element;
+  };
+
   Board.prototype.append = function(piece) {
     var pieceID = generateID();
     piece.id(pieceID);
     this._pieceMap[pieceID] = piece;
-    this._element.appendChild(piece.element());
+    m.redraw();
   };
 
   Board.prototype.remove = function(piece) {
     piece.destroy();
-    this._element.removeChild(piece.element());
     var pieceID = piece.id();
     delete this._pieceMap[pieceID];
+    m.redraw();
   };
 
   Board.prototype.pieceMap = function() {
     return this._pieceMap;
+  };
+
+  Board.prototype.pieces = function() {
+    var pieceMap = this._pieceMap;
+    return Object.keys(pieceMap).map(function(key) {
+      return pieceMap[key];
+    });
   };
 
   Board.prototype.showAllPieceComponentBack = function() {

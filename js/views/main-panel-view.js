@@ -15,7 +15,6 @@
         });
 
         // template
-        piece.template(dom.el('#piece_template'));
         port.template(dom.el('#port_template'));
 
         // board event
@@ -25,7 +24,7 @@
         });
         boardEvent.loadURLHash();
       }
-    }, boardView());
+    }, boardView(ctrl.boardController));
   };
 
   if (typeof module !== 'undefined' && module.exports)

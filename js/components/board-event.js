@@ -1,5 +1,6 @@
 var boardEvent = (function() {
   var Base64 = require('js-base64').Base64;
+  var m = require('mithril');
   
   var isTouchEnabled = dom.supportsTouch();
   var START = dom.eventType.START;
@@ -226,6 +227,7 @@ var boardEvent = (function() {
       }
       var retryCount = 0;
       setTimeout(function waitLoadPiece() {
+        m.redraw(true);
         if (!board.isLoading()) {
           var cacheDataList = data.data;
           for (var i = 0, len = cacheDataList.length; i < len; i += 1) {
@@ -285,6 +287,7 @@ var boardEvent = (function() {
             if (propData[target].serialize === true)
               propDataCache.setSerializeTarget(pieceID, target);
           }
+          m.redraw();
           break;
         case 'prop':
           propDataCache.set(pieceID, target, data);

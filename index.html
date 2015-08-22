@@ -5,26 +5,6 @@
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
   <title>Board</title>
   <link rel="stylesheet" href="css/app.css">
-  <script id="piece_template" type="text/template">
-    <div class="piece loading">
-      <div class="piece-header">
-        <div class="piece-header-title loading"></div>
-        <div class="piece-header-delete-button">×</div>
-      </div>
-      <div class="piece-content loading">
-        <div class="piece-component-back hide"></div>
-        <iframe class="piece-component"></iframe>
-        <div class="piece-port-list hide"></div>
-      </div>
-      <div class="piece-footer loading">
-        <select class="piece-port-select hide">
-          <option value=""></option>
-          <optgroup class="piece-port-select-optgroup-prop" label="Property"></optgroup>
-          <optgroup class="piece-port-select-optgroup-event" label="Event"></optgroup>
-        </select>
-      </div>
-    </div>
-  </script>
   <script id="port_template" type="text/template">
     <div class="port">
       <div class="port-connector">
@@ -52,6 +32,7 @@
   <script src="js/components/board-event.js"></script>
   <script src="js/components/piece.js"></script>
   <script src="js/components/port.js"></script>
+  <script src="js/controllers/board-controller.js"></script>
   <script src="js/views/board-view.js"></script>
   <script src="js/controllers/main-panel-controller.js"></script>
   <script src="js/views/main-panel-view.js"></script>
