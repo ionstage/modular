@@ -17,9 +17,8 @@ var piece = (function() {
       headerTitle: node.children[0].children[0],
       headerDeleteButton: node.children[0].children[1],
       content: node.children[1],
-      componentBack: node.children[1].children[0],
-      component: node.children[1].children[1],
-      portList: node.children[1].children[2],
+      component: node.children[1].children[0],
+      portList: node.children[1].children[1],
       footer: node.children[2],
       portSelect: node.children[2].children[0],
       portSelectOptionGroup: {
@@ -69,7 +68,6 @@ var piece = (function() {
     if (value) {
       var elementMap = this._elementMap;
       elementMap.component.style.height = value;
-      elementMap.componentBack.style.height = value;
       if (parseInt(value) === 0) {
         addClass(elementMap.component, 'hide');
         addClass(elementMap.portList, 'no-component');
@@ -165,12 +163,6 @@ var piece = (function() {
   function portMap() {
     return this._portMap;
   }
-  function showComponentBack() {
-    removeClass(this._elementMap.componentBack, 'hide');
-  }
-  function hideComponentBack() {
-    addClass(this._elementMap.componentBack, 'hide');
-  }
   function toFront() {
     zIndexCount += 1;
     this._zIndex = zIndexCount;
@@ -211,8 +203,6 @@ var piece = (function() {
     showPort: showPort,
     hidePort: hidePort,
     portMap: portMap,
-    showComponentBack: showComponentBack,
-    hideComponentBack: hideComponentBack,
     toFront: toFront,
     addClassOfHeader: addClassOfHeader,
     removeClassOfHeader: removeClassOfHeader,

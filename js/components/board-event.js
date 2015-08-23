@@ -507,7 +507,7 @@ var boardEvent = (function() {
         updatePathPosition(pieceID);
       },
       end: function(dx, dy) {
-        board.hideAllPieceComponentBack();
+        board.endDrag();
         isDragging = false;
         dom.requestAnimationFrame(function() {
           piece.position({x: startX + dx, y: startY + dy});
@@ -521,7 +521,7 @@ var boardEvent = (function() {
         updateURLHash();
       }
     });
-    board.showAllPieceComponentBack();
+    board.startDrag();
     dom.requestAnimationFrame(updatePiecePosition);
     if (isTouchEnabled)
       piece.addClassOfHeader('drag');
@@ -566,7 +566,7 @@ var boardEvent = (function() {
         updatePathPosition(pieceID);
       },
       end: function(dx, dy) {
-        board.hideAllPieceComponentBack();
+        board.endDrag();
         isDragging = false;
         dom.requestAnimationFrame(function() {
           portElement.style.cssText = '';
@@ -579,7 +579,7 @@ var boardEvent = (function() {
         });
       }
     });
-    board.showAllPieceComponentBack();
+    board.startDrag();
     dom.addClass(placeholderElement, 'placeholder');
     dom.addClass(portElement, 'drag');
     portListElement.insertBefore(placeholderElement, portElement.nextSibling);
@@ -756,7 +756,7 @@ var boardEvent = (function() {
           }
         },
         end: function(dx, dy) {
-          board.hideAllPieceComponentBack();
+          board.endDrag();
           isDragging = false;
           dom.requestAnimationFrame(function() {
             connectorHandle.hide();
@@ -779,7 +779,7 @@ var boardEvent = (function() {
           updateURLHash();
         }
       });
-      board.showAllPieceComponentBack();
+      board.startDrag();
       startConnectorHandle();
       currentPathSourceID = portID + '/out';
       if (isConnected) {

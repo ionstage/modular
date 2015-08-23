@@ -37,18 +37,12 @@
     });
   };
 
-  Board.prototype.showAllPieceComponentBack = function() {
-    var pieceMap = this._pieceMap;
-    for (var key in pieceMap) {
-      pieceMap[key].showComponentBack();
-    }
+  Board.prototype.startDrag = function() {
+    dom.addClass(this._element, 'drag');
   };
 
-  Board.prototype.hideAllPieceComponentBack = function() {
-    var pieceMap = this._pieceMap;
-    for (var key in pieceMap) {
-      pieceMap[key].hideComponentBack();
-    }
+  Board.prototype.endDrag = function() {
+    dom.removeClass(this._element, 'drag');
   };
 
   Board.prototype.getInConnectorNotConnectedElements = function(type) {

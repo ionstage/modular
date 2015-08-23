@@ -37,7 +37,6 @@
             m('.piece-header-delete-button', '×')
           ]),
           m('.piece-content', [
-            m('.piece-component-back.hide'),
             m('iframe.piece-component', {src: piece.src() + '#' + piece.id()}),
             m('.piece-port-list')
           ]),

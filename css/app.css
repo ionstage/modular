@@ -263,20 +263,16 @@ body {
   height: 0;
 }
 
-.piece-component-back {
-  background-color: white;
-  opacity: 0;
-  position: absolute;
-  width:  228px;
-  z-index: 1;
-}
-
 .piece-component {
   border: none;
   height: 0;
   overflow: hidden;
   vertical-align: bottom;
   width: 100%;
+}
+
+#board.drag .piece-component {
+  pointer-events: none;
 }
 
 .piece-port-list {
