@@ -186,6 +186,7 @@ body {
 #path_container {
   height: 100%;
   overflow: visible;
+  pointer-events: none;
   vertical-align: bottom;
   width: 100%;
 }
