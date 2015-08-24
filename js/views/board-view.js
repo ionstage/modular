@@ -57,8 +57,14 @@
             m('.piece-header-delete-button', '×')
           ]),
           m('.piece-content', [
-            m('iframe.piece-component', {src: piece.src() + '#' + piece.id()}),
-            m('.piece-port-list', ports.map(function(port) {
+            m('iframe.piece-component', {
+              className: parseInt(piece.componentHeight()) === 0 ? 'hide' : '',
+              src: piece.src() + '#' + piece.id(),
+              style: {height: piece.componentHeight()}
+            }),
+            m('.piece-port-list', {
+              className: parseInt(piece.componentHeight()) === 0 ? 'no-component' : ''
+            }, ports.map(function(port) {
               if (!port.isShowing())
                 return;
               return m('.port.hide-connector-connected', {

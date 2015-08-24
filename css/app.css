@@ -218,11 +218,11 @@ body {
   overflow: hidden;
 }
 
-.piece-header.delete {
+.piece.delete .piece-header {
   background-color: red;
 }
 
-.piece-header.drag {
+.piece.drag .piece-header {
   background-color: orange;
 }
 

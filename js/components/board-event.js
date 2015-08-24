@@ -466,18 +466,18 @@ var boardEvent = (function() {
     var pieceID = event.target.parentNode.parentNode.getAttribute('data-piece-id');
     var piece = board.pieceMap()[pieceID];
     if (isTouchEnabled)
-      piece.addClassOfHeader('delete');
+      dom.addClass(piece.element(), 'delete');
     dom.startTapEvent(event, {
       tap: function() {
         board.remove(piece);
         propDataCache.remove(pieceID);
         if (isTouchEnabled)
-          piece.removeClassOfHeader('delete');
+          dom.removeClass(piece.element(), 'delete');
         updateURLHash();
       },
       cancel: function() {
         if (isTouchEnabled)
-          piece.removeClassOfHeader('delete');
+          dom.removeClass(piece.element(), 'delete');
       }
     });
   }
@@ -517,14 +517,14 @@ var boardEvent = (function() {
           pathContainer.refreshPosition();
         });
         if (isTouchEnabled)
-          piece.removeClassOfHeader('drag');
+          dom.removeClass(piece.element(), 'drag');
         updateURLHash();
       }
     });
     board.startDrag();
     dom.requestAnimationFrame(updatePiecePosition);
     if (isTouchEnabled)
-      piece.addClassOfHeader('drag');
+      dom.addClass(piece.element(), 'drag');
   }
   function sortPort(event) {
     var portElement = event.target.parentNode.parentNode;

@@ -14,23 +14,7 @@ var piece = (function() {
     return p;
   }
   function initializeElement(node) {
-    var map = {
-      element: node,
-      header: node.children[0],
-      headerTitle: node.children[0].children[0],
-      headerDeleteButton: node.children[0].children[1],
-      content: node.children[1],
-      component: node.children[1].children[0],
-      portList: node.children[1].children[1],
-      footer: node.children[2],
-      portSelect: node.children[2].children[0],
-      portSelectOptionGroup: {
-        prop: node.children[2].children[0].children[1],
-        event: node.children[2].children[0].children[2]
-      }
-    };
-
-    this._elementMap = map;
+    this._element = node;
     this.updatePosition();
   }
   function destroy() {
@@ -66,14 +50,9 @@ var piece = (function() {
       this._y = Math.max(point.y, 0);
   }
   function componentHeight(value) {
-    if (value) {
-      var elementMap = this._elementMap;
-      elementMap.component.style.height = value;
-      if (parseInt(value) === 0) {
-        addClass(elementMap.component, 'hide');
-        addClass(elementMap.portList, 'no-component');
-      }
-    }
+    if (!value)
+      return this._componentHeight || 0;
+    this._componentHeight = value;
   }
   function updatePosition() {
     this._x = Math.max(this._x, (this._isShowingInConnector) ? 46 : 0);
@@ -82,11 +61,11 @@ var piece = (function() {
       top: this._y + 'px',
       'z-index': this._zIndex
     });
-    if (this._elementMap)
-      this._elementMap.element.style.cssText = cssText;
+    if (this._element)
+      this._element.style.cssText = cssText;
   }
   function element() {
-    return this._elementMap.element;
+    return this._element;
   }
   function setPorts(ports) {
     var pieceID = this._id;
@@ -133,12 +112,6 @@ var piece = (function() {
     zIndexCount += 1;
     this._zIndex = zIndexCount;
   }
-  function addClassOfHeader(className) {
-    addClass(this._elementMap.header, className);
-  }
-  function removeClassOfHeader(className) {
-    removeClass(this._elementMap.header, className);
-  }
   function getAttribute() {
     return {
       id: this._id,
@@ -151,7 +124,7 @@ var piece = (function() {
     return this._isLoading;
   }
   function getComponentElement() {
-    return this._elementMap.component;
+    return this._element.children[1].children[0];
   }
   return {
     create: create,
@@ -171,8 +144,6 @@ var piece = (function() {
     portMap: portMap,
     ports: ports,
     toFront: toFront,
-    addClassOfHeader: addClassOfHeader,
-    removeClassOfHeader: removeClassOfHeader,
     getAttribute: getAttribute,
     isLoading: isLoading,
     getComponentElement: getComponentElement
