@@ -123,9 +123,8 @@ var piece = (function() {
     portSelectElement.value = '';
     portSelectElement.blur();
     var portListElement = pieceElementMap.portList;
-    this._isShowingInConnector =
-      (portListElement.querySelectorAll('.port-connector-in').length !== 
-       portListElement.querySelectorAll('.port-connector-in.hide').length);
+    this._isShowingInConnector = (portListElement.children.length !==
+                                  portListElement.querySelectorAll('.hide-connector-in').length);
     this.updatePosition();
   }
   function hidePort(port) {
@@ -155,9 +154,8 @@ var piece = (function() {
       removeClass(portSelectElement, 'hide');
     portSelectElement.value = '';
     portSelectElement.blur();
-    this._isShowingInConnector =
-      (portListElement.querySelectorAll('.port-connector-in').length !== 
-       portListElement.querySelectorAll('.port-connector-in.hide').length);
+    this._isShowingInConnector = (portListElement.children.length !==
+                                  portListElement.querySelectorAll('.hide-connector-in').length);
     this.updatePosition();
   }
   function portMap() {
