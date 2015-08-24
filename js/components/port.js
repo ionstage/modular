@@ -7,40 +7,28 @@ var port = (function() {
   }
   function createPort(type, contentText, hasIn, hasOut) {
     var node = templateNode.cloneNode(true);
-    dom.addClass(node, type);
-    var map = {
-      element: node,
-      connector: node.children[0],
-      connectorIn: node.children[0].children[0],
-      connectorConnected: node.children[0].children[1],
-      connectorOut: node.children[0].children[2],
-      content: node.children[1],
-      contentText: node.children[1].children[0],
-      contentDeleteButton: node.children[1].children[1]
-    };
-    map.contentText.textContent = contentText;
+    addClass(node, type);
     if (!hasIn)
-      dom.addClass(map.connectorIn, 'hide');
+      addClass(node, 'hide-connector-in');
     if (!hasOut)
-      dom.addClass(map.connectorOut, 'hide');
-    return map;
+      addClass(node, 'hide-connector-out');
+    node.children[1].children[0].textContent = contentText;
+    return node;
   }
   function create(type, key, contentText, hasIn, hasOut, isDefault) {
     var p = Object.create(this);
-    var elementMap = createPort(type, contentText, hasIn, hasOut);
-    p._elementMap = elementMap;
+    p._element = createPort(type, contentText, hasIn, hasOut);
     p._type = type;
     p._key = key;
     p._isDefault = isDefault;
     p._contentText = contentText;
-    addClass(elementMap.connectorConnected, 'hide');
     return p;
   }
   function id(value) {
     if (!value)
       return this._id;
     this._id = value;
-    this._elementMap.element.setAttribute('data-port-id', value);
+    this._element.setAttribute('data-port-id', value);
   }
   function type() {
     return this._type;
@@ -49,7 +37,7 @@ var port = (function() {
     return this._key;
   }
   function element() {
-    return this._elementMap.element;
+    return this._element;
   }
   function isDefault() {
     return this._isDefault;
@@ -58,40 +46,40 @@ var port = (function() {
     return this._contentText;
   }
   function showConnectorConnected() {
-    removeClass(this._elementMap.connectorConnected, 'hide');
+    removeClass(this._element, 'hide-connector-connected');
   }
   function hideConnectorConnected() {
-    addClass(this._elementMap.connectorConnected, 'hide');
+    addClass(this._element, 'hide-connector-connected');
   }
   function getOutConnectorElement() {
-    return this._elementMap.connectorOut;
+    return this._element.children[0].children[2];
   }
   function getInConnectorElement() {
-    return this._elementMap.connectorIn;
+    return this._element.children[0].children[0];
   }
   function setFlushInConnector(flag) {
     if (flag)
-      addClass(this._elementMap.connectorIn, 'flush');
+      addClass(this._element, 'flush-connector-in');
     else
-      removeClass(this._elementMap.connectorIn, 'flush');
+      removeClass(this._element, 'flush-connector-in');
   }
   function setFlushConnectorConnected(flag) {
     if (flag)
-      addClass(this._elementMap.connectorConnected, 'flush');
+      addClass(this._element, 'flush-connector-connected');
     else
-      removeClass(this._elementMap.connectorConnected, 'flush');
+      removeClass(this._element, 'flush-connector-connected');
   }
   function setFlushOutConnector(flag) {
     if (flag)
-      addClass(this._elementMap.connectorOut, 'flush');
+      addClass(this._element, 'flush-connector-out');
     else
-      removeClass(this._elementMap.connectorOut, 'flush');
+      removeClass(this._element, 'flush-connector-out');
   }
   function mark() {
-    addClass(this._elementMap.element, 'mark');
+    addClass(this._element, 'mark');
   }
   function clearMark() {
-    removeClass(this._elementMap.element, 'mark');
+    removeClass(this._element, 'mark');
   }
   return {
     template: template,

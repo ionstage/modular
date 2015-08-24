@@ -52,7 +52,7 @@
       var node = nodes[i];
       var portElement = node.parentNode.parentNode;
       if (dom.hasClass(portElement, type) &&
-          dom.hasClass(node.nextElementSibling, 'hide')) {
+          dom.hasClass(portElement, 'hide-connector-connected')) {
         notConnectedElements.push(node);
       }
     }

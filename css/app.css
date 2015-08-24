@@ -342,8 +342,12 @@ body {
   width: 36px;
 }
 
-.port-connector-in.flush {
+.port.flush-connector-in .port-connector-in {
   border-color: red;
+}
+
+.port.hide-connector-in .port-connector-in {
+  display: none;
 }
 
 .port-connector-connected {
@@ -356,8 +360,12 @@ body {
   width: 24px;
 }
 
-.port-connector-connected.flush {
+.port.flush-connector-connected .port-connector-connected {
   background-color: red;
+}
+
+.port.hide-connector-connected .port-connector-connected {
+  display: none;
 }
 
 .port-connector-out {
@@ -370,7 +378,7 @@ body {
   width: 24px;
 }
 
-.port-connector-out.flush {
+.port.flush-connector-out .port-connector-out {
   background-color: red;
 }
 
@@ -379,6 +387,10 @@ body {
   position: absolute;
   top: 0;
   z-index: 2147483647;
+}
+
+.port.hide-connector-out .port-connector-out {
+  display: none;
 }
 
 .port.prop .port-connector-in {
