@@ -1,4 +1,6 @@
 var piece = (function() {
+  var m = require('mithril');
+
   var zIndexCount = 0;
   var addClass = dom.addClass;
   var removeClass = dom.removeClass;
@@ -8,6 +10,7 @@ var piece = (function() {
     p._zIndex = zIndexCount;
     p._src = src;
     p._isLoading = true;
+    p._portMap = {};
     return p;
   }
   function initializeElement(node) {
@@ -27,12 +30,10 @@ var piece = (function() {
       }
     };
 
-    map.portSelect.addEventListener('change', boardEvent.showPort, false);
     this._elementMap = map;
     this.updatePosition();
   }
   function destroy() {
-    this._elementMap.portSelect.removeEventListener('change', boardEvent.showPort, false);
     var pieceID = this._id;
     var portMap = this._portMap;
     for (var portName in portMap) {
@@ -104,62 +105,29 @@ var piece = (function() {
     this._portMap = map;
   }
   function showPort(port) {
-    var portElement = port.element();
-    var pieceElementMap = this._elementMap;
-    var portListElement = pieceElementMap.portList;
-    if (portListElement.contains(portElement))
-      return;
-    portListElement.appendChild(portElement);
-    var optionGroup = pieceElementMap.portSelectOptionGroup[port.type()];
-    var options = optionGroup.children;
-    for (var i = options.length - 1; i >= 0; i -= 1) {
-      var option = options[i];
-      if (option.value === port.id())
-        optionGroup.removeChild(option);
-    }
-    var portSelectElement = pieceElementMap.portSelect;
-    if (portSelectElement.options.length === 1)
-      addClass(portSelectElement, 'hide');
-    portSelectElement.value = '';
-    portSelectElement.blur();
-    var portListElement = pieceElementMap.portList;
-    this._isShowingInConnector = (portListElement.children.length !==
-                                  portListElement.querySelectorAll('.hide-connector-in').length);
+    port.show();
+    this._isShowingInConnector = this.ports().some(function(port) {
+      return port.isShowing() && port.hasIn();
+    });
     this.updatePosition();
+    m.redraw();
   }
   function hidePort(port) {
-    var portElement = port.element();
-    var pieceElementMap = this._elementMap;
-    var portListElement = pieceElementMap.portList;
-    if (portListElement.contains(portElement))
-      portListElement.removeChild(portElement);
-    var newOption = document.createElement('option');
-    newOption.value = port.id();
-    newOption.textContent = port.contentText();
-    var optionGroup = pieceElementMap.portSelectOptionGroup[port.type()];
-    var _options = optionGroup.children, i, len, options = [];
-    for (i = 0, len = _options.length; i < len; i += 1) {
-      options.push(_options[i]);
-    }
-    options.push(newOption);
-    options.sort(function(a, b) {
-      return (a.textContent > b.textContent) ? 1 : -1;
+    port.hide();
+    this._isShowingInConnector = this.ports().some(function(port) {
+      return port.isShowing() && port.hasIn();
     });
-    for (i = 0, len = options.length; i < len; i += 1) {
-      var option = options[i];
-      optionGroup.appendChild(option);
-    }
-    var portSelectElement = pieceElementMap.portSelect;
-    if (portSelectElement.options.length !== 1)
-      removeClass(portSelectElement, 'hide');
-    portSelectElement.value = '';
-    portSelectElement.blur();
-    this._isShowingInConnector = (portListElement.children.length !==
-                                  portListElement.querySelectorAll('.hide-connector-in').length);
     this.updatePosition();
+    m.redraw();
   }
   function portMap() {
     return this._portMap;
+  }
+  function ports() {
+    var portMap = this._portMap;
+    return Object.keys(portMap).map(function(key) {
+      return portMap[key];
+    });
   }
   function toFront() {
     zIndexCount += 1;
@@ -201,6 +169,7 @@ var piece = (function() {
     showPort: showPort,
     hidePort: hidePort,
     portMap: portMap,
+    ports: ports,
     toFront: toFront,
     addClassOfHeader: addClassOfHeader,
     removeClassOfHeader: removeClassOfHeader,

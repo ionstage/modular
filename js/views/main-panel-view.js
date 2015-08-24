@@ -14,9 +14,6 @@
           element: element
         });
 
-        // template
-        port.template(dom.el('#port_template'));
-
         // board event
         boardEvent.element({
           mainPanel: element,

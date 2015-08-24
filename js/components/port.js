@@ -1,40 +1,38 @@
 var port = (function() {
   var addClass = dom.addClass;
   var removeClass = dom.removeClass;
-  var templateNode = null;
-  function template(node) {
-    templateNode = dom.createNode(node.innerHTML);
-  }
-  function createPort(type, contentText, hasIn, hasOut) {
-    var node = templateNode.cloneNode(true);
-    addClass(node, type);
-    if (!hasIn)
-      addClass(node, 'hide-connector-in');
-    if (!hasOut)
-      addClass(node, 'hide-connector-out');
-    node.children[1].children[0].textContent = contentText;
-    return node;
-  }
   function create(type, key, contentText, hasIn, hasOut, isDefault) {
     var p = Object.create(this);
-    p._element = createPort(type, contentText, hasIn, hasOut);
     p._type = type;
     p._key = key;
+    p._hasIn = hasIn;
+    p._hasOut = hasOut;
     p._isDefault = isDefault;
+    p._isShowing = isDefault;
     p._contentText = contentText;
     return p;
+  }
+  function initializeElement(node) {
+    this._element = node;
+    addClass(node, this._type);
+    if (!this._hasIn)
+      addClass(node, 'hide-connector-in');
+    if (!this._hasOut)
+      addClass(node, 'hide-connector-out');
   }
   function id(value) {
     if (!value)
       return this._id;
     this._id = value;
-    this._element.setAttribute('data-port-id', value);
   }
   function type() {
     return this._type;
   }
   function key() {
     return this._key;
+  }
+  function hasIn() {
+    return this._hasIn;
   }
   function element() {
     return this._element;
@@ -45,6 +43,15 @@ var port = (function() {
   function contentText() {
     return this._contentText;
   }
+  function show() {
+    this._isShowing = true;
+  }
+  function hide() {
+    this._isShowing = false;
+  }
+  function isShowing() {
+    return this._isShowing;
+  }
   function showConnectorConnected() {
     removeClass(this._element, 'hide-connector-connected');
   }
@@ -52,9 +59,13 @@ var port = (function() {
     addClass(this._element, 'hide-connector-connected');
   }
   function getOutConnectorElement() {
+    if (!this._element)
+      return null;
     return this._element.children[0].children[2];
   }
   function getInConnectorElement() {
+    if (!this._element)
+      return null;
     return this._element.children[0].children[0];
   }
   function setFlushInConnector(flag) {
@@ -82,14 +93,18 @@ var port = (function() {
     removeClass(this._element, 'mark');
   }
   return {
-    template: template,
     create: create,
+    initializeElement: initializeElement,
     id: id,
     type: type,
     key: key,
+    hasIn: hasIn,
     element: element,
     isDefault: isDefault,
     contentText: contentText,
+    show: show,
+    hide: hide,
+    isShowing: isShowing,
     showConnectorConnected: showConnectorConnected,
     hideConnectorConnected: hideConnectorConnected,
     getOutConnectorElement: getOutConnectorElement,

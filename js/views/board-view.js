@@ -22,6 +22,26 @@
           boardEvent.setBoard(ctrl.board);
         }
       }, ctrl.board.pieces().map(function(piece) {
+        var ports = piece.ports();
+        var propOptionViews = ports.concat().filter(function(port) {
+          return !port.isShowing() && port.type() === 'prop';
+        }).sort(function(a, b) {
+          return (a.contentText() > b.contentText()) ? 1 : -1;
+        }).map(function(port) {
+          return m('option', {
+            value: port.id()
+          }, port.contentText())
+        });
+        var eventOptionViews = ports.concat().filter(function(port) {
+          return !port.isShowing() && port.type() === 'event';
+        }).sort(function(a, b) {
+          return (a.contentText() > b.contentText()) ? 1 : -1;
+        }).map(function(port) {
+          return m('option', {
+            value: port.id()
+          }, port.contentText())
+        });
+
         return m('.piece', {
           key: piece.id(),
           className: piece.isLoading() ? 'loading' : '',
@@ -38,13 +58,43 @@
           ]),
           m('.piece-content', [
             m('iframe.piece-component', {src: piece.src() + '#' + piece.id()}),
-            m('.piece-port-list')
+            m('.piece-port-list', ports.map(function(port) {
+              if (!port.isShowing())
+                return;
+              return m('.port.hide-connector-connected', {
+                key: port.id(),
+                'data-port-id': port.id(),
+                config: function(element, isInitialized) {
+                  if (isInitialized)
+                    return;
+                  port.initializeElement(element);
+                }
+              }, [
+                m('.port-connector', [
+                  m('.port-connector-in'),
+                  m('.port-connector-connected'),
+                  m('.port-connector-out')
+                ]),
+                m('.port-content', [
+                  m('.port-content-text', port.contentText()),
+                  m('.port-content-delete-button', '×')
+                ])
+              ]);
+            }))
           ]),
           m('.piece-footer', [
-            m('select.piece-port-select.hide', [
+            m('select.piece-port-select', {
+              className: (propOptionViews.length === 0 && eventOptionViews.length === 0) ? 'hide' : '',
+              onchange: function(event) {
+                var currentTarget = event.currentTarget;
+                boardEvent.showPort(event);
+                currentTarget.value = '';
+                currentTarget.blur();
+              }
+            }, [
               m('option', {value: ''}),
-              m('optgroup.piece-port-select-optgroup-prop', {label: 'Property'}),
-              m('optgroup.piece-port-select-optgroup-event', {label: 'Event'})
+              m('optgroup.piece-port-select-optgroup-prop', {label: 'Property'}, propOptionViews),
+              m('optgroup.piece-port-select-optgroup-event', {label: 'Event'}, eventOptionViews)
             ])
           ])
         ]);
