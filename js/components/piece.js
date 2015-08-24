@@ -64,6 +64,11 @@ var piece = (function() {
     if (this._element)
       this._element.style.cssText = cssText;
   }
+  function updateIsShowingInConnector() {
+    this._isShowingInConnector = this.ports().some(function(port) {
+      return port.isShowing() && port.hasIn();
+    });
+  }
   function element() {
     return this._element;
   }
@@ -82,20 +87,17 @@ var piece = (function() {
       map[portName] = port;
     }
     this._portMap = map;
+    this.updateIsShowingInConnector();
   }
   function showPort(port) {
     port.show();
-    this._isShowingInConnector = this.ports().some(function(port) {
-      return port.isShowing() && port.hasIn();
-    });
+    this.updateIsShowingInConnector();
     this.updatePosition();
     m.redraw();
   }
   function hidePort(port) {
     port.hide();
-    this._isShowingInConnector = this.ports().some(function(port) {
-      return port.isShowing() && port.hasIn();
-    });
+    this.updateIsShowingInConnector();
     this.updatePosition();
     m.redraw();
   }
@@ -137,6 +139,7 @@ var piece = (function() {
     position: position,
     componentHeight: componentHeight,
     updatePosition: updatePosition,
+    updateIsShowingInConnector: updateIsShowingInConnector,
     element: element,
     setPorts: setPorts,
     showPort: showPort,
