@@ -216,12 +216,6 @@
     return isTouchEnabled;
   }
 
-  function createNode(str) {
-    var node = document.createElement('div');
-    node.innerHTML = str.replace(/\r\n/g, '').trim();
-    return node.firstChild;
-  }
-
   global.dom = {
     el: el,
     tappable: tappable,
@@ -242,7 +236,6 @@
     windowWidth: windowWidth,
     translate: translate,
     requestAnimationFrame: requestAnimationFrame,
-    supportsTouch: supportsTouch,
-    createNode: createNode
+    supportsTouch: supportsTouch
   };
 })(this);
