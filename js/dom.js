@@ -168,14 +168,6 @@
       element.className = (element.className + ' ').replace(className + ' ', '').trim();
   }
 
-  function makeCSSText(styleMap) {
-    var cssText = '';
-    for (var key in styleMap) {
-      cssText = cssText + key + ':' + styleMap[key] + ';';
-    }
-    return cssText;
-  }
-
   function indexOf(parentNode, childNode) {
     return Array.prototype.indexOf.call(parentNode.children, childNode);
   }
@@ -229,7 +221,6 @@
     hasClass: hasClass,
     addClass: addClass,
     removeClass: removeClass,
-    makeCSSText: makeCSSText,
     indexOf: indexOf,
     setCursor: setCursor,
     removeKeyboardFocus: removeKeyboardFocus,

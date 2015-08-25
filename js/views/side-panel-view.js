@@ -135,7 +135,7 @@
         isFirstDrag = true;
         isAutoClose = false;
 
-        node.style.cssText = dom.makeCSSText({opacity: 0.6});
+        node.style.opacity = 0.6;
 
         dom.removeKeyboardFocus();
 
@@ -158,11 +158,8 @@
             ctrl.dispatchEvent({type: 'close'});
           }
 
-          var cssText = dom.makeCSSText({
-            left: cloneOffset.left + 'px',
-            top: cloneOffset.top + 'px'
-          });
-          cloneNode.style.cssText = cssText;
+          cloneNode.style.left = cloneOffset.left + 'px';
+          cloneNode.style.top = cloneOffset.top + 'px';
         }
 
         dom.translate(cloneNode, dx, dy);

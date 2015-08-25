@@ -543,7 +543,7 @@ var boardEvent = (function() {
     function updatePortPosition() {
       if (isDragging) {
         dom.requestAnimationFrame(updatePortPosition);
-        portElement.style.cssText = dom.makeCSSText({top: portTop + 'px'});
+        portElement.style.top = portTop + 'px';
         pathContainer.updatePosition();
       }
     }
