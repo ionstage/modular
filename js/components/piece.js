@@ -55,14 +55,12 @@ var piece = (function() {
     this._componentHeight = value;
   }
   function updatePosition() {
+    var element = this._element;
     this._x = Math.max(this._x, (this._isShowingInConnector) ? 46 : 0);
-    var cssText = dom.makeCSSText({
-      left: this._x + 'px',
-      top: this._y + 'px',
-      'z-index': this._zIndex
-    });
-    if (this._element)
-      this._element.style.cssText = cssText;
+    if (element) {
+      dom.translate(element, this._x, this._y);
+      element.style.zIndex = this._zIndex;
+    }
   }
   function updateIsShowingInConnector() {
     this._isShowingInConnector = this.ports().some(function(port) {
