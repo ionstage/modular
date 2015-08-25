@@ -84,16 +84,17 @@
 
   Board.prototype.getConnectorOffset = function(element) {
     var offsetX = 0, offsetY = 0, count = 0;
-    while (element && element.id !== 'main_panel') {
+    if (element) {
       var elementStyle = getComputedStyle(element, null);
-      offsetX = offsetX + element.offsetLeft -
+      var rect = element.getBoundingClientRect();
+      var parent = this._element.parentNode;
+      var parentRect = parent.getBoundingClientRect();
+      offsetX = rect.left + parent.scrollLeft - parentRect.left -
                 parseInt(elementStyle.marginLeft || 0) +
                 parseInt(isFF() ? 0 : (elementStyle.borderLeftWidth || 0));
-      offsetY = offsetY + element.offsetTop -
+      offsetY = rect.top + parent.scrollTop - parentRect.top -
                 parseInt(elementStyle.marginTop || 0) +
                 parseInt(isFF() ? 0 : (elementStyle.borderTopWidth || 0));
-      element = element.offsetParent;
-      count += 1;
     }
     return {x: offsetX, y: offsetY};
   };
