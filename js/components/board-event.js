@@ -333,7 +333,9 @@ var boardEvent = (function() {
       if (piece) {
         piece.toFront();
         piece.updatePosition();
-        if (document.activeElement && document.activeElement.blur)
+        var tagName = target.tagName.toLowerCase();
+        if (tagName !== 'select' &&
+            document.activeElement && document.activeElement.blur)
           document.activeElement.blur();
       }
       switch (className) {
