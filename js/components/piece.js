@@ -88,6 +88,13 @@ var piece = (function() {
     this.updateIsShowingInConnector();
   }
   function showPort(port) {
+    var portMap = this._portMap;
+    var portName = port.type() + '/' + port.key();
+
+    // XXX: change port order
+    delete portMap[portName];
+    portMap[portName] = port;
+
     port.show();
     this.updateIsShowingInConnector();
     this.updatePosition();
