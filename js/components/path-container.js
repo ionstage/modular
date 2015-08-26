@@ -5,6 +5,7 @@
     this._element = element;
     this._dirtyIDs = [];
     this._positionMap = {};
+    this._connections = [];
   };
 
   PathContainer.prototype.append = function(sourceID, targetID) {
@@ -13,18 +14,33 @@
     if (path)
       return;
 
-    path = dom.el('<path>', 'http://www.w3.org/2000/svg');
-    path.setAttribute('data-source-id', sourceID);
-    path.setAttribute('data-target-id', targetID);
+    var pathElement = dom.el('<path>', 'http://www.w3.org/2000/svg');
+    pathElement.setAttribute('data-source-id', sourceID);
+    pathElement.setAttribute('data-target-id', targetID);
 
-    this._element.appendChild(path);
+    this._element.appendChild(pathElement);
+
+    this._connections.push({
+      sourceID: sourceID,
+      targetID: targetID,
+      element: pathElement
+    });
   };
 
   PathContainer.prototype.remove = function(sourceID, targetID) {
     var path = getPath(this, sourceID, targetID);
 
-    if (path)
-      this._element.removeChild(path);
+    if (!path)
+      return;
+
+    this._element.removeChild(path.element);
+
+    var connections = this._connections;
+    for (var i = connections.length - 1; i >= 0; i--) {
+      var connection = connections[i];
+      if (connection.sourceID === sourceID && connection.targetID === targetID)
+        connections.splice(i, 1);
+    }
   };
 
   PathContainer.prototype.change = function(oldIDSet, newIDSet) {
@@ -46,8 +62,12 @@
     if (newPath)
       this.remove(newSourceID, newTargetID);
 
-    path.setAttribute('data-source-id', newSourceID);
-    path.setAttribute('data-target-id', newTargetID);
+    path.sourceID = newSourceID;
+    path.targetID = newTargetID;
+
+    var pathElement = path.element;
+    pathElement.setAttribute('data-source-id', newSourceID);
+    pathElement.setAttribute('data-target-id', newTargetID);
   };
 
   PathContainer.prototype.position = function(id, point) {
@@ -60,14 +80,12 @@
     var positionMap = this._positionMap;
 
     dirtyIDs.forEach(function(id) {
-      var paths = Array.prototype.slice.call(getAllPaths(this, id, id));
+      var paths = getAllPaths(this, id, id);
       paths.forEach(function(path) {
-        var sourceID = path.getAttribute('data-source-id');
-        var targetID = path.getAttribute('data-target-id');
-        var sourcePoint = positionMap[sourceID];
-        var targetPoint = positionMap[targetID];
-        path.setAttribute('d', 'M' + sourcePoint.x + ',' + sourcePoint.y +
-                               'L' + targetPoint.x + ',' + targetPoint.y + 'Z');
+        var sourcePoint = positionMap[path.sourceID];
+        var targetPoint = positionMap[path.targetID];
+        path.element.setAttribute('d', 'M' + sourcePoint.x + ',' + sourcePoint.y +
+                                  'L' + targetPoint.x + ',' + targetPoint.y + 'Z');
       });
     }.bind(this));
 
@@ -88,16 +106,16 @@
     var path = getPath(this, null, targetID);
 
     if (path)
-      return path.getAttribute('data-source-id');
+      return path.sourceID;
     else
       return null;
   };
 
   PathContainer.prototype.getTargetIDs = function(sourceID) {
-    var paths = Array.prototype.slice.call(getAllPaths(this, sourceID));
+    var paths = getAllPaths(this, sourceID);
 
     return paths.map(function(path) {
-      return path.getAttribute('data-target-id');
+      return path.targetID;
     });
   };
 
@@ -107,42 +125,39 @@
     if (!path)
       return;
 
+    var pathElement = path.element;
+
     if (flag)
-      path.setAttribute('class', 'flush');
+      pathElement.setAttribute('class', 'flush');
     else
-      path.removeAttribute('class');
+      pathElement.removeAttribute('class');
   };
 
   PathContainer.prototype.getConnectionList = function() {
-    var element = this._element;
-    var paths = Array.prototype.slice.call(element.childNodes);
-
-    return paths.map(function(path) {
+    return this._connections.map(function(path) {
       return {
-        sourceID: path.getAttribute('data-source-id'),
-        targetID: path.getAttribute('data-target-id')
+        sourceID: path.sourceID,
+        targetID: path.targetID
       };
     });
   };
 
   var getPath = function(self, sourceID, targetID) {
-    var element = self._element;
+    var connections = self._connections;
 
-    if (!sourceID)
-      return element.querySelector('[data-target-id="' + targetID + '"]');
+    for (var i = connections.length - 1; i >= 0; i--) {
+      var connection = connections[i];
+      if ((!sourceID || connection.sourceID === sourceID) && connection.targetID === targetID)
+        return connection;
+    }
 
-    return element.querySelector('[data-source-id="' + sourceID + '"]' +
-                                 '[data-target-id="' + targetID + '"]');
+    return null;
   };
 
   var getAllPaths = function(self, sourceID, targetID) {
-    var element = self._element;
-
-    if (!targetID)
-      return element.querySelectorAll('[data-source-id="' + sourceID + '"]');
-
-    return element.querySelectorAll('[data-source-id="' + sourceID + '"],' +
-                                    '[data-target-id="' + targetID + '"]');
+    return self._connections.filter(function(connection) {
+      return connection.sourceID === sourceID || connection.targetID === targetID;
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports)
