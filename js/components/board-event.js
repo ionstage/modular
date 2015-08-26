@@ -410,6 +410,8 @@ var boardEvent = (function() {
     var targetPort = getPort(targetPortID);
     sourcePiece.showPort(sourcePort);
     targetPiece.showPort(targetPort);
+    if (!targetPort.element())
+      m.redraw(true);
     targetPort.showConnectorConnected();
     pathContainer.append(sourcePortID + '/out', targetPortID + '/in');
     updatePathPosition(sourcePieceID);
