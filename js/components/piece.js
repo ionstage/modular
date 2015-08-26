@@ -11,6 +11,7 @@ var piece = (function() {
     p._src = src;
     p._isLoading = true;
     p._portMap = {};
+    p._ports = [];
     return p;
   }
   function initializeElement(node) {
@@ -73,6 +74,7 @@ var piece = (function() {
   function setPorts(ports) {
     var pieceID = this._id;
     var map = {};
+    var list = [];
     for (var i = 0, len = ports.length; i < len; i += 1) {
       var port = ports[i];
       var portName = port.type() + '/' + port.key();
@@ -83,11 +85,24 @@ var piece = (function() {
       else
         this.hidePort(port);
       map[portName] = port;
+      list.push(port);
     }
     this._portMap = map;
+    this._ports = list;
     this.updateIsShowingInConnector();
   }
   function showPort(port) {
+    if (port.isShowing())
+      return;
+
+    // change port order
+    var ports = this._ports;
+    for (var i = ports.length - 1; i >= 0; i--) {
+      if (ports[i] === port)
+        ports.splice(i, 1);
+    }
+    ports.push(port);
+
     port.show();
     this.updateIsShowingInConnector();
     this.updatePosition();
@@ -103,10 +118,7 @@ var piece = (function() {
     return this._portMap;
   }
   function ports() {
-    var portMap = this._portMap;
-    return Object.keys(portMap).map(function(key) {
-      return portMap[key];
-    });
+    return this._ports;
   }
   function toFront() {
     zIndexCount += 1;
