@@ -100,25 +100,33 @@
     return {x: offsetX, y: offsetY};
   };
 
-  Board.prototype.getConnectorPositionMap = function(pieceID) {
-    var map = {};
+  Board.prototype.getConnectorPosition = function(connectorID) {
+    var idList = connectorID.split('/');
+    var pieceID = idList[0];
+    var portName = idList[1] + '/' + idList[2];
+    var connectorType = idList[3];
+
     var piece = this._pieceMap[pieceID];
     var portMap = piece.portMap();
+    var port = portMap[portName];
+    var connectorOffset;
     var connectorSizeOffset = this._connectorSizeOffset;
-    for (var portName in portMap) {
-      var port = portMap[portName];
-      var outConnectorOffset = this.getConnectorOffset(port.getOutConnectorElement());
-      map[pieceID + '/' + portName + '/out'] = {
-        x: outConnectorOffset.x + connectorSizeOffset,
-        y: outConnectorOffset.y + connectorSizeOffset
+
+    if (connectorType === 'out') {
+      connectorOffset = this.getConnectorOffset(port.getOutConnectorElement());
+      return {
+        x: connectorOffset.x + connectorSizeOffset,
+        y: connectorOffset.y + connectorSizeOffset
       };
-      var inConnectorOffset = this.getConnectorOffset(port.getInConnectorElement());
-      map[pieceID + '/' + portName + '/in'] = {
-        x: inConnectorOffset.x + connectorSizeOffset - (isFF() ? 0 : 4),
-        y: inConnectorOffset.y + connectorSizeOffset - (isFF() ? 0 : 4)
+    } else if (connectorType === 'in') {
+      connectorOffset = this.getConnectorOffset(port.getInConnectorElement());
+      return {
+        x: connectorOffset.x + connectorSizeOffset - (isFF() ? 0 : 4),
+        y: connectorOffset.y + connectorSizeOffset - (isFF() ? 0 : 4)
       };
+    } else {
+      return null;
     }
-    return map;
   };
 
   Board.prototype.getConnectorSizeOffset = function() {

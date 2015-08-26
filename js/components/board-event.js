@@ -486,10 +486,16 @@ var boardEvent = (function() {
     });
   }
   function updatePathPosition(pieceID) {
-    var connectorPositionMap = board.getConnectorPositionMap(pieceID);
-    for (var connectorID in connectorPositionMap) {
-      pathContainer.position(connectorID, connectorPositionMap[connectorID]);
-    }
+    pathContainer.getConnectionList().forEach(function(connection) {
+      var sourceID = connection.sourceID;
+      var targetID = connection.targetID;
+      var sourcePieceID = sourceID.split('/')[0];
+      var targetPieceID = targetID.split('/')[0];
+      if (sourcePieceID === pieceID)
+        pathContainer.position(sourceID, board.getConnectorPosition(sourceID));
+      else if(targetPieceID === pieceID)
+        pathContainer.position(targetID, board.getConnectorPosition(targetID));
+    });
   }
   function dragPiece(event) {
     var pieceID = event.target.parentNode.parentNode.getAttribute('data-piece-id');
