@@ -58,7 +58,6 @@
           ]),
           m('.piece-content', [
             m('iframe.piece-component', {
-              className: parseInt(piece.componentHeight()) === 0 ? 'hide' : '',
               src: piece.src() + '#' + piece.id(),
               style: {height: piece.componentHeight()}
             }),

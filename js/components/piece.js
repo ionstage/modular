@@ -54,6 +54,8 @@ var piece = (function() {
     if (!value)
       return this._componentHeight || 0;
     this._componentHeight = value;
+    if (parseInt(value) === 0 && this._element)
+      dom.addClass(this._element.children[1].children[0], 'hide');
   }
   function updatePosition() {
     var element = this._element;
