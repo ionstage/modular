@@ -72,10 +72,11 @@ var piece = (function() {
   }
   function updatePortListOrder() {
     var portMap = this._portMap;
+    var ports = this._ports;
     var portElements = this._element.children[1].children[1].children;
-    this._ports = Array.prototype.slice.call(portElements).map(function(portElement) {
+    Array.prototype.slice.call(portElements).forEach(function(portElement, index) {
       var idList = portElement.getAttribute('data-port-id').split('/');
-      return portMap[idList[1] + '/' + idList[2]];
+      ports[index] = portMap[idList[1] + '/' + idList[2]];
     });
   }
   function getInConnectorOffset(port) {
