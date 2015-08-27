@@ -21,7 +21,26 @@
         });
         boardEvent.loadURLHash();
       }
-    }, boardView(ctrl.boardController));
+    }, [
+      boardView(ctrl.boardController),
+      m('.retainer', {
+        config: function(element, isInitialized) {
+          if (!isInitialized)
+            return;
+
+          dom.addClass(element, 'hide');
+          var mainPanelElement = ctrl.element();
+          var clientWidth = mainPanelElement.clientWidth;
+          var clientHeight = mainPanelElement.clientHeight;
+          var scrollWidth = mainPanelElement.scrollWidth;
+          var scrollHeight = mainPanelElement.scrollHeight;
+          if (scrollWidth > clientWidth || scrollHeight > clientHeight) {
+            dom.translate(element, mainPanelElement.scrollWidth - 1, mainPanelElement.scrollHeight - 1);
+            dom.removeClass(element, 'hide');
+          }
+        }
+      })
+    ]);
   };
 
   if (typeof module !== 'undefined' && module.exports)

@@ -187,6 +187,7 @@ body {
   height: 100%;
   overflow: visible;
   pointer-events: none;
+  position: absolute;
   vertical-align: bottom;
   width: 100%;
 }
@@ -433,4 +434,10 @@ body {
 
 .port-content-delete-button:hover {
   opacity: 0.6;
+}
+
+.retainer {
+  height: 1px;
+  position: absolute;
+  width: 1px;
 }

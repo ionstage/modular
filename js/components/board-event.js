@@ -529,12 +529,14 @@ var boardEvent = (function() {
         if (isTouchEnabled)
           dom.removeClass(piece.element(), 'drag');
         updateURLHash();
+        m.redraw();
       }
     });
     board.startDrag();
     dom.requestAnimationFrame(updatePiecePosition);
     if (isTouchEnabled)
       dom.addClass(piece.element(), 'drag');
+    m.redraw();
   }
   function sortPort(event) {
     var portElement = event.target.parentNode.parentNode;
