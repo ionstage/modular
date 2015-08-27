@@ -122,10 +122,13 @@
         y: connectorOffset.y + connectorSizeOffset
       };
     } else if (connectorType === 'in') {
-      if (isSortingPort)
+      if (isSortingPort) {
         connectorOffset = this.getConnectorOffset(port.getInConnectorElement());
-      else
+        connectorOffset.x -= (isFF() ? 0 : 4);
+        connectorOffset.y -= (isFF() ? 0 : 4);
+      } else {
         connectorOffset = piece.getInConnectorOffset(port);
+      }
       return {
         x: connectorOffset.x + connectorSizeOffset,
         y: connectorOffset.y + connectorSizeOffset
