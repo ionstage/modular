@@ -536,7 +536,6 @@ var boardEvent = (function() {
     dom.requestAnimationFrame(updatePiecePosition);
     if (isTouchEnabled)
       dom.addClass(piece.element(), 'drag');
-    m.redraw();
   }
   function sortPort(event) {
     var portElement = event.target.parentNode.parentNode;

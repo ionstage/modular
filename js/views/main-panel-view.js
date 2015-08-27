@@ -28,15 +28,22 @@
           if (!isInitialized)
             return;
 
-          dom.addClass(element, 'hide');
           var mainPanelElement = ctrl.element();
+
+          var scrollLeft = mainPanelElement.scrollLeft;
+          var scrollTop = mainPanelElement.scrollTop;
+
+          dom.addClass(element, 'hide');
+
           var clientWidth = mainPanelElement.clientWidth;
           var clientHeight = mainPanelElement.clientHeight;
           var scrollWidth = mainPanelElement.scrollWidth;
           var scrollHeight = mainPanelElement.scrollHeight;
           if (scrollWidth > clientWidth || scrollHeight > clientHeight) {
-            dom.translate(element, mainPanelElement.scrollWidth - 1, mainPanelElement.scrollHeight - 1);
+            dom.translate(element, scrollWidth + 46, scrollHeight + 46);
             dom.removeClass(element, 'hide');
+            mainPanelElement.scrollLeft = scrollLeft;
+            mainPanelElement.scrollTop = scrollTop;
           }
         }
       })
