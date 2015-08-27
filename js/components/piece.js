@@ -68,6 +68,28 @@ var piece = (function() {
       return port.isShowing() && port.hasIn();
     });
   }
+  function updatePortListOrder() {
+    var portMap = this._portMap;
+    var portElements = this._element.children[1].children[1].children;
+    this._ports = Array.prototype.slice.call(portElements).map(function(portElement) {
+      var idList = portElement.getAttribute('data-port-id').split('/');
+      return portMap[idList[1] + '/' + idList[2]];
+    });
+  }
+  function getInConnectorOffset(port) {
+    var index = this._ports.indexOf(port);
+    return {
+      x: this._x - 42,
+      y: this._y + 34 + parseInt(this._componentHeight) + index * 46 + 8
+    };
+  }
+  function getOutConnectorOffset(port) {
+    var index = this._ports.indexOf(port);
+    return {
+      x: this._x + 240,
+      y: this._y + 34 + parseInt(this._componentHeight) + index * 46 + 4
+    };
+  }
   function element() {
     return this._element;
   }
@@ -150,6 +172,9 @@ var piece = (function() {
     componentHeight: componentHeight,
     updatePosition: updatePosition,
     updateIsShowingInConnector: updateIsShowingInConnector,
+    updatePortListOrder: updatePortListOrder,
+    getInConnectorOffset: getInConnectorOffset,
+    getOutConnectorOffset: getOutConnectorOffset,
     element: element,
     setPorts: setPorts,
     showPort: showPort,

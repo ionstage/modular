@@ -100,7 +100,7 @@
     return {x: offsetX, y: offsetY};
   };
 
-  Board.prototype.getConnectorPosition = function(connectorID) {
+  Board.prototype.getConnectorPosition = function(connectorID, isSortingPort) {
     var idList = connectorID.split('/');
     var pieceID = idList[0];
     var portName = idList[1] + '/' + idList[2];
@@ -113,13 +113,19 @@
     var connectorSizeOffset = this._connectorSizeOffset;
 
     if (connectorType === 'out') {
-      connectorOffset = this.getConnectorOffset(port.getOutConnectorElement());
+      if (isSortingPort)
+        connectorOffset = this.getConnectorOffset(port.getOutConnectorElement());
+      else
+        connectorOffset = piece.getOutConnectorOffset(port);
       return {
         x: connectorOffset.x + connectorSizeOffset,
         y: connectorOffset.y + connectorSizeOffset
       };
     } else if (connectorType === 'in') {
-      connectorOffset = this.getConnectorOffset(port.getInConnectorElement());
+      if (isSortingPort)
+        connectorOffset = this.getConnectorOffset(port.getInConnectorElement());
+      else
+        connectorOffset = piece.getInConnectorOffset(port);
       return {
         x: connectorOffset.x + connectorSizeOffset - (isFF() ? 0 : 4),
         y: connectorOffset.y + connectorSizeOffset - (isFF() ? 0 : 4)

@@ -485,16 +485,16 @@ var boardEvent = (function() {
       }
     });
   }
-  function updatePathPosition(pieceID) {
+  function updatePathPosition(pieceID, isSortingPort) {
     pathContainer.getConnectionList().forEach(function(connection) {
       var sourceID = connection.sourceID;
       var targetID = connection.targetID;
       var sourcePieceID = sourceID.split('/')[0];
       var targetPieceID = targetID.split('/')[0];
       if (sourcePieceID === pieceID)
-        pathContainer.position(sourceID, board.getConnectorPosition(sourceID));
+        pathContainer.position(sourceID, board.getConnectorPosition(sourceID, isSortingPort));
       else if(targetPieceID === pieceID)
-        pathContainer.position(targetID, board.getConnectorPosition(targetID));
+        pathContainer.position(targetID, board.getConnectorPosition(targetID, isSortingPort));
     });
   }
   function dragPiece(event) {
@@ -550,6 +550,7 @@ var boardEvent = (function() {
     var portListElementChildren;
     var prePlaceholderIndex;
     var pieceID = portID.split('/')[0];
+    var piece = board.pieceMap()[pieceID];
     function updatePortPosition() {
       if (isDragging) {
         dom.requestAnimationFrame(updatePortPosition);
@@ -573,7 +574,7 @@ var boardEvent = (function() {
           portListElement.insertBefore(placeholderElement, portListElementChildren[placeholderIndex] || null);
           prePlaceholderIndex = placeholderIndex;
         }
-        updatePathPosition(pieceID);
+        updatePathPosition(pieceID, true);
       },
       end: function(dx, dy) {
         board.endDrag();
@@ -583,9 +584,10 @@ var boardEvent = (function() {
           portListElement.insertBefore(portElement, placeholderElement);
           dom.removeClass(portElement, 'drag');
           portListElement.removeChild(placeholderElement);
-          updatePathPosition(pieceID);
+          updatePathPosition(pieceID, true);
           pathContainer.updatePosition();
           pathContainer.refreshPosition();
+          piece.updatePortListOrder();
         });
       }
     });
