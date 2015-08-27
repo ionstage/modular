@@ -81,8 +81,8 @@ var piece = (function() {
   function getInConnectorOffset(port) {
     var index = this._ports.indexOf(port);
     return {
-      x: this._x - 42,
-      y: this._y + 34 + parseInt(this._componentHeight) + index * 46 + 8
+      x: this._x - 46,
+      y: this._y + 34 + parseInt(this._componentHeight) + index * 46 + 4
     };
   }
   function getOutConnectorOffset(port) {

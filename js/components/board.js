@@ -127,8 +127,8 @@
       else
         connectorOffset = piece.getInConnectorOffset(port);
       return {
-        x: connectorOffset.x + connectorSizeOffset - (isFF() ? 0 : 4),
-        y: connectorOffset.y + connectorSizeOffset - (isFF() ? 0 : 4)
+        x: connectorOffset.x + connectorSizeOffset,
+        y: connectorOffset.y + connectorSizeOffset
       };
     } else {
       return null;
