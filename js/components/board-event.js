@@ -493,7 +493,7 @@ var boardEvent = (function() {
       var targetPieceID = targetID.split('/')[0];
       if (sourcePieceID === pieceID)
         pathContainer.position(sourceID, board.getConnectorPosition(sourceID, isSortingPort));
-      else if(targetPieceID === pieceID)
+      if(targetPieceID === pieceID)
         pathContainer.position(targetID, board.getConnectorPosition(targetID, isSortingPort));
     });
   }
