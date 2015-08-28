@@ -96,16 +96,18 @@ var piece = (function() {
   }
   function getInConnectorOffset(port) {
     var index = this._ports.indexOf(port);
+    var componentHeight = parseInt(this._componentHeight);
     return {
       x: this._x - 46,
-      y: this._y + 34 + parseInt(this._componentHeight) + index * 46 + 4
+      y: this._y + 34 + (componentHeight || -2) + index * 46 + 4
     };
   }
   function getOutConnectorOffset(port) {
     var index = this._ports.indexOf(port);
+    var componentHeight = parseInt(this._componentHeight);
     return {
       x: this._x + 240,
-      y: this._y + 34 + parseInt(this._componentHeight) + index * 46 + 4
+      y: this._y + 34 + (componentHeight || -2) + index * 46 + 4
     };
   }
   function element() {
