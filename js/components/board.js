@@ -6,6 +6,7 @@
     this._element = element;
     this._pieceMap = {};
     this._connectorSizeOffset = 21;
+    this._dirtyPortConnectorConnectedMap = {};
   };
 
   Board.prototype.element = function(element) {
@@ -69,14 +70,26 @@
   };
 
   Board.prototype.showPortConnectorConnected = function(portID) {
-    var port = this.getPort(portID);
-    port.showConnectorConnected();
+    this._dirtyPortConnectorConnectedMap[portID] = true;
   };
 
   Board.prototype.hidePortConnectorConnected = function(portID) {
-    var port = this.getPort(portID);
-    port.hideConnectorConnected();
+    this._dirtyPortConnectorConnectedMap[portID] = false;
   };
+
+  Board.prototype.updatePortConnectorConnected = function() {
+    var map = this._dirtyPortConnectorConnectedMap;
+    var list = Object.keys(map).map(function(portID) {
+      var port = this.getPort(portID);
+      if (map[portID])
+        port.showConnectorConnected();
+      else
+        port.hideConnectorConnected();
+    }.bind(this));
+    if (list.length !== 0)
+      this._dirtyPortConnectorConnectedMap = {};
+  };
+
 
   Board.prototype.getOutConnectorElement = function(portID) {
     var port = this.getPort(portID);

@@ -692,6 +692,7 @@ var boardEvent = (function() {
         if (isDragging) {
           connectorHandle.update();
           pathContainer.updatePosition();
+          board.updatePortConnectorConnected();
         }
       }
       function startConnectorHandle() {

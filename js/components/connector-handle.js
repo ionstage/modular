@@ -6,18 +6,29 @@
     this._x = 0;
     this._y = 0;
     this._type = '';
+    this._isShowing = false;
+    this._needsUpdateShowing = false;
   };
 
   ConnectorHandle.prototype.show = function() {
-    dom.removeClass(this._element, 'hide');
+    this._isShowing = true;
+    this._needsUpdateShowing = true;
   };
 
   ConnectorHandle.prototype.hide = function() {
-    dom.addClass(this._element, 'hide');
+    this._isShowing = false;
+    this._needsUpdateShowing = true;
   };
 
   ConnectorHandle.prototype.update = function() {
     dom.translate(this._element, this._x, this._y);
+    if (this._needsUpdateShowing) {
+      if (this._isShowing)
+        dom.removeClass(this._element, 'hide');
+      else
+        dom.addClass(this._element, 'hide');
+      this._needsUpdateShowing = false;
+    }
   };
 
   ConnectorHandle.prototype.position = function(point) {
