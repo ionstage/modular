@@ -561,8 +561,6 @@ var boardEvent = (function() {
     }
     dom.startDragEvent(event, {
       drag: function(dx, dy) {
-        if (isDragging)
-          dom.requestAnimationFrame(updatePortPosition);
         var top = startY + dy;
         if (top < 0)
           top = 0;
@@ -597,6 +595,7 @@ var boardEvent = (function() {
     dom.addClass(portElement, 'drag');
     portListElement.insertBefore(placeholderElement, portElement.nextSibling);
     portListElementChildren = portListElement.querySelectorAll('.port:not(.drag)');
+    dom.requestAnimationFrame(updatePortPosition);
   }
   var dragPortConnectorOut = (function() {
     var hasClass = dom.hasClass;
@@ -690,6 +689,7 @@ var boardEvent = (function() {
       var isDragging = true;
       function updatePortConnector() {
         if (isDragging) {
+          dom.requestAnimationFrame(updatePortConnector);
           connectorHandle.update();
           pathContainer.updatePosition();
           board.updatePortConnectorConnected();
@@ -705,8 +705,6 @@ var boardEvent = (function() {
       }
       dom.startDragEvent(event, {
         drag: function(dx, dy) {
-          if (isDragging)
-            dom.requestAnimationFrame(updatePortConnector);
           connectorHandle.position({
             x: targetOffset.x + dx,
             y: targetOffset.y + dy,
@@ -815,6 +813,7 @@ var boardEvent = (function() {
         });
       }
       dom.setCursor('crosshair');
+      dom.requestAnimationFrame(updatePortConnector);
     };
   }());
   return {
