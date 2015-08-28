@@ -46,7 +46,7 @@ var piece = (function() {
     if (!point)
       return {x: this._x, y: this._y};
     if ('x' in point)
-      this._x = Math.max(point.x, 0);
+      this._x = Math.max(point.x, (this._isShowingInConnector) ? 46 : 0);
     if ('y' in point)
       this._y = Math.max(point.y, 0);
   }
@@ -59,7 +59,6 @@ var piece = (function() {
   }
   function updatePosition() {
     var element = this._element;
-    this._x = Math.max(this._x, (this._isShowingInConnector) ? 46 : 0);
     if (element) {
       dom.translate(element, this._x, this._y);
       element.style.zIndex = this._zIndex;
@@ -74,10 +73,26 @@ var piece = (function() {
     var portMap = this._portMap;
     var ports = this._ports;
     var portElements = this._element.children[1].children[1].children;
-    Array.prototype.slice.call(portElements).forEach(function(portElement, index) {
+
+    var currentShowingPorts = Array.prototype.slice.call(portElements).map(function(portElement) {
       var idList = portElement.getAttribute('data-port-id').split('/');
-      ports[index] = portMap[idList[1] + '/' + idList[2]];
+      return portMap[idList[1] + '/' + idList[2]];
+    }).filter(function(port) {
+      return port.isShowing();
     });
+
+    var currentHiddenPorts = ports.filter(function(port) {
+      return currentShowingPorts.indexOf(port) === -1;
+    }).sort(function(a, b) {
+      if (a.isShowing() && !b.isShowing())
+        return -1;
+      else if (!a.isShowing() && b.isShowing())
+        return 1;
+      else
+        return 0;
+    });
+
+    this._ports = currentShowingPorts.concat(currentHiddenPorts);
   }
   function getInConnectorOffset(port) {
     var index = this._ports.indexOf(port);
@@ -129,12 +144,19 @@ var piece = (function() {
     ports.push(port);
 
     port.show();
+    this.updatePortListOrder();
     this.updateIsShowingInConnector();
     this.updatePosition();
-    m.redraw();
+
+    // XXX: showing as last port
+    m.redraw(true);
+    var portElement = port.element();
+    if (this._element && portElement)
+      this._element.children[1].children[1].appendChild(portElement);
   }
   function hidePort(port) {
     port.hide();
+    this.updatePortListOrder();
     this.updateIsShowingInConnector();
     this.updatePosition();
     m.redraw();
