@@ -1,118 +1,92 @@
-var port = (function() {
-  var addClass = dom.addClass;
-  var removeClass = dom.removeClass;
-  function create(type, key, contentText, hasIn, hasOut, isDefault) {
-    var p = Object.create(this);
-    p._type = type;
-    p._key = key;
-    p._hasIn = hasIn;
-    p._hasOut = hasOut;
-    p._isDefault = isDefault;
-    p._isShowing = isDefault;
-    p._contentText = contentText;
-    return p;
-  }
-  function initializeElement(node) {
-    this._element = node;
-    addClass(node, this._type);
-    if (!this._hasIn)
-      addClass(node, 'hide-connector-in');
-    if (!this._hasOut)
-      addClass(node, 'hide-connector-out');
-  }
-  function id(value) {
-    if (!value)
-      return this._id;
-    this._id = value;
-  }
-  function type() {
-    return this._type;
-  }
-  function key() {
-    return this._key;
-  }
-  function hasIn() {
-    return this._hasIn;
-  }
-  function element() {
-    return this._element;
-  }
-  function isDefault() {
-    return this._isDefault;
-  }
-  function contentText() {
-    return this._contentText;
-  }
-  function show() {
-    this._isShowing = true;
-  }
-  function hide() {
-    this._isShowing = false;
-  }
-  function isShowing() {
-    return this._isShowing;
-  }
-  function showConnectorConnected() {
-    removeClass(this._element, 'hide-connector-connected');
-  }
-  function hideConnectorConnected() {
-    addClass(this._element, 'hide-connector-connected');
-  }
-  function getOutConnectorElement() {
-    if (!this._element)
-      return null;
-    return this._element.children[0].children[2];
-  }
-  function getInConnectorElement() {
-    if (!this._element)
-      return null;
-    return this._element.children[0].children[0];
-  }
-  function setFlushInConnector(flag) {
-    if (flag)
-      addClass(this._element, 'flush-connector-in');
-    else
-      removeClass(this._element, 'flush-connector-in');
-  }
-  function setFlushConnectorConnected(flag) {
-    if (flag)
-      addClass(this._element, 'flush-connector-connected');
-    else
-      removeClass(this._element, 'flush-connector-connected');
-  }
-  function setFlushOutConnector(flag) {
-    if (flag)
-      addClass(this._element, 'flush-connector-out');
-    else
-      removeClass(this._element, 'flush-connector-out');
-  }
-  function mark() {
-    addClass(this._element, 'mark');
-  }
-  function clearMark() {
-    removeClass(this._element, 'mark');
-  }
-  return {
-    create: create,
-    initializeElement: initializeElement,
-    id: id,
-    type: type,
-    key: key,
-    hasIn: hasIn,
-    element: element,
-    isDefault: isDefault,
-    contentText: contentText,
-    show: show,
-    hide: hide,
-    isShowing: isShowing,
-    showConnectorConnected: showConnectorConnected,
-    hideConnectorConnected: hideConnectorConnected,
-    getOutConnectorElement: getOutConnectorElement,
-    getInConnectorElement: getInConnectorElement,
-    setFlushInConnector: setFlushInConnector,
-    setFlushConnectorConnected: setFlushConnectorConnected,
-    setFlushOutConnector: setFlushOutConnector,
-    mark: mark,
-    clearMark: clearMark
+(function(app) {
+  'use strict';
+  var m = require('mithril');
+
+  var Port = function(option) {
+    this.id = m.prop('');
+    this.type = m.prop(option.type);
+    this.key = m.prop(option.key);
+    this.contentText = m.prop(option.contentText);
+    this.hasIn = m.prop(option.hasIn);
+    this.hasOut = m.prop(option.hasOut);
+    this.isDefault = m.prop(option.isDefault);
+    this.isShowing = m.prop(option.isDefault);
+    this.element = m.prop(null);
   };
-}());
+
+  Port.prototype.initializeElement = function(element) {
+    this.element(element);
+    dom.addClass(element, this.type());
+    if (!this.hasIn())
+      dom.addClass(element, 'hide-connector-in');
+    if (!this.hasOut())
+      dom.addClass(element, 'hide-connector-out');
+  };
+
+  Port.prototype.show = function() {
+    this.isShowing(true);
+  };
+
+  Port.prototype.hide = function() {
+    this.isShowing(false);
+  };
+
+  Port.prototype.showConnectorConnected = function() {
+    dom.removeClass(this.element(), 'hide-connector-connected');
+  };
+
+  Port.prototype.hideConnectorConnected = function() {
+    dom.addClass(this.element(), 'hide-connector-connected');
+  };
+
+  Port.prototype.getOutConnectorElement = function() {
+    var element = this.element();
+    if (!element)
+      return null;
+    return element.children[0].children[2];
+  };
+
+  Port.prototype.getInConnectorElement = function() {
+    var element = this.element();
+    if (!element)
+      return null;
+    return element.children[0].children[0];
+  };
+
+  Port.prototype.setFlushInConnector = function(flag) {
+    var element = this.element();
+    if (flag)
+      dom.addClass(element, 'flush-connector-in');
+    else
+      dom.removeClass(element, 'flush-connector-in');
+  };
+
+  Port.prototype.setFlushConnectorConnected = function(flag) {
+    var element = this.element();
+    if (flag)
+      dom.addClass(element, 'flush-connector-connected');
+    else
+      dom.removeClass(element, 'flush-connector-connected');
+  };
+
+  Port.prototype.setFlushOutConnector = function(flag) {
+    var element = this.element();
+    if (flag)
+      dom.addClass(element, 'flush-connector-out');
+    else
+      dom.removeClass(element, 'flush-connector-out');
+  };
+
+  Port.prototype.mark = function() {
+    dom.addClass(this.element(), 'mark');
+  };
+
+  Port.prototype.clearMark = function() {
+    dom.removeClass(this.element(), 'mark');
+  };
+
+  if (typeof module !== 'undefined' && module.exports)
+    module.exports = Port;
+  else
+    app.Port = Port;
+})(this.app || (this.app = {}));

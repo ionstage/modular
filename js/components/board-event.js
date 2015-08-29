@@ -1,6 +1,7 @@
-var boardEvent = (function() {
+var boardEvent = (function(app) {
   var Base64 = require('js-base64').Base64;
   var m = require('mithril');
+  var Port = app.Port || require('./port.js');
   
   var isTouchEnabled = dom.supportsTouch();
   var START = dom.eventType.START;
@@ -13,18 +14,28 @@ var boardEvent = (function() {
     if (propData) {
       for (key in propData) {
         item = propData[key];
-        p = port.create('prop', key, item.label,
-                        (item['in'] === true), (item.out === true),
-                        (item['default'] === true));
+        p = new Port({
+          type: 'prop',
+          key: key,
+          contentText: item.label,
+          hasIn: item['in'] === true,
+          hasOut: item.out === true,
+          isDefault: item['default'] === true
+        });
         ports.push(p);
       }
     }
     if (eventData) {
       for (key in eventData) {
         item = eventData[key];
-        p = port.create('event', key, item.label,
-                        (item['in'] === true), (item.out === true),
-                        (item['default'] === true));
+        p = new Port({
+          type: 'event',
+          key: key,
+          contentText: item.label,
+          hasIn: item['in'] === true,
+          hasOut: item.out === true,
+          isDefault: item['default'] === true
+        });
         ports.push(p);
       }
     }
@@ -826,4 +837,4 @@ var boardEvent = (function() {
     removePortConnection: removePortConnection,
     loadURLHash: loadURLHash
   };
-}());
+})(this.app || (this.app = {}));
