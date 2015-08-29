@@ -3,7 +3,6 @@
   var m = require('mithril');
 
   var Port = function(option) {
-    this.id = m.prop('');
     this.type = m.prop(option.type);
     this.key = m.prop(option.key);
     this.contentText = m.prop(option.contentText);
@@ -11,7 +10,16 @@
     this.hasOut = m.prop(option.hasOut);
     this.isDefault = m.prop(option.isDefault);
     this.isShowing = m.prop(option.isDefault);
+    this.pieceID = m.prop('');
     this.element = m.prop(null);
+  };
+
+  Port.prototype.id = function() {
+    return this.pieceID() + '/' + this.type() + '/' + this.key();
+  };
+
+  Port.prototype.name = function() {
+    return this.type() + '/' + this.key();
   };
 
   Port.prototype.initializeElement = function(element) {

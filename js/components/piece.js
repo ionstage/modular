@@ -120,9 +120,8 @@ var piece = (function() {
     var list = [];
     for (var i = 0, len = ports.length; i < len; i += 1) {
       var port = ports[i];
-      var portName = port.type() + '/' + port.key();
-      var portID = pieceID + '/' + portName;
-      port.id(portID);
+      var portName = port.name();
+      port.pieceID(pieceID);
       if (port.isDefault())
         this.showPort(port);
       else
