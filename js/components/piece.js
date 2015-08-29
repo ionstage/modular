@@ -60,6 +60,7 @@ var piece = (function() {
   function updatePosition() {
     var element = this._element;
     if (element) {
+      this._x = Math.max(this._x, (this._isShowingInConnector) ? 46 : 0);
       dom.translate(element, this._x, this._y);
       element.style.zIndex = this._zIndex;
     }
