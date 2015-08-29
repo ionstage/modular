@@ -1,6 +1,7 @@
 var boardEvent = (function(app) {
   var Base64 = require('js-base64').Base64;
   var m = require('mithril');
+  var Piece = app.Piece || require('./piece.js');
   var Port = app.Port || require('./port.js');
   
   var isTouchEnabled = dom.supportsTouch();
@@ -202,7 +203,7 @@ var boardEvent = (function(app) {
     }, 100);
   }());
   function createAndAppendPiece(attr) {
-    var p = piece.create(attr.src);
+    var p = new Piece({src: attr.src});
     p.position({x: attr.x, y: attr.y});
     p.updatePosition();
     board.append(p);
@@ -387,7 +388,7 @@ var boardEvent = (function(app) {
     pathContainer = component;
   }
   function addPiece(x, y, label, src) {
-    var p = piece.create(src);
+    var p = new Piece({src: src});
     p.label(label);
     p.position({x: x, y: y});
     p.updatePosition();
