@@ -40,7 +40,9 @@
           var scrollWidth = mainPanelElement.scrollWidth;
           var scrollHeight = mainPanelElement.scrollHeight;
           if (scrollWidth > clientWidth || scrollHeight > clientHeight) {
-            dom.translate(element, scrollWidth + 46, scrollHeight + 46);
+            var x = scrollWidth + (scrollWidth > clientWidth ? 46 : -1);
+            var y = scrollHeight + (scrollHeight > clientHeight ? 46 : -1);
+            dom.translate(element, x, y);
             dom.removeClass(element, 'hide');
             mainPanelElement.scrollLeft = scrollLeft;
             mainPanelElement.scrollTop = scrollTop;
