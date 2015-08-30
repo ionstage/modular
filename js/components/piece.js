@@ -14,7 +14,7 @@
     this.element = m.prop(null);
     this.componentHeight = componentHeightProp(0);
     this.zIndex = m.prop(zIndexCount);
-    this.isShowingInConnector = m.prop(true);
+    this.isShowingInConnector = m.prop(false);
 
     zIndexCount++;
   };
