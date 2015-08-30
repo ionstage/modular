@@ -2,47 +2,54 @@
   'use strict';
 
   var ConnectorHandle = function(element) {
-    this._element = element;
-    this._x = 0;
-    this._y = 0;
-    this._type = '';
-    this._isShowing = false;
-    this._needsUpdateShowing = false;
-  };
-
-  ConnectorHandle.prototype.show = function() {
-    this._isShowing = true;
-    this._needsUpdateShowing = true;
-  };
-
-  ConnectorHandle.prototype.hide = function() {
-    this._isShowing = false;
-    this._needsUpdateShowing = true;
+    this.element = prop(element);
+    this.x = prop(0);
+    this.y = prop(0);
+    this.type = prop('');
+    this.visible = prop(false);
   };
 
   ConnectorHandle.prototype.update = function() {
-    dom.translate(this._element, this._x, this._y);
-    if (this._needsUpdateShowing) {
-      if (this._isShowing)
-        dom.removeClass(this._element, 'hide');
+    var element = this.element();
+
+    if (this.x.dirty || this.y.dirty) {
+      dom.translate(element, this.x(), this.y());
+      this.x.dirty = false;
+      this.y.dirty = false;
+    }
+
+    if (this.type.dirty) {
+      var type = this.type();
+      var preType = this.type.preValue;
+      if (preType && type !== preType)
+        dom.removeClass(element, preType);
+      dom.addClass(element, type);
+      this.type.dirty = false;
+    }
+
+    if (this.visible.dirty) {
+      if (this.visible())
+        dom.removeClass(element, 'hide');
       else
-        dom.addClass(this._element, 'hide');
-      this._needsUpdateShowing = false;
+        dom.addClass(element, 'hide');
+      this.visible.dirty = false;
     }
   };
 
-  ConnectorHandle.prototype.position = function(point) {
-    this._x = point.x;
-    this._y = point.y;
-  };
-
-  ConnectorHandle.prototype.type = function(value) {
-    var element = this._element;
-    var currentType = this._type;
-    if (currentType)
-      dom.removeClass(element, currentType);
-    dom.addClass(element, value);
-    this._type = value;
+  var prop = function(initialValue) {
+    var cache = initialValue;
+    var propFunc = function(value) {
+      if (typeof value === 'undefined')
+        return cache;
+      if (cache === value)
+        return;
+      propFunc.preValue = cache;
+      cache = value;
+      propFunc.dirty = true;
+    };
+    propFunc.preValue = null;
+    propFunc.dirty = false;
+    return propFunc;
   };
 
   if (typeof module !== 'undefined' && module.exports)

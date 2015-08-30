@@ -708,19 +708,18 @@ var boardEvent = (function(app) {
         }
       }
       function startConnectorHandle() {
-        connectorHandle.position(connectorOffset);
-        connectorHandle.update();
+        connectorHandle.x(connectorOffset.x);
+        connectorHandle.y(connectorOffset.y);
         if (hasClass(portElement, 'prop'))
           connectorHandle.type('prop');
         else if (hasClass(portElement, 'event'))
           connectorHandle.type('event');
+        connectorHandle.update();
       }
       dom.startDragEvent(event, {
         drag: function(dx, dy) {
-          connectorHandle.position({
-            x: targetOffset.x + dx,
-            y: targetOffset.y + dy,
-          });
+          connectorHandle.x(targetOffset.x + dx);
+          connectorHandle.y(targetOffset.y + dy);
           var dragPoint = {
             x: targetPoint.x + dx,
             y: targetPoint.y + dy
@@ -735,7 +734,7 @@ var boardEvent = (function(app) {
                                  [currentPathSourceID, targetID]);
               currentPathTargetID = targetID;
               pathContainer.position(targetID, interSectConnector.point);
-              connectorHandle.hide();
+              connectorHandle.visible(false);
               board.showPortConnectorConnected(interSectConnector.portID);
               if (currentPortID !== 'drag') {
                 board.hidePortConnectorConnected(currentPortID);
@@ -766,7 +765,7 @@ var boardEvent = (function(app) {
               currentPathTargetID = targetID;
               if (currentPortID !== 'drag')
                 board.hidePortConnectorConnected(currentPortID);
-              connectorHandle.show();
+              connectorHandle.visible(true);
               var prePathTargetPortID = prePathTargetID.replace(/\/in$/, '');
               dispatchBoardEvent({
                 type: 'disconnect',
@@ -783,11 +782,9 @@ var boardEvent = (function(app) {
           board.endDrag();
           isDragging = false;
           dom.requestAnimationFrame(function() {
-            connectorHandle.hide();
-            connectorHandle.position({
-              x: -connectorSizeOffset * 2,
-              y: -connectorSizeOffset * 2
-            });
+            connectorHandle.visible(false);
+            connectorHandle.x(-connectorSizeOffset * 2);
+            connectorHandle.y(-connectorSizeOffset * 2);
             connectorHandle.update();
             pathContainer.remove(currentPathSourceID, 'drag');
             pathContainer.refreshPosition();
@@ -808,10 +805,10 @@ var boardEvent = (function(app) {
       currentPathSourceID = portID + '/out';
       if (isConnected) {
         currentPathTargetID = connectedPortID + '/in';
-        connectorHandle.hide();
+        connectorHandle.visible(false);
       } else {
         currentPathTargetID = 'drag';
-        connectorHandle.show();
+        connectorHandle.visible(true);
       }
       pathContainer.append(currentPathSourceID, currentPathTargetID);
       pathContainer.position(currentPathSourceID, connectorPoint);
