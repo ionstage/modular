@@ -6,6 +6,8 @@
   var PathContainer = app.PathContainer || require('../components/path-container.js');
 
   var boardView = function(ctrl) {
+    var connectorHandle = ctrl.connectorHandle;
+
     return [
       m('svg#path_container', {
         config: function(element, isInitialized) {
@@ -104,11 +106,13 @@
           ])
         ]);
       })),
-      m('.port-connector-out.drag.hide', {
+      m('.port-connector-out.drag', {
+        className: connectorHandle.type() + ' ' + (connectorHandle.visible() ? '' : 'hide'),
         config: function(element, isInitialized) {
           if (isInitialized)
             return;
-          boardEvent.setConnectorHandle(new ConnectorHandle(element));
+          connectorHandle.element(element);
+          boardEvent.setConnectorHandle(connectorHandle);
         }
       })
     ];

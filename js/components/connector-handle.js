@@ -1,30 +1,22 @@
 (function(app) {
   'use strict';
+  var m = require('mithril');
 
-  var ConnectorHandle = function(element) {
-    this.element = prop(element);
-    this.x = prop(0);
-    this.y = prop(0);
-    this.type = prop('');
-    this.visible = prop(false);
+  var ConnectorHandle = function() {
+    this.type = m.prop('');
+    this.x = propWithCache(0);
+    this.y = propWithCache(0);
+    this.visible = propWithCache(false);
+    this.element = m.prop(null);
   };
 
-  ConnectorHandle.prototype.update = function() {
+  ConnectorHandle.prototype.redraw = function() {
     var element = this.element();
 
     if (this.x.dirty || this.y.dirty) {
       dom.translate(element, this.x(), this.y());
       this.x.dirty = false;
       this.y.dirty = false;
-    }
-
-    if (this.type.dirty) {
-      var type = this.type();
-      var preType = this.type.preValue;
-      if (preType && type !== preType)
-        dom.removeClass(element, preType);
-      dom.addClass(element, type);
-      this.type.dirty = false;
     }
 
     if (this.visible.dirty) {
@@ -36,18 +28,16 @@
     }
   };
 
-  var prop = function(initialValue) {
+  var propWithCache = function(initialValue) {
     var cache = initialValue;
     var propFunc = function(value) {
       if (typeof value === 'undefined')
         return cache;
       if (cache === value)
         return;
-      propFunc.preValue = cache;
       cache = value;
       propFunc.dirty = true;
     };
-    propFunc.preValue = null;
     propFunc.dirty = false;
     return propFunc;
   };

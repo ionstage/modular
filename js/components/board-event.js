@@ -702,7 +702,7 @@ var boardEvent = (function(app) {
       function updatePortConnector() {
         if (isDragging) {
           dom.requestAnimationFrame(updatePortConnector);
-          connectorHandle.update();
+          connectorHandle.redraw();
           pathContainer.updatePosition();
           board.updatePortConnectorConnected();
         }
@@ -714,7 +714,8 @@ var boardEvent = (function(app) {
           connectorHandle.type('prop');
         else if (hasClass(portElement, 'event'))
           connectorHandle.type('event');
-        connectorHandle.update();
+        connectorHandle.redraw();
+        m.redraw();
       }
       dom.startDragEvent(event, {
         drag: function(dx, dy) {
@@ -785,7 +786,7 @@ var boardEvent = (function(app) {
             connectorHandle.visible(false);
             connectorHandle.x(-connectorSizeOffset * 2);
             connectorHandle.y(-connectorSizeOffset * 2);
-            connectorHandle.update();
+            connectorHandle.redraw();
             pathContainer.remove(currentPathSourceID, 'drag');
             pathContainer.refreshPosition();
             dom.setCursor('default');
