@@ -434,6 +434,7 @@ var boardEvent = (function(app) {
       sourcePortID: sourcePortID,
       targetPortID: targetPortID
     });
+    m.redraw();
   }
   function disconnectPort(sourcePortID, targetPortID) {
     if (sourcePortID === null || targetPortID === null)
@@ -455,6 +456,7 @@ var boardEvent = (function(app) {
     }
     var targetPortID = portID + '/in';
     disconnectPort(pathContainer.getSourceID(targetPortID), targetPortID);
+    m.redraw(true);
   }
   var hidePort = (function() {
     function tapListener(event) {
@@ -790,6 +792,7 @@ var boardEvent = (function(app) {
             pathContainer.remove(currentPathSourceID, 'drag');
             pathContainer.refreshPosition();
             dom.setCursor('default');
+            m.redraw();
           });
           if (isTouchEnabled) {
             getPort(portID).clearMark();
@@ -815,6 +818,7 @@ var boardEvent = (function(app) {
       pathContainer.position(currentPathSourceID, connectorPoint);
       pathContainer.position(currentPathTargetID, targetPoint);
       pathContainer.updatePosition();
+      m.redraw();
       if (isTouchEnabled) {
         dom.requestAnimationFrame(function() {
           getPort(portID).mark();

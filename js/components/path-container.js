@@ -1,8 +1,7 @@
 (function(app) {
   'use strict';
 
-  var PathContainer = function(element) {
-    this._element = element;
+  var PathContainer = function() {
     this._dirtyIDs = [];
     this._positionMap = {};
     this._connections = [];
@@ -14,16 +13,9 @@
     if (path)
       return;
 
-    var pathElement = dom.el('<path>', 'http://www.w3.org/2000/svg');
-    pathElement.setAttribute('data-source-id', sourceID);
-    pathElement.setAttribute('data-target-id', targetID);
-
-    this._element.appendChild(pathElement);
-
     this._connections.push({
       sourceID: sourceID,
-      targetID: targetID,
-      element: pathElement
+      targetID: targetID
     });
   };
 
@@ -32,8 +24,6 @@
 
     if (!path)
       return;
-
-    this._element.removeChild(path.element);
 
     var connections = this._connections;
     for (var i = connections.length - 1; i >= 0; i--) {
@@ -71,6 +61,9 @@
   };
 
   PathContainer.prototype.position = function(id, point) {
+    if (typeof point === 'undefined')
+      return this._positionMap[id] || {x: 0, y: 0};
+
     this._dirtyIDs.push(id);
     this._positionMap[id] = point;
   };
@@ -84,8 +77,10 @@
       paths.forEach(function(path) {
         var sourcePoint = positionMap[path.sourceID];
         var targetPoint = positionMap[path.targetID];
-        path.element.setAttribute('d', 'M' + sourcePoint.x + ',' + sourcePoint.y +
-                                  'L' + targetPoint.x + ',' + targetPoint.y + 'Z');
+        if (path.element) {
+          path.element.setAttribute('d', 'M' + sourcePoint.x + ',' + sourcePoint.y +
+                                    'L' + targetPoint.x + ',' + targetPoint.y + 'Z');
+        }
       });
     }.bind(this));
 
@@ -140,6 +135,11 @@
         targetID: path.targetID
       };
     });
+  };
+
+  PathContainer.prototype.setPathElement = function(element, sourceID, targetID) {
+    var path = getPath(this, sourceID, targetID);
+    path.element = element;
   };
 
   var getPath = function(self, sourceID, targetID) {

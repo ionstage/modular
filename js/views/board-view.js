@@ -6,6 +6,7 @@
   var PathContainer = app.PathContainer || require('../components/path-container.js');
 
   var boardView = function(ctrl) {
+    var pathContainer = ctrl.pathContainer;
     var connectorHandle = ctrl.connectorHandle;
 
     return [
@@ -13,9 +14,26 @@
         config: function(element, isInitialized) {
           if (isInitialized)
             return;
-          boardEvent.setPathContainer(new PathContainer(element));
+          boardEvent.setPathContainer(pathContainer);
         }
-      }),
+      }, pathContainer.getConnectionList().map(function(path) {
+        var sourceID = path.sourceID;
+        var targetID = path.targetID;
+        var sourcePoint = pathContainer.position(sourceID);
+        var targetPoint = pathContainer.position(targetID);
+        return m('path', {
+          key: sourceID + '-' + targetID,
+          d: 'M' + sourcePoint.x + ',' + sourcePoint.y +
+             'L' + targetPoint.x + ',' + targetPoint.y + 'Z',
+          'data-source-id': sourceID,
+          'data-target-id': targetID,
+          config: function(element, isInitialized) {
+            if (isInitialized)
+              return;
+            pathContainer.setPathElement(element, sourceID, targetID);
+          }
+        });
+      })),
       m('#board', {
         config: function(element, isInitialized) {
           if (isInitialized)
