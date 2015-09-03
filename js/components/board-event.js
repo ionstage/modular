@@ -376,9 +376,9 @@ var boardEvent = (function(app) {
       }
     }, false);
   }
-  function element(elementMap) {
+  function initialize(mainPanelElement) {
     setWindowMessageListener();
-    setMainPanelStartListener(elementMap.mainPanel);
+    setMainPanelStartListener(mainPanelElement);
   }
   function setConnectorHandle(component) {
     connectorHandle = component;
@@ -835,7 +835,7 @@ var boardEvent = (function(app) {
     };
   }());
   return {
-    element: element,
+    initialize: initialize,
     setConnectorHandle: setConnectorHandle,
     setBoard: setBoard,
     setPathContainer: setPathContainer,

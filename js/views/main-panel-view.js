@@ -15,10 +15,7 @@
         });
 
         // board event
-        boardEvent.element({
-          mainPanel: element,
-          board: dom.el('#board')
-        });
+        boardEvent.initialize(element);
         boardEvent.loadURLHash();
       }
     }, [
