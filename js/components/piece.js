@@ -4,9 +4,9 @@
 
   var Piece = function(option) {
     this.id = m.prop('');
-    this.x = m.prop(0);
-    this.y = m.prop(0);
-    this.label = m.prop('');
+    this.x = m.prop(option.x || 0);
+    this.y = m.prop(option.y || 0);
+    this.label = m.prop(option.label || '');
     this.src = m.prop(option.src);
     this.portMap = m.prop({});
     this.ports = m.prop([]);

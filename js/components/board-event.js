@@ -203,9 +203,11 @@ var boardEvent = (function(app) {
     }, 100);
   }());
   function createAndAppendPiece(attr) {
-    var p = new Piece({src: attr.src});
-    p.position({x: attr.x, y: attr.y});
-    p.updatePosition();
+    var p = new Piece({
+      x: attr.x,
+      y: attr.y,
+      src: attr.src
+    });
     board.append(p);
     return p.id();
   }
@@ -388,10 +390,12 @@ var boardEvent = (function(app) {
     pathContainer = component;
   }
   function addPiece(x, y, label, src) {
-    var p = new Piece({src: src});
-    p.label(label);
-    p.position({x: x, y: y});
-    p.updatePosition();
+    var p = new Piece({
+      x: x,
+      y: y,
+      label: label,
+      src: src
+    });
     board.append(p);
   }
   function showPort(event) {
