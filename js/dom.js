@@ -213,11 +213,6 @@
     tappable: tappable,
     startTapEvent: startTapEvent,
     startDragEvent: startDragEvent,
-    eventType: {
-      START: START,
-      MOVE: MOVE,
-      END: END
-    },
     hasClass: hasClass,
     addClass: addClass,
     removeClass: removeClass,

@@ -5,7 +5,6 @@ var boardEvent = (function(app) {
   var Port = app.Port || require('./port.js');
   
   var isTouchEnabled = dom.supportsTouch();
-  var START = dom.eventType.START;
   var isLoadingURLHash = false;
   var connectorHandle = null;
   var board = null;
@@ -338,7 +337,7 @@ var boardEvent = (function(app) {
     }, false);
   }
   function setMainPanelStartListener(mainPanelElement) {
-    mainPanelElement.addEventListener(START, function(event) {
+    mainPanelElement.addEventListener(isTouchEnabled ? 'touchstart' : 'mousedown', function(event) {
       var target = event.target;
       if (dom.hasClass(target, 'loading'))
         return;
