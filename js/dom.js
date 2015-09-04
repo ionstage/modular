@@ -7,17 +7,6 @@
   var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
   var END = isTouchEnabled ? 'touchend' : 'mouseup';
 
-  function el(selector, namespace) {
-    if (selector[0] === '<') {
-      selector = selector.match(/<(.+)>/)[1];
-      if (namespace)
-        return document.createElementNS(namespace, selector);
-      else
-        return document.createElement(selector);
-    }
-    return document.querySelector(selector);
-  }
-
   function getTarget(event) {
     if (isTouchEnabled) {
       var touch = event.changedTouches[0];
@@ -209,7 +198,6 @@
   }
 
   global.dom = {
-    el: el,
     tappable: tappable,
     startTapEvent: startTapEvent,
     startDragEvent: startDragEvent,

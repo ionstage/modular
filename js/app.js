@@ -27,7 +27,7 @@
     ];
   };
 
-  m.mount(dom.el('#container'), {
+  m.mount(document.getElementById('container'), {
     controller: controller,
     view: view
   });
