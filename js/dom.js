@@ -1,74 +1,75 @@
 (function(global) {
   'use strict';
-  var lib = global.lib;
-
   var isTouchEnabled = 'createTouch' in document;
   var START = isTouchEnabled ? 'touchstart' : 'mousedown';
   var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
   var END = isTouchEnabled ? 'touchend' : 'mouseup';
 
-  function getTarget(event) {
-    if (isTouchEnabled) {
-      var touch = event.changedTouches[0];
-      return document.elementFromPoint(touch.clientX, touch.clientY);
-    } else {
-      return event.target;
-    }
-  }
+  var cancelEvent = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
   var tappable = (function() {
     var Tappable = function(option) {
-      var noop = function() {};
-      var element = this._element = option.element;
+      var element = this.element = option.element;
 
-      this._move = move.bind(this);
-      this._end = end.bind(this);
-      this._ontap = option.ontap || noop;
-      this._onstart = option.onstart || noop;
-      this._onout = option.onout || noop;
-      this._onover = option.onover || noop;
+      this.move = move.bind(this);
+      this.end = end.bind(this);
+      this.ontap = option.ontap || noop;
+      this.onstart = option.onstart || noop;
+      this.onout = option.onout || noop;
+      this.onover = option.onover || noop;
 
       element.addEventListener(START, start.bind(this));
     };
 
+    var noop = function() {};
+
     var start = function(event) {
-      event.preventDefault();
-      event.stopPropagation();
+      cancelEvent(event);
 
-      this._previousTarget = event.currentTarget;
+      this.previousTarget = event.currentTarget;
 
-      document.addEventListener(MOVE, this._move);
-      document.addEventListener(END, this._end);
+      document.addEventListener(MOVE, this.move);
+      document.addEventListener(END, this.end);
 
-      this._onstart();
+      this.onstart();
     };
 
     var move = function(event) {
-      event.preventDefault();
-      event.stopPropagation();
+      cancelEvent(event);
 
       var target = getTarget(event);
 
-      if (target === this._previousTarget)
+      if (target === this.previousTarget)
         return;
 
-      if (target === this._element)
-        this._onover();
+      if (target === this.element)
+        this.onover();
       else
-        this._onout();
+        this.onout();
 
-      this._previousTarget = target;
+      this.previousTarget = target;
     };
 
     var end = function(event) {
-      event.preventDefault();
-      event.stopPropagation();
+      cancelEvent(event);
 
-      document.removeEventListener(MOVE, this._move);
-      document.removeEventListener(END, this._end);
+      document.removeEventListener(MOVE, this.move);
+      document.removeEventListener(END, this.end);
 
-      if (getTarget(event) === this._element)
-        this._ontap();
+      if (getTarget(event) === this.element)
+        this.ontap();
+    };
+
+    var getTarget = function(event) {
+      if (isTouchEnabled) {
+        var touch = event.changedTouches[0];
+        return document.elementFromPoint(touch.clientX, touch.clientY);
+      } else {
+        return event.target;
+      }
     };
 
     return function(option) {
@@ -79,8 +80,7 @@
   function startTapEvent(event, option) {
     var target = event.currentTarget, startOffset;
     function moveListener(event) {
-      event.preventDefault();
-      event.stopPropagation();
+      cancelEvent(event);
       event = isTouchEnabled ? event.touches[0] : event;
       var dx = Math.abs(event.pageX - startOffset.left);
       var dy = Math.abs(event.pageY - startOffset.top);
@@ -92,15 +92,13 @@
       }
     }
     function endListener(event) {
-      event.preventDefault();
-      event.stopPropagation();
+      cancelEvent(event);
       target.removeEventListener(MOVE, moveListener, false);
       target.removeEventListener(END, endListener, false);
       if (typeof option.tap === 'function')
         requestAnimationFrame(option.tap);
     }
-    event.preventDefault();
-    event.stopPropagation();
+    cancelEvent(event);
     event = isTouchEnabled ? event.touches[0] : event;
     startOffset = {left: event.pageX, top: event.pageY};
     target.addEventListener(MOVE, moveListener, false);
@@ -110,8 +108,7 @@
   function startDragEvent(event, option) {
     var startOffset;
     function moveListener(event) {
-      event.preventDefault();
-      event.stopPropagation();
+      cancelEvent(event);
       event = isTouchEnabled ? event.touches[0] : event;
       var dx = event.pageX - startOffset.left;
       var dy = event.pageY - startOffset.top;
@@ -119,8 +116,7 @@
         option.drag(dx, dy);
     }
     function endListener(event) {
-      event.preventDefault();
-      event.stopPropagation();
+      cancelEvent(event);
       if (isTouchEnabled && event.touches.length > 0)
         return;
       event = isTouchEnabled ? event.changedTouches[0] : event;
@@ -131,30 +127,23 @@
       if (typeof option.end === 'function')
         option.end(dx, dy);
     }
-    event.preventDefault();
-    event.stopPropagation();
+    cancelEvent(event);
     event = isTouchEnabled ? event.touches[0] : event;
     startOffset = {left: event.pageX, top: event.pageY};
     document.addEventListener(MOVE, moveListener, false);
     document.addEventListener(END, endListener, false);
   }
 
-  function hasClass(element, className) {
-    var elementClassName = element.className;
-    return (elementClassName + ' ').indexOf(className + ' ') !== -1;
+  function hasClass(el, className) {
+    return el.classList.contains(className);
   }
 
-  function addClass(element, className) {
-    var elementClassName = element.className;
-    if ((' ' + elementClassName).indexOf(' ' + className) === -1)
-      element.className = (elementClassName + ' ' + className).trim();
+  function addClass(el, className) {
+    el.classList.add(className);
   }
 
-  function removeClass(element, className) {
-    if (typeof className === 'undefined')
-      element.className = '';
-    if (hasClass(element, className))
-      element.className = (element.className + ' ').replace(className + ' ', '').trim();
+  function removeClass(el, className) {
+    el.classList.remove(className);
   }
 
   function indexOf(parentNode, childNode) {
@@ -169,10 +158,6 @@
     var activeElement = document.activeElement;
     if (activeElement && activeElement.blur)
       activeElement.blur();
-  }
-
-  function windowWidth() {
-    return window.innerWidth;
   }
 
   function translate(el, x, y) {
@@ -207,7 +192,6 @@
     indexOf: indexOf,
     setCursor: setCursor,
     removeKeyboardFocus: removeKeyboardFocus,
-    windowWidth: windowWidth,
     translate: translate,
     requestAnimationFrame: requestAnimationFrame,
     supportsTouch: supportsTouch

@@ -153,7 +153,7 @@
         if (isFirstDrag) {
           isFirstDrag = false;
 
-          if (dom.windowWidth() < 358) {
+          if (window.innerWidth < 358) {
             isAutoClose = true;
             ctrl.dispatchEvent({type: 'close'});
           }
