@@ -347,9 +347,8 @@ var boardEvent = (function(app) {
         piece.toFront();
         piece.updatePosition();
         var tagName = target.tagName.toLowerCase();
-        if (tagName !== 'select' &&
-            document.activeElement && document.activeElement.blur)
-          document.activeElement.blur();
+        if (tagName !== 'select')
+          dom.removeKeyboardFocus();
       }
       switch (className) {
         case 'port-content-delete-button':
