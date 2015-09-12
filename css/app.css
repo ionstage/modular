@@ -148,6 +148,10 @@ body {
   z-index: 2147483647;
 }
 
+.piece-list-item-container * {
+  pointer-events: none;
+}
+
 .piece-list-item-header {
   background-color: black;
   border-radius: 10px 10px 0 0;

@@ -58,8 +58,92 @@
         config: function(element, isInitialized) {
           if (isInitialized)
             return;
-          setListItemDragEvent(ctrl, element, function(event) {
-            ctrl.dispatchEvent(event);
+
+          var isHeld;
+          var draggingNode;
+          var cloneOffset;
+          var isFirstDrag;
+          var isAutoClose;
+          var cloneNode;
+
+          var start = function() {
+            var pieceListContent = element.children[0];
+
+            cloneOffset = {
+              left: draggingNode.offsetLeft - pieceListContent.scrollLeft,
+              top: draggingNode.offsetTop - pieceListContent.scrollTop
+            };
+
+            isFirstDrag = true;
+            isAutoClose = false;
+
+            draggingNode.style.opacity = 0.6;
+
+            dom.removeKeyboardFocus();
+
+            cloneNode = draggingNode.cloneNode(true);
+            dom.addClass(cloneNode, 'drag');
+            document.body.appendChild(cloneNode);
+          };
+
+          dom.pointerEvent('.piece-list-item-container', {
+            onstart: function(event) {
+              isHeld = !dom.supportsTouch();
+              draggingNode = event.target;
+              if (!dom.supportsTouch())
+                start();
+            },
+            onhold: function() {
+              isHeld = true;
+              if (dom.supportsTouch())
+                start();
+            },
+            ondrag: function(event, dx, dy) {
+              if (!isHeld)
+                return;
+
+              event.preventDefault();
+              event.stopPropagation();
+
+              if (isFirstDrag) {
+                isFirstDrag = false;
+
+                if (window.innerWidth < 358) {
+                  isAutoClose = true;
+                  ctrl.dispatchEvent({type: 'close'});
+                }
+
+                cloneNode.style.left = cloneOffset.left + 'px';
+                cloneNode.style.top = cloneOffset.top + 'px';
+              }
+
+              dom.translate(cloneNode, dx, dy);
+            },
+            ondragend: function(event, dx, dy) {
+              if (!isHeld)
+                return;
+
+              var pageX = cloneOffset.left + dx;
+              var pageY = cloneOffset.top + dy;
+              var dragEndEvent = {
+                type: 'dragend',
+                pageX: pageX,
+                pageY: pageY,
+                pieceSrc: cloneNode.getAttribute('data-piece-src'),
+                pieceLabel: cloneNode.children[0].textContent
+              };
+              ctrl.dispatchEvent(dragEndEvent);
+            },
+            onend: function() {
+              if (!isHeld)
+                return;
+
+              draggingNode.style.cssText = '';
+              document.body.removeChild(cloneNode);
+
+              if (isAutoClose)
+                ctrl.dispatchEvent({type: 'open'});
+            }
           });
         }
       }, [
@@ -106,140 +190,6 @@
       ])
     ]);
   };
-
-  var setListItemDragEvent = (function() {
-    var isTouchEnabled = dom.supportsTouch();
-    var START = isTouchEnabled ? 'touchstart' : 'mousedown';
-    var MOVE = isTouchEnabled ? 'touchmove' : 'mousemove';
-    var END = isTouchEnabled ? 'touchend' : 'mouseup';
-
-    return function(ctrl, element, ondragend) {
-      var cloneNode;
-      var cloneOffset;
-      var draggingNode;
-      var isFirstDrag;
-      var isAutoClose;
-
-      function startListener(event) {
-        var node = event.target.parentNode;
-
-        if (!dom.hasClass(node, 'piece-list-item-container'))
-          return;
-
-        var pieceListContent = element.children[0];
-
-        cloneOffset = {
-          left: node.offsetLeft - pieceListContent.scrollLeft,
-          top: node.offsetTop - pieceListContent.scrollTop
-        };
-        draggingNode = node;
-        isFirstDrag = true;
-        isAutoClose = false;
-
-        node.style.opacity = 0.6;
-
-        dom.removeKeyboardFocus();
-
-        cloneNode = node.cloneNode(true);
-        dom.addClass(cloneNode, 'drag');
-        document.body.appendChild(cloneNode);
-
-        dom.startDragEvent(event, {
-          drag: dragListener,
-          end: endListener
-        });
-      }
-
-      function dragListener(dx, dy) {
-        if (isFirstDrag) {
-          isFirstDrag = false;
-
-          if (window.innerWidth < 358) {
-            isAutoClose = true;
-            ctrl.dispatchEvent({type: 'close'});
-          }
-
-          cloneNode.style.left = cloneOffset.left + 'px';
-          cloneNode.style.top = cloneOffset.top + 'px';
-        }
-
-        dom.translate(cloneNode, dx, dy);
-      }
-
-      function endListener(dx, dy) {
-        draggingNode.style.cssText = '';
-        document.body.removeChild(cloneNode);
-
-        if (dx !== 0 || dy !== 0) {
-          var pageX = cloneOffset.left + dx;
-          var pageY = cloneOffset.top + dy;
-          var dragEndEvent = {
-            type:'dragend',
-            pageX: pageX,
-            pageY: pageY,
-            pieceSrc: cloneNode.getAttribute('data-piece-src'),
-            pieceLabel: cloneNode.children[0].textContent
-          };
-          ondragend(dragEndEvent);
-        }
-
-        if (isAutoClose)
-          ctrl.dispatchEvent({type: 'open'});
-      }
-
-      function clearTouchEvent(target) {
-        isHold = false;
-        if (tapHoldTimer !== null)
-          clearTimeout(tapHoldTimer);
-        document.removeEventListener(MOVE, touchMoveListener);
-        document.removeEventListener(END, touchEndListener);
-      }
-
-      function touchMoveListener(event) {
-        event = isTouchEnabled ? event.touches[0] : event;
-        var dx = Math.abs(event.pageX - startOffset.left);
-        var dy = Math.abs(event.pageY - startOffset.top);
-        if (dx > 5 || dy > 5)
-          clearTouchEvent();
-      }
-
-      function touchEndListener(event) {
-        clearTouchEvent();
-      }
-
-      if (isTouchEnabled) {
-        var isHold = true;
-        var tapHoldTimer = null;
-        var startOffset;
-
-        element.addEventListener(START, function(event) {
-          isHold = true;
-
-          var touch = event.touches[0];
-          startOffset = {
-            left: touch.pageX,
-            top: touch.pageY
-          };
-
-          if (tapHoldTimer !== null)
-            clearTimeout(tapHoldTimer);
-          tapHoldTimer = setTimeout(function() {
-            tapHoldTimer = null;
-            if (isHold) {
-              document.removeEventListener(MOVE, touchMoveListener);
-              document.removeEventListener(END, touchEndListener);
-              startListener(event);
-            }
-          }, 300);
-
-          document.addEventListener(MOVE, touchMoveListener);
-          document.addEventListener(END, touchEndListener);
-        }, false);
-      } else {
-        element.addEventListener(START, startListener);
-      }
-    };
-  })();
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = sidePanelView;
