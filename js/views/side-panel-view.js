@@ -88,7 +88,7 @@
                 dom.setCursor('default');
                 dom.removeClass(element, 'tap');
               },
-              onstart: function() {
+              ondown: function() {
                 dom.addClass(element, 'tap');
                 dom.removeKeyboardFocus();
                 dom.setCursor('pointer');

@@ -17,7 +17,7 @@
       this.move = move.bind(this);
       this.end = end.bind(this);
       this.ontap = option.ontap || noop;
-      this.onstart = option.onstart || noop;
+      this.ondown = option.ondown || noop;
       this.onout = option.onout || noop;
       this.onover = option.onover || noop;
 
@@ -34,7 +34,7 @@
       document.addEventListener(MOVE, this.move);
       document.addEventListener(END, this.end);
 
-      this.onstart();
+      this.ondown();
     };
 
     var move = function(event) {
