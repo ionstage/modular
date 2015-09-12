@@ -94,9 +94,11 @@
               },
               onout: function() {
                 dom.removeClass(element, 'tap');
+                dom.setCursor('default');
               },
               onover: function() {
                 dom.addClass(element, 'tap');
+                dom.setCursor('pointer');
               }
             });
           }
