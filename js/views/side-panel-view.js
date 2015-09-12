@@ -81,14 +81,13 @@
             if (isInitialized)
               return;
 
-            dom.tappable({
-              element: element,
+            dom.pointerEvent('#divider_icon', {
               ontap: function() {
                 ctrl.dispatchEvent({type: 'toggle'});
                 dom.setCursor('default');
                 dom.removeClass(element, 'tap');
               },
-              ondown: function() {
+              onstart: function() {
                 dom.addClass(element, 'tap');
                 dom.removeKeyboardFocus();
                 dom.setCursor('pointer');

@@ -10,57 +10,22 @@
     event.stopPropagation();
   };
 
-  var tappable = (function() {
-    var Tappable = function(option) {
-      var element = this.element = option.element;
-
-      this.move = move.bind(this);
-      this.end = end.bind(this);
-      this.ontap = option.ontap || noop;
-      this.ondown = option.ondown || noop;
-      this.onout = option.onout || noop;
-      this.onover = option.onover || noop;
-
-      element.addEventListener(START, start.bind(this));
-    };
-
+  var pointerEvent = (function() {
+    var isInitialized = false;
+    var lock = false;
+    var optionMap = {};
     var noop = function() {};
+    var previousTarget;
+    var currentTarget;
+    var currentOptions;
+    var startOffset;
+    var isDragStarted;
 
-    var start = function(event) {
-      cancelEvent(event);
-
-      this.previousTarget = event.currentTarget;
-
-      document.addEventListener(MOVE, this.move);
-      document.addEventListener(END, this.end);
-
-      this.ondown();
-    };
-
-    var move = function(event) {
-      cancelEvent(event);
-
-      var target = getTarget(event);
-
-      if (target === this.previousTarget)
-        return;
-
-      if (target === this.element)
-        this.onover();
-      else
-        this.onout();
-
-      this.previousTarget = target;
-    };
-
-    var end = function(event) {
-      cancelEvent(event);
-
-      document.removeEventListener(MOVE, this.move);
-      document.removeEventListener(END, this.end);
-
-      if (getTarget(event) === this.element)
-        this.ontap();
+    var extend = function(a, b) {
+      for (var key in b) {
+        a[key] = b[key];
+      }
+      return a;
     };
 
     var getTarget = function(event) {
@@ -72,8 +37,123 @@
       }
     };
 
-    return function(option) {
-      new Tappable(option);
+    var getCurrentOptions = function(optionMap, target) {
+      var options = [];
+
+      var optionListById = optionMap['#' + target.id];
+      if (Array.isArray(optionListById))
+        options = options.concat(optionListById);
+
+      var classList = target.classList;
+      for (var i = 0, len = classList.length; i < len; i++) {
+        var className = classList[i];
+        var optionListByClassName = optionMap['.' + className];
+        if (Array.isArray(optionListByClassName))
+          options = options.concat(optionListByClassName);
+      }
+
+      return options;
+    };
+
+    var getStartOffset = function(event) {
+      event = isTouchEnabled ? event.changedTouches[0] : event;
+      return {
+        x: event.pageX,
+        y: event.pageY
+      };
+    };
+
+    var getOffset = function(event, startOffset) {
+      event = isTouchEnabled ? event.changedTouches[0] : event;
+      return {
+        x: event.pageX - startOffset.x,
+        y: event.pageY - startOffset.y
+      };
+    };
+
+    var start = function(event) {
+      if (lock)
+        return;
+
+      lock = true;
+      currentTarget = previousTarget = getTarget(event);
+      currentOptions = getCurrentOptions(optionMap, currentTarget);
+      startOffset = getStartOffset(event);
+      isDragStarted = false;
+
+      document.addEventListener(MOVE, move);
+      document.addEventListener(END, end);
+
+      currentOptions.forEach(function(option) {
+        option.onstart(event);
+      });
+    };
+
+    var move = function(event) {
+      var target = getTarget(event);
+      var offset = getOffset(event, startOffset);
+
+      currentOptions.forEach(function(option) {
+        if (!isDragStarted)
+          option.ondragstart(event);
+
+        option.ondrag(event, offset.x, offset.y);
+
+        if (target !== previousTarget) {
+          if (previousTarget === currentTarget)
+            option.onout(event);
+          else if (target === currentTarget)
+            option.onover(event);
+        }
+      });
+
+      previousTarget = target;
+
+      if (!isDragStarted)
+        isDragStarted = true;
+    };
+
+    var end = function(event) {
+      document.removeEventListener(MOVE, move);
+      document.removeEventListener(END, end);
+
+      var target = getTarget(event);
+      var offset = getOffset(event, startOffset);
+
+      currentOptions.forEach(function(option) {
+        if (isDragStarted)
+          option.ondragend(event, offset.x, offset.y);
+
+        option.onend(event);
+
+        if (target === currentTarget)
+          option.ontap(event);
+      });
+
+      lock = false;
+    };
+
+    return function(selector, option) {
+      if (!isInitialized) {
+        document.addEventListener(START, start);
+        isInitialized = true;
+      }
+
+      var options = optionMap[selector];
+
+      if (!options)
+        options = optionMap[selector] = [];
+
+      options.push(extend({
+        onstart: noop,
+        ondragstart: noop,
+        ondrag: noop,
+        onout: noop,
+        onover: noop,
+        ondragend: noop,
+        onend: noop,
+        ontap: noop
+      }, option));
     };
   })();
 
@@ -178,7 +258,7 @@
   }
 
   global.dom = {
-    tappable: tappable,
+    pointerEvent: pointerEvent,
     startTapEvent: startTapEvent,
     startDragEvent: startDragEvent,
     hasClass: hasClass,
