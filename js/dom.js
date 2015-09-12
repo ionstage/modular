@@ -20,6 +20,7 @@
     var currentOptions;
     var startOffset;
     var isDragStarted;
+    var holdTimerId = null;
 
     var extend = function(a, b) {
       for (var key in b) {
@@ -71,6 +72,13 @@
       };
     };
 
+    var holdTimer = function() {
+      holdTimerId = null;
+      currentOptions.forEach(function(option) {
+        option.onhold();
+      });
+    };
+
     var start = function(event) {
       if (lock)
         return;
@@ -80,6 +88,7 @@
       currentOptions = getCurrentOptions(optionMap, currentTarget);
       startOffset = getStartOffset(event);
       isDragStarted = false;
+      holdTimerId = setTimeout(holdTimer, 300);
 
       document.addEventListener(MOVE, move);
       document.addEventListener(END, end);
@@ -92,6 +101,11 @@
     var move = function(event) {
       var target = getTarget(event);
       var offset = getOffset(event, startOffset);
+
+      if (holdTimerId !== null && (Math.abs(offset.x) > 5 || Math.abs(offset.y) > 5)) {
+        clearTimeout(holdTimerId);
+        holdTimerId = null;
+      }
 
       currentOptions.forEach(function(option) {
         if (!isDragStarted)
@@ -130,6 +144,11 @@
           option.ontap(event);
       });
 
+      if (holdTimerId !== null) {
+        clearTimeout(holdTimerId);
+        holdTimerId = null;
+      }
+
       lock = false;
     };
 
@@ -146,6 +165,7 @@
 
       options.push(extend({
         onstart: noop,
+        onhold: noop,
         ondragstart: noop,
         ondrag: noop,
         onout: noop,
