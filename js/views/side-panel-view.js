@@ -171,7 +171,8 @@
                 dom.setCursor('default');
                 dom.removeClass(element, 'tap');
               },
-              onstart: function() {
+              onstart: function(event) {
+                event.preventDefault();
                 dom.addClass(element, 'tap');
                 dom.removeKeyboardFocus();
                 dom.setCursor('pointer');

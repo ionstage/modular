@@ -74,7 +74,9 @@
         }, [
           m('.piece-header', [
             m('.piece-header-title', piece.label()),
-            m('.piece-header-delete-button', '×')
+            m('.piece-header-delete-button', {
+              className: dom.supportsTouch() ? '' : 'hoverable'
+            }, '×')
           ]),
           m('.piece-content', [
             m('iframe.piece-component', {
@@ -102,7 +104,9 @@
                 ]),
                 m('.port-content', [
                   m('.port-content-text', port.contentText()),
-                  m('.port-content-delete-button', '×')
+                  m('.port-content-delete-button', {
+                    className: dom.supportsTouch() ? '' : 'hoverable'
+                  }, '×')
                 ])
               ]);
             }))

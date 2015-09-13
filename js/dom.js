@@ -177,34 +177,6 @@
     };
   })();
 
-  function startTapEvent(event, option) {
-    var target = event.currentTarget, startOffset;
-    function moveListener(event) {
-      cancelEvent(event);
-      event = isTouchEnabled ? event.touches[0] : event;
-      var dx = Math.abs(event.pageX - startOffset.left);
-      var dy = Math.abs(event.pageY - startOffset.top);
-      if (dx > 5 || dy > 5) {
-        target.removeEventListener(MOVE, moveListener, false);
-        target.removeEventListener(END, endListener, false);
-        if (typeof option.cancel === 'function')
-          requestAnimationFrame(option.cancel);
-      }
-    }
-    function endListener(event) {
-      cancelEvent(event);
-      target.removeEventListener(MOVE, moveListener, false);
-      target.removeEventListener(END, endListener, false);
-      if (typeof option.tap === 'function')
-        requestAnimationFrame(option.tap);
-    }
-    cancelEvent(event);
-    event = isTouchEnabled ? event.touches[0] : event;
-    startOffset = {left: event.pageX, top: event.pageY};
-    target.addEventListener(MOVE, moveListener, false);
-    target.addEventListener(END, endListener, false);
-  }
-
   function startDragEvent(event, option) {
     var startOffset;
     function moveListener(event) {
@@ -279,7 +251,6 @@
 
   global.dom = {
     pointerEvent: pointerEvent,
-    startTapEvent: startTapEvent,
     startDragEvent: startDragEvent,
     hasClass: hasClass,
     addClass: addClass,

@@ -351,12 +351,6 @@ var boardEvent = (function(app) {
           dom.removeKeyboardFocus();
       }
       switch (className) {
-        case 'port-content-delete-button':
-          hidePort(event);
-          break;
-        case 'piece-header-delete-button':
-          removePiece(event);
-          break;
         case 'piece-header-title':
           dragPiece(event);
           break;
@@ -374,9 +368,59 @@ var boardEvent = (function(app) {
       }
     }, false);
   }
+  function setHidePortEvent() {
+    dom.pointerEvent('.port-content-delete-button', {
+      onstart: function(event) {
+        event.preventDefault();
+      },
+      ontap: function(event) {
+        var portID = event.target.parentNode.parentNode.getAttribute('data-port-id');
+        var portIDSet = portID.split('/');
+        var pieceID = portIDSet[0];
+        var piece = board.pieceMap()[pieceID];
+        var portMap = piece.portMap();
+        var portName = portIDSet[1] + '/' + portIDSet[2];
+        piece.hidePort(portMap[portName]);
+        removePortConnection(portID);
+        updatePathPosition(pieceID);
+        pathContainer.updatePosition();
+        pathContainer.refreshPosition();
+      }
+    });
+  }
+  function setRemovePieceEvent() {
+    var pieceID;
+    var piece;
+    dom.pointerEvent('.piece-header-delete-button', {
+      onstart: function(event) {
+        event.preventDefault();
+        pieceID = event.target.parentNode.parentNode.getAttribute('data-piece-id');
+        piece = board.pieceMap()[pieceID];
+        if (isTouchEnabled)
+          dom.addClass(piece.element(), 'delete');
+      },
+      ontap: function() {
+        board.remove(piece);
+        propDataCache.remove(pieceID);
+        if (isTouchEnabled)
+          dom.removeClass(piece.element(), 'delete');
+        updateURLHash();
+      },
+      onout: function() {
+        if (isTouchEnabled)
+          dom.removeClass(piece.element(), 'delete');
+      },
+      onover: function() {
+        if (isTouchEnabled)
+          dom.addClass(piece.element(), 'delete');
+      }
+    });
+  }
   function initialize(mainPanelElement) {
     setWindowMessageListener();
     setMainPanelStartListener(mainPanelElement);
+    setHidePortEvent();
+    setRemovePieceEvent();
   }
   function setConnectorHandle(component) {
     connectorHandle = component;
@@ -459,47 +503,6 @@ var boardEvent = (function(app) {
     var targetPortID = portID + '/in';
     disconnectPort(pathContainer.getSourceID(targetPortID), targetPortID);
     m.redraw(true);
-  }
-  var hidePort = (function() {
-    function tapListener(event) {
-      var portID = event.target.parentNode.parentNode.getAttribute('data-port-id');
-      var portIDSet = portID.split('/');
-      var pieceID = portIDSet[0];
-      var piece = board.pieceMap()[pieceID];
-      var portMap = piece.portMap();
-      var portName = portIDSet[1] + '/' + portIDSet[2];
-      piece.hidePort(portMap[portName]);
-      removePortConnection(portID);
-      updatePathPosition(pieceID);
-      pathContainer.updatePosition();
-      pathContainer.refreshPosition();
-    }
-    return function(event) {
-      dom.startTapEvent(event, {
-        tap: function() {
-          tapListener(event);
-        }
-      });
-    };
-  }());
-  function removePiece(event) {
-    var pieceID = event.target.parentNode.parentNode.getAttribute('data-piece-id');
-    var piece = board.pieceMap()[pieceID];
-    if (isTouchEnabled)
-      dom.addClass(piece.element(), 'delete');
-    dom.startTapEvent(event, {
-      tap: function() {
-        board.remove(piece);
-        propDataCache.remove(pieceID);
-        if (isTouchEnabled)
-          dom.removeClass(piece.element(), 'delete');
-        updateURLHash();
-      },
-      cancel: function() {
-        if (isTouchEnabled)
-          dom.removeClass(piece.element(), 'delete');
-      }
-    });
   }
   function updatePathPosition(pieceID, isSortingPort) {
     pathContainer.getConnectionList().forEach(function(connection) {

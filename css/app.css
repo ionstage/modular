@@ -253,10 +253,6 @@ body {
   padding: 6px 10px 6px 12px;
 }
 
-.piece-header-delete-button:hover {
-  opacity: 0.6;
-}
-
 .piece-content {
   background-color: white;
   border-left: 6px solid black;
@@ -434,10 +430,6 @@ body {
   cursor: pointer;
   float: right;
   padding: 12px 8px 12px 12px;
-}
-
-.port-content-delete-button:hover {
-  opacity: 0.6;
 }
 
 .retainer {
