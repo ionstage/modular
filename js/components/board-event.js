@@ -402,8 +402,6 @@ var boardEvent = (function(app) {
       ontap: function() {
         board.remove(piece);
         propDataCache.remove(pieceID);
-        if (isTouchEnabled)
-          dom.removeClass(piece.element(), 'delete');
         updateURLHash();
       },
       onout: function() {
