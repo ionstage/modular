@@ -642,17 +642,14 @@ var boardEvent = (function(app) {
       }
       return map;
     }
-    function abs(n) {
-      return n > 0 ? n : -n;
-    }
     function getIntersectConnector(searchMap, point) {
       var connectorSizeOffset = board.getConnectorSizeOffset();
       var pointX = point.x, pointY = point.y;
       for (var x in searchMap) {
-        if (abs(pointX - x) < connectorSizeOffset) {
+        if (Math.abs(pointX - x) < connectorSizeOffset) {
           var searchMapForY = searchMap[x];
           for (var y in searchMapForY) {
-            if (abs(pointY - y) < connectorSizeOffset) {
+            if (Math.abs(pointY - y) < connectorSizeOffset) {
               return {
                 portID: searchMapForY[y],
                 point: {x: x, y: y}
