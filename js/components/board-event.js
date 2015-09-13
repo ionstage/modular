@@ -3,8 +3,7 @@ var boardEvent = (function(app) {
   var m = require('mithril');
   var Piece = app.Piece || require('./piece.js');
   var Port = app.Port || require('./port.js');
-  
-  var isTouchEnabled = dom.supportsTouch();
+
   var isLoadingURLHash = false;
   var connectorHandle = null;
   var board = null;
@@ -337,7 +336,7 @@ var boardEvent = (function(app) {
     }, false);
   }
   function setMainPanelStartListener(mainPanelElement) {
-    mainPanelElement.addEventListener(isTouchEnabled ? 'touchstart' : 'mousedown', function(event) {
+    mainPanelElement.addEventListener(dom.supportsTouch() ? 'touchstart' : 'mousedown', function(event) {
       var target = event.target;
       if (dom.hasClass(target, 'loading'))
         return;
@@ -396,7 +395,7 @@ var boardEvent = (function(app) {
         event.preventDefault();
         pieceID = event.target.parentNode.parentNode.getAttribute('data-piece-id');
         piece = board.pieceMap()[pieceID];
-        if (isTouchEnabled)
+        if (dom.supportsTouch())
           dom.addClass(piece.element(), 'delete');
       },
       ontap: function() {
@@ -405,11 +404,11 @@ var boardEvent = (function(app) {
         updateURLHash();
       },
       onout: function() {
-        if (isTouchEnabled)
+        if (dom.supportsTouch())
           dom.removeClass(piece.element(), 'delete');
       },
       onover: function() {
-        if (isTouchEnabled)
+        if (dom.supportsTouch())
           dom.addClass(piece.element(), 'delete');
       }
     });
@@ -543,7 +542,7 @@ var boardEvent = (function(app) {
           pathContainer.updatePosition();
           pathContainer.refreshPosition();
         });
-        if (isTouchEnabled)
+        if (dom.supportsTouch())
           dom.removeClass(piece.element(), 'drag');
         updateURLHash();
         m.redraw();
@@ -551,7 +550,7 @@ var boardEvent = (function(app) {
     });
     board.startDrag();
     dom.requestAnimationFrame(updatePiecePosition);
-    if (isTouchEnabled)
+    if (dom.supportsTouch())
       dom.addClass(piece.element(), 'drag');
   }
   function sortPort(event) {
@@ -615,7 +614,6 @@ var boardEvent = (function(app) {
     dom.requestAnimationFrame(updatePortPosition);
   }
   var dragPortConnectorOut = (function() {
-    var hasClass = dom.hasClass;
     var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
     function getInConnectorPositionMap(type) {
       var inConnectorElements = board.getInConnectorNotConnectedElements(type);
@@ -678,7 +676,7 @@ var boardEvent = (function(app) {
       } else {
         connectorOutElement = target;
       }
-      if (hasClass(connectorOutElement, 'drag'))
+      if (dom.hasClass(connectorOutElement, 'drag'))
         return;
       var connectorOffset = board.getConnectorOffset(connectorOutElement);
       var portElement = connectorOutElement.parentNode.parentNode;
@@ -712,9 +710,9 @@ var boardEvent = (function(app) {
       function startConnectorHandle() {
         connectorHandle.x(connectorOffset.x);
         connectorHandle.y(connectorOffset.y);
-        if (hasClass(portElement, 'prop'))
+        if (dom.hasClass(portElement, 'prop'))
           connectorHandle.type('prop');
-        else if (hasClass(portElement, 'event'))
+        else if (dom.hasClass(portElement, 'event'))
           connectorHandle.type('event');
         connectorHandle.redraw();
         m.redraw();
@@ -747,7 +745,7 @@ var boardEvent = (function(app) {
                   sourcePortID: currentPathSourceID.replace(/\/out$/, ''),
                   targetPortID: prePathTargetPortID
                 });
-                if (isTouchEnabled)
+                if (dom.supportsTouch())
                   getPort(prePathTargetPortID).clearMark();
               }
               var currentPathTargetPortID = currentPathTargetID.replace(/\/in$/, '');
@@ -756,7 +754,7 @@ var boardEvent = (function(app) {
                 sourcePortID: currentPathSourceID.replace(/\/out$/, ''),
                 targetPortID: currentPathTargetPortID
               });
-              if (isTouchEnabled)
+              if (dom.supportsTouch())
                 getPort(currentPathTargetPortID).mark();
             }
           } else {
@@ -775,7 +773,7 @@ var boardEvent = (function(app) {
                 sourcePortID: currentPathSourceID.replace(/\/out$/, ''),
                 targetPortID: prePathTargetPortID
               });
-              if (isTouchEnabled)
+              if (dom.supportsTouch())
                 getPort(prePathTargetPortID).clearMark();
             }
             pathContainer.position(targetID, dragPoint);
@@ -794,7 +792,7 @@ var boardEvent = (function(app) {
             dom.setCursor('default');
             m.redraw();
           });
-          if (isTouchEnabled) {
+          if (dom.supportsTouch()) {
             getPort(portID).clearMark();
             if (currentPathTargetID !== 'drag') {
               var currentPathTargetPortID = currentPathTargetID.replace(/\/in$/, '');
@@ -819,7 +817,7 @@ var boardEvent = (function(app) {
       pathContainer.position(currentPathTargetID, targetPoint);
       pathContainer.updatePosition();
       m.redraw();
-      if (isTouchEnabled) {
+      if (dom.supportsTouch()) {
         dom.requestAnimationFrame(function() {
           getPort(portID).mark();
           if (isConnected)
