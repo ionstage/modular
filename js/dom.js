@@ -88,7 +88,13 @@
       currentOptions = getCurrentOptions(optionMap, currentTarget);
       startOffset = getStartOffset(event);
       isDragStarted = false;
-      holdTimerId = setTimeout(holdTimer, 300);
+
+      var hasHoldEvent = currentOptions.some(function(option) {
+        return option.onhold !== noop;
+      });
+
+      if (hasHoldEvent)
+        holdTimerId = setTimeout(holdTimer, 300);
 
       document.addEventListener(MOVE, move);
       document.addEventListener(END, end);
