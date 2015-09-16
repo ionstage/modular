@@ -1,13 +1,13 @@
 (function(app) {
   'use strict';
   var m = require('mithril');
-  var boardView = app.boardView || require('../views/board-view.js');
+  var BoardComponent = app.BoardComponent || require('../views/board-view.js');
 
   var mainPanelView = function(ctrl) {
     return m('#main_panel', {
       config: mainPanelConfig.bind(ctrl)
     }, [
-      boardView(ctrl.boardController),
+      m.component(BoardComponent),
       m('.retainer', {
         config: retainerConfig.bind(ctrl)
       })
