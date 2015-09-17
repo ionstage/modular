@@ -3,6 +3,39 @@
   var m = require('mithril');
   var BoardComponent = app.BoardComponent || require('../views/board-view.js');
 
+  var MainPanelController = function(args) {
+    if (!(this instanceof MainPanelController))
+      return new MainPanelController(args);
+
+    this.element = m.prop(null);
+    args.addPiece = this.addPiece.bind(this);
+  };
+
+  MainPanelController.prototype.addPiece = function(pageX, pageY, label, src) {
+    var element = this.element();
+
+    if (!element)
+      return;
+
+    var x = pageX - element.offsetLeft + element.scrollLeft;
+    var y = pageY + element.scrollTop;
+
+    if (x < 0 || y < 0)
+      return;
+
+    boardEvent.addPiece(x, y, label, src);
+  };
+
+  MainPanelController.prototype.dispatchEvent = function(event) {
+    switch (event.type) {
+    case 'init':
+      this.element(event.element);
+      break;
+    default:
+      break;
+    }
+  };
+
   var mainPanelView = function(ctrl) {
     return m('#main_panel', {
       config: mainPanelConfig.bind(ctrl)
@@ -57,8 +90,13 @@
     }
   };
 
+  var MainPanelComponent = {
+    controller: MainPanelController,
+    view: mainPanelView
+  };
+
   if (typeof module !== 'undefined' && module.exports)
-    module.exports = mainPanelView;
+    module.exports = MainPanelComponent;
   else
-    app.mainPanelView = mainPanelView;
+    app.MainPanelComponent = MainPanelComponent;
 })(this.app || (this.app = {}));
