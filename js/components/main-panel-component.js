@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
   var m = require('mithril');
-  var BoardComponent = app.BoardComponent || require('../views/board-view.js');
+  var BoardComponent = app.BoardComponent || require('./board-component.js');
 
   var MainPanelController = function(args) {
     if (!(this instanceof MainPanelController))
