@@ -6,7 +6,6 @@
     if (!(this instanceof SidePanelController))
       return new SidePanelController(args);
 
-    var noop = function() {};
     this.state = m.prop(SidePanelController.STATE_OPEN);
     this.pieceList = m.prop([]);
     this.searchKeyword = m.prop('');

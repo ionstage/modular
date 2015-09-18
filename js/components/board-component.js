@@ -256,7 +256,7 @@
   };
 
   Board.prototype.getConnectorOffset = function(element) {
-    var offsetX = 0, offsetY = 0, count = 0;
+    var offsetX = 0, offsetY = 0;
     if (element) {
       var elementStyle = getComputedStyle(element, null);
       var rect = element.getBoundingClientRect();
