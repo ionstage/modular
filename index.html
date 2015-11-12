@@ -3,77 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
-  <title>Board</title>
+  <title>Modular</title>
   <link rel="stylesheet" href="css/app.min.css">
-  <script id="piece_list_item_template" type="text/template">
-    <div class="piece-list-item">
-      <div class="piece-list-item-container">
-        <div class="piece-list-item-header"></div>
-        <div class="piece-list-item-content"></div>
-      </div>
-    </div>
-  </script>
-  <script id="piece_template" type="text/template">
-    <div class="piece loading">
-      <div class="piece-header">
-        <div class="piece-header-title loading"></div>
-        <div class="piece-header-delete-button">×</div>
-      </div>
-      <div class="piece-content loading">
-        <div class="piece-component-back hide"></div>
-        <iframe class="piece-component"></iframe>
-        <div class="piece-port-list hide"></div>
-      </div>
-      <div class="piece-footer loading">
-        <select class="piece-port-select hide">
-          <option value=""></option>
-          <optgroup class="piece-port-select-optgroup-prop" label="Property"></optgroup>
-          <optgroup class="piece-port-select-optgroup-event" label="Event"></optgroup>
-        </select>
-      </div>
-    </div>
-  </script>
-  <script id="port_template" type="text/template">
-    <div class="port">
-      <div class="port-connector">
-        <div class="port-connector-in"></div>
-        <div class="port-connector-connected"></div>
-        <div class="port-connector-out"></div>
-      </div>
-      <div class="port-content">
-        <div class="port-content-text"></div>
-        <div class="port-content-delete-button">×</div>
-      </div>
-    </div>
-  </script>
 </head>
-<body>
-  <div id="side_panel">
-    <div>
-      <input id="search_input" type="search" autocapitalize="off" autocorrect="off"></input>
-      <div id="piece_list_manager_button">
-        <svg class="icon">
-          <g>
-            <line x1="2" y1="3.5" x2="14" y2="3.5" />
-            <line x1="2" y1="8" x2="14" y2="8" />
-            <line x1="2" y1="12.5" x2="14" y2="12.5" />
-          </g>
-        </svg>
-      </div>
-    </div>
-    <div id="piece_list">
-      <div id="piece_list_content"></div>
-    </div>
-  </div>
-  <div id="divider">
-    <div id="divider_icon"></div>
-  </div>
-  <div id="main_panel">
-    <svg id="path_container" xmlns="http://www.w3.org/2000/svg"></svg>
-    <div id="board"></div>
-  </div>
+<body class="unselectable">
+  <div id="container"></div>
   <script src="js/bundle.min.js"></script>
   <script src="js/lib.js"></script>
+  <script src="js/dom.js"></script>
   <script src="js/app.min.js"></script>
 </body>
 </html>
