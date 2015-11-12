@@ -25,6 +25,7 @@
   };
 
   Piece.prototype.destroy = function() {
+    var boardEvent = app.boardEvent || require('./board-event.js');
     var pieceID = this.id();
     var portMap = this.portMap();
     for (var portName in portMap) {

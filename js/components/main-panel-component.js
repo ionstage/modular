@@ -2,6 +2,7 @@
   'use strict';
   var m = require('mithril');
   var BoardComponent = app.BoardComponent || require('./board-component.js');
+  var boardEvent = app.boardEvent || require('./board-event.js');
 
   var MainPanelController = function(args) {
     if (!(this instanceof MainPanelController))

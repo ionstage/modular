@@ -374,6 +374,7 @@
   };
 
   var BoardController = function() {
+    this.boardEvent = app.boardEvent || require('./board-event.js');
     this.pathContainer = new PathContainer();
     this.board = new Board();
     this.connectorHandle = new ConnectorHandle();
@@ -388,7 +389,7 @@
         config: function(element, isInitialized) {
           if (isInitialized)
             return;
-          boardEvent.setPathContainer(pathContainer);
+          ctrl.boardEvent.setPathContainer(pathContainer);
         }
       }, pathContainer.getConnectionList().map(function(path) {
         var sourceID = path.sourceID;
@@ -413,7 +414,7 @@
           if (isInitialized)
             return;
           ctrl.board.element(element);
-          boardEvent.setBoard(ctrl.board);
+          ctrl.boardEvent.setBoard(ctrl.board);
         }
       }, ctrl.board.pieces().map(function(piece) {
         var ports = piece.ports();
@@ -490,7 +491,7 @@
               className: (propOptionViews.length === 0 && eventOptionViews.length === 0) ? 'hide' : '',
               onchange: function(event) {
                 var currentTarget = event.currentTarget;
-                boardEvent.showPort(event);
+                ctrl.boardEvent.showPort(event);
                 currentTarget.value = '';
                 currentTarget.blur();
               }
@@ -508,7 +509,7 @@
           if (isInitialized)
             return;
           connectorHandle.element(element);
-          boardEvent.setConnectorHandle(connectorHandle);
+          ctrl.boardEvent.setConnectorHandle(connectorHandle);
         }
       })
     ]);

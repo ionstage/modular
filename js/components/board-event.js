@@ -1,4 +1,5 @@
-var boardEvent = (function(app) {
+(function(app) {
+  'use strict';
   var Base64 = require('js-base64').Base64;
   var m = require('mithril');
   var Piece = app.Piece || require('./piece.js');
@@ -828,7 +829,8 @@ var boardEvent = (function(app) {
       dom.requestAnimationFrame(updatePortConnector);
     };
   }());
-  return {
+
+  var boardEvent = {
     initialize: initialize,
     setConnectorHandle: setConnectorHandle,
     setBoard: setBoard,
@@ -838,4 +840,9 @@ var boardEvent = (function(app) {
     removePortConnection: removePortConnection,
     loadURLHash: loadURLHash
   };
+
+  if (typeof module !== 'undefined' && module.exports)
+    module.exports = boardEvent;
+  else
+    app.boardEvent = boardEvent;
 })(this.app || (this.app = {}));
