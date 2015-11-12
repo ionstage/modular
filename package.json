@@ -1,5 +1,5 @@
 {
-  "name": "board",
+  "name": "modular",
   "version": "0.1.1",
   "scripts": {
     "build": "uglifyjs js/bundle.js -o build/bundle.min.js --comments '/^\\!|^@preserve|^@cc_on|\\bMIT\\b|\\bMPL\\b|\\bGPL\\b|\\(c\\)|License|Copyright/' -c -m; uglifyjs js/app.js -o build/app.min.js -c -m; cat css/*.css | cleancss -o build/app.min.css",
