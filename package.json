@@ -11,10 +11,10 @@
     "mithril": "^0.2.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.7.7",
-    "browserify": "^10.2.4",
-    "clean-css": "^3.3.1",
-    "uglify-js": "^2.4.23"
+    "browser-sync": "^2.12.5",
+    "browserify": "^13.0.0",
+    "clean-css": "^3.4.12",
+    "uglify-js": "^2.6.2"
   },
   "private": true
 }
