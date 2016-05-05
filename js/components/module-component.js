@@ -1,14 +1,14 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
-  var Component = app.Component || require('./component.js');
 
   var ModuleComponent = helper.inherits(function(props) {
     ModuleComponent.super_.call(this);
 
     this.element = this.prop(props.element);
-  }, Component);
+  }, jCore.Component);
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleComponent;
