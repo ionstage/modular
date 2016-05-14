@@ -22,6 +22,14 @@
     el.parentNode.removeChild(el);
   };
 
+  dom.addClass = function(el, className) {
+    el.classList.add(className);
+  };
+
+  dom.html = function(el, s) {
+    el.innerHTML = s;
+  };
+
   dom.animate = function(callback) {
     return window.requestAnimationFrame(callback);
   };

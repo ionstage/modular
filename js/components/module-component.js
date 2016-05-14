@@ -22,6 +22,8 @@
     // add element
     if (parentElement && !element) {
       element = dom.el('<div>');
+      dom.addClass(element, 'module');
+      dom.html(element, ModuleComponent.MODULE_HTML);
       this.element(element);
       dom.append(parentElement, element);
       return;
@@ -34,6 +36,24 @@
       return;
     }
   };
+
+  ModuleComponent.MODULE_HTML = [
+    '<div class="module-header">',
+      '<div class="module-header-title"></div>',
+      '<div class="module-header-delete-button"></div>',
+    '</div>',
+    '<div class="module-content">',
+      '<iframe class="module-component"></iframe>',
+      '<div class="module-port-list"></div>',
+    '</div>',
+    '<div class="module-footer">',
+      '<img class="module-footer-icon" src="images/caret-down.svg">',
+      '<select class="module-port-select">',
+        '<optgroup label="Property"></optgroup>',
+        '<optgroup label="Event"></optgroup>',
+      '</select>',
+    '</div>'
+  ].join('');
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleComponent;
