@@ -5,11 +5,14 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
 
-  var ModuleComponent = helper.inherits(function() {
+  var ModuleComponent = helper.inherits(function(props) {
     ModuleComponent.super_.call(this);
 
+    this.x = this.prop(props.x);
+    this.y = this.prop(props.y);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
+    this.cache = this.prop({});
   }, jCore.Component);
 
   ModuleComponent.prototype.redraw = function() {
@@ -25,6 +28,7 @@
       dom.addClass(element, 'module');
       dom.html(element, ModuleComponent.MODULE_HTML);
       this.element(element);
+      this.redraw();
       dom.append(parentElement, element);
       return;
     }
@@ -33,8 +37,31 @@
     if (!parentElement && element) {
       dom.remove(element);
       this.element(null);
+      this.cache({});
       return;
     }
+
+    // update element
+    this.redrawPosition();
+  };
+
+  ModuleComponent.prototype.redrawPosition = function() {
+    var x = this.x();
+    var y = this.y();
+    var cache = this.cache();
+
+    if (x === cache.x && y === cache.y)
+      return;
+
+    var translate = 'translate(' + x + 'px, ' + y + 'px)';
+
+    dom.css(this.element(), {
+      transform: translate,
+      webkitTransform: translate
+    });
+
+    cache.x = x;
+    cache.y = y;
   };
 
   ModuleComponent.MODULE_HTML = [

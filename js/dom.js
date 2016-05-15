@@ -22,6 +22,14 @@
     el.parentNode.removeChild(el);
   };
 
+  dom.css = function(el, props) {
+    var style = el.style;
+
+    for (var key in props) {
+      style[key] = props[key];
+    }
+  };
+
   dom.addClass = function(el, className) {
     el.classList.add(className);
   };
