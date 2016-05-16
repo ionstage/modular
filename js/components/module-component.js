@@ -8,12 +8,17 @@
   var ModuleComponent = helper.inherits(function(props) {
     ModuleComponent.super_.call(this);
 
+    this.title = this.prop(props.title);
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
   }, jCore.Component);
+
+  ModuleComponent.prototype.titleElement = function() {
+    return dom.child(this.element(), 0, 0);
+  };
 
   ModuleComponent.prototype.redraw = function() {
     var element = this.element();
@@ -42,7 +47,19 @@
     }
 
     // update element
+    this.redrawTitle();
     this.redrawPosition();
+  };
+
+  ModuleComponent.prototype.redrawTitle = function() {
+    var title = this.title();
+    var cache = this.cache();
+
+    if (title === cache.title)
+      return;
+
+    dom.text(this.titleElement(), title);
+    cache.title = title;
   };
 
   ModuleComponent.prototype.redrawPosition = function() {

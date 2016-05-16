@@ -22,6 +22,20 @@
     el.parentNode.removeChild(el);
   };
 
+  dom.child = function(el, index) {
+    var len = arguments.length;
+
+    if (len === 2)
+      return el.children[index];
+
+    for (var i = 1; i < len; i++) {
+      index = arguments[i];
+      el = el.children[index];
+    }
+
+    return el;
+  };
+
   dom.css = function(el, props) {
     var style = el.style;
 
@@ -32,6 +46,10 @@
 
   dom.addClass = function(el, className) {
     el.classList.add(className);
+  };
+
+  dom.text = function(el, s) {
+    el.textContent = s;
   };
 
   dom.html = function(el, s) {
