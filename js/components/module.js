@@ -5,8 +5,8 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
 
-  var ModuleComponent = helper.inherits(function(props) {
-    ModuleComponent.super_.call(this);
+  var Module = helper.inherits(function(props) {
+    Module.super_.call(this);
 
     this.title = this.prop(props.title);
     this.x = this.prop(props.x);
@@ -16,11 +16,11 @@
     this.cache = this.prop({});
   }, jCore.Component);
 
-  ModuleComponent.prototype.titleElement = function() {
+  Module.prototype.titleElement = function() {
     return dom.child(this.element(), 0, 0);
   };
 
-  ModuleComponent.prototype.redraw = function() {
+  Module.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
 
@@ -31,7 +31,7 @@
     if (parentElement && !element) {
       element = dom.el('<div>');
       dom.addClass(element, 'module');
-      dom.html(element, ModuleComponent.MODULE_HTML);
+      dom.html(element, Module.MODULE_HTML);
       this.element(element);
       this.redraw();
       dom.append(parentElement, element);
@@ -51,7 +51,7 @@
     this.redrawPosition();
   };
 
-  ModuleComponent.prototype.redrawTitle = function() {
+  Module.prototype.redrawTitle = function() {
     var title = this.title();
     var cache = this.cache();
 
@@ -62,7 +62,7 @@
     cache.title = title;
   };
 
-  ModuleComponent.prototype.redrawPosition = function() {
+  Module.prototype.redrawPosition = function() {
     var x = this.x();
     var y = this.y();
     var cache = this.cache();
@@ -81,7 +81,7 @@
     cache.y = y;
   };
 
-  ModuleComponent.MODULE_HTML = [
+  Module.MODULE_HTML = [
     '<div class="module-header">',
       '<div class="module-header-title"></div>',
       '<div class="module-header-delete-button"></div>',
@@ -100,7 +100,7 @@
   ].join('');
 
   if (typeof module !== 'undefined' && module.exports)
-    module.exports = ModuleComponent;
+    module.exports = Module;
   else
-    app.ModuleComponent = ModuleComponent;
+    app.Module = Module;
 })(this.app || (this.app = {}));
