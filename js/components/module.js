@@ -31,7 +31,7 @@
     if (parentElement && !element) {
       element = dom.el('<div>');
       dom.addClass(element, 'module');
-      dom.html(element, Module.MODULE_HTML);
+      dom.html(element, Module.TEMPLATE_HTML);
       this.element(element);
       this.redraw();
       dom.append(parentElement, element);
@@ -81,7 +81,7 @@
     cache.y = y;
   };
 
-  Module.MODULE_HTML = [
+  Module.TEMPLATE_HTML = [
     '<div class="module-header">',
       '<div class="module-header-title"></div>',
       '<div class="module-header-delete-button"></div>',
