@@ -128,6 +128,13 @@
     };
   };
 
+  dom.identifier = function(event) {
+    if (dom.supportsTouch())
+      return event.changedTouches[0].identifier;
+
+    return null;
+  };
+
   dom.draggable = (function() {
     var Draggable = function(props) {
       this.el = props.el;
@@ -138,6 +145,7 @@
       this.move = move.bind(this);
       this.end = end.bind(this);
       this.lock = false;
+      this.identifier = null;
       this.startingPoint = null;
 
       dom.on(this.el, dom.eventType('start'), this.start);
@@ -148,6 +156,7 @@
         return;
 
       this.lock = true;
+      this.identifier = dom.identifier(event);
       this.startingPoint = dom.pagePoint(event);
 
       var el = this.el;
@@ -167,6 +176,11 @@
     };
 
     var move = function(event) {
+      var identifier = this.identifier;
+
+      if (identifier && identifier !== dom.identifier(event))
+        return;
+
       var onmove = this.onmove;
       var d = dom.pagePoint(event, this.startingPoint);
 
@@ -175,6 +189,11 @@
     };
 
     var end = function(event) {
+      var identifier = this.identifier;
+
+      if (identifier && identifier !== dom.identifier(event))
+        return;
+
       dom.off(document, dom.eventType('move'), this.move);
       dom.off(document, dom.eventType('end'), this.end);
 
