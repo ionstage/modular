@@ -84,6 +84,17 @@
     return 'createTouch' in document;
   };
 
+  dom.target = function(event) {
+    if (dom.supportsTouch() && 'changedTouches' in event)
+      event = event.changedTouches[0];
+
+    return event.target;
+  };
+
+  dom.cancel = function(event) {
+    event.preventDefault();
+  };
+
   dom.eventType = function(name) {
     var supportsTouch = dom.supportsTouch();
 

@@ -14,6 +14,7 @@
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
+    this.dragContext = this.prop({});
   }, jCore.Component);
 
   Module.prototype.titleElement = function() {
@@ -32,6 +33,7 @@
       element = dom.el('<div>');
       dom.addClass(element, 'module');
       dom.html(element, Module.TEMPLATE_HTML);
+      dom.draggable(element, this.onstart.bind(this), this.onmove.bind(this));
       this.element(element);
       this.redraw();
       dom.append(parentElement, element);
@@ -79,6 +81,40 @@
 
     cache.x = x;
     cache.y = y;
+  };
+
+  Module.prototype.onstart = function(x, y, event) {
+    var context = this.dragContext();
+
+    if (dom.target(event) === this.titleElement())
+      context.type = 'position';
+    else
+      context.type = null;
+
+    var type = context.type;
+
+    if (!type)
+      return;
+
+    dom.cancel(event);
+
+    if (type === 'position') {
+      context.x = this.x();
+      context.y = this.y();
+    }
+  };
+
+  Module.prototype.onmove = function(dx, dy) {
+    var context = this.dragContext();
+    var type = context.type;
+
+    if (!type)
+      return;
+
+    if (type === 'position') {
+      this.x(context.x + dx);
+      this.y(context.y + dy);
+    }
   };
 
   Module.TEMPLATE_HTML = [
