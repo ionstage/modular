@@ -151,6 +151,12 @@
       dom.on(this.el, dom.eventType('start'), this.start);
     };
 
+    Draggable.prototype.destroy = function() {
+      dom.off(this.el, dom.eventType('start'), this.start);
+      dom.off(document, dom.eventType('move'), this.move);
+      dom.off(document, dom.eventType('end'), this.end);
+    };
+
     var start = function(event) {
       if (this.lock)
         return;
@@ -207,7 +213,7 @@
     };
 
     return function(el, onstart, onmove, onend) {
-      new Draggable({
+      return new Draggable({
         el: el,
         onstart: onstart,
         onmove: onmove,
