@@ -14,6 +14,7 @@
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
+    this.draggable = this.prop(null);
     this.dragContext = this.prop({});
   }, jCore.Component);
 
@@ -33,7 +34,7 @@
       element = dom.el('<div>');
       dom.addClass(element, 'module');
       dom.html(element, Module.TEMPLATE_HTML);
-      dom.draggable(element, this.onstart.bind(this), this.onmove.bind(this));
+      this.draggable(dom.draggable(element, this.onstart.bind(this), this.onmove.bind(this)));
       this.element(element);
       this.redraw();
       dom.append(parentElement, element);
@@ -42,6 +43,7 @@
 
     // remove element
     if (!parentElement && element) {
+      this.draggable().destroy();
       dom.remove(element);
       this.element(null);
       this.cache({});
