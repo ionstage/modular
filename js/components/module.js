@@ -22,6 +22,10 @@
     return dom.child(this.element(), 0, 0);
   };
 
+  Module.prototype.deleteButtonElement = function() {
+    return dom.child(this.element(), 0, 1);
+  };
+
   Module.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
@@ -34,7 +38,7 @@
       element = dom.el('<div>');
       dom.addClass(element, 'module');
       dom.html(element, Module.TEMPLATE_HTML);
-      this.draggable(dom.draggable(element, this.onstart.bind(this), this.onmove.bind(this)));
+      this.draggable(dom.draggable(element, this.onstart.bind(this), this.onmove.bind(this), this.onend.bind(this)));
       this.element(element);
       this.redraw();
       dom.append(parentElement, element);
@@ -87,9 +91,12 @@
 
   Module.prototype.onstart = function(x, y, event) {
     var context = this.dragContext();
+    var target = dom.target(event);
 
-    if (dom.target(event) === this.titleElement())
+    if (target === this.titleElement())
       context.type = 'position';
+    else if (target === this.deleteButtonElement())
+      context.type = 'delete';
     else
       context.type = null;
 
@@ -117,6 +124,17 @@
       this.x(context.x + dx);
       this.y(context.y + dy);
     }
+  };
+
+  Module.prototype.onend = function(dx, dy, event) {
+    var type = this.dragContext().type;
+    var target = dom.target(event);
+
+    if (!type)
+      return;
+
+    if (type === 'delete' && target === this.deleteButtonElement())
+      this.parentElement(null);
   };
 
   Module.TEMPLATE_HTML = [
