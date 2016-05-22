@@ -222,6 +222,32 @@
     };
   })();
 
+  dom.ajax = function(opt) {
+    var type = opt.type;
+    var url = opt.url;
+
+    return new Promise(function(resolve, reject) {
+      var req = new XMLHttpRequest();
+
+      var onfailed = function() {
+        reject(new Error('Failed to load resource: ' + type + ' ' + url));
+      };
+
+      req.onload = function() {
+        if (req.status >= 200 && req.status < 400)
+          resolve(req.responseText);
+        else
+          onfailed();
+      };
+
+      req.onerror = onfailed;
+      req.onabort = onfailed;
+
+      req.open(type, url, true);
+      req.send();
+    });
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = dom;
   else
