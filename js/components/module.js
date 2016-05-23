@@ -122,6 +122,8 @@
     if (type === 'position') {
       context.x = this.x();
       context.y = this.y();
+
+      dom.addClass(this.element(), 'module-dragging');
     }
   };
 
@@ -144,6 +146,9 @@
 
     if (!type)
       return;
+
+    if (type === 'position')
+      dom.removeClass(this.element(), 'module-dragging');
 
     if (type === 'delete' && target === this.deleteButtonElement())
       this.parentElement(null);
