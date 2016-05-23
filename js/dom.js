@@ -68,6 +68,21 @@
     return el.scrollTop;
   };
 
+  dom.contentWindow = function(iframe) {
+    return iframe.contentWindow;
+  };
+
+  dom.writeContent = function(iframe, s) {
+    var doc = iframe.contentDocument;
+    doc.open();
+    doc.write(s);
+    doc.close();
+  };
+
+  dom.fillContentHeight = function(iframe) {
+    iframe.style.height = iframe.contentDocument.documentElement.scrollHeight + 'px';
+  };
+
   dom.animate = function(callback) {
     return window.requestAnimationFrame(callback);
   };

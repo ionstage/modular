@@ -26,6 +26,18 @@
     return dom.child(this.element(), 0, 1);
   };
 
+  Module.prototype.componentElement = function() {
+    return dom.child(this.element(), 1, 0);
+  };
+
+  Module.prototype.loadComponent = function(contentText) {
+    var contentElement = this.componentElement();
+    var contentWindow = dom.contentWindow(contentElement);
+
+    dom.writeContent(contentElement, contentText);
+    dom.fillContentHeight(contentElement);
+  };
+
   Module.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
