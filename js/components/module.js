@@ -122,7 +122,6 @@
     if (type === 'position') {
       context.x = this.x();
       context.y = this.y();
-
       dom.addClass(this.element(), 'module-dragging');
     } else if (type === 'delete') {
       dom.addClass(this.element(), 'module-deleting');
@@ -154,10 +153,9 @@
     if (!type)
       return;
 
-    if (type === 'position')
+    if (type === 'position') {
       dom.removeClass(this.element(), 'module-dragging');
-
-    if (type === 'delete') {
+    } else if (type === 'delete') {
       if (target === this.deleteButtonElement())
         this.parentElement(null);
       else
