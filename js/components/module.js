@@ -124,6 +124,8 @@
       context.y = this.y();
 
       dom.addClass(this.element(), 'module-dragging');
+    } else if (type === 'delete') {
+      dom.addClass(this.element(), 'module-deleting');
     }
   };
 
@@ -137,6 +139,11 @@
     if (type === 'position') {
       this.x(context.x + dx);
       this.y(context.y + dy);
+    } else if (type === 'delete') {
+      if (dom.target(event) === this.deleteButtonElement())
+        dom.addClass(this.element(), 'module-deleting');
+      else
+        dom.removeClass(this.element(), 'module-deleting');
     }
   };
 
@@ -150,8 +157,12 @@
     if (type === 'position')
       dom.removeClass(this.element(), 'module-dragging');
 
-    if (type === 'delete' && target === this.deleteButtonElement())
-      this.parentElement(null);
+    if (type === 'delete') {
+      if (target === this.deleteButtonElement())
+        this.parentElement(null);
+      else
+        dom.removeClass(this.element(), 'module-deleting');
+    }
   };
 
   Module.TEMPLATE_HTML = [
