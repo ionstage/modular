@@ -9,6 +9,7 @@
     Module.super_.call(this);
 
     this.title = this.prop(props.title);
+    this.name = this.prop(props.name);
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
     this.element = this.prop(null);
