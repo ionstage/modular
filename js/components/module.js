@@ -31,12 +31,23 @@
     return dom.child(this.element(), 1, 0);
   };
 
-  Module.prototype.loadComponent = function(contentText) {
-    var contentElement = this.componentElement();
-    var contentWindow = dom.contentWindow(contentElement);
+  Module.prototype.loadComponent = function() {
+    var url = [
+      'modular_modules/',
+      this.name().split('/').map(function(s) {
+        return encodeURIComponent(s);
+      }).join('/'),
+      '.html'
+    ].join('');
 
-    dom.writeContent(contentElement, contentText);
-    dom.fillContentHeight(contentElement);
+    return dom.ajax({
+      type: 'GET',
+      url: url
+    }).then(function(text) {
+      var componentElement = this.componentElement();
+      dom.writeContent(componentElement, text);
+      dom.fillContentHeight(componentElement);
+    }.bind(this));
   };
 
   Module.prototype.redraw = function() {
