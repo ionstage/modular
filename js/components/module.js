@@ -40,10 +40,13 @@
       '.html'
     ].join('');
 
+    dom.addClass(this.element(), 'module-loading');
+
     return dom.ajax({
       type: 'GET',
       url: url
     }).then(function(text) {
+      dom.removeClass(this.element(), 'module-loading');
       var componentElement = this.componentElement();
       dom.writeContent(componentElement, text);
       dom.fillContentHeight(componentElement);
