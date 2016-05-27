@@ -46,15 +46,12 @@
       type: 'GET',
       url: url
     }).then(function(text) {
-      dom.removeClass(this.element(), 'module-loading');
-
       var componentElement = this.componentElement();
       var contentWindow = dom.contentWindow(componentElement);
       var data = Date.now().toString();
 
       dom.name(contentWindow, data);
       dom.writeContent(componentElement, text);
-      dom.fillContentHeight(componentElement);
 
       var onmessage;
 
@@ -81,7 +78,9 @@
         })
       ]).then(function() {
         dom.off(contentWindow, 'message', onmessage);
-      }).catch(function(e) {
+        dom.removeClass(this.element(), 'module-loading');
+        dom.fillContentHeight(componentElement);
+      }.bind(this)).catch(function(e) {
         dom.off(contentWindow, 'message', onmessage);
         throw e;
       });
