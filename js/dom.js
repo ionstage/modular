@@ -52,6 +52,10 @@
     el.classList.remove(className);
   };
 
+  dom.name = function(el, s) {
+    el.name = s;
+  };
+
   dom.text = function(el, s) {
     el.textContent = s;
   };
@@ -265,6 +269,10 @@
       req.open(type, url, true);
       req.send();
     });
+  };
+
+  dom.origin = function() {
+    return location.protocol + '//' + location.host;
   };
 
   if (typeof module !== 'undefined' && module.exports)

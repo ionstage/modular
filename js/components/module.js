@@ -47,9 +47,44 @@
       url: url
     }).then(function(text) {
       dom.removeClass(this.element(), 'module-loading');
+
       var componentElement = this.componentElement();
+      var contentWindow = dom.contentWindow(componentElement);
+      var data = Date.now().toString();
+
+      dom.name(contentWindow, data);
       dom.writeContent(componentElement, text);
       dom.fillContentHeight(componentElement);
+
+      var onmessage;
+
+      return Promise.race([
+        new Promise(function(resolve, reject) {
+          onmessage = function(event) {
+            try {
+              if (event.origin !== dom.origin())
+                throw new Error('Invalid content origin');
+
+              if (event.data !== data)
+                throw new Error('Invalid content data');
+
+              resolve();
+            } catch(e) {
+              reject(e);
+            }
+          };
+
+          dom.on(contentWindow, 'message', onmessage);
+        }),
+        new Promise(function(resolve, reject) {
+          setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
+        })
+      ]).then(function() {
+        dom.off(contentWindow, 'message', onmessage);
+      }).catch(function(e) {
+        dom.off(contentWindow, 'message', onmessage);
+        throw e;
+      });
     }.bind(this));
   };
 
