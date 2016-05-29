@@ -3,12 +3,22 @@
 
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
+  var Module = app.Module || require('./module.js');
 
   var ModuleContainer = helper.inherits(function(props) {
     ModuleContainer.super_.call(this);
 
+    this.modules = this.prop([]);
     this.element = this.prop(props.element);
   }, jCore.Component);
+
+  ModuleContainer.prototype.loadModule = function(props) {
+    var module = new Module(props);
+    module.parentElement(this.element());
+    module.redraw();
+    module.loadComponent();
+    this.modules().push(module);
+  };
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleContainer;
