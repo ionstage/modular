@@ -5,6 +5,10 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
 
+  var ModulePort = helper.inherits(function() {
+    ModulePort.super_.call(this);
+  }, jCore.Component);
+
   var Module = helper.inherits(function(props) {
     Module.super_.call(this);
 
