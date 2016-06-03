@@ -51,6 +51,10 @@
     return member.wrapper;
   };
 
+  CircuitElement.empty = function() {
+    return new CircuitElement([]);
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = CircuitElement;
   else
