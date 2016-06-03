@@ -42,6 +42,15 @@
     this.names = names;
   };
 
+  CircuitElement.prototype.get = function(name) {
+    var member = this.memberTable[name];
+
+    if (!member)
+      return null;
+
+    return member.wrapper;
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = CircuitElement;
   else
