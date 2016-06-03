@@ -15,16 +15,9 @@
   Wrapper.KEY = {};
 
   var CircuitElementMember = function(props) {
-    var name = props.name;
-    var arg = props.arg;
-    var type = props.type;
-
-    if (typeof type === 'undefined' || (type !== 'prop' && type !== 'event'))
-      type = (name.indexOf('on') === 0) ? 'event' : 'prop';
-
-    this.name = name;
-    this.type = type;
-    this.callee = circuit[type](arg);
+    this.name = props.name;
+    this.type = props.type;
+    this.callee = circuit[props.type](props.arg);
     this.sources = [];
     this.targets = [];
     this.wrapper = new Wrapper(this);
