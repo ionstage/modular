@@ -15,6 +15,7 @@
   Wrapper.KEY = {};
 
   var CircuitElementMember = function(props) {
+    this.label = props.label;
     this.name = props.name;
     this.type = props.type;
     this.callee = circuit[props.type](props.arg);
