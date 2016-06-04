@@ -73,14 +73,17 @@
               if (event.data !== data)
                 throw new Error('Invalid content data');
 
+              if (!this.circuitElement())
+                throw new Error('Invalid circuit element');
+
               resolve();
             } catch(e) {
               reject(e);
             }
-          };
+          }.bind(this);
 
           dom.on(contentWindow, 'message', onmessage);
-        }),
+        }.bind(this)),
         new Promise(function(resolve, reject) {
           setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
         })
