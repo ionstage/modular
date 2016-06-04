@@ -21,6 +21,13 @@
     return value;
   };
 
+  helper.dig = function() {
+    var args = Array.prototype.slice.call(arguments);
+    return args.reduce(function(prev, curr) {
+      return (typeof prev === 'object') ? prev[curr] : null;
+    });
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = helper;
   else

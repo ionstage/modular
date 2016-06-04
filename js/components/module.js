@@ -35,6 +35,10 @@
     return dom.child(this.element(), 1, 0);
   };
 
+  Module.prototype.circuitElement = function() {
+    return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
+  };
+
   Module.prototype.loadComponent = function() {
     var url = [
       'modular_modules/',
