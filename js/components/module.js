@@ -95,6 +95,9 @@
         dom.off(contentWindow, 'message', onmessage);
         throw e;
       });
+    }.bind(this)).catch(function(e) {
+      dom.addClass(this.element(), 'module-error');
+      throw e;
     }.bind(this));
   };
 
