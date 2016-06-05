@@ -14,10 +14,10 @@
 
   ModuleContainer.prototype.loadModule = function(props) {
     var module = new Module(props);
+    this.modules().push(module);
     module.parentElement(this.element());
     module.redraw();
-    module.loadComponent();
-    this.modules().push(module);
+    return module.loadComponent();
   };
 
   if (typeof module !== 'undefined' && module.exports)
