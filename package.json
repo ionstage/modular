@@ -16,6 +16,7 @@
     "browser-sync": "^2.12.5",
     "browserify": "^13.0.0",
     "clean-css": "^3.4.12",
+    "font-awesome-svg-png": "^1.1.5",
     "uglify-js": "^2.6.2"
   },
   "private": true
