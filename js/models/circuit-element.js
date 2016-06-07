@@ -56,6 +56,12 @@
     return member.wrapper;
   };
 
+  CircuitElement.prototype.getAll = function() {
+    return this.names.map(function(name) {
+      return this.memberTable[name].wrapper;
+    }.bind(this));
+  };
+
   CircuitElement.empty = function() {
     return new CircuitElement([]);
   };
