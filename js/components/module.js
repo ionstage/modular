@@ -7,6 +7,8 @@
 
   var ModulePort = helper.inherits(function() {
     ModulePort.super_.call(this);
+
+    this.element = this.prop(null);
   }, jCore.Component);
 
   var Module = helper.inherits(function(props) {
