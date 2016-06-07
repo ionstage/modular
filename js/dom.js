@@ -158,9 +158,9 @@
     return null;
   };
 
-  dom.draggable = (function() {
+  dom.Draggable = (function() {
     var Draggable = function(props) {
-      this.el = props.el;
+      this.element = props.element;
       this.onstart = props.onstart;
       this.onmove = props.onmove;
       this.onend = props.onend;
@@ -171,11 +171,11 @@
       this.identifier = null;
       this.startingPoint = null;
 
-      dom.on(this.el, dom.eventType('start'), this.start);
+      dom.on(this.element, dom.eventType('start'), this.start);
     };
 
     Draggable.prototype.destroy = function() {
-      dom.off(this.el, dom.eventType('start'), this.start);
+      dom.off(this.element, dom.eventType('start'), this.start);
       dom.off(document, dom.eventType('move'), this.move);
       dom.off(document, dom.eventType('end'), this.end);
     };
@@ -188,13 +188,13 @@
       this.identifier = dom.identifier(event);
       this.startingPoint = dom.pagePoint(event);
 
-      var el = this.el;
+      var element = this.element;
       var onstart = this.onstart;
 
-      var rect = dom.rect(el);
+      var rect = dom.rect(element);
       var p = dom.clientPoint(event, {
-        x: rect.left - dom.scrollLeft(el),
-        y: rect.top - dom.scrollTop(el)
+        x: rect.left - dom.scrollLeft(element),
+        y: rect.top - dom.scrollTop(element)
       });
 
       if (typeof onstart === 'function')
@@ -235,14 +235,7 @@
       this.lock = false;
     };
 
-    return function(el, onstart, onmove, onend) {
-      return new Draggable({
-        el: el,
-        onstart: onstart,
-        onmove: onmove,
-        onend: onend
-      });
-    };
+    return Draggable;
   })();
 
   dom.ajax = function(opt) {

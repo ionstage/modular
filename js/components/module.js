@@ -115,7 +115,12 @@
       element = dom.el('<div>');
       dom.addClass(element, 'module');
       dom.html(element, Module.TEMPLATE_HTML);
-      this.draggable(dom.draggable(element, this.onstart.bind(this), this.onmove.bind(this), this.onend.bind(this)));
+      this.draggable(new dom.Draggable({
+        element: element,
+        onstart: this.onstart.bind(this),
+        onmove: this.onmove.bind(this),
+        onend: this.onend.bind(this)
+      }));
       this.element(element);
       this.redraw();
       dom.append(parentElement, element);
