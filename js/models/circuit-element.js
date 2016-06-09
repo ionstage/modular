@@ -23,10 +23,18 @@
     this.sources = [];
     this.targets = [];
     this.wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
+    this.wrapper.prop = CircuitElementMember.prototype.prop.bind(this);
   };
 
   CircuitElementMember.prototype.call = function() {
     return this.callee.apply(null, arguments);
+  };
+
+  CircuitElementMember.prototype.prop = function(key) {
+    if (['label', 'name', 'type'].indexOf(key) === -1)
+      return;
+
+    return this[key];
   };
 
   var CircuitElement = function(members) {
