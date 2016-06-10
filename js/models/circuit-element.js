@@ -23,18 +23,19 @@
     this.sources = [];
     this.targets = [];
     this.wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
-    this.wrapper.prop = CircuitElementMember.prototype.prop.bind(this);
+    this.wrapper.props = CircuitElementMember.prototype.props.bind(this);
   };
 
   CircuitElementMember.prototype.call = function() {
     return this.callee.apply(null, arguments);
   };
 
-  CircuitElementMember.prototype.prop = function(key) {
-    if (['label', 'name', 'type'].indexOf(key) === -1)
-      return;
-
-    return this[key];
+  CircuitElementMember.prototype.props = function() {
+    return {
+      label: this.label,
+      name: this.name,
+      type: this.type
+    };
   };
 
   var CircuitElement = function(members) {
