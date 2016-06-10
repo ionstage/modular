@@ -4,6 +4,7 @@
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var ModulePort = app.ModulePort || require('./module-port.js');
 
   var Module = helper.inherits(function(props) {
     Module.super_.call(this);
@@ -12,6 +13,7 @@
     this.name = this.prop(props.name);
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
+    this.ports = this.prop([]);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -71,8 +73,14 @@
               if (event.data !== data)
                 throw new Error('Invalid content data');
 
-              if (!this.circuitElement())
+              var circuitElement = this.circuitElement();
+
+              if (!circuitElement)
                 throw new Error('Invalid circuit element');
+
+              this.ports(circuitElement.getAll().map(function(member) {
+                return new ModulePort(member.props());
+              }));
 
               resolve();
             } catch(e) {

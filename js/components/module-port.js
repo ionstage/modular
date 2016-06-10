@@ -4,9 +4,12 @@
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
 
-  var ModulePort = helper.inherits(function() {
+  var ModulePort = helper.inherits(function(props) {
     ModulePort.super_.call(this);
 
+    this.label = this.prop(props.label);
+    this.name = this.prop(props.name);
+    this.type = this.prop(props.type);
     this.element = this.prop(null);
   }, jCore.Component);
 
