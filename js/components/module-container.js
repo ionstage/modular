@@ -10,14 +10,27 @@
 
     this.modules = this.prop([]);
     this.element = this.prop(props.element);
+
+    this.deleter = ModuleContainer.prototype.deleter.bind(this);
   }, jCore.Component);
 
   ModuleContainer.prototype.loadModule = function(props) {
+    props.deleter = this.deleter;
     var module = new Module(props);
     this.modules().push(module);
     module.parentElement(this.element());
     module.redraw();
     return module.loadComponent();
+  };
+
+  ModuleContainer.prototype.deleter = function(module) {
+    var modules = this.modules();
+    var index = modules.indexOf(module);
+
+    if (index === -1)
+      return;
+
+    modules.splice(index, 1);
   };
 
   if (typeof module !== 'undefined' && module.exports)

@@ -23,6 +23,8 @@
     this.cache = this.prop({});
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
+
+    this.deleter = props.deleter;
   }, jCore.Component);
 
   Module.prototype.titleElement = function() {
@@ -226,10 +228,12 @@
     if (type === 'position') {
       dom.removeClass(this.element(), 'module-dragging');
     } else if (type === 'delete') {
-      if (target === this.deleteButtonElement())
+      if (target === this.deleteButtonElement()) {
         this.parentElement(null);
-      else
+        this.deleter(this);
+      } else {
         dom.removeClass(this.element(), 'module-deleting');
+      }
     }
   };
 
