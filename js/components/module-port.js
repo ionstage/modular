@@ -10,6 +10,8 @@
     this.label = this.prop(props.label);
     this.name = this.prop(props.name);
     this.type = this.prop(props.type);
+    this.socketDisabled = this.prop(props.socketDisabled);
+    this.plugDisabled = this.prop(props.plugDisabled);
     this.element = this.prop(null);
   }, jCore.Component);
 

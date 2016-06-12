@@ -20,6 +20,8 @@
     this.name = props.name;
     this.type = props.type;
     this.callee = circuit[props.type](props.arg);
+    this.socketDisabled = !!props.socketDisabled;
+    this.plugDisabled = !!props.plugDisabled;
     this.sources = [];
     this.targets = [];
     this.wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
@@ -34,7 +36,9 @@
     return {
       label: this.label,
       name: this.name,
-      type: this.type
+      type: this.type,
+      socketDisabled: this.socketDisabled,
+      plugDisabled: this.plugDisabled
     };
   };
 
