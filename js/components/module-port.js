@@ -12,6 +12,7 @@
     this.type = this.prop(props.type);
     this.socketDisabled = this.prop(props.socketDisabled);
     this.plugDisabled = this.prop(props.plugDisabled);
+    this.visible = this.prop(false);
     this.element = this.prop(null);
   }, jCore.Component);
 
