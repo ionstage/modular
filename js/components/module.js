@@ -35,6 +35,10 @@
     return dom.child(this.element(), 1, 0);
   };
 
+  Module.prototype.portListElement = function() {
+    return dom.child(this.element(), 1, 1);
+  };
+
   Module.prototype.circuitElement = function() {
     return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
   };
@@ -143,6 +147,7 @@
     // update element
     this.redrawTitle();
     this.redrawPosition();
+    this.redrawPorts();
   };
 
   Module.prototype.redrawTitle = function() {
@@ -173,6 +178,16 @@
 
     cache.x = x;
     cache.y = y;
+  };
+
+  Module.prototype.redrawPorts = function() {
+    var visiblePorts = this.ports().filter(function(port) {
+      return port.visible();
+    });
+
+    dom.css(this.portListElement(), {
+      height: visiblePorts.length * 44 + 'px'
+    });
   };
 
   Module.prototype.onstart = function(x, y, event) {
