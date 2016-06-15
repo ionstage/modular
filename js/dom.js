@@ -64,6 +64,13 @@
     el.innerHTML = s;
   };
 
+  dom.value = function(el, s) {
+    if (typeof s === 'undefined')
+      return el.value;
+
+    el.value = s;
+  };
+
   dom.rect = function(el) {
     return el.getBoundingClientRect();
   };
