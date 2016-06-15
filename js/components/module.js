@@ -39,6 +39,10 @@
     return dom.child(this.element(), 1, 1);
   };
 
+  Module.prototype.portSelectElement = function() {
+    return dom.child(this.element(), 2, 1);
+  };
+
   Module.prototype.circuitElement = function() {
     return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
   };
