@@ -3,6 +3,7 @@
 
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
+  var dom = app.dom || require('../dom.js');
 
   var ModulePort = helper.inherits(function(props) {
     ModulePort.super_.call(this);
@@ -15,6 +16,28 @@
     this.visible = this.prop(false);
     this.element = this.prop(null);
   }, jCore.Component);
+
+  ModulePort.prototype.renderListItem = function() {
+    var element = dom.el('<div>');
+
+    dom.addClass(element, 'module-port');
+    dom.addClass(element, 'module-port-' + this.type());
+
+    var texts = [];
+
+    if (!this.socketDisabled())
+      texts.push('<div class="module-port-socket"></div>');
+
+    if (!this.plugDisabled())
+      texts.push('<div class="module-port-plug"></div>');
+
+    texts.push('<div class="module-port-label">' + this.label() + '</div>');
+    texts.push('<img class="module-port-hide-button" src="images/minus-square-o.svg">');
+
+    dom.html(element, texts.join(''));
+
+    return element;
+  };
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModulePort;
