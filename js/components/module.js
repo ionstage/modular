@@ -87,8 +87,10 @@
                 throw new Error('Invalid circuit element');
 
               this.ports(circuitElement.getAll().map(function(member) {
-                return new ModulePort(member.props());
-              }));
+                var props = member.props();
+                props.parentListElement = this.portListElement();
+                return new ModulePort(props);
+              }.bind(this)));
 
               resolve();
             } catch(e) {

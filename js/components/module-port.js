@@ -14,7 +14,10 @@
     this.socketDisabled = this.prop(props.socketDisabled);
     this.plugDisabled = this.prop(props.plugDisabled);
     this.visible = this.prop(false);
+    this.listItemElement = this.prop(this.renderListItem());
+    this.parentListElement = this.prop(props.parentListElement);
     this.element = this.prop(null);
+    this.cache = this.prop({});
   }, jCore.Component);
 
   ModulePort.prototype.renderListItem = function() {
@@ -37,6 +40,21 @@
     dom.html(element, texts.join(''));
 
     return element;
+  };
+
+  ModulePort.prototype.redraw = function() {
+    var visible = this.visible();
+    var cache = this.cache();
+
+    if (visible === cache.visible)
+      return;
+
+    if (visible)
+      dom.append(this.parentListElement(), this.listItemElement());
+    else
+      dom.remove(this.listItemElement());
+
+    cache.visible = visible;
   };
 
   if (typeof module !== 'undefined' && module.exports)
