@@ -14,6 +14,7 @@
     this.socketDisabled = this.prop(props.socketDisabled);
     this.plugDisabled = this.prop(props.plugDisabled);
     this.visible = this.prop(false);
+    this.top = this.prop(0);
     this.listItemElement = this.prop(this.renderListItem());
     this.parentListElement = this.prop(props.parentListElement);
     this.element = this.prop(null);
@@ -44,7 +45,19 @@
 
   ModulePort.prototype.redraw = function() {
     var visible = this.visible();
+    var top = this.top();
     var cache = this.cache();
+
+    if (top !== cache.top && visible) {
+      var translate = 'translateY(' + top + 'px)';
+
+      dom.css(this.listItemElement(), {
+        transform: translate,
+        webkitTransform: translate
+      });
+
+      cache.top = top;
+    }
 
     if (visible === cache.visible)
       return;
