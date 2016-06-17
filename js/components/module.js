@@ -14,6 +14,7 @@
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
     this.ports = this.prop([]);
+    this.portListHeight = this.prop(0);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -153,7 +154,7 @@
     // update element
     this.redrawTitle();
     this.redrawPosition();
-    this.redrawPorts();
+    this.redrawPortList();
   };
 
   Module.prototype.redrawTitle = function() {
@@ -186,14 +187,18 @@
     cache.y = y;
   };
 
-  Module.prototype.redrawPorts = function() {
-    var visiblePorts = this.ports().filter(function(port) {
-      return port.visible();
-    });
+  Module.prototype.redrawPortList = function() {
+    var portListHeight = this.portListHeight();
+    var cache = this.cache();
+
+    if (portListHeight === cache.portListHeight)
+      return;
 
     dom.css(this.portListElement(), {
-      height: visiblePorts.length * 44 + 'px'
+      height: portListHeight + 'px'
     });
+
+    cache.portListHeight = portListHeight;
   };
 
   Module.prototype.onstart = function(x, y, event) {
