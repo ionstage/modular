@@ -15,6 +15,7 @@
     this.plugDisabled = this.prop(props.plugDisabled);
     this.visible = this.prop(false);
     this.top = this.prop(0);
+    this.height = this.prop(44);
     this.listItemElement = this.prop(this.renderListItem());
     this.parentListElement = this.prop(props.parentListElement);
     this.element = this.prop(null);

@@ -118,6 +118,21 @@
     }.bind(this));
   };
 
+  Module.prototype.showPort = function(name) {
+    var port = this.ports().filter(function(port) {
+      return port.name() === name;
+    })[0];
+
+    if (!port || port.visible())
+      return;
+
+    // add the port to the end of the list
+    var portListHeight = this.portListHeight();
+    this.portListHeight(portListHeight + port.height());
+    port.top(portListHeight);
+    port.visible(true);
+  };
+
   Module.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
