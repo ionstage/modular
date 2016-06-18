@@ -20,7 +20,9 @@
     this.modules().push(module);
     module.parentElement(this.element());
     module.redraw();
-    return module.loadComponent();
+    return module.loadComponent().then(function() {
+      return module;
+    });
   };
 
   ModuleContainer.prototype.deleter = function(module) {
