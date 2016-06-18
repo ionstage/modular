@@ -36,6 +36,10 @@
     return el;
   };
 
+  dom.contains = function(el, other) {
+    return el.contains(other);
+  };
+
   dom.css = function(el, props) {
     var style = el.style;
 
