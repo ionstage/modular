@@ -264,6 +264,7 @@
       context.y = this.y();
       dom.addClass(this.element(), 'module-dragging');
     } else if (type === 'delete') {
+      context.target = target;
       dom.addClass(this.element(), 'module-deleting');
     } else if (type === 'hidePort') {
       context.target = target;
@@ -284,7 +285,7 @@
       this.x(context.x + dx);
       this.y(context.y + dy);
     } else if (type === 'delete') {
-      if (dom.target(event) === this.deleteButtonElement())
+      if (dom.target(event) === context.target)
         dom.addClass(this.element(), 'module-deleting');
       else
         dom.removeClass(this.element(), 'module-deleting');
@@ -302,7 +303,7 @@
     if (type === 'position') {
       dom.removeClass(this.element(), 'module-dragging');
     } else if (type === 'delete') {
-      if (target === this.deleteButtonElement()) {
+      if (target === context.target) {
         this.parentElement(null);
         this.deleter(this);
       } else {
