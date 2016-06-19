@@ -56,6 +56,10 @@
     el.classList.remove(className);
   };
 
+  dom.hasClass = function(el, className) {
+    return el.classList.contains(className);
+  };
+
   dom.name = function(el, s) {
     el.name = s;
   };

@@ -247,6 +247,8 @@
       context.type = 'position';
     else if (target === this.deleteButtonElement())
       context.type = 'delete';
+    else if (dom.hasClass(target, 'module-port-hide-button'))
+      context.type = 'hidePort';
     else
       context.type = null;
 
@@ -263,6 +265,11 @@
       dom.addClass(this.element(), 'module-dragging');
     } else if (type === 'delete') {
       dom.addClass(this.element(), 'module-deleting');
+    } else if (type === 'hidePort') {
+      context.target = target;
+      context.port = this.ports().filter(function(port) {
+        return dom.contains(port.listItemElement(), target);
+      })[0];
     }
   };
 
@@ -285,7 +292,8 @@
   };
 
   Module.prototype.onend = function(dx, dy, event) {
-    var type = this.dragContext().type;
+    var context = this.dragContext();
+    var type = context.type;
     var target = dom.target(event);
 
     if (!type)
@@ -300,6 +308,9 @@
       } else {
         dom.removeClass(this.element(), 'module-deleting');
       }
+    } else if (type === 'hidePort') {
+      if (target === context.target)
+        this.hidePort(context.port.name());
     }
   };
 
