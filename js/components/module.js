@@ -186,6 +186,7 @@
       dom.remove(element);
       this.element(null);
       this.cache({});
+      this.dragContext({});
       return;
     }
 
