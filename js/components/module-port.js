@@ -44,6 +44,13 @@
     return element;
   };
 
+  ModulePort.prototype.renderOption = function() {
+    var element = dom.el('<option>');
+    dom.text(element, this.label());
+    dom.value(element, this.name());
+    return element;
+  };
+
   ModulePort.prototype.redraw = function() {
     var visible = this.visible();
     var top = this.top();
