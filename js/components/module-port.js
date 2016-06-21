@@ -20,7 +20,6 @@
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
-    this.element = this.prop(null);
     this.cache = this.prop({});
   }, jCore.Component);
 
