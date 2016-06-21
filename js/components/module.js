@@ -44,6 +44,11 @@
     return dom.child(this.element(), 2, 1);
   };
 
+  Module.prototype.portOptGroupElement = function(type) {
+    var index = ({ prop: 0, event: 1 })[type];
+    return dom.child(this.element(), 2, 1, index);
+  };
+
   Module.prototype.circuitElement = function() {
     return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
   };
@@ -90,6 +95,7 @@
               this.ports(circuitElement.getAll().map(function(member) {
                 var props = member.props();
                 props.parentListElement = this.portListElement();
+                props.parentOptGroupElement = this.portOptGroupElement(props.type);
                 return new ModulePort(props);
               }.bind(this)));
 
