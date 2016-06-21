@@ -19,7 +19,9 @@
   };
 
   dom.remove = function(el) {
-    el.parentNode.removeChild(el);
+    var parentNode = el.parentNode;
+    if (parentNode)
+      parentNode.removeChild(el);
   };
 
   dom.child = function(el, index) {
