@@ -22,6 +22,8 @@
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
     this.cache = this.prop({});
 
+    this.optionDeselector = props.optionDeselector;
+
     // update the list-item element or the option element
     this.markDirty();
   }, jCore.Component);
@@ -81,6 +83,8 @@
       dom.remove(this.listItemElement());
       dom.append(this.parentOptGroupElement(), this.optionElement());
     }
+
+    this.optionDeselector();
 
     cache.visible = visible;
   };

@@ -21,6 +21,8 @@
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
 
+    this.optionDeselector = this.deselectOption.bind(this);
+
     this.deleter = props.deleter;
   }, jCore.Component);
 
@@ -96,6 +98,7 @@
                 var props = member.props();
                 props.parentListElement = this.portListElement();
                 props.parentOptGroupElement = this.portOptGroupElement(props.type);
+                props.optionDeselector = this.optionDeselector;
                 return new ModulePort(props);
               }.bind(this)));
 
@@ -160,6 +163,10 @@
 
     if (hiddenPort)
       this.portListHeight(this.portListHeight() - hiddenPort.height());
+  };
+
+  Module.prototype.deselectOption = function() {
+    dom.value(this.portSelectElement(), '');
   };
 
   Module.prototype.redraw = function() {
