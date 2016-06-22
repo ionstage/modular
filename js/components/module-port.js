@@ -21,6 +21,9 @@
     this.optionElement = this.prop(this.renderOption());
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
     this.cache = this.prop({});
+
+    // update the list-item element or the option element
+    this.markDirty();
   }, jCore.Component);
 
   ModulePort.prototype.renderListItem = function() {
@@ -71,10 +74,13 @@
     if (visible === cache.visible)
       return;
 
-    if (visible)
+    if (visible) {
+      dom.remove(this.optionElement());
       dom.append(this.parentListElement(), this.listItemElement());
-    else
+    } else {
       dom.remove(this.listItemElement());
+      dom.append(this.parentOptGroupElement(), this.optionElement());
+    }
 
     cache.visible = visible;
   };
