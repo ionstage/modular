@@ -38,6 +38,10 @@
     return el;
   };
 
+  dom.children = function(el) {
+    return Array.prototype.slice.call(el.children);
+  };
+
   dom.contains = function(el, other) {
     return el.contains(other);
   };

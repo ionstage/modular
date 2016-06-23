@@ -22,6 +22,7 @@
     this.dragContext = this.prop({});
 
     this.optionDeselector = this.deselectOption.bind(this);
+    this.optGroupSorter = this.sortOptGroup.bind(this);
 
     this.deleter = props.deleter;
   }, jCore.Component);
@@ -99,6 +100,7 @@
                 props.parentListElement = this.portListElement();
                 props.parentOptGroupElement = this.portOptGroupElement(props.type);
                 props.optionDeselector = this.optionDeselector;
+                props.optGroupSorter = this.optGroupSorter;
                 return new ModulePort(props);
               }.bind(this)));
 
@@ -167,6 +169,14 @@
 
   Module.prototype.deselectOption = function() {
     dom.value(this.portSelectElement(), '');
+  };
+
+  Module.prototype.sortOptGroup = function(type) {
+    var element = this.portOptGroupElement(type);
+
+    helper.sortBy(dom.children(element), 'textContent').forEach(function(child) {
+      dom.append(element, child);
+    });
   };
 
   Module.prototype.redraw = function() {

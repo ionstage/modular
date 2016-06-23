@@ -23,6 +23,7 @@
     this.cache = this.prop({});
 
     this.optionDeselector = props.optionDeselector;
+    this.optGroupSorter = props.optGroupSorter;
 
     // update the list-item element or the option element
     this.markDirty();
@@ -84,6 +85,7 @@
       dom.append(this.parentOptGroupElement(), this.optionElement());
     }
 
+    this.optGroupSorter(this.type());
     this.optionDeselector();
 
     cache.visible = visible;
