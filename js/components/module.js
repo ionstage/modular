@@ -21,8 +21,8 @@
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
 
-    this.optionDeselector = this.deselectOption.bind(this);
-    this.optGroupSorter = this.sortOptGroup.bind(this);
+    this.optionDeselector = Module.prototype.deselectOption.bind(this);
+    this.optGroupSorter = Module.prototype.sortOptGroup.bind(this);
 
     this.deleter = props.deleter;
   }, jCore.Component);
@@ -193,9 +193,9 @@
       dom.html(element, Module.TEMPLATE_HTML);
       this.draggable(new dom.Draggable({
         element: element,
-        onstart: this.onstart.bind(this),
-        onmove: this.onmove.bind(this),
-        onend: this.onend.bind(this)
+        onstart: Module.prototype.onstart.bind(this),
+        onmove: Module.prototype.onmove.bind(this),
+        onend: Module.prototype.onend.bind(this)
       }));
       this.element(element);
       this.redraw();
