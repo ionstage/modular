@@ -221,6 +221,7 @@
     this.redrawTitle();
     this.redrawPosition();
     this.redrawPortList();
+    this.redrawPortSelect();
   };
 
   Module.prototype.redrawTitle = function() {
@@ -265,6 +266,22 @@
     });
 
     cache.portListHeight = portListHeight;
+  };
+
+  Module.prototype.redrawPortSelect = function() {
+    var cache = this.cache();
+
+    var isAllPortsVisible = this.ports().every(function(port) {
+      return port.visible();
+    });
+
+    if (isAllPortsVisible === cache.isAllPortsVisible)
+      return;
+
+    if (isAllPortsVisible)
+      dom.addClass(this.element(), 'module-all-ports-visible');
+    else
+      dom.removeClass(this.element(), 'module-all-ports-visible');
   };
 
   Module.prototype.onstart = function(x, y, event) {
