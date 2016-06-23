@@ -112,6 +112,10 @@
     iframe.style.height = iframe.contentDocument.documentElement.scrollHeight + 'px';
   };
 
+  dom.removeFocus = function() {
+    document.activeElement.blur();
+  };
+
   dom.animate = function(callback) {
     return window.requestAnimationFrame(callback);
   };

@@ -21,6 +21,8 @@
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
 
+    this.onchange = Module.prototype.onchange.bind(this);
+
     this.optionDeselector = Module.prototype.deselectOption.bind(this);
     this.optGroupSorter = Module.prototype.sortOptGroup.bind(this);
 
@@ -198,6 +200,7 @@
         onend: Module.prototype.onend.bind(this)
       }));
       this.element(element);
+      dom.on(this.portSelectElement(), 'change', this.onchange);
       this.redraw();
       dom.append(parentElement, element);
       return;
@@ -206,6 +209,7 @@
     // remove element
     if (!parentElement && element) {
       this.draggable().destroy();
+      dom.off(this.portSelectElement(), 'change', this.onchange);
       dom.remove(element);
       this.element(null);
       this.cache({});
@@ -337,6 +341,12 @@
       if (target === context.target)
         this.hidePort(context.port.name());
     }
+  };
+
+  Module.prototype.onchange = function(event) {
+    this.showPort(dom.value(dom.target(event)));
+    this.deselectOption();
+    dom.removeFocus();
   };
 
   Module.TEMPLATE_HTML = [
