@@ -58,6 +58,8 @@
 
     this.memberTable = memberTable;
     this.names = names;
+
+    return this.wrapper();
   };
 
   CircuitElement.prototype.get = function(name) {
@@ -73,6 +75,13 @@
     return this.names.map(function(name) {
       return this.memberTable[name].wrapper;
     }.bind(this));
+  };
+
+  CircuitElement.prototype.wrapper = function() {
+    return {
+      get: CircuitElement.prototype.get.bind(this),
+      getAll: CircuitElement.prototype.getAll.bind(this)
+    };
   };
 
   if (typeof module !== 'undefined' && module.exports)
