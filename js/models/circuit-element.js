@@ -75,10 +75,6 @@
     }.bind(this));
   };
 
-  CircuitElement.empty = function() {
-    return new CircuitElement([]);
-  };
-
   if (typeof module !== 'undefined' && module.exports)
     module.exports = CircuitElement;
   else
