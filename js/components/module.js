@@ -13,6 +13,7 @@
     this.name = this.prop(props.name);
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
+    this.zIndex = this.prop('auto');
     this.ports = this.prop([]);
     this.portListHeight = this.prop(0);
     this.element = this.prop(null);
@@ -220,6 +221,7 @@
     // update element
     this.redrawTitle();
     this.redrawPosition();
+    this.redrawZIndex();
     this.redrawPortList();
     this.redrawPortSelect();
   };
@@ -252,6 +254,20 @@
 
     cache.x = x;
     cache.y = y;
+  };
+
+  Module.prototype.redrawZIndex = function() {
+    var zIndex = this.zIndex();
+    var cache = this.cache();
+
+    if (zIndex === cache.zIndex)
+      return;
+
+    dom.css(this.element(), {
+      zIndex: zIndex
+    });
+
+    cache.zIndex = zIndex;
   };
 
   Module.prototype.redrawPortList = function() {
