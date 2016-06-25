@@ -294,6 +294,8 @@
       context.type = 'delete';
     else if (dom.hasClass(target, 'module-port-hide-button'))
       context.type = 'hidePort';
+    else if (dom.hasClass(target, 'module-port-label'))
+      context.type = 'sortPort';
     else
       context.type = null;
 
@@ -316,6 +318,16 @@
       context.port = this.ports().filter(function(port) {
         return dom.contains(port.listItemElement(), target);
       })[0];
+    } else if (type === 'sortPort') {
+      var port = this.ports().filter(function(port) {
+        return dom.contains(port.listItemElement(), target);
+      })[0];
+      var top = port.top();
+      context.port = port;
+      context.top = top;
+      context.placeholderTop = top;
+      dom.addClass(port.listItemElement(), 'module-port-sorting');
+      dom.addClass(this.element(), 'module-port-sorting');
     }
   };
 
@@ -334,6 +346,47 @@
         dom.addClass(this.element(), 'module-deleting');
       else
         dom.removeClass(this.element(), 'module-deleting');
+    } else if (type === 'sortPort') {
+      var targetPort = context.port;
+      var targetPortHeight = targetPort.height();
+
+      // move within the port list
+      var targetPortTop = Math.min(Math.max(context.top + dy, 0), this.portListHeight() - targetPortHeight);
+
+      targetPort.top(targetPortTop);
+
+      var targetPortCenter = targetPortTop + targetPortHeight / 2;
+      var placeholderTop = context.placeholderTop;
+      var nextPlaceholderTop = placeholderTop;
+      var isDown = (targetPortTop - placeholderTop > 0);
+
+      this.ports().forEach(function(port) {
+        if (!port.visible() || port === targetPort)
+          return;
+
+        var top = port.top();
+        var height = port.height();
+
+        if (isDown) {
+          if (placeholderTop <= top && top < targetPortCenter) {
+            port.top(top - targetPortHeight);
+
+            var bottom = port.top() + port.height();
+            if (nextPlaceholderTop < bottom)
+              nextPlaceholderTop = bottom;
+          }
+        } else {
+          var bottom = top + height;
+          if (targetPortCenter < bottom && bottom <= placeholderTop) {
+            port.top(top + targetPortHeight);
+
+            if (nextPlaceholderTop > top)
+              nextPlaceholderTop = top;
+          }
+        }
+      });
+
+      context.placeholderTop = nextPlaceholderTop;
     }
   };
 
@@ -357,6 +410,11 @@
     } else if (type === 'hidePort') {
       if (target === context.target)
         this.hidePort(context.port.name());
+    } else if (type === 'sortPort') {
+      var port = context.port;
+      port.top(context.placeholderTop);
+      dom.removeClass(port.listItemElement(), 'module-port-sorting');
+      dom.removeClass(this.element(), 'module-port-sorting');
     }
   };
 
