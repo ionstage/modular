@@ -350,7 +350,7 @@
       var targetPort = context.port;
       var targetPortHeight = targetPort.height();
 
-      // move within the port list
+      // move the target port within the port list
       var targetPortTop = Math.min(Math.max(context.top + dy, 0), this.portListHeight() - targetPortHeight);
 
       targetPort.top(targetPortTop);
@@ -365,23 +365,16 @@
           return;
 
         var top = port.top();
+        var bottom = port.bottom();
 
-        if (isDown) {
-          if (placeholderTop <= top && top < targetPortCenter) {
-            port.top(top - targetPortHeight);
-
-            var bottom = port.bottom();
-            if (nextPlaceholderTop < bottom)
-              nextPlaceholderTop = bottom;
-          }
-        } else {
-          var bottom = port.bottom();
-          if (targetPortCenter < bottom && bottom <= placeholderTop) {
-            port.top(top + targetPortHeight);
-
-            if (nextPlaceholderTop > top)
-              nextPlaceholderTop = top;
-          }
+        if (isDown && placeholderTop <= top && top < targetPortCenter) {
+          // move up the ports over the target port
+          port.top(top - targetPortHeight);
+          nextPlaceholderTop = Math.max(nextPlaceholderTop, port.bottom());
+        } else if (!isDown && targetPortCenter < bottom && bottom <= placeholderTop) {
+          // move down the ports under the target port
+          port.top(top + targetPortHeight);
+          nextPlaceholderTop = Math.min(nextPlaceholderTop, top);
         }
       });
 
