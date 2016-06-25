@@ -365,18 +365,17 @@
           return;
 
         var top = port.top();
-        var height = port.height();
 
         if (isDown) {
           if (placeholderTop <= top && top < targetPortCenter) {
             port.top(top - targetPortHeight);
 
-            var bottom = port.top() + port.height();
+            var bottom = port.bottom();
             if (nextPlaceholderTop < bottom)
               nextPlaceholderTop = bottom;
           }
         } else {
-          var bottom = top + height;
+          var bottom = port.bottom();
           if (targetPortCenter < bottom && bottom <= placeholderTop) {
             port.top(top + targetPortHeight);
 

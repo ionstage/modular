@@ -29,6 +29,10 @@
     this.markDirty();
   }, jCore.Component);
 
+  ModulePort.prototype.bottom = function() {
+    return this.top() + this.height();
+  };
+
   ModulePort.prototype.renderListItem = function() {
     var element = dom.el('<div>');
 
