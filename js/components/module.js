@@ -46,6 +46,10 @@
     return dom.child(this.element(), 1, 1);
   };
 
+  Module.prototype.footerElement = function() {
+    return dom.child(this.element(), 2);
+  };
+
   Module.prototype.portSelectElement = function() {
     return dom.child(this.element(), 2, 1);
   };
@@ -223,7 +227,7 @@
     this.redrawPosition();
     this.redrawZIndex();
     this.redrawPortList();
-    this.redrawPortSelect();
+    this.redrawFooter();
   };
 
   Module.prototype.redrawTitle = function() {
@@ -284,7 +288,7 @@
     cache.portListHeight = portListHeight;
   };
 
-  Module.prototype.redrawPortSelect = function() {
+  Module.prototype.redrawFooter = function() {
     var cache = this.cache();
 
     var isAllPortsVisible = this.ports().every(function(port) {
@@ -295,9 +299,9 @@
       return;
 
     if (isAllPortsVisible)
-      dom.addClass(this.element(), 'module-all-ports-visible');
+      dom.addClass(this.footerElement(), 'module-footer-hide');
     else
-      dom.removeClass(this.element(), 'module-all-ports-visible');
+      dom.removeClass(this.footerElement(), 'module-footer-hide');
   };
 
   Module.prototype.onstart = function(x, y, event) {
