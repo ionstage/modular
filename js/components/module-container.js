@@ -25,6 +25,17 @@
     });
   };
 
+  ModuleContainer.prototype.toFront = function(module) {
+    var modules = this.modules();
+    var index = modules.indexOf(module);
+
+    if (index === -1)
+      return;
+
+    modules.splice(index, 1);
+    modules.push(module);
+  };
+
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
     var index = modules.indexOf(module);
