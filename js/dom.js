@@ -120,12 +120,12 @@
     return window.requestAnimationFrame(callback);
   };
 
-  dom.on = function(el, type, listener) {
-    el.addEventListener(type, listener);
+  dom.on = function(el, type, listener, useCapture) {
+    el.addEventListener(type, listener, !!useCapture);
   };
 
-  dom.off = function(el, type, listener) {
-    el.removeEventListener(type, listener);
+  dom.off = function(el, type, listener, useCapture) {
+    el.removeEventListener(type, listener, !!useCapture);
   };
 
   dom.supportsTouch = function() {
