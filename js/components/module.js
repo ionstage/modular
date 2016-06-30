@@ -23,11 +23,13 @@
     this.dragContext = this.prop({});
 
     this.onchange = Module.prototype.onchange.bind(this);
+    this.onpoint = Module.prototype.onpoint.bind(this);
 
     this.optionDeselector = Module.prototype.deselectOption.bind(this);
     this.optGroupSorter = Module.prototype.sortOptGroup.bind(this);
 
     this.deleter = props.deleter;
+    this.fronter = props.fronter;
   }, jCore.Component);
 
   Module.prototype.titleElement = function() {
@@ -110,6 +112,10 @@
                 props.optGroupSorter = this.optGroupSorter;
                 return new ModulePort(props);
               }.bind(this)));
+
+              var contentWindow = dom.contentWindow(this.componentElement());
+              if (contentWindow)
+                dom.on(contentWindow, dom.eventType('start'), this.onpoint, true);
 
               resolve();
             } catch(e) {
@@ -206,6 +212,7 @@
       }));
       this.element(element);
       dom.on(this.portSelectElement(), 'change', this.onchange);
+      dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
       this.redraw();
       dom.append(parentElement, element);
       return;
@@ -215,6 +222,12 @@
     if (!parentElement && element) {
       this.draggable().destroy();
       dom.off(this.portSelectElement(), 'change', this.onchange);
+      dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
+
+      var contentWindow = dom.contentWindow(this.componentElement());
+      if (contentWindow)
+        dom.off(contentWindow, dom.eventType('start'), this.onpoint, true);
+
       dom.remove(element);
       this.element(null);
       this.cache({});
@@ -434,6 +447,10 @@
     this.showPort(dom.value(dom.target(event)));
     this.deselectOption();
     dom.removeFocus();
+  };
+
+  Module.prototype.onpoint = function() {
+    this.fronter(this);
   };
 
   Module.TEMPLATE_HTML = [

@@ -13,15 +13,12 @@
     this.element = this.prop(props.element);
 
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
-
-    new dom.Draggable({
-      element: this.element(),
-      onstart: ModuleContainer.prototype.onstart.bind(this)
-    });
+    this.fronter = ModuleContainer.prototype.fronter.bind(this);
   }, jCore.Component);
 
   ModuleContainer.prototype.loadModule = function(props) {
     props.deleter = this.deleter;
+    props.fronter = this.fronter;
     var module = new Module(props);
     this.modules().push(module);
     module.parentElement(this.element());
@@ -42,24 +39,6 @@
     modules.push(module);
   };
 
-  ModuleContainer.prototype.onstart = function(x, y, event) {
-    var modules = this.modules();
-    var target = dom.target(event);
-
-    var module = modules.filter(function(module) {
-      return dom.contains(module.element(), target);
-    })[0];
-
-    if (!module)
-      return;
-
-    // move the target module on top of others
-    this.toFront(module);
-    modules.forEach(function(module, index) {
-      module.zIndex(index);
-    });
-  };
-
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
     var index = modules.indexOf(module);
@@ -68,6 +47,13 @@
       return;
 
     modules.splice(index, 1);
+  };
+
+  ModuleContainer.prototype.fronter = function(module) {
+    this.toFront(module);
+    this.modules().forEach(function(module, index) {
+      module.zIndex(index);
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports)
