@@ -21,6 +21,7 @@
     props.fronter = this.fronter;
     var module = new Module(props);
     this.modules().push(module);
+    this.updateZIndex();
     module.parentElement(this.element());
     module.redraw();
     return module.loadComponent().then(function() {
@@ -39,6 +40,12 @@
     modules.push(module);
   };
 
+  ModuleContainer.prototype.updateZIndex = function() {
+    this.modules().forEach(function(module, index) {
+      module.zIndex(index);
+    });
+  };
+
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
     var index = modules.indexOf(module);
@@ -47,13 +54,12 @@
       return;
 
     modules.splice(index, 1);
+    this.updateZIndex();
   };
 
   ModuleContainer.prototype.fronter = function(module) {
     this.toFront(module);
-    this.modules().forEach(function(module, index) {
-      module.zIndex(index);
-    });
+    this.updateZIndex();
   };
 
   if (typeof module !== 'undefined' && module.exports)
