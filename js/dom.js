@@ -133,8 +133,10 @@
   };
 
   dom.target = function(event) {
-    if (dom.supportsTouch() && 'changedTouches' in event)
+    if (dom.supportsTouch() && 'changedTouches' in event) {
       event = event.changedTouches[0];
+      return document.elementFromPoint(event.clientX, event.clientY);
+    }
 
     return event.target;
   };
