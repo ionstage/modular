@@ -11,6 +11,7 @@
 
     this.modules = this.prop([]);
     this.element = this.prop(props.element);
+    this.dragCount = this.prop(0);
 
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
@@ -67,11 +68,21 @@
   };
 
   ModuleContainer.prototype.dragStarter = function() {
-    dom.addClass(this.element(), 'module-dragging');
+    var dragCount = this.dragCount();
+
+    if (dragCount === 0)
+      dom.addClass(this.element(), 'module-dragging');
+
+    this.dragCount(dragCount + 1);
   };
 
   ModuleContainer.prototype.dragEnder = function() {
-    dom.removeClass(this.element(), 'module-dragging');
+    var dragCount = this.dragCount();
+
+    if (dragCount === 1)
+      dom.removeClass(this.element(), 'module-dragging');
+
+    this.dragCount(dragCount - 1);
   };
 
   if (typeof module !== 'undefined' && module.exports)
