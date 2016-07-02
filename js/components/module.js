@@ -30,6 +30,8 @@
 
     this.deleter = props.deleter;
     this.fronter = props.fronter;
+    this.dragStarter = props.dragStarter;
+    this.dragEnder = props.dragEnder;
   }, jCore.Component);
 
   Module.prototype.titleElement = function() {
@@ -342,7 +344,7 @@
     if (type === 'position') {
       context.x = this.x();
       context.y = this.y();
-      dom.addClass(this.element(), 'module-dragging');
+      dom.addClass(this.element(), 'module-moving');
     } else if (type === 'delete') {
       context.target = target;
       dom.addClass(this.element(), 'module-deleting');
@@ -360,8 +362,9 @@
       context.top = top;
       context.placeholderTop = top;
       dom.addClass(port.listItemElement(), 'module-port-sorting');
-      dom.addClass(this.element(), 'module-port-sorting');
     }
+
+    this.dragStarter();
   };
 
   Module.prototype.onmove = function(dx, dy) {
@@ -424,7 +427,7 @@
       return;
 
     if (type === 'position') {
-      dom.removeClass(this.element(), 'module-dragging');
+      dom.removeClass(this.element(), 'module-moving');
     } else if (type === 'delete') {
       if (target === context.target) {
         this.parentElement(null);
@@ -439,8 +442,9 @@
       var port = context.port;
       port.top(context.placeholderTop);
       dom.removeClass(port.listItemElement(), 'module-port-sorting');
-      dom.removeClass(this.element(), 'module-port-sorting');
     }
+
+    this.dragEnder();
   };
 
   Module.prototype.onchange = function(event) {

@@ -14,11 +14,15 @@
 
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
+    this.dragStarter = ModuleContainer.prototype.dragStarter.bind(this);
+    this.dragEnder = ModuleContainer.prototype.dragEnder.bind(this);
   }, jCore.Component);
 
   ModuleContainer.prototype.loadModule = function(props) {
     props.deleter = this.deleter;
     props.fronter = this.fronter;
+    props.dragStarter = this.dragStarter;
+    props.dragEnder = this.dragEnder;
     var module = new Module(props);
     this.modules().push(module);
     this.updateZIndex();
@@ -60,6 +64,14 @@
   ModuleContainer.prototype.fronter = function(module) {
     this.toFront(module);
     this.updateZIndex();
+  };
+
+  ModuleContainer.prototype.dragStarter = function() {
+    dom.addClass(this.element(), 'module-dragging');
+  };
+
+  ModuleContainer.prototype.dragEnder = function() {
+    dom.removeClass(this.element(), 'module-dragging');
   };
 
   if (typeof module !== 'undefined' && module.exports)
