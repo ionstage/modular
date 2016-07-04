@@ -67,6 +67,12 @@
     return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
   };
 
+  Module.prototype.hasVisiblePortSocket = function() {
+    return this.ports().some(function(port) {
+      return port.visible() && !port.socketDisabled();
+    });
+  };
+
   Module.prototype.loadComponent = function() {
     var url = [
       'modular_modules/',
