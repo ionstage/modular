@@ -6,6 +6,8 @@
 
   var ModuleWire = helper.inherits(function() {
     ModuleWire.super_.call(this);
+
+    this.element = this.prop(null);
   }, jCore.Component);
 
   if (typeof module !== 'undefined' && module.exports)
