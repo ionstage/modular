@@ -163,6 +163,10 @@
     this.portListHeight(portListHeight + port.height());
     port.top(portListHeight);
     port.visible(true);
+
+    // move right not to position the port-socket outside
+    if (this.x() < 50 && this.hasVisiblePortSocket())
+      this.x(50);
   };
 
   Module.prototype.hidePort = function(name) {
