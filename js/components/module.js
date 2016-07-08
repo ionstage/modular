@@ -381,8 +381,8 @@
       return;
 
     if (type === 'position') {
-      this.x(context.x + dx);
-      this.y(context.y + dy);
+      this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? 50 : 0)));
+      this.y(Math.max(context.y + dy, 0));
     } else if (type === 'delete') {
       if (dom.target(event) === context.target)
         dom.addClass(this.element(), 'module-deleting');
