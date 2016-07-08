@@ -165,8 +165,8 @@
     port.visible(true);
 
     // move right not to position the port-socket outside
-    if (this.x() < 50 && this.hasVisiblePortSocket())
-      this.x(50);
+    if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket())
+      this.x(ModulePort.SOCKET_WIDTH);
   };
 
   Module.prototype.hidePort = function(name) {
@@ -385,7 +385,7 @@
       return;
 
     if (type === 'position') {
-      this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? 50 : 0)));
+      this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0)));
       this.y(Math.max(context.y + dy, 0));
     } else if (type === 'delete') {
       if (dom.target(event) === context.target)

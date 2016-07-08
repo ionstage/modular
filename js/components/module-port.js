@@ -95,6 +95,8 @@
     cache.visible = visible;
   };
 
+  ModulePort.SOCKET_WIDTH = 50;
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModulePort;
   else
