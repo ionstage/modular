@@ -19,8 +19,12 @@
     this.dragEnder = ModuleContainer.prototype.dragEnder.bind(this);
   }, jCore.Component);
 
-  ModuleContainer.prototype.wireContainerElement = function() {
+  ModuleContainer.prototype.retainerElement = function() {
     return dom.child(this.element(), 0);
+  };
+
+  ModuleContainer.prototype.wireContainerElement = function() {
+    return dom.child(this.element(), 1);
   };
 
   ModuleContainer.prototype.loadModule = function(props) {
