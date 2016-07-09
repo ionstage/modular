@@ -73,6 +73,12 @@
     });
   };
 
+  Module.prototype.hasVisiblePortPlug = function() {
+    return this.ports().some(function(port) {
+      return port.visible() && !port.plugDisabled();
+    });
+  };
+
   Module.prototype.loadComponent = function() {
     var url = [
       'modular_modules/',
