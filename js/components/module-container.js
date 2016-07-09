@@ -15,6 +15,7 @@
 
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
+    this.portToggler = ModuleContainer.prototype.portToggler.bind(this);
     this.dragStarter = ModuleContainer.prototype.dragStarter.bind(this);
     this.dragEnder = ModuleContainer.prototype.dragEnder.bind(this);
   }, jCore.Component);
@@ -54,6 +55,7 @@
   ModuleContainer.prototype.loadModule = function(props) {
     props.deleter = this.deleter;
     props.fronter = this.fronter;
+    props.portToggler = this.portToggler;
     props.dragStarter = this.dragStarter;
     props.dragEnder = this.dragEnder;
     var module = new Module(props);
@@ -97,6 +99,11 @@
   ModuleContainer.prototype.fronter = function(module) {
     this.toFront(module);
     this.updateZIndex();
+  };
+
+  ModuleContainer.prototype.portToggler = function() {
+    // resize the element
+    this.markDirty();
   };
 
   ModuleContainer.prototype.dragStarter = function() {

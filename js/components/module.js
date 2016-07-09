@@ -30,6 +30,7 @@
 
     this.deleter = props.deleter;
     this.fronter = props.fronter;
+    this.portToggler = props.portToggler;
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
   }, jCore.Component);
@@ -181,6 +182,8 @@
     // move right not to position the port-socket outside
     if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket())
       this.x(ModulePort.SOCKET_WIDTH);
+
+    this.portToggler();
   };
 
   Module.prototype.hidePort = function(name) {
@@ -204,6 +207,8 @@
 
     if (hiddenPort)
       this.portListHeight(this.portListHeight() - hiddenPort.height());
+
+    this.portToggler();
   };
 
   Module.prototype.deselectOption = function() {
