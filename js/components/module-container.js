@@ -27,6 +27,13 @@
     return dom.child(this.element(), 1);
   };
 
+  ModuleContainer.prototype.redraw = function() {
+    if (this.dragCount() > 0)
+      dom.addClass(this.element(), 'module-dragging');
+    else
+      dom.removeClass(this.element(), 'module-dragging');
+  };
+
   ModuleContainer.prototype.loadModule = function(props) {
     props.deleter = this.deleter;
     props.fronter = this.fronter;
@@ -76,21 +83,11 @@
   };
 
   ModuleContainer.prototype.dragStarter = function() {
-    var dragCount = this.dragCount();
-
-    if (dragCount === 0)
-      dom.addClass(this.element(), 'module-dragging');
-
-    this.dragCount(dragCount + 1);
+    this.dragCount(this.dragCount() + 1);
   };
 
   ModuleContainer.prototype.dragEnder = function() {
-    var dragCount = this.dragCount();
-
-    if (dragCount === 1)
-      dom.removeClass(this.element(), 'module-dragging');
-
-    this.dragCount(dragCount - 1);
+    this.dragCount(this.dragCount() - 1);
   };
 
   if (typeof module !== 'undefined' && module.exports)
