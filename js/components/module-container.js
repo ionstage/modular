@@ -28,6 +28,23 @@
   };
 
   ModuleContainer.prototype.redraw = function() {
+    var x = 0;
+    var y = 0;
+
+    this.modules().forEach(function(module) {
+      var diagonalPoint = module.diagonalPoint();
+      x = Math.max(diagonalPoint.x, x);
+      y = Math.max(diagonalPoint.y, y);
+    });
+
+    var padding = 80;
+    var translate = 'translate(' + (x - 1 + padding) + 'px, ' + (y - 1 + padding) + 'px)';
+
+    dom.css(this.retainerElement(), {
+      transform: translate,
+      webkitTransform: translate
+    });
+
     if (this.dragCount() > 0)
       dom.addClass(this.element(), 'module-dragging');
     else

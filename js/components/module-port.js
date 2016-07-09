@@ -96,6 +96,7 @@
   };
 
   ModulePort.SOCKET_WIDTH = 50;
+  ModulePort.PLUG_WIDTH = 50;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModulePort;

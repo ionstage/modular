@@ -67,6 +67,14 @@
     return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
   };
 
+  Module.prototype.diagonalPoint = function() {
+    var rect = dom.rect(this.element());
+    return {
+      x: this.x() + rect.width + (this.hasVisiblePortPlug() ? ModulePort.PLUG_WIDTH : 0),
+      y: this.y() + rect.height
+    };
+  };
+
   Module.prototype.hasVisiblePortSocket = function() {
     return this.ports().some(function(port) {
       return port.visible() && !port.socketDisabled();
