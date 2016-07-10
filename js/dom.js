@@ -46,6 +46,12 @@
     return el.contains(other);
   };
 
+  dom.attr = function(el, props) {
+    for (var key in props) {
+      el.setAttribute(key, props[key]);
+    }
+  };
+
   dom.css = function(el, props) {
     var style = el.style;
 
