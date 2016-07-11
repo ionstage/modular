@@ -22,6 +22,7 @@
     // add element
     if (parentElement && !element) {
       element = dom.el('<div>');
+      dom.addClass(element, 'module-wire');
       this.element(element);
       dom.append(parentElement, element);
       return;
