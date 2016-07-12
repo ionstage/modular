@@ -17,10 +17,6 @@
     this.cache = this.prop({});
   }, jCore.Component);
 
-  ModuleWire.prototype.pathContainerElement = function() {
-    return dom.child(this.element(), 0);
-  };
-
   ModuleWire.prototype.pathElement = function() {
     // use 'dom.childNode' method for SVGElement
     return dom.childNode(this.element(), 0, 0);
@@ -70,8 +66,6 @@
 
     var x = Math.min(sourceX, targetX);
     var y = Math.min(sourceY, targetY);
-    var width = Math.max(Math.abs(targetX - sourceX), 1);
-    var height = Math.max(Math.abs(targetY - sourceY), 1);
 
     var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
@@ -80,11 +74,9 @@
       'L', targetX - x, targetY - y
     ].join(' ');
 
-    dom.css(this.pathContainerElement(), {
-      height: height + 'px',
+    dom.css(this.element(), {
       transform: translate,
-      webkitTransform: translate,
-      width: width + 'px'
+      webkitTransform: translate
     });
 
     dom.attr(this.pathElement(), { d: d });
