@@ -38,6 +38,20 @@
     return el;
   };
 
+  dom.childNode = function(el, index) {
+    var len = arguments.length;
+
+    if (len === 2)
+      return el.childNodes[index];
+
+    for (var i = 1; i < len; i++) {
+      index = arguments[i];
+      el = el.childNodes[index];
+    }
+
+    return el;
+  };
+
   dom.children = function(el) {
     return Array.prototype.slice.call(el.children);
   };
