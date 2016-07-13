@@ -33,7 +33,7 @@
     if (parentElement && !element) {
       element = dom.el('<div>');
       dom.addClass(element, 'module-wire');
-      dom.html(element, '<svg><path></path></svg>');
+      dom.html(element, ModuleWire.TEMPLATE_HTML);
       this.element(element);
       this.redraw();
       dom.append(parentElement, element);
@@ -86,6 +86,12 @@
     cache.targetX = targetX;
     cache.targetY = targetY;
   };
+
+  ModuleWire.TEMPLATE_HTML = [
+    '<svg class="module-wire-path-container">',
+      '<path class="module-wire-path"></path>',
+    '</svg>'
+  ].join('');
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleWire;
