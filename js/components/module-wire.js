@@ -22,6 +22,10 @@
     return dom.childNode(this.element(), 0, 0);
   };
 
+  ModuleWire.prototype.connectorElement = function() {
+    return dom.childNode(this.element(), 1);
+  };
+
   ModuleWire.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
@@ -50,6 +54,7 @@
 
     // update element
     this.redrawPath();
+    this.redrawConnector();
   };
 
   ModuleWire.prototype.redrawPath = function() {
@@ -61,6 +66,7 @@
 
     if (sourceX === cache.sourceX && sourceY === cache.sourceY &&
         targetX === cache.targetX && targetY === cache.targetY) {
+      cache.isPathUpdated = false;
       return;
     }
 
@@ -85,13 +91,38 @@
     cache.sourceY = sourceY;
     cache.targetX = targetX;
     cache.targetY = targetY;
+
+    // for update of the connector
+    cache.x = x;
+    cache.y = y;
+    cache.isPathUpdated = true;
+  };
+
+  ModuleWire.prototype.redrawConnector = function() {
+    var cache = this.cache();
+
+    if (!cache.isPathUpdated)
+      return;
+
+    var x = cache.targetX - cache.x - ModuleWire.CONNECTOR_WIDTH / 2;
+    var y = cache.targetY - cache.y - ModuleWire.CONNECTOR_WIDTH / 2;
+
+    var translate = 'translate(' + x + 'px, ' + y + 'px)';
+
+    dom.css(this.connectorElement(), {
+      transform: translate,
+      webkitTransform: translate
+    });
   };
 
   ModuleWire.TEMPLATE_HTML = [
     '<svg class="module-wire-path-container">',
       '<path class="module-wire-path"></path>',
-    '</svg>'
+    '</svg>',
+    '<div class="module-wire-connector"></div>'
   ].join('');
+
+  ModuleWire.CONNECTOR_WIDTH = 24;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleWire;
