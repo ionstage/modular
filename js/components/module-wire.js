@@ -12,6 +12,7 @@
     this.sourceY = this.prop(props.sourceY);
     this.targetX = this.prop(props.targetX);
     this.targetY = this.prop(props.targetY);
+    this.connectorVisible = this.prop(!!props.connectorVisible);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -66,7 +67,6 @@
 
     if (sourceX === cache.sourceX && sourceY === cache.sourceY &&
         targetX === cache.targetX && targetY === cache.targetY) {
-      cache.isPathUpdated = false;
       return;
     }
 
@@ -95,13 +95,23 @@
     // for update of the connector
     cache.x = x;
     cache.y = y;
-    cache.isPathUpdated = true;
   };
 
   ModuleWire.prototype.redrawConnector = function() {
+    var visible = this.connectorVisible();
+    var element = this.connectorElement();
     var cache = this.cache();
 
-    if (!cache.isPathUpdated)
+    if (cache.connectorVisible !== visible) {
+      if (visible)
+        dom.removeClass(element, 'hide');
+      else
+        dom.addClass(element, 'hide');
+
+      cache.connectorVisible = visible;
+    }
+
+    if (!visible)
       return;
 
     var x = cache.targetX - cache.x - ModuleWire.CONNECTOR_WIDTH / 2;
@@ -109,7 +119,7 @@
 
     var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
-    dom.css(this.connectorElement(), {
+    dom.css(element, {
       transform: translate,
       webkitTransform: translate
     });
