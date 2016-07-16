@@ -12,6 +12,7 @@
     this.sourceY = this.prop(props.sourceY);
     this.targetX = this.prop(props.targetX);
     this.targetY = this.prop(props.targetY);
+    this.connectorType = this.prop(props.connectorType);
     this.connectorVisible = this.prop(!!props.connectorVisible);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
@@ -98,9 +99,15 @@
   };
 
   ModuleWire.prototype.redrawConnector = function() {
+    var type = this.connectorType();
     var visible = this.connectorVisible();
     var element = this.connectorElement();
     var cache = this.cache();
+
+    if (cache.connectorType !== type) {
+      dom.data(element, 'type', type);
+      cache.connectorType = type;
+    }
 
     if (cache.connectorVisible !== visible) {
       if (visible)
