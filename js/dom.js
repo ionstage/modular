@@ -86,6 +86,19 @@
     return el.classList.contains(className);
   };
 
+  dom.data = function(el, key, value) {
+    if (typeof value === 'undefined')
+      return el.dataset[key];
+
+    if (value === null) {
+      if (key in el.dataset)
+        delete el.dataset[key];
+      return;
+    }
+
+    el.dataset[key] = value;
+  };
+
   dom.name = function(el, s) {
     el.name = s;
   };
