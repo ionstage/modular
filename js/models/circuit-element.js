@@ -84,6 +84,16 @@
     };
   };
 
+  CircuitElement.bind = function(sourceWrapper, targetWrapper) {
+    var sourceMember = sourceWrapper.unwrap(Wrapper.KEY);
+    var targetMember = targetWrapper.unwrap(Wrapper.KEY);
+
+    circuit.bind(sourceMember.callee, targetMember.callee);
+
+    sourceMember.targets.push(targetMember);
+    targetMember.sources.push(sourceMember);
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = CircuitElement;
   else
