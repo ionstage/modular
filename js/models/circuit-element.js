@@ -94,6 +94,19 @@
     targetMember.sources.push(sourceMember);
   };
 
+  CircuitElement.unbind = function(sourceWrapper, targetWrapper) {
+    var sourceMember = sourceWrapper.unwrap(Wrapper.KEY);
+    var targetMember = targetWrapper.unwrap(Wrapper.KEY);
+
+    circuit.unbind(sourceMember.callee, targetMember.callee);
+
+    var sourceMemberTargets = sourceMember.targets;
+    var targetMemberSources = targetMember.sources;
+
+    sourceMemberTargets.splice(sourceMemberTargets.indexOf(targetMember), 1);
+    targetMemberSources.splice(targetMemberSources.indexOf(sourceMember), 1);
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = CircuitElement;
   else
