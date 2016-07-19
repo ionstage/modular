@@ -15,6 +15,7 @@
     this.y = this.prop(props.y);
     this.zIndex = this.prop('auto');
     this.ports = this.prop([]);
+    this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
@@ -34,6 +35,10 @@
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
   }, jCore.Component);
+
+  Module.prototype.headerElement = function() {
+    return dom.child(this.element(), 0);
+  };
 
   Module.prototype.titleElement = function() {
     return dom.child(this.element(), 0, 0);
@@ -155,6 +160,7 @@
         dom.off(contentWindow, 'message', onmessage);
         dom.removeClass(this.element(), 'module-loading');
         dom.fillContentHeight(componentElement);
+        this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()));
       }.bind(this)).catch(function(e) {
         dom.off(contentWindow, 'message', onmessage);
         throw e;
