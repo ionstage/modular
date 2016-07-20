@@ -53,12 +53,13 @@
   };
 
   ModuleContainer.prototype.loadModule = function(props) {
-    props.deleter = this.deleter;
-    props.fronter = this.fronter;
-    props.portToggler = this.portToggler;
-    props.dragStarter = this.dragStarter;
-    props.dragEnder = this.dragEnder;
-    var module = new Module(props);
+    var module = new Module(helper.extend({}, props, {
+      deleter: this.deleter,
+      fronter: this.fronter,
+      portToggler: this.portToggler,
+      dragStarter: this.dragStarter,
+      dragEnder: this.dragEnder
+    }));
     this.modules().push(module);
     this.updateZIndex();
     module.parentElement(this.element());

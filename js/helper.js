@@ -21,6 +21,16 @@
     return value;
   };
 
+  helper.extend = function(obj) {
+    for (var i = 1, len = arguments.length; i < len; i++) {
+      var src = arguments[i];
+      for (var key in src) {
+        obj[key] = src[key];
+      }
+    }
+    return obj;
+  };
+
   helper.dig = function() {
     var args = Array.prototype.slice.call(arguments);
     return args.reduce(function(prev, curr) {

@@ -134,11 +134,12 @@
 
               this.ports(circuitElement.getAll().map(function(member) {
                 var props = member.props();
-                props.parentListElement = this.portListElement();
-                props.parentOptGroupElement = this.portOptGroupElement(props.type);
-                props.optionDeselector = this.optionDeselector;
-                props.optGroupSorter = this.optGroupSorter;
-                return new ModulePort(props);
+                return new ModulePort(helper.extend({}, props, {
+                  parentListElement: this.portListElement(),
+                  parentOptGroupElement: this.portOptGroupElement(props.type),
+                  optionDeselector: this.optionDeselector,
+                  optGroupSorter: this.optGroupSorter
+                }));
               }.bind(this)));
 
               var contentWindow = dom.contentWindow(this.componentElement());
