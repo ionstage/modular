@@ -37,7 +37,7 @@
     var element = dom.el('<div>');
 
     dom.addClass(element, 'module-port');
-    dom.addClass(element, 'module-port-' + this.type());
+    dom.data(element, 'type', this.type());
 
     var texts = [];
 
