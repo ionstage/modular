@@ -46,10 +46,7 @@
       webkitTransform: translate
     });
 
-    if (this.dragCount() > 0)
-      dom.addClass(this.element(), 'module-dragging');
-    else
-      dom.removeClass(this.element(), 'module-dragging');
+    dom.toggleClass(this.element(), 'module-dragging', this.dragCount() > 0);
   };
 
   ModuleContainer.prototype.loadModule = function(props) {

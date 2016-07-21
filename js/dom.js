@@ -82,6 +82,17 @@
     el.classList.remove(className);
   };
 
+  dom.toggleClass = function(el, className, force) {
+    if (typeof force === 'undefined') {
+      el.classList.toggle(className);
+      return;
+    }
+    if (force)
+      el.classList.add(className);
+    else
+      el.classList.remove(className);
+  };
+
   dom.hasClass = function(el, className) {
     return el.classList.contains(className);
   };

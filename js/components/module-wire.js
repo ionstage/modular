@@ -110,11 +110,7 @@
     }
 
     if (cache.connectorVisible !== visible) {
-      if (visible)
-        dom.removeClass(element, 'hide');
-      else
-        dom.addClass(element, 'hide');
-
+      dom.toggleClass(element, 'hide', !visible);
       cache.connectorVisible = visible;
     }
 

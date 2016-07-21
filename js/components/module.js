@@ -349,10 +349,7 @@
     if (isAllPortsVisible === cache.isAllPortsVisible)
       return;
 
-    if (isAllPortsVisible)
-      dom.addClass(this.footerElement(), 'module-footer-hide');
-    else
-      dom.removeClass(this.footerElement(), 'module-footer-hide');
+    dom.toggleClass(this.footerElement(), 'module-footer-hide', isAllPortsVisible);
   };
 
   Module.prototype.onstart = function(x, y, event) {
@@ -414,10 +411,7 @@
       this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0)));
       this.y(Math.max(context.y + dy, 0));
     } else if (type === 'delete') {
-      if (dom.target(event) === context.target)
-        dom.addClass(this.element(), 'module-deleting');
-      else
-        dom.removeClass(this.element(), 'module-deleting');
+      dom.toggleClass(this.element(), 'module-deleting', dom.target(event) === context.target);
     } else if (type === 'sortPort') {
       var targetPort = context.port;
       var targetPortHeight = targetPort.height();
