@@ -349,7 +349,7 @@
     if (isAllPortsVisible === cache.isAllPortsVisible)
       return;
 
-    dom.toggleClass(this.footerElement(), 'module-footer-hide', isAllPortsVisible);
+    dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
   };
 
   Module.prototype.onstart = function(x, y, event) {
