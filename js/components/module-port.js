@@ -16,6 +16,7 @@
     this.visible = this.prop(false);
     this.top = this.prop(0);
     this.height = this.prop(44);
+    this.socketConnected = this.prop(false);
     this.listItemElement = this.prop(this.renderListItem());
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
@@ -65,6 +66,7 @@
   ModulePort.prototype.redraw = function() {
     var visible = this.visible();
     var top = this.top();
+    var socketConnected = this.socketConnected();
     var cache = this.cache();
 
     if (top !== cache.top && visible) {
@@ -76,6 +78,11 @@
       });
 
       cache.top = top;
+    }
+
+    if (socketConnected !== cache.socketConnected && visible) {
+      dom.toggleClass(this.listItemElement(), 'module-port-socket-connected', socketConnected);
+      cache.socketConnected = socketConnected;
     }
 
     if (visible === cache.visible)
