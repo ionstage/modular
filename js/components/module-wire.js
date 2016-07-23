@@ -12,8 +12,8 @@
     this.sourceY = this.prop(props.sourceY);
     this.targetX = this.prop(props.targetX);
     this.targetY = this.prop(props.targetY);
-    this.connectorType = this.prop(props.connectorType);
-    this.connectorVisible = this.prop(!!props.connectorVisible);
+    this.handleType = this.prop(props.handleType);
+    this.handleVisible = this.prop(!!props.handleVisible);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -24,7 +24,7 @@
     return dom.childNode(this.element(), 0, 0);
   };
 
-  ModuleWire.prototype.connectorElement = function() {
+  ModuleWire.prototype.handleElement = function() {
     return dom.childNode(this.element(), 1);
   };
 
@@ -56,7 +56,7 @@
 
     // update element
     this.redrawPath();
-    this.redrawConnector();
+    this.redrawHandle();
   };
 
   ModuleWire.prototype.redrawPath = function() {
@@ -93,32 +93,32 @@
     cache.targetX = targetX;
     cache.targetY = targetY;
 
-    // for update of the connector
+    // for update of the handle
     cache.x = x;
     cache.y = y;
   };
 
-  ModuleWire.prototype.redrawConnector = function() {
-    var type = this.connectorType();
-    var visible = this.connectorVisible();
-    var element = this.connectorElement();
+  ModuleWire.prototype.redrawHandle = function() {
+    var type = this.handleType();
+    var visible = this.handleVisible();
+    var element = this.handleElement();
     var cache = this.cache();
 
-    if (cache.connectorType !== type) {
+    if (cache.handleType !== type) {
       dom.data(element, 'type', type);
-      cache.connectorType = type;
+      cache.handleType = type;
     }
 
-    if (cache.connectorVisible !== visible) {
+    if (cache.handleVisible !== visible) {
       dom.toggleClass(element, 'hide', !visible);
-      cache.connectorVisible = visible;
+      cache.handleVisible = visible;
     }
 
     if (!visible)
       return;
 
-    var x = cache.targetX - cache.x - ModuleWire.CONNECTOR_WIDTH / 2;
-    var y = cache.targetY - cache.y - ModuleWire.CONNECTOR_WIDTH / 2;
+    var x = cache.targetX - cache.x - ModuleWire.HANDLE_WIDTH / 2;
+    var y = cache.targetY - cache.y - ModuleWire.HANDLE_WIDTH / 2;
 
     var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
@@ -132,10 +132,10 @@
     '<svg class="module-wire-path-container">',
       '<path class="module-wire-path"></path>',
     '</svg>',
-    '<div class="module-wire-connector"></div>'
+    '<div class="module-wire-handle"></div>'
   ].join('');
 
-  ModuleWire.CONNECTOR_WIDTH = 24;
+  ModuleWire.HANDLE_WIDTH = 24;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleWire;
