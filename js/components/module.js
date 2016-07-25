@@ -36,6 +36,12 @@
     this.dragEnder = props.dragEnder;
   }, jCore.Component);
 
+  Module.prototype.port = function(name) {
+    return this.ports().filter(function(port) {
+      return port.name() === name;
+    })[0] || null;
+  };
+
   Module.prototype.headerElement = function() {
     return dom.child(this.element(), 0);
   };
@@ -173,9 +179,7 @@
   };
 
   Module.prototype.showPort = function(name) {
-    var port = this.ports().filter(function(port) {
-      return port.name() === name;
-    })[0];
+    var port = this.port(name);
 
     if (!port || port.visible())
       return;
