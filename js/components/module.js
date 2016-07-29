@@ -167,7 +167,7 @@
         dom.off(contentWindow, 'message', onmessage);
         dom.removeClass(this.element(), 'module-loading');
         dom.fillContentHeight(componentElement);
-        this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()));
+        this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
       }.bind(this)).catch(function(e) {
         dom.off(contentWindow, 'message', onmessage);
         throw e;
