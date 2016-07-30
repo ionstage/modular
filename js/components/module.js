@@ -414,12 +414,6 @@
     if (type === 'position') {
       this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0)));
       this.y(Math.max(context.y + dy, 0));
-
-      this.ports().forEach(function(port) {
-        // update wires bound to the port
-        if (port.visible())
-          port.markDirty();
-      });
     } else if (type === 'delete') {
       dom.toggleClass(this.element(), 'module-deleting', dom.target(event) === context.target);
     } else if (type === 'sortPort') {

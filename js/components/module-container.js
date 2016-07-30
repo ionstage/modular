@@ -42,12 +42,15 @@
     if (hasRelation)
       return;
 
-    relations.push(new ModuleWireRelation({
+    var relation = new ModuleWireRelation({
       type: type,
       module: module,
       port: port,
       wire: wire
-    }));
+    });
+
+    relations.push(relation);
+    module.relations().push(relation);
   };
 
   ModuleContainer.prototype.redraw = function() {
