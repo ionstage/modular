@@ -5,6 +5,7 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Module = app.Module || require('./module.js');
+  var ModuleWireRelation = app.ModuleWireRelation || require('../relations/module-wire-relation.js');
 
   var ModuleContainer = helper.inherits(function(props) {
     ModuleContainer.super_.call(this);
@@ -26,6 +27,27 @@
 
   ModuleContainer.prototype.wireContainerElement = function() {
     return dom.child(this.element(), 1);
+  };
+
+  ModuleContainer.prototype.lock = function(type, module, port, wire) {
+    var relations = port.relations();
+
+    var hasRelation = relations.some(function(relation) {
+      return relation.type() === type &&
+             relation.module() === module &&
+             relation.port() === port &&
+             relation.wire() === wire;
+    });
+
+    if (hasRelation)
+      return;
+
+    relations.push(new ModuleWireRelation({
+      type: type,
+      module: module,
+      port: port,
+      wire: wire
+    }));
   };
 
   ModuleContainer.prototype.redraw = function() {
@@ -111,6 +133,9 @@
   ModuleContainer.prototype.dragEnder = function() {
     this.dragCount(this.dragCount() - 1);
   };
+
+  ModuleContainer.LOCK_TYPE_SOURCE = ModuleWireRelation.TYPE_SOURCE;
+  ModuleContainer.LOCK_TYPE_TARGET = ModuleWireRelation.TYPE_TARGET;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleContainer;
