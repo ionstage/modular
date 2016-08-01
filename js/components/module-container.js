@@ -33,10 +33,7 @@
     var relations = port.relations();
 
     var hasRelation = relations.some(function(relation) {
-      return relation.type() === type &&
-             relation.module() === module &&
-             relation.port() === port &&
-             relation.wire() === wire;
+      return relation.consistsOf(type, module, port, wire);
     });
 
     if (hasRelation)
@@ -58,10 +55,7 @@
 
     for (var i = relations.length - 1; i >= 0; i--) {
       var relation = relations[i];
-      if (relation.type() === type &&
-          relation.module() === module &&
-          relation.port() === port &&
-          relation.wire() === wire) {
+      if (relation.consistsOf(type, module, port, wire)) {
         relations.splice(i, 1);
         var moduleRelations = module.relations();
         moduleRelations.splice(moduleRelations.indexOf(relation), 1);

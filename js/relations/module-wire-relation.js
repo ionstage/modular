@@ -14,6 +14,13 @@
     this.wire = this.prop(props.wire);
   }, jCore.Relation);
 
+  ModuleWireRelation.prototype.consistsOf = function(type, module, port, wire) {
+    return (this.type() === type &&
+            this.module() === module &&
+            this.port() === port &&
+            this.wire() === wire);
+  };
+
   ModuleWireRelation.prototype.update = function() {
     var port = this.port();
 
