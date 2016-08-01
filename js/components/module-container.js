@@ -53,6 +53,23 @@
     module.relations().push(relation);
   };
 
+  ModuleContainer.prototype.unlock = function(type, module, port, wire) {
+    var relations = port.relations();
+
+    for (var i = relations.length - 1; i >= 0; i--) {
+      var relation = relations[i];
+      if (relation.type() === type &&
+          relation.module() === module &&
+          relation.port() === port &&
+          relation.wire() === wire) {
+        relations.splice(i, 1);
+        var moduleRelations = module.relations();
+        moduleRelations.splice(moduleRelations.indexOf(relation), 1);
+        break;
+      }
+    }
+  };
+
   ModuleContainer.prototype.redraw = function() {
     var x = 0;
     var y = 0;
