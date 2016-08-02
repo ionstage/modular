@@ -79,6 +79,11 @@
     return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
   };
 
+  Module.prototype.circuitElementMember = function(name) {
+    var circuitElement = this.circuitElement();
+    return (circuitElement ? circuitElement.get(name) : null);
+  };
+
   Module.prototype.diagonalPoint = function() {
     var rect = dom.rect(this.element());
     return {
