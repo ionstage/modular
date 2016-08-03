@@ -8,10 +8,10 @@
   var ModuleWire = helper.inherits(function(props) {
     ModuleWire.super_.call(this);
 
-    this.sourceX = this.prop(props.sourceX);
-    this.sourceY = this.prop(props.sourceY);
-    this.targetX = this.prop(props.targetX);
-    this.targetY = this.prop(props.targetY);
+    this.sourceX = this.prop(props.sourceX || 0);
+    this.sourceY = this.prop(props.sourceY || 0);
+    this.targetX = this.prop(props.targetX || 0);
+    this.targetY = this.prop(props.targetY || 0);
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(!!props.handleVisible);
     this.element = this.prop(null);
