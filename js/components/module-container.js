@@ -148,8 +148,8 @@
     this.dragCount(this.dragCount() - 1);
   };
 
-  ModuleContainer.LOCK_TYPE_SOURCE = ModuleWireRelation.TYPE_SOURCE;
-  ModuleContainer.LOCK_TYPE_TARGET = ModuleWireRelation.TYPE_TARGET;
+  ModuleContainer.LOCK_TYPE_SOCKET = ModuleWireRelation.TYPE_TARGET;
+  ModuleContainer.LOCK_TYPE_PLUG = ModuleWireRelation.TYPE_SOURCE;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleContainer;
