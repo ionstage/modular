@@ -43,7 +43,7 @@
     var texts = [];
 
     if (!this.socketDisabled())
-      texts.push('<div class="module-port-socket"></div>');
+      texts.push('<div class="module-port-socket"><span></span></div>');
 
     if (!this.plugDisabled())
       texts.push('<div class="module-port-plug"></div>');
