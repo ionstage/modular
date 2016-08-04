@@ -11,8 +11,8 @@
     this.label = this.prop(props.label);
     this.name = this.prop(props.name);
     this.type = this.prop(props.type);
-    this.socketDisabled = this.prop(props.socketDisabled);
     this.plugDisabled = this.prop(props.plugDisabled);
+    this.socketDisabled = this.prop(props.socketDisabled);
     this.visible = this.prop(false);
     this.top = this.prop(0);
     this.height = this.prop(44);
@@ -42,11 +42,11 @@
 
     var texts = [];
 
-    if (!this.socketDisabled())
-      texts.push('<div class="module-port-socket"><span></span></div>');
-
     if (!this.plugDisabled())
       texts.push('<div class="module-port-plug"></div>');
+
+    if (!this.socketDisabled())
+      texts.push('<div class="module-port-socket"><span></span></div>');
 
     texts.push('<div class="module-port-label">' + this.label() + '</div>');
     texts.push('<img class="module-port-hide-button" src="images/minus-square-o.svg">');
@@ -102,11 +102,11 @@
     cache.visible = visible;
   };
 
-  ModulePort.SOCKET_OFFSET_X = -25;
-  ModulePort.SOCKET_WIDTH = 50;
-
   ModulePort.PLUG_OFFSET_X = 261;
   ModulePort.PLUG_WIDTH = 50;
+
+  ModulePort.SOCKET_OFFSET_X = -25;
+  ModulePort.SOCKET_WIDTH = 50;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModulePort;
