@@ -32,8 +32,8 @@
     var wire = this.wire();
 
     var offsetX = ({
-      source: ModulePort.SOCKET_OFFSET_X,
-      target: ModulePort.PLUG_OFFSET_X
+      source: ModulePort.PLUG_OFFSET_X,
+      target: ModulePort.SOCKET_OFFSET_X
     })[type];
 
     var x = module.x() + offsetX;
