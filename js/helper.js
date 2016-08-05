@@ -48,6 +48,44 @@
     });
   };
 
+  helper.List = (function() {
+    var List = function() {
+      this.data = [];
+    };
+
+    List.prototype.add = function(item) {
+      if (!this.contains(item))
+        this.data.push(item);
+    };
+
+    List.prototype.remove = function(item) {
+      var data = this.data;
+
+      for (var i = data.length - 1; i >= 0; i--) {
+        if (this.equal(data[i], item)) {
+          data.splice(i, 1);
+          break;
+        }
+      }
+    };
+
+    List.prototype.contains = function(item) {
+      return this.data.some(function(dataItem) {
+        return this.equal(dataItem, item);
+      }.bind(this));
+    };
+
+    List.prototype.equal = function(a, b) {
+      return a === b;
+    };
+
+    List.prototype.toArray = function() {
+      return this.data.slice();
+    };
+
+    return List;
+  })();
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = helper;
   else
