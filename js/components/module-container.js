@@ -4,8 +4,22 @@
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
   var Module = app.Module || require('./module.js');
   var ModuleWireRelation = app.ModuleWireRelation || require('../relations/module-wire-relation.js');
+
+  var Binding = function(props) {
+    this.sourceModule = props.sourceModule;
+    this.sourcePort = props.sourcePort;
+    this.targetModule = props.targetModule;
+    this.targetPort = props.targetPort;
+  };
+
+  Binding.prototype.bind = function() {
+    var source = this.sourceModule.circuitElementMember(this.sourcePort.name());
+    var target = this.targetModule.circuitElementMember(this.targetPort.name());
+    CircuitElement.bind(source, target);
+  };
 
   var ModuleContainer = helper.inherits(function(props) {
     ModuleContainer.super_.call(this);
@@ -62,6 +76,17 @@
         break;
       }
     }
+  };
+
+  ModuleContainer.prototype.bind = function(sourceModule, sourcePort, targetModule, targetPort) {
+    var binding = new Binding({
+      sourceModule: sourceModule,
+      sourcePort: sourcePort,
+      targetModule: targetModule,
+      targetPort: targetPort
+    });
+
+    binding.bind();
   };
 
   ModuleContainer.prototype.redraw = function() {
