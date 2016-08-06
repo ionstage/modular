@@ -21,10 +21,22 @@
     CircuitElement.bind(source, target);
   };
 
+  var BindingList = helper.inherits(function() {
+    BindingList.super_.call(this);
+  }, helper.List);
+
+  BindingList.prototype.equal = function(a, b) {
+    return (a.sourceModule === b.sourceModule &&
+            a.sourcePort === b.sourcePort &&
+            b.targetModule === b.targetModule &&
+            b.targetPort === b.targetPort);
+  };
+
   var ModuleContainer = helper.inherits(function(props) {
     ModuleContainer.super_.call(this);
 
     this.modules = this.prop([]);
+    this.bindingList = this.prop(new BindingList());
     this.element = this.prop(props.element);
     this.dragCount = this.prop(0);
 
@@ -79,6 +91,8 @@
   };
 
   ModuleContainer.prototype.bind = function(sourceModule, sourcePort, targetModule, targetPort) {
+    var bindingList = this.bindingList();
+
     var binding = new Binding({
       sourceModule: sourceModule,
       sourcePort: sourcePort,
@@ -86,7 +100,11 @@
       targetPort: targetPort
     });
 
+    if (bindingList.contains(binding))
+      return;
+
     binding.bind();
+    bindingList.add(binding);
   };
 
   ModuleContainer.prototype.redraw = function() {
