@@ -21,6 +21,12 @@
     CircuitElement.bind(source, target);
   };
 
+  Binding.prototype.unbind = function() {
+    var source = this.sourceModule.circuitElementMember(this.sourcePort.name());
+    var target = this.targetModule.circuitElementMember(this.targetPort.name());
+    CircuitElement.unbind(source, target);
+  };
+
   var BindingList = helper.inherits(function() {
     BindingList.super_.call(this);
   }, helper.List);
@@ -105,6 +111,23 @@
 
     binding.bind();
     bindingList.add(binding);
+  };
+
+  ModuleContainer.prototype.unbind = function(sourceModule, sourcePort, targetModule, targetPort) {
+    var bindingList = this.bindingList();
+
+    var binding = new Binding({
+      sourceModule: sourceModule,
+      sourcePort: sourcePort,
+      targetModule: targetModule,
+      targetPort: targetPort
+    });
+
+    if (!bindingList.contains(binding))
+      return;
+
+    binding.unbind();
+    bindingList.remove(binding);
   };
 
   ModuleContainer.prototype.redraw = function() {
