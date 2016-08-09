@@ -5,7 +5,9 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
+  var ModulePort = app.ModulePort || require('./module-port.js');
   var Module = app.Module || require('./module.js');
+  var ModuleWire = app.ModuleWire || require('./module-wire.js');
   var ModuleWireRelation = app.ModuleWireRelation || require('../relations/module-wire-relation.js');
 
   var Binding = function(props) {
@@ -51,6 +53,9 @@
     this.portToggler = ModuleContainer.prototype.portToggler.bind(this);
     this.dragStarter = ModuleContainer.prototype.dragStarter.bind(this);
     this.dragEnder = ModuleContainer.prototype.dragEnder.bind(this);
+    this.dragPortPlugStarter = ModuleContainer.prototype.dragPortPlugStarter.bind(this);
+    this.dragPortPlugMover = ModuleContainer.prototype.dragPortPlugMover.bind(this);
+    this.dragPortPlugEnder = ModuleContainer.prototype.dragPortPlugEnder.bind(this);
   }, jCore.Component);
 
   ModuleContainer.prototype.retainerElement = function() {
@@ -157,7 +162,10 @@
       fronter: this.fronter,
       portToggler: this.portToggler,
       dragStarter: this.dragStarter,
-      dragEnder: this.dragEnder
+      dragEnder: this.dragEnder,
+      dragPortPlugStarter: this.dragPortPlugStarter,
+      dragPortPlugMover: this.dragPortPlugMover,
+      dragPortPlugEnder: this.dragPortPlugEnder
     }));
     this.modules().push(module);
     this.updateZIndex();
@@ -212,6 +220,36 @@
 
   ModuleContainer.prototype.dragEnder = function() {
     this.dragCount(this.dragCount() - 1);
+  };
+
+  ModuleContainer.prototype.dragPortPlugStarter = function(module, port, context) {
+    var x = module.x() + ModulePort.PLUG_OFFSET_X;
+    var y = module.y() + module.portListTop() + port.top() + port.height() / 2;
+    var wire = new ModuleWire({
+      sourceX: x,
+      sourceY: y,
+      targetX: x,
+      targetY: y,
+      handleType: port.type(),
+      handleVisible: true
+    });
+    wire.parentElement(this.wireContainerElement());
+    this.lock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);
+    context.x = x;
+    context.y = y;
+    context.wire = wire;
+  };
+
+  ModuleContainer.prototype.dragPortPlugMover = function(module, port, dx, dy, context) {
+    var wire = context.wire;
+    wire.targetX(context.x + dx);
+    wire.targetY(context.y + dy);
+  };
+
+  ModuleContainer.prototype.dragPortPlugEnder = function(module, port, context) {
+    var wire = context.wire;
+    this.unlock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);
+    wire.parentElement(null);
   };
 
   ModuleContainer.LOCK_TYPE_PLUG = ModuleWireRelation.TYPE_SOURCE;

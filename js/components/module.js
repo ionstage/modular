@@ -34,6 +34,9 @@
     this.portToggler = props.portToggler;
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
+    this.dragPortPlugStarter = props.dragPortPlugStarter;
+    this.dragPortPlugMover = props.dragPortPlugMover;
+    this.dragPortPlugEnder = props.dragPortPlugEnder;
   }, jCore.Component);
 
   Module.prototype.port = function(name) {
@@ -373,6 +376,8 @@
       context.type = 'hidePort';
     else if (dom.hasClass(target, 'module-port-label'))
       context.type = 'sortPort';
+    else if (dom.hasClass(target, 'module-port-plug'))
+      context.type = 'dragPortPlug';
     else
       context.type = null;
 
@@ -404,6 +409,12 @@
       context.top = top;
       context.placeholderTop = top;
       dom.addClass(port.listItemElement(), 'module-port-sorting');
+    } else if (type === 'dragPortPlug') {
+      context.port = this.ports().filter(function(port) {
+        return dom.contains(port.listItemElement(), target);
+      })[0];
+      context.context = {};
+      this.dragPortPlugStarter(this, context.port, context.context);
     }
 
     this.dragStarter();
@@ -454,6 +465,8 @@
       });
 
       context.placeholderTop = nextPlaceholderTop;
+    } else if (type === 'dragPortPlug') {
+      this.dragPortPlugMover(this, context.port, dx, dy, context.context);
     }
   };
 
@@ -481,6 +494,8 @@
       var port = context.port;
       port.top(context.placeholderTop);
       dom.removeClass(port.listItemElement(), 'module-port-sorting');
+    } else if (type === 'dragPortPlug') {
+      this.dragPortPlugEnder(this, context.port, context.context);
     }
 
     this.dragEnder();
