@@ -66,6 +66,10 @@
     return dom.child(this.element(), 1);
   };
 
+  ModuleContainer.prototype.contentElement = function() {
+    return dom.child(this.element(), 2);
+  };
+
   ModuleContainer.prototype.lock = function(type, module, port, wire) {
     var relations = port.relations();
 
@@ -169,7 +173,7 @@
     }));
     this.modules().push(module);
     this.updateZIndex();
-    module.parentElement(this.element());
+    module.parentElement(this.contentElement());
     module.redraw();
     return module.loadComponent().then(function() {
       return module;
