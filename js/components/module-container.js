@@ -144,10 +144,11 @@
   };
 
   ModuleContainer.prototype.redraw = function() {
+    var modules = this.modules();
     var x = 0;
     var y = 0;
 
-    this.modules().forEach(function(module) {
+    modules.forEach(function(module) {
       var diagonalPoint = module.diagonalPoint();
       x = Math.max(diagonalPoint.x, x);
       y = Math.max(diagonalPoint.y, y);
@@ -162,6 +163,10 @@
     });
 
     dom.toggleClass(this.element(), 'module-dragging', this.dragCount() > 0);
+
+    dom.css(this.wireHandleContainerElement(), {
+      zIndex: modules.length + 1
+    });
   };
 
   ModuleContainer.prototype.loadModule = function(props) {
@@ -177,6 +182,7 @@
     }));
     this.modules().push(module);
     this.updateZIndex();
+    this.markDirty();
     module.parentElement(this.contentElement());
     module.redraw();
     return module.loadComponent().then(function() {
@@ -210,6 +216,7 @@
 
     modules.splice(index, 1);
     this.updateZIndex();
+    this.markDirty();
   };
 
   ModuleContainer.prototype.fronter = function(module) {
