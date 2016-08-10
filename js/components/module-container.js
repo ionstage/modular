@@ -70,6 +70,10 @@
     return dom.child(this.element(), 2);
   };
 
+  ModuleContainer.prototype.wireHandleContainerElement = function() {
+    return dom.child(this.element(), 3);
+  };
+
   ModuleContainer.prototype.lock = function(type, module, port, wire) {
     var relations = port.relations();
 
@@ -235,7 +239,8 @@
       targetX: x,
       targetY: y,
       handleType: port.type(),
-      handleVisible: true
+      handleVisible: true,
+      parentHandleElement: this.wireHandleContainerElement()
     });
     wire.parentElement(this.wireContainerElement());
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);

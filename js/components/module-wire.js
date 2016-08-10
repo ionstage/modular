@@ -16,16 +16,14 @@
     this.handleVisible = this.prop(!!props.handleVisible);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
+    this.handleElement = this.prop(null);
+    this.parentHandleElement = this.prop(props.parentHandleElement);
     this.cache = this.prop({});
   }, jCore.Component);
 
   ModuleWire.prototype.pathElement = function() {
     // use 'dom.childNode' method for SVGElement
     return dom.childNode(this.element(), 0, 0);
-  };
-
-  ModuleWire.prototype.handleElement = function() {
-    return dom.childNode(this.element(), 1);
   };
 
   ModuleWire.prototype.redraw = function() {
@@ -40,16 +38,22 @@
       element = dom.el('<div>');
       dom.addClass(element, 'module-wire');
       dom.html(element, ModuleWire.TEMPLATE_HTML);
+      var handleElement = dom.el('<div>');
+      dom.addClass(handleElement, 'module-wire-handle');
       this.element(element);
+      this.handleElement(handleElement);
       this.redraw();
       dom.append(parentElement, element);
+      dom.append(this.parentHandleElement(), handleElement);
       return;
     }
 
     // remove element
     if (!parentElement && element) {
       dom.remove(element);
+      dom.remove(this.handleElement());
       this.element(null);
+      this.handleElement(null);
       this.cache({});
       return;
     }
@@ -92,10 +96,6 @@
     cache.sourceY = sourceY;
     cache.targetX = targetX;
     cache.targetY = targetY;
-
-    // for update of the handle
-    cache.x = x;
-    cache.y = y;
   };
 
   ModuleWire.prototype.redrawHandle = function() {
@@ -117,8 +117,8 @@
     if (!visible)
       return;
 
-    var x = cache.targetX - cache.x - ModuleWire.HANDLE_WIDTH / 2;
-    var y = cache.targetY - cache.y - ModuleWire.HANDLE_WIDTH / 2;
+    var x = cache.targetX - ModuleWire.HANDLE_WIDTH / 2;
+    var y = cache.targetY - ModuleWire.HANDLE_WIDTH / 2;
 
     var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
@@ -131,8 +131,7 @@
   ModuleWire.TEMPLATE_HTML = [
     '<svg class="module-wire-path-container">',
       '<path class="module-wire-path"></path>',
-    '</svg>',
-    '<div class="module-wire-handle"></div>'
+    '</svg>'
   ].join('');
 
   ModuleWire.HANDLE_WIDTH = 24;
