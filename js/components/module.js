@@ -107,6 +107,20 @@
     });
   };
 
+  Module.prototype.plugPosition = function(port) {
+    return {
+      x: this.x() + ModulePort.PLUG_OFFSET_X,
+      y: this.y() + this.portListTop() + port.top() + port.height() / 2
+    };
+  };
+
+  Module.prototype.socketPosition = function(port) {
+    return {
+      x: this.x() + ModulePort.SOCKET_OFFSET_X,
+      y: this.y() + this.portListTop() + port.top() + port.height() / 2
+    };
+  };
+
   Module.prototype.loadComponent = function() {
     var url = [
       'modular_modules/',

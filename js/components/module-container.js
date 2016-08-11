@@ -238,8 +238,9 @@
   };
 
   ModuleContainer.prototype.dragPortPlugStarter = function(module, port, context) {
-    var x = module.x() + ModulePort.PLUG_OFFSET_X;
-    var y = module.y() + module.portListTop() + port.top() + port.height() / 2;
+    var position = module.plugPosition(port);
+    var x = position.x;
+    var y = position.y;
     var wire = new ModuleWire({
       sourceX: x,
       sourceY: y,

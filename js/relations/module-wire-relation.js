@@ -28,23 +28,21 @@
       return;
 
     var type = this.type();
-    var module = this.module();
+    var positionType = ModuleWireRelation.positionTypeMap[type];
+    var position = this.module()[positionType + 'Position'](port);
     var wire = this.wire();
 
-    var offsetX = ({
-      source: ModulePort.PLUG_OFFSET_X,
-      target: ModulePort.SOCKET_OFFSET_X
-    })[type];
-
-    var x = module.x() + offsetX;
-    var y = module.y() + module.portListTop() + port.top() + port.height() / 2;
-
-    wire[type + 'X'](x);
-    wire[type + 'Y'](y);
+    wire[type + 'X'](position.x);
+    wire[type + 'Y'](position.y);
   };
 
   ModuleWireRelation.TYPE_SOURCE = 'source';
   ModuleWireRelation.TYPE_TARGET = 'target';
+
+  ModuleWireRelation.positionTypeMap = {
+    source: 'plug',
+    target: 'socket'
+  };
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleWireRelation;
