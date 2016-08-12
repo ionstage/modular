@@ -283,6 +283,8 @@
           break;
         if (Math.abs(y - position.y) > 18)
           continue;
+        if (!port.visible())
+          continue;
         if (!port.socketConnected() && type === port.type()) {
           targetModule = module;
           targetPort = port;
