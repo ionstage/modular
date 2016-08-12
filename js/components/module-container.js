@@ -261,11 +261,14 @@
     var wire = context.wire;
     var x = context.x + dx;
     var y = context.y + dy;
+
     wire.targetX(x);
     wire.targetY(y);
 
     var modules = this.modules();
     var type = context.type;
+    var currentTargetModule = context.targetModule;
+    var currentTargetPort = context.targetPort;
     var targetModule = null;
     var targetPort = null;
 
@@ -283,6 +286,9 @@
         if (!port.socketConnected() && type === port.type()) {
           targetModule = module;
           targetPort = port;
+        } else if (module === currentTargetModule && port === currentTargetPort) {
+          targetModule = currentTargetModule;
+          targetPort = currentTargetPort;
         }
         break;
       }
@@ -290,16 +296,23 @@
         break;
     }
 
+    var hasCurrentTarget = (currentTargetModule && currentTargetPort);
+
     if (targetModule && targetPort) {
       // attach the wire-handle to the target port-socket
-      this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
+      if (!hasCurrentTarget) {
+        this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
+        targetPort.socketConnected(true);
+        wire.handleVisible(false);
+      }
       targetPort.markDirty();
     } else {
       // detach the wire-handle from the current target port-socket
-      var currentTargetModule = context.targetModule;
-      var currentTargetPort = context.targetPort;
-      if (currentTargetModule && currentTargetPort)
+      if (hasCurrentTarget) {
         this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetModule, currentTargetPort, wire);
+        wire.handleVisible(true);
+        currentTargetPort.socketConnected(false);
+      }
     }
 
     context.targetModule = targetModule;
