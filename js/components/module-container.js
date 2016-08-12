@@ -306,9 +306,16 @@
     context.targetPort = targetPort;
   };
 
-  ModuleContainer.prototype.dragPortPlugEnder = function(module, port, context) {
+  ModuleContainer.prototype.dragPortPlugEnder = function(sourceModule, sourcePort, context) {
+    var targetModule = context.targetModule;
+    var targetPort = context.targetPort;
+
+    if (targetModule && targetPort)
+      return;
+
+    // remove the dragging wire
     var wire = context.wire;
-    this.unlock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);
+    this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     wire.parentElement(null);
   };
 
