@@ -254,12 +254,56 @@
     context.x = x;
     context.y = y;
     context.wire = wire;
+    context.type = port.type();
   };
 
-  ModuleContainer.prototype.dragPortPlugMover = function(module, port, dx, dy, context) {
+  ModuleContainer.prototype.dragPortPlugMover = function(sourceModule, sourcePort, dx, dy, context) {
     var wire = context.wire;
-    wire.targetX(context.x + dx);
-    wire.targetY(context.y + dy);
+    var x = context.x + dx;
+    var y = context.y + dy;
+    wire.targetX(x);
+    wire.targetY(y);
+
+    var modules = this.modules();
+    var type = context.type;
+    var targetModule = null;
+    var targetPort = null;
+
+    // search the target port-socket by the position of the dragging wire-handle
+    for (var mi = modules.length - 1; mi >= 0; mi--) {
+      var module = modules[mi];
+      var ports = module.ports();
+      for (var pi = ports.length - 1; pi >= 0; pi--) {
+        var port = ports[pi];
+        var position = module.socketPosition(port);
+        if (Math.abs(x - position.x) > 18)
+          break;
+        if (Math.abs(y - position.y) > 18)
+          continue;
+        if (!port.socketConnected() && type === port.type()) {
+          targetModule = module;
+          targetPort = port;
+        }
+        break;
+      }
+      if (targetModule && targetPort)
+        break;
+    }
+
+    if (targetModule && targetPort) {
+      // attach the wire-handle to the target port-socket
+      this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
+      targetPort.markDirty();
+    } else {
+      // detach the wire-handle from the current target port-socket
+      var currentTargetModule = context.targetModule;
+      var currentTargetPort = context.targetPort;
+      if (currentTargetModule && currentTargetPort)
+        this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetModule, currentTargetPort, wire);
+    }
+
+    context.targetModule = targetModule;
+    context.targetPort = targetPort;
   };
 
   ModuleContainer.prototype.dragPortPlugEnder = function(module, port, context) {
