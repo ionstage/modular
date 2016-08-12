@@ -5,7 +5,6 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
-  var ModulePort = app.ModulePort || require('./module-port.js');
   var Module = app.Module || require('./module.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
   var ModuleWireRelation = app.ModuleWireRelation || require('../relations/module-wire-relation.js');
