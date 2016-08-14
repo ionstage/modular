@@ -35,8 +35,8 @@
   BindingList.prototype.equal = function(a, b) {
     return (a.sourceModule === b.sourceModule &&
             a.sourcePort === b.sourcePort &&
-            b.targetModule === b.targetModule &&
-            b.targetPort === b.targetPort);
+            a.targetModule === b.targetModule &&
+            a.targetPort === b.targetPort);
   };
 
   var ModuleContainer = helper.inherits(function(props) {
