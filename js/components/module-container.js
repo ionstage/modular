@@ -285,7 +285,7 @@
           break;
         if (Math.abs(y - position.y) > 18)
           continue;
-        if (!port.visible())
+        if (!port.visible() || port.socketDisabled())
           continue;
         if (!port.socketConnected() && type === port.type()) {
           targetModule = module;
