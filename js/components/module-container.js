@@ -309,6 +309,7 @@
     }
 
     if (currentTargetModule && currentTargetPort) {
+      this.unbind(sourceModule, sourcePort, currentTargetModule, currentTargetPort);
       // detach the wire-handle from the current target port-socket
       this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetModule, currentTargetPort, wire);
       wire.handleVisible(true);
@@ -316,6 +317,7 @@
     }
 
     if (targetModule && targetPort) {
+      this.bind(sourceModule, sourcePort, targetModule, targetPort);
       // attach the wire-handle to the target port-socket
       this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
       targetPort.socketConnected(true);
