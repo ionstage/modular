@@ -255,6 +255,8 @@
     context.y = y;
     context.wire = wire;
     context.type = port.type();
+    context.targetModule = null;
+    context.targetPort = null;
   };
 
   ModuleContainer.prototype.dragPortPlugMover = function(sourceModule, sourcePort, dx, dy, context) {
@@ -298,23 +300,26 @@
         break;
     }
 
-    var hasCurrentTarget = (currentTargetModule && currentTargetPort);
+    if (targetModule === currentTargetModule && targetPort === currentTargetPort) {
+      if (targetPort) {
+        // fix the target position of the wire
+        targetPort.markDirty();
+      }
+      return;
+    }
+
+    if (currentTargetModule && currentTargetPort) {
+      // detach the wire-handle from the current target port-socket
+      this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetModule, currentTargetPort, wire);
+      wire.handleVisible(true);
+      currentTargetPort.socketConnected(false);
+    }
 
     if (targetModule && targetPort) {
       // attach the wire-handle to the target port-socket
-      if (!hasCurrentTarget) {
-        this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
-        targetPort.socketConnected(true);
-        wire.handleVisible(false);
-      }
-      targetPort.markDirty();
-    } else {
-      // detach the wire-handle from the current target port-socket
-      if (hasCurrentTarget) {
-        this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetModule, currentTargetPort, wire);
-        wire.handleVisible(true);
-        currentTargetPort.socketConnected(false);
-      }
+      this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
+      targetPort.socketConnected(true);
+      wire.handleVisible(false);
     }
 
     context.targetModule = targetModule;
