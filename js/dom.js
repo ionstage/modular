@@ -56,6 +56,10 @@
     return Array.prototype.slice.call(el.children);
   };
 
+  dom.parent = function(el) {
+    return el.parentNode;
+  };
+
   dom.contains = function(el, other) {
     return el.contains(other);
   };

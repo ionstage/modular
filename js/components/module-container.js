@@ -55,6 +55,9 @@
     this.dragPortPlugStarter = ModuleContainer.prototype.dragPortPlugStarter.bind(this);
     this.dragPortPlugMover = ModuleContainer.prototype.dragPortPlugMover.bind(this);
     this.dragPortPlugEnder = ModuleContainer.prototype.dragPortPlugEnder.bind(this);
+    this.dragPortSocketStarter = ModuleContainer.prototype.dragPortSocketStarter.bind(this);
+    this.dragPortSocketMover = ModuleContainer.prototype.dragPortSocketMover.bind(this);
+    this.dragPortSocketEnder = ModuleContainer.prototype.dragPortSocketEnder.bind(this);
   }, jCore.Component);
 
   ModuleContainer.prototype.retainerElement = function() {
@@ -177,7 +180,10 @@
       dragEnder: this.dragEnder,
       dragPortPlugStarter: this.dragPortPlugStarter,
       dragPortPlugMover: this.dragPortPlugMover,
-      dragPortPlugEnder: this.dragPortPlugEnder
+      dragPortPlugEnder: this.dragPortPlugEnder,
+      dragPortSocketStarter: this.dragPortSocketStarter,
+      dragPortSocketMover: this.dragPortSocketMover,
+      dragPortSocketEnder: this.dragPortSocketEnder
     }));
     this.modules().push(module);
     this.updateZIndex();
@@ -339,6 +345,35 @@
     var wire = context.wire;
     this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     wire.parentElement(null);
+  };
+
+  ModuleContainer.prototype.dragPortSocketStarter = function(module, port, context) {
+    var relation = port.relations().filter(function(relation) {
+      return (relation.type() === ModuleWireRelation.TYPE_TARGET);
+    })[0];
+
+    var wire = relation.wire();
+    context.x = wire.targetX();
+    context.y = wire.targetY();
+    context.wire = wire;
+    context.type = port.type();
+
+    var binding = this.bindingList().toArray().filter(function(binding) {
+      return (binding.targetModule === module && binding.targetPort === port);
+    })[0];
+
+    context.sourceModule = binding.sourceModule;
+    context.sourcePort = binding.sourcePort;
+    context.targetModule = module;
+    context.targetPort = port;
+  };
+
+  ModuleContainer.prototype.dragPortSocketMover = function(targetModule, targetPort, dx, dy, context) {
+    this.dragPortPlugMover(context.sourceModule, context.sourcePort, dx, dy, context);
+  };
+
+  ModuleContainer.prototype.dragPortSocketEnder = function(targetModule, targetPort, context) {
+    this.dragPortPlugEnder(context.sourceModule, context.sourcePort, context);
   };
 
   ModuleContainer.LOCK_TYPE_PLUG = ModuleWireRelation.TYPE_SOURCE;
