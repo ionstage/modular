@@ -220,6 +220,14 @@
     });
   };
 
+  ModuleContainer.prototype.updatePortHighlight = function(port) {
+    var draggingWires = this.draggingWires();
+    var isDragging = port.relations().some(function(relation) {
+      return (draggingWires.indexOf(relation.wire()) !== -1);
+    });
+    port.isHighlighted(isDragging);
+  };
+
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
     var index = modules.indexOf(module);
@@ -266,6 +274,7 @@
     wire.parentElement(this.wireContainerElement());
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);
     this.draggingWires().push(wire);
+    this.updatePortHighlight(port);
     context.x = x;
     context.y = y;
     context.wire = wire;
@@ -329,6 +338,7 @@
       this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetModule, currentTargetPort, wire);
       wire.handleVisible(true);
       currentTargetPort.socketConnected(false);
+      this.updatePortHighlight(currentTargetPort);
     }
 
     if (targetModule && targetPort) {
@@ -337,6 +347,7 @@
       this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
       targetPort.socketConnected(true);
       wire.handleVisible(false);
+      this.updatePortHighlight(targetPort);
     }
 
     context.targetModule = targetModule;
@@ -350,9 +361,12 @@
     var targetPort = context.targetPort;
 
     draggingWires.splice(draggingWires.indexOf(wire), 1);
+    this.updatePortHighlight(sourcePort);
 
-    if (targetModule && targetPort)
+    if (targetModule && targetPort) {
+      this.updatePortHighlight(targetPort);
       return;
+    }
 
     // remove the dragging wire
     this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
@@ -375,6 +389,9 @@
     var binding = this.bindingList().toArray().filter(function(binding) {
       return (binding.targetModule === module && binding.targetPort === port);
     })[0];
+
+    this.updatePortHighlight(port);
+    this.updatePortHighlight(binding.sourcePort);
 
     context.sourceModule = binding.sourceModule;
     context.sourcePort = binding.sourcePort;
