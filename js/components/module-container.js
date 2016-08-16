@@ -51,6 +51,7 @@
     this.bindingList = this.prop(new BindingList());
     this.element = this.prop(props.element);
     this.dragCount = this.prop(0);
+    this.draggingWires = this.prop([]);
 
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
@@ -264,6 +265,7 @@
     });
     wire.parentElement(this.wireContainerElement());
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);
+    this.draggingWires().push(wire);
     context.x = x;
     context.y = y;
     context.wire = wire;
@@ -342,14 +344,17 @@
   };
 
   ModuleContainer.prototype.dragPortPlugEnder = function(sourceModule, sourcePort, context) {
+    var draggingWires = this.draggingWires();
+    var wire = context.wire;
     var targetModule = context.targetModule;
     var targetPort = context.targetPort;
+
+    draggingWires.splice(draggingWires.indexOf(wire), 1);
 
     if (targetModule && targetPort)
       return;
 
     // remove the dragging wire
-    var wire = context.wire;
     this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     wire.parentElement(null);
   };
@@ -360,6 +365,8 @@
     })[0];
 
     var wire = relation.wire();
+    this.draggingWires().push(wire);
+
     context.x = wire.targetX();
     context.y = wire.targetY();
     context.wire = wire;
