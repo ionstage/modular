@@ -9,10 +9,6 @@
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
   var ModuleWireRelation = app.ModuleWireRelation || require('../relations/module-wire-relation.js');
 
-  var ModuleWireRelationList = helper.inherits(function() {
-    ModuleWireRelationList.super_.call(this);
-  }, helper.List);
-
   var Binding = function(props) {
     this.sourceModule = props.sourceModule;
     this.sourcePort = props.sourcePort;
@@ -47,7 +43,6 @@
     ModuleContainer.super_.call(this);
 
     this.modules = this.prop([]);
-    this.moduleWireRelationList = this.prop(new ModuleWireRelationList());
     this.bindingList = this.prop(new BindingList());
     this.element = this.prop(props.element);
     this.dragCount = this.prop(0);
@@ -101,7 +96,6 @@
 
     relations.push(relation);
     module.relations().push(relation);
-    this.moduleWireRelationList().add(relation);
   };
 
   ModuleContainer.prototype.unlock = function(type, module, port, wire) {
@@ -113,7 +107,6 @@
         relations.splice(i, 1);
         var moduleRelations = module.relations();
         moduleRelations.splice(moduleRelations.indexOf(relation), 1);
-        this.moduleWireRelationList().remove(relation);
         break;
       }
     }
