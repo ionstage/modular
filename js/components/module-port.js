@@ -31,6 +31,11 @@
     this.markDirty();
   }, jCore.Component);
 
+  ModulePort.prototype.hideable = function() {
+    // don't hide highlighted port
+    return !this.isHighlighted();
+  };
+
   ModulePort.prototype.bottom = function() {
     return this.top() + this.height();
   };
@@ -69,6 +74,7 @@
     var top = this.top();
     var socketConnected = this.socketConnected();
     var isHighlighted = this.isHighlighted();
+    var hideable = this.hideable();
     var cache = this.cache();
 
     if (top !== cache.top && visible) {
@@ -90,6 +96,11 @@
     if (cache.isHighlighted !== isHighlighted && visible) {
       dom.toggleClass(this.listItemElement(), 'module-port-highlight', isHighlighted);
       cache.isHighlighted = isHighlighted;
+    }
+
+    if (hideable !== cache.hideable && visible) {
+      dom.toggleClass(this.listItemElement(), 'module-port-hide-disabled', !hideable);
+      cache.hideable = hideable;
     }
 
     if (visible === cache.visible)
