@@ -249,10 +249,16 @@
   };
 
   Module.prototype.deselectOption = function() {
+    if (!this.element())
+      return;
+
     dom.value(this.portSelectElement(), '');
   };
 
   Module.prototype.sortOptGroup = function(type) {
+    if (!this.element())
+      return;
+
     var element = this.portOptGroupElement(type);
 
     helper.sortBy(dom.children(element), 'textContent').forEach(function(child) {
@@ -510,6 +516,10 @@
       dom.removeClass(this.element(), 'module-moving');
     } else if (type === 'delete') {
       if (target === context.target) {
+        // remove all connections of connected ports
+        this.ports().forEach(function(port) {
+          this.hidePort(port.name());
+        }.bind(this));
         this.parentElement(null);
         this.deleter(this);
       } else {
