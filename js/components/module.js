@@ -241,9 +241,10 @@
       }
     });
 
-    if (hiddenPort)
-      this.portListHeight(this.portListHeight() - hiddenPort.height());
+    if (!hiddenPort)
+      return;
 
+    this.portListHeight(this.portListHeight() - hiddenPort.height());
     this.portToggler();
   };
 
