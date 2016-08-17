@@ -219,7 +219,7 @@
     if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket())
       this.x(ModulePort.SOCKET_WIDTH);
 
-    this.portToggler();
+    this.portToggler(this, port);
   };
 
   Module.prototype.hidePort = function(name) {
@@ -245,7 +245,7 @@
       return;
 
     this.portListHeight(this.portListHeight() - hiddenPort.height());
-    this.portToggler();
+    this.portToggler(this, hiddenPort);
   };
 
   Module.prototype.deselectOption = function() {

@@ -238,7 +238,28 @@
     this.updateZIndex();
   };
 
-  ModuleContainer.prototype.portToggler = function() {
+  ModuleContainer.prototype.portToggler = function(module, port) {
+    if (!port.visible()) {
+      // remove all connections with hidden port
+      var bindings = this.bindingList().toArray().filter(function(binding) {
+        return ((binding.sourceModule === module && binding.sourcePort === port) ||
+                (binding.targetModule === module && binding.targetPort === port));
+      }).forEach(function(binding) {
+        var sourceModule = binding.sourceModule;
+        var sourcePort = binding.sourcePort;
+        var targetModule = binding.targetModule;
+        var targetPort = binding.targetPort;
+        var wire = binding.targetPort.relations().filter(function(relation) {
+          return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
+        })[0].wire();
+        this.unbind(sourceModule, sourcePort, targetModule, targetPort);
+        this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
+        this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
+        targetPort.socketConnected(false);
+        wire.parentElement(null);
+      }.bind(this));
+    }
+
     // resize the element
     this.markDirty();
   };
