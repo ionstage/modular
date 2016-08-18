@@ -253,15 +253,10 @@
           return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
         })[0].wire();
         this.unbind(sourceModule, sourcePort, targetModule, targetPort);
+        this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
         this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
         targetPort.socketConnected(false);
-        var isDragging = (this.draggingWires().indexOf(wire) !== -1);
-        if (isDragging) {
-          wire.handleVisible(true);
-        } else {
-          this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
-          wire.parentElement(null);
-        }
+        wire.parentElement(null);
       }.bind(this));
     }
 
