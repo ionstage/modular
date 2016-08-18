@@ -294,6 +294,7 @@
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);
     this.draggingWires().push(wire);
     this.updatePortHighlight(port);
+    module.deletable(!port.isHighlighted());
     context.x = x;
     context.y = y;
     context.wire = wire;
@@ -358,6 +359,7 @@
       wire.handleVisible(true);
       currentTargetPort.socketConnected(false);
       this.updatePortHighlight(currentTargetPort);
+      currentTargetModule.deletable(!currentTargetPort.isHighlighted());
     }
 
     if (targetModule && targetPort) {
@@ -367,6 +369,7 @@
       targetPort.socketConnected(true);
       wire.handleVisible(false);
       this.updatePortHighlight(targetPort);
+      targetModule.deletable(!targetPort.isHighlighted());
     }
 
     context.targetModule = targetModule;
@@ -381,9 +384,11 @@
 
     draggingWires.splice(draggingWires.indexOf(wire), 1);
     this.updatePortHighlight(sourcePort);
+    sourceModule.deletable(!sourcePort.isHighlighted());
 
     if (targetModule && targetPort) {
       this.updatePortHighlight(targetPort);
+      targetModule.deletable(!targetPort.isHighlighted());
       return;
     }
 
@@ -409,11 +414,16 @@
       return (binding.targetModule === module && binding.targetPort === port);
     })[0];
 
-    this.updatePortHighlight(port);
-    this.updatePortHighlight(binding.sourcePort);
+    var sourceModule = binding.sourceModule;
+    var sourcePort = binding.sourcePort;
 
-    context.sourceModule = binding.sourceModule;
-    context.sourcePort = binding.sourcePort;
+    this.updatePortHighlight(port);
+    this.updatePortHighlight(sourcePort);
+    module.deletable(!port.isHighlighted());
+    sourceModule.deletable(!sourcePort.isHighlighted());
+
+    context.sourceModule = sourceModule;
+    context.sourcePort = sourcePort;
     context.targetModule = module;
     context.targetPort = port;
   };

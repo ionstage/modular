@@ -17,6 +17,7 @@
     this.ports = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
+    this.deletable = this.prop(true);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -310,6 +311,13 @@
     }
 
     // update element
+    var cache = this.cache();
+    var deletable = this.deletable();
+    if (deletable !== cache.deletable) {
+      dom.toggleClass(element, 'module-delete-disabled', !deletable);
+      cache.deletable = deletable;
+    }
+
     this.redrawTitle();
     this.redrawPosition();
     this.redrawZIndex();
