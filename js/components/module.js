@@ -4,6 +4,7 @@
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
 
   var Module = helper.inherits(function(props) {
@@ -18,6 +19,7 @@
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
     this.deletable = this.prop(true);
+    this.eventCircuitElement = this.prop(null);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -33,6 +35,7 @@
     this.deleter = props.deleter;
     this.fronter = props.fronter;
     this.portToggler = props.portToggler;
+    this.portEventer = props.portEventer;
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
     this.dragPortPlugStarter = props.dragPortPlugStarter;
@@ -174,6 +177,23 @@
                 }));
               }.bind(this)));
 
+              var eventCircuitElement = new CircuitElement(this.ports().filter(function(port) {
+                return port.type() === 'event';
+              }).map(function(port) {
+                return {
+                  label: port.label(),
+                  name: port.name(),
+                  type: port.type(),
+                  arg: this.portEventer.bind(null, this, port)
+                };
+              }.bind(this)));
+
+              eventCircuitElement.getAll().forEach(function(member) {
+                CircuitElement.bind(circuitElement.get(member.props().name), member);
+              });
+
+              this.eventCircuitElement(eventCircuitElement);
+
               var contentWindow = dom.contentWindow(this.componentElement());
               if (contentWindow)
                 dom.on(contentWindow, dom.eventType('start'), this.onpoint, true);
@@ -302,6 +322,11 @@
       var contentWindow = dom.contentWindow(this.componentElement());
       if (contentWindow)
         dom.off(contentWindow, dom.eventType('start'), this.onpoint, true);
+
+      var circuitElement = this.circuitElement();
+      this.eventCircuitElement().getAll().forEach(function(member) {
+        CircuitElement.unbind(circuitElement.get(member.props().name), member);
+      });
 
       dom.remove(element);
       this.element(null);

@@ -51,6 +51,7 @@
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
     this.portToggler = ModuleContainer.prototype.portToggler.bind(this);
+    this.portEventer = ModuleContainer.prototype.portEventer.bind(this);
     this.dragStarter = ModuleContainer.prototype.dragStarter.bind(this);
     this.dragEnder = ModuleContainer.prototype.dragEnder.bind(this);
     this.dragPortPlugStarter = ModuleContainer.prototype.dragPortPlugStarter.bind(this);
@@ -177,6 +178,7 @@
       deleter: this.deleter,
       fronter: this.fronter,
       portToggler: this.portToggler,
+      portEventer: this.portEventer,
       dragStarter: this.dragStarter,
       dragEnder: this.dragEnder,
       dragPortPlugStarter: this.dragPortPlugStarter,
@@ -262,6 +264,34 @@
 
     // resize the element
     this.markDirty();
+  };
+
+  ModuleContainer.prototype.portEventer = function(module, port) {
+    var targetPort = null;
+    var wire = null;
+
+    this.bindingList().toArray().filter(function(binding) {
+      return (binding.sourceModule === module && binding.sourcePort === port);
+    }).forEach(function(binding) {
+      targetPort = binding.targetPort;
+      wire = binding.targetPort.relations().filter(function(relation) {
+        return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
+      })[0].wire();
+    });
+
+    port.plugHighlighted(true);
+    if (targetPort)
+      targetPort.socketHighlighted(true);
+    if (wire)
+      wire.isHighlighted(true);
+
+    setTimeout(function() {
+      port.plugHighlighted(false);
+      if (targetPort)
+        targetPort.socketHighlighted(false);
+      if (wire)
+        wire.isHighlighted(false);
+    }, 100);
   };
 
   ModuleContainer.prototype.dragStarter = function() {
