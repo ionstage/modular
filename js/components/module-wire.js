@@ -69,10 +69,12 @@
     var sourceY = this.sourceY();
     var targetX = this.targetX();
     var targetY = this.targetY();
+    var isHighlighted = this.isHighlighted();
     var cache = this.cache();
 
     if (sourceX === cache.sourceX && sourceY === cache.sourceY &&
-        targetX === cache.targetX && targetY === cache.targetY) {
+        targetX === cache.targetX && targetY === cache.targetY &&
+        isHighlighted === cache.isHighlighted) {
       return;
     }
 
