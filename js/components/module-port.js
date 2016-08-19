@@ -18,6 +18,8 @@
     this.height = this.prop(44);
     this.socketConnected = this.prop(false);
     this.isHighlighted = this.prop(false);
+    this.plugHighlighted = this.prop(false);
+    this.socketHighlighted = this.prop(false);
     this.listItemElement = this.prop(this.renderListItem());
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
@@ -74,6 +76,8 @@
     var top = this.top();
     var socketConnected = this.socketConnected();
     var isHighlighted = this.isHighlighted();
+    var plugHighlighted = this.plugHighlighted();
+    var socketHighlighted = this.socketHighlighted();
     var hideable = this.hideable();
     var cache = this.cache();
 
@@ -96,6 +100,16 @@
     if (cache.isHighlighted !== isHighlighted && visible) {
       dom.toggleClass(this.listItemElement(), 'module-port-highlight', isHighlighted);
       cache.isHighlighted = isHighlighted;
+    }
+
+    if (cache.plugHighlighted !== plugHighlighted && visible) {
+      dom.toggleClass(this.listItemElement(), 'module-port-plug-highlight', plugHighlighted);
+      cache.plugHighlighted = plugHighlighted;
+    }
+
+    if (cache.socketHighlighted !== socketHighlighted && visible) {
+      dom.toggleClass(this.listItemElement(), 'module-port-socket-highlight', socketHighlighted);
+      cache.socketHighlighted = socketHighlighted;
     }
 
     if (hideable !== cache.hideable && visible) {
