@@ -14,7 +14,7 @@
     this.targetY = this.prop(props.targetY || 0);
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(!!props.handleVisible);
-    this.isHighlighted = this.prop(true);
+    this.isHighlighted = this.prop(false);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.handleElement = this.prop(null);
