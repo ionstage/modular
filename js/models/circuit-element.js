@@ -107,18 +107,6 @@
     targetMemberSources.splice(targetMemberSources.indexOf(sourceMember), 1);
   };
 
-  CircuitElement.unbindAll = function(wrapper) {
-    var member = wrapper.unwrap(Wrapper.KEY);
-
-    member.sources.forEach(function(source) {
-      CircuitElement.unbind(source.wrapper, member.wrapper);
-    });
-
-    member.targets.forEach(function(target) {
-      CircuitElement.unbind(member.wrapper, target.wrapper);
-    });
-  };
-
   if (typeof module !== 'undefined' && module.exports)
     module.exports = CircuitElement;
   else
