@@ -81,57 +81,52 @@
     var hideable = this.hideable();
     var cache = this.cache();
 
-    if (top !== cache.top && visible) {
-      var translate = 'translateY(' + top + 'px)';
+    if (visible !== cache.visible) {
+      if (visible) {
+        dom.remove(this.optionElement());
+        dom.append(this.parentListElement(), this.listItemElement());
+      } else {
+        dom.remove(this.listItemElement());
+        dom.append(this.parentOptGroupElement(), this.optionElement());
+      }
+      this.optGroupSorter(this.type());
+      this.optionDeselector();
+      cache.visible = visible;
+    }
 
+    if (top !== cache.top) {
+      var translate = 'translateY(' + top + 'px)';
       dom.css(this.listItemElement(), {
         transform: translate,
         webkitTransform: translate
       });
-
       cache.top = top;
     }
 
-    if (socketConnected !== cache.socketConnected && visible) {
+    if (socketConnected !== cache.socketConnected) {
       dom.toggleClass(this.listItemElement(), 'module-port-socket-connected', socketConnected);
       cache.socketConnected = socketConnected;
     }
 
-    if (cache.isHighlighted !== isHighlighted && visible) {
+    if (isHighlighted !== cache.isHighlighted) {
       dom.toggleClass(this.listItemElement(), 'module-port-highlight', isHighlighted);
       cache.isHighlighted = isHighlighted;
     }
 
-    if (cache.plugHighlighted !== plugHighlighted && visible) {
+    if (plugHighlighted !== cache.plugHighlighted) {
       dom.toggleClass(this.listItemElement(), 'module-port-plug-highlight', plugHighlighted);
       cache.plugHighlighted = plugHighlighted;
     }
 
-    if (cache.socketHighlighted !== socketHighlighted && visible) {
+    if (socketHighlighted !== cache.socketHighlighted) {
       dom.toggleClass(this.listItemElement(), 'module-port-socket-highlight', socketHighlighted);
       cache.socketHighlighted = socketHighlighted;
     }
 
-    if (hideable !== cache.hideable && visible) {
+    if (hideable !== cache.hideable) {
       dom.toggleClass(this.listItemElement(), 'module-port-hide-disabled', !hideable);
       cache.hideable = hideable;
     }
-
-    if (visible === cache.visible)
-      return;
-
-    if (visible) {
-      dom.remove(this.optionElement());
-      dom.append(this.parentListElement(), this.listItemElement());
-    } else {
-      dom.remove(this.listItemElement());
-      dom.append(this.parentOptGroupElement(), this.optionElement());
-    }
-
-    this.optGroupSorter(this.type());
-    this.optionDeselector();
-
-    cache.visible = visible;
   };
 
   ModulePort.PLUG_OFFSET_X = 261;
