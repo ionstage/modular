@@ -363,6 +363,15 @@
       highlightedEventList.addWire(port, wire);
     });
 
+    var draggingWire = this.draggingWires().filter(function(wire) {
+      return port.relations().some(function(relation) {
+        return (relation.wire() === wire);
+      });
+    })[0];
+
+    if (draggingWire)
+      highlightedEventList.addWire(port, draggingWire);
+
     highlightedEventList.isHighlighted(port, true);
 
     setTimeout(function() {
