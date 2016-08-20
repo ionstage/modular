@@ -70,11 +70,16 @@
     var targetX = this.targetX();
     var targetY = this.targetY();
     var isHighlighted = this.isHighlighted();
+    var element = this.element();
     var cache = this.cache();
 
+    if (isHighlighted !== cache.isHighlighted) {
+      dom.toggleClass(element, 'module-wire-highlight', this.isHighlighted());
+      // update cache in 'redrawHandle' method
+    }
+
     if (sourceX === cache.sourceX && sourceY === cache.sourceY &&
-        targetX === cache.targetX && targetY === cache.targetY &&
-        isHighlighted === cache.isHighlighted) {
+        targetX === cache.targetX && targetY === cache.targetY) {
       return;
     }
 
@@ -87,10 +92,6 @@
       'M', sourceX - x, sourceY - y,
       'L', targetX - x, targetY - y
     ].join(' ');
-
-    var element = this.element();
-
-    dom.toggleClass(element, 'module-wire-highlight', this.isHighlighted());
 
     dom.css(element, {
       transform: translate,
@@ -112,33 +113,33 @@
     var element = this.handleElement();
     var cache = this.cache();
 
-    if (cache.handleType !== type) {
+    if (type !== cache.handleType) {
       dom.data(element, 'type', type);
       cache.handleType = type;
     }
 
-    if (cache.handleVisible !== visible) {
+    if (visible !== cache.handleVisible) {
       dom.toggleClass(element, 'hide', !visible);
       cache.handleVisible = visible;
     }
 
-    if (cache.isHighlighted !== isHighlighted) {
+    if (isHighlighted !== cache.isHighlighted) {
       dom.toggleClass(element, 'module-wire-highlight', isHighlighted);
       cache.isHighlighted = isHighlighted;
     }
 
-    if (!visible)
-      return;
-
     var x = cache.targetX - ModuleWire.HANDLE_WIDTH / 2;
     var y = cache.targetY - ModuleWire.HANDLE_WIDTH / 2;
 
-    var translate = 'translate(' + x + 'px, ' + y + 'px)';
-
-    dom.css(element, {
-      transform: translate,
-      webkitTransform: translate
-    });
+    if (x !== cache.x || y !== cache.y) {
+      var translate = 'translate(' + x + 'px, ' + y + 'px)';
+      dom.css(element, {
+        transform: translate,
+        webkitTransform: translate
+      });
+      cache.x = x;
+      cache.y = y;
+    }
   };
 
   ModuleWire.TEMPLATE_HTML = [
