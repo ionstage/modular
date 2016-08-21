@@ -218,6 +218,24 @@
     bindingList.remove(binding);
   };
 
+  ModuleContainer.prototype.connect = function(sourceModule, sourcePort, targetModule, targetPort) {
+    var sourcePosition = sourceModule.plugPosition(sourcePort);
+    var targetPosition = targetModule.plugPosition(targetPort);
+    var wire = new ModuleWire({
+      sourceX: sourcePosition.x,
+      sourceY: sourcePosition.y,
+      targetX: targetPosition.x,
+      targetY: targetPosition.y,
+      handleType: sourcePort.type(),
+      parentHandleElement: this.wireHandleContainerElement()
+    });
+    wire.parentElement(this.wireContainerElement());
+    targetPort.socketConnected(true);
+    this.bind(sourceModule, sourcePort, targetModule, targetPort);
+    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
+    this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
+  };
+
   ModuleContainer.prototype.redraw = function() {
     var modules = this.modules();
     var x = 0;
