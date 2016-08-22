@@ -406,8 +406,8 @@
     this.dragCount(this.dragCount() - 1);
   };
 
-  ModuleContainer.prototype.dragPortPlugStarter = function(module, port, context) {
-    var position = module.plugPosition(port);
+  ModuleContainer.prototype.dragPortPlugStarter = function(sourceModule, sourcePort, context) {
+    var position = sourceModule.plugPosition(sourcePort);
     var x = position.x;
     var y = position.y;
     var wire = new ModuleWire({
@@ -415,22 +415,22 @@
       sourceY: y,
       targetX: x,
       targetY: y,
-      handleType: port.type(),
+      handleType: sourcePort.type(),
       handleVisible: true,
       parentHandleElement: this.wireHandleContainerElement()
     });
     wire.parentElement(this.wireContainerElement());
-    this.lock(ModuleContainer.LOCK_TYPE_PLUG, module, port, wire);
+    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     this.draggingWires().push(wire);
-    this.updatePortHighlight(port);
-    module.deletable(!port.isHighlighted());
+    this.updatePortHighlight(sourcePort);
+    sourceModule.deletable(!sourcePort.isHighlighted());
     var highlightedEventList = this.highlightedEventList();
-    highlightedEventList.addWire(port, wire);
-    highlightedEventList.isHighlighted(port, port.plugHighlighted());
+    highlightedEventList.addWire(sourcePort, wire);
+    highlightedEventList.isHighlighted(sourcePort, sourcePort.plugHighlighted());
     context.x = x;
     context.y = y;
     context.wire = wire;
-    context.type = port.type();
+    context.type = sourcePort.type();
     context.targetModule = null;
     context.targetPort = null;
   };
@@ -536,8 +536,8 @@
     wire.parentElement(null);
   };
 
-  ModuleContainer.prototype.dragPortSocketStarter = function(module, port, context) {
-    var relation = port.relations().filter(function(relation) {
+  ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
+    var relation = targetPort.relations().filter(function(relation) {
       return (relation.type() === ModuleWireRelation.TYPE_TARGET);
     })[0];
 
@@ -547,24 +547,24 @@
     context.x = wire.targetX();
     context.y = wire.targetY();
     context.wire = wire;
-    context.type = port.type();
+    context.type = targetPort.type();
 
     var binding = this.bindingList().toArray().filter(function(binding) {
-      return (binding.targetModule === module && binding.targetPort === port);
+      return (binding.targetModule === targetModule && binding.targetPort === targetPort);
     })[0];
 
     var sourceModule = binding.sourceModule;
     var sourcePort = binding.sourcePort;
 
-    this.updatePortHighlight(port);
     this.updatePortHighlight(sourcePort);
-    module.deletable(!port.isHighlighted());
+    this.updatePortHighlight(targetPort);
     sourceModule.deletable(!sourcePort.isHighlighted());
+    targetModule.deletable(!targetPort.isHighlighted());
 
     context.sourceModule = sourceModule;
     context.sourcePort = sourcePort;
-    context.targetModule = module;
-    context.targetPort = port;
+    context.targetModule = targetModule;
+    context.targetPort = targetPort;
   };
 
   ModuleContainer.prototype.dragPortSocketMover = function(targetModule, targetPort, dx, dy, context) {
