@@ -42,7 +42,7 @@
 
   var CircuitElement = function(members) {
     var memberTable = {};
-    var names = [];
+    var memberNames = [];
 
     members.slice().reverse().forEach(function(props) {
       var name = props.name;
@@ -51,17 +51,17 @@
         return;
 
       memberTable[name] = new CircuitElementMember(props);
-      names.unshift(name);
+      memberNames.unshift(name);
     });
 
     this.memberTable = memberTable;
-    this.names = names;
+    this.memberNames = memberNames;
 
     return this.wrapper();
   };
 
-  CircuitElement.prototype.get = function(name) {
-    var member = this.memberTable[name];
+  CircuitElement.prototype.get = function(memberName) {
+    var member = this.memberTable[memberName];
 
     if (!member)
       return null;
@@ -70,8 +70,8 @@
   };
 
   CircuitElement.prototype.getAll = function() {
-    return this.names.map(function(name) {
-      return this.memberTable[name].wrapper;
+    return this.memberNames.map(function(memberName) {
+      return this.memberTable[memberName].wrapper;
     }.bind(this));
   };
 
