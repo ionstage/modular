@@ -22,8 +22,6 @@
     this.callee = circuit[props.type](props.arg);
     this.socketDisabled = !!props.socketDisabled;
     this.plugDisabled = !!props.plugDisabled;
-    this.sources = [];
-    this.targets = [];
     this.wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
     this.wrapper.props = CircuitElementMember.prototype.props.bind(this);
   };
@@ -87,24 +85,13 @@
   CircuitElement.bind = function(sourceWrapper, targetWrapper) {
     var sourceMember = sourceWrapper.unwrap(Wrapper.KEY);
     var targetMember = targetWrapper.unwrap(Wrapper.KEY);
-
     circuit.bind(sourceMember.callee, targetMember.callee);
-
-    sourceMember.targets.push(targetMember);
-    targetMember.sources.push(sourceMember);
   };
 
   CircuitElement.unbind = function(sourceWrapper, targetWrapper) {
     var sourceMember = sourceWrapper.unwrap(Wrapper.KEY);
     var targetMember = targetWrapper.unwrap(Wrapper.KEY);
-
     circuit.unbind(sourceMember.callee, targetMember.callee);
-
-    var sourceMemberTargets = sourceMember.targets;
-    var targetMemberSources = targetMember.sources;
-
-    sourceMemberTargets.splice(sourceMemberTargets.indexOf(targetMember), 1);
-    targetMemberSources.splice(targetMemberSources.indexOf(sourceMember), 1);
   };
 
   if (typeof module !== 'undefined' && module.exports)
