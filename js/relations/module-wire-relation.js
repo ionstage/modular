@@ -22,14 +22,9 @@
   };
 
   ModuleWireRelation.prototype.update = function() {
-    var port = this.port();
-
-    if (!port.visible())
-      return;
-
     var type = this.type();
     var positionType = ModuleWireRelation.positionTypeMap[type];
-    var position = this.module()[positionType + 'Position'](port);
+    var position = this.module()[positionType + 'Position'](this.port());
     var wire = this.wire();
 
     wire[type + 'X'](position.x);
