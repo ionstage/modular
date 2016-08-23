@@ -323,10 +323,13 @@
       if (contentWindow)
         dom.off(contentWindow, dom.eventType('start'), this.onpoint, true);
 
-      var circuitElement = this.circuitElement();
-      this.eventCircuitElement().getAll().forEach(function(member) {
-        CircuitElement.unbind(circuitElement.get(member.props().name), member);
-      });
+      var eventCircuitElement = this.eventCircuitElement();
+      if (eventCircuitElement) {
+        var circuitElement = this.circuitElement();
+        eventCircuitElement.getAll().forEach(function(member) {
+          CircuitElement.unbind(circuitElement.get(member.props().name), member);
+        });
+      }
 
       dom.remove(element);
       this.element(null);
