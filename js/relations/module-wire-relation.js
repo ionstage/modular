@@ -3,7 +3,6 @@
 
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
-  var ModulePort = app.ModulePort || require('./module-port.js');
 
   var ModuleWireRelation = helper.inherits(function(props) {
     ModuleWireRelation.super_.call(this);
