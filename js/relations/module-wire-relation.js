@@ -14,6 +14,13 @@
     this.wire = this.prop(props.wire);
   }, jCore.Relation);
 
+  ModuleWireRelation.prototype.positionType = (function() {
+    var map = { source: 'plug', target: 'socket' };
+    return function() {
+      return map[this.type()];
+    };
+  })();
+
   ModuleWireRelation.prototype.consistsOf = function(type, module, port, wire) {
     return (this.type() === type &&
             this.module() === module &&
@@ -23,9 +30,8 @@
 
   ModuleWireRelation.prototype.update = function() {
     var type = this.type();
-    var positionType = ModuleWireRelation.positionTypeMap[type];
-    var position = this.module()[positionType + 'Position'](this.port());
     var wire = this.wire();
+    var position = this.module()[this.positionType() + 'Position'](this.port());
 
     wire[type + 'X'](position.x);
     wire[type + 'Y'](position.y);
@@ -33,11 +39,6 @@
 
   ModuleWireRelation.TYPE_SOURCE = 'source';
   ModuleWireRelation.TYPE_TARGET = 'target';
-
-  ModuleWireRelation.positionTypeMap = {
-    source: 'plug',
-    target: 'socket'
-  };
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleWireRelation;
