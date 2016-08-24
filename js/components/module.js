@@ -178,7 +178,7 @@
               }.bind(this)));
 
               var eventCircuitElement = new CircuitElement(this.ports().filter(function(port) {
-                return port.type() === 'event';
+                return port.type() === ModulePort.TYPE_EVENT;
               }).map(function(port) {
                 return {
                   label: port.label(),

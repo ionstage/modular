@@ -129,6 +129,9 @@
     }
   };
 
+  ModulePort.TYPE_PROP = 'prop';
+  ModulePort.TYPE_EVENT = 'event';
+
   ModulePort.PLUG_OFFSET_X = 261;
   ModulePort.PLUG_WIDTH = 50;
 
