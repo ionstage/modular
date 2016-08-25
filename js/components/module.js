@@ -128,6 +128,17 @@
     };
   };
 
+  Module.prototype.exportModularModule = (function() {
+    var ModularModule = function(member) {
+      return new CircuitElement(member);
+    };
+    return function() {
+      var globalApp = (typeof module !== 'undefined' && module.exports) ? global.app : app;
+      if (globalApp.ModularModule !== ModularModule)
+        globalApp.ModularModule = ModularModule;
+    };
+  })();
+
   Module.prototype.loadComponent = function() {
     var url = [
       'modular_modules/',
@@ -146,6 +157,8 @@
       var componentElement = this.componentElement();
       var contentWindow = dom.contentWindow(componentElement);
       var data = Date.now().toString();
+
+      this.exportModularModule();
 
       dom.name(contentWindow, data);
       dom.writeContent(componentElement, text);
