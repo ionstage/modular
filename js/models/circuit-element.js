@@ -62,16 +62,12 @@
 
   CircuitElement.prototype.get = function(memberName) {
     var member = this.memberTable[memberName];
-
-    if (!member)
-      return null;
-
-    return member.wrapper;
+    return (member ? member.wrapper : null);
   };
 
   CircuitElement.prototype.getAll = function() {
     return this.memberNames.map(function(memberName) {
-      return this.memberTable[memberName].wrapper;
+      return this.get(memberName);
     }.bind(this));
   };
 
