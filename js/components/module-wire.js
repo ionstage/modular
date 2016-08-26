@@ -14,7 +14,7 @@
     this.targetY = this.prop(props.targetY);
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(!!props.handleVisible);
-    this.isHighlighted = this.prop(false);
+    this.highlighted = this.prop(false);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.handleElement = this.prop(null);
@@ -69,12 +69,12 @@
     var sourceY = this.sourceY();
     var targetX = this.targetX();
     var targetY = this.targetY();
-    var isHighlighted = this.isHighlighted();
+    var highlighted = this.highlighted();
     var element = this.element();
     var cache = this.cache();
 
-    if (isHighlighted !== cache.isHighlighted) {
-      dom.toggleClass(element, 'module-wire-highlight', this.isHighlighted());
+    if (highlighted !== cache.highlighted) {
+      dom.toggleClass(element, 'module-wire-highlight', this.highlighted());
       // update cache in 'redrawHandle' method
     }
 
@@ -109,7 +109,7 @@
   ModuleWire.prototype.redrawHandle = function() {
     var type = this.handleType();
     var visible = this.handleVisible();
-    var isHighlighted = this.isHighlighted();
+    var highlighted = this.highlighted();
     var element = this.handleElement();
     var cache = this.cache();
 
@@ -123,9 +123,9 @@
       cache.handleVisible = visible;
     }
 
-    if (isHighlighted !== cache.isHighlighted) {
-      dom.toggleClass(element, 'module-wire-highlight', isHighlighted);
-      cache.isHighlighted = isHighlighted;
+    if (highlighted !== cache.highlighted) {
+      dom.toggleClass(element, 'module-wire-highlight', highlighted);
+      cache.highlighted = highlighted;
     }
 
     var x = cache.targetX - ModuleWire.HANDLE_WIDTH / 2;

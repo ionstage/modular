@@ -17,7 +17,7 @@
     this.top = this.prop(0);
     this.height = this.prop(44);
     this.socketConnected = this.prop(false);
-    this.isHighlighted = this.prop(false);
+    this.labelHighlighted = this.prop(false);
     this.plugHighlighted = this.prop(false);
     this.socketHighlighted = this.prop(false);
     this.listItemElement = this.prop(this.renderListItem());
@@ -34,8 +34,8 @@
   }, jCore.Component);
 
   ModulePort.prototype.hideable = function() {
-    // don't hide highlighted port
-    return !this.isHighlighted();
+    // don't hide label-highlighted port
+    return !this.labelHighlighted();
   };
 
   ModulePort.prototype.bottom = function() {
@@ -75,7 +75,7 @@
     var visible = this.visible();
     var top = this.top();
     var socketConnected = this.socketConnected();
-    var isHighlighted = this.isHighlighted();
+    var labelHighlighted = this.labelHighlighted();
     var plugHighlighted = this.plugHighlighted();
     var socketHighlighted = this.socketHighlighted();
     var hideable = this.hideable();
@@ -108,9 +108,9 @@
       cache.socketConnected = socketConnected;
     }
 
-    if (isHighlighted !== cache.isHighlighted) {
-      dom.toggleClass(this.listItemElement(), 'module-port-highlight', isHighlighted);
-      cache.isHighlighted = isHighlighted;
+    if (labelHighlighted !== cache.labelHighlighted) {
+      dom.toggleClass(this.listItemElement(), 'module-port-highlight', labelHighlighted);
+      cache.labelHighlighted = labelHighlighted;
     }
 
     if (plugHighlighted !== cache.plugHighlighted) {

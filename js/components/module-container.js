@@ -94,18 +94,18 @@
     highlightEvent.targetPortList.remove(targetPort);
   };
 
-  HighlightedEventList.prototype.isHighlighted = function(sourcePort, isHighlighted) {
+  HighlightedEventList.prototype.highlighted = function(sourcePort, highlighted) {
     var highlightEvent = this.highlightEvent(sourcePort);
 
     if (!highlightEvent)
       return;
 
-    highlightEvent.sourcePort.plugHighlighted(isHighlighted);
+    highlightEvent.sourcePort.plugHighlighted(highlighted);
     highlightEvent.targetPortList.toArray().forEach(function(targetPort) {
-      targetPort.socketHighlighted(isHighlighted);
+      targetPort.socketHighlighted(highlighted);
     });
     highlightEvent.wireList.toArray().forEach(function(wire) {
-      wire.isHighlighted(isHighlighted);
+      wire.highlighted(highlighted);
     });
   };
 
@@ -304,12 +304,12 @@
     });
   };
 
-  ModuleContainer.prototype.updatePortHighlight = function(port) {
+  ModuleContainer.prototype.updatePortLabelHighlight = function(port) {
     var draggingWires = this.draggingWires();
     var isDragging = port.relations().some(function(relation) {
       return (draggingWires.indexOf(relation.wire()) !== -1);
     });
-    port.isHighlighted(isDragging);
+    port.labelHighlighted(isDragging);
   };
 
   ModuleContainer.prototype.deleter = function(module) {
@@ -390,10 +390,10 @@
     if (draggingWire)
       highlightedEventList.addWire(port, draggingWire);
 
-    highlightedEventList.isHighlighted(port, true);
+    highlightedEventList.highlighted(port, true);
 
     setTimeout(function() {
-      highlightedEventList.isHighlighted(port, false);
+      highlightedEventList.highlighted(port, false);
       highlightedEventList.removeSourcePort(port);
     }, 100);
   };
@@ -422,11 +422,11 @@
     wire.parentElement(this.wireContainerElement());
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     this.draggingWires().push(wire);
-    this.updatePortHighlight(sourcePort);
-    sourceModule.deletable(!sourcePort.isHighlighted());
+    this.updatePortLabelHighlight(sourcePort);
+    sourceModule.deletable(!sourcePort.labelHighlighted());
     var highlightedEventList = this.highlightedEventList();
     highlightedEventList.addWire(sourcePort, wire);
-    highlightedEventList.isHighlighted(sourcePort, sourcePort.plugHighlighted());
+    highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
     context.x = x;
     context.y = y;
     context.wire = wire;
@@ -492,11 +492,11 @@
       this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetModule, currentTargetPort, wire);
       wire.handleVisible(true);
       currentTargetPort.socketConnected(false);
-      this.updatePortHighlight(currentTargetPort);
-      currentTargetModule.deletable(!currentTargetPort.isHighlighted());
+      this.updatePortLabelHighlight(currentTargetPort);
+      currentTargetModule.deletable(!currentTargetPort.labelHighlighted());
       highlightedEventList.removeTargetPort(sourcePort, currentTargetPort);
       currentTargetPort.socketHighlighted(false);
-      highlightedEventList.isHighlighted(sourcePort, sourcePort.plugHighlighted());
+      highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
     }
 
     if (targetModule && targetPort) {
@@ -505,10 +505,10 @@
       this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetModule, targetPort, wire);
       targetPort.socketConnected(true);
       wire.handleVisible(false);
-      this.updatePortHighlight(targetPort);
-      targetModule.deletable(!targetPort.isHighlighted());
+      this.updatePortLabelHighlight(targetPort);
+      targetModule.deletable(!targetPort.labelHighlighted());
       highlightedEventList.addTargetPort(sourcePort, targetPort);
-      highlightedEventList.isHighlighted(sourcePort, sourcePort.plugHighlighted());
+      highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
     }
 
     context.targetModule = targetModule;
@@ -522,12 +522,12 @@
     var targetPort = context.targetPort;
 
     draggingWires.splice(draggingWires.indexOf(wire), 1);
-    this.updatePortHighlight(sourcePort);
-    sourceModule.deletable(!sourcePort.isHighlighted());
+    this.updatePortLabelHighlight(sourcePort);
+    sourceModule.deletable(!sourcePort.labelHighlighted());
 
     if (targetModule && targetPort) {
-      this.updatePortHighlight(targetPort);
-      targetModule.deletable(!targetPort.isHighlighted());
+      this.updatePortLabelHighlight(targetPort);
+      targetModule.deletable(!targetPort.labelHighlighted());
       return;
     }
 
@@ -556,10 +556,10 @@
     var sourceModule = binding.sourceModule;
     var sourcePort = binding.sourcePort;
 
-    this.updatePortHighlight(sourcePort);
-    this.updatePortHighlight(targetPort);
-    sourceModule.deletable(!sourcePort.isHighlighted());
-    targetModule.deletable(!targetPort.isHighlighted());
+    this.updatePortLabelHighlight(sourcePort);
+    this.updatePortLabelHighlight(targetPort);
+    sourceModule.deletable(!sourcePort.labelHighlighted());
+    targetModule.deletable(!targetPort.labelHighlighted());
 
     context.sourceModule = sourceModule;
     context.sourcePort = sourcePort;
