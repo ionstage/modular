@@ -22,8 +22,8 @@
     this.callee = circuit[props.type](props.arg);
     this.socketDisabled = !!props.socketDisabled;
     this.plugDisabled = !!props.plugDisabled;
-    this.wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
-    this.wrapper.props = CircuitElementMember.prototype.props.bind(this);
+
+    return this.wrapper();
   };
 
   CircuitElementMember.prototype.call = function() {
@@ -38,6 +38,12 @@
       socketDisabled: this.socketDisabled,
       plugDisabled: this.plugDisabled
     };
+  };
+
+  CircuitElementMember.prototype.wrapper = function() {
+    var wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
+    wrapper.props = CircuitElementMember.prototype.props.bind(this);
+    return wrapper;
   };
 
   var CircuitElement = function(members) {
@@ -59,8 +65,7 @@
   };
 
   CircuitElement.prototype.get = function(memberName) {
-    var member = this.memberTable[memberName];
-    return (member ? member.wrapper : null);
+    return this.memberTable[memberName];
   };
 
   CircuitElement.prototype.getAll = function() {
