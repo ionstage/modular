@@ -47,19 +47,12 @@
 
     dom.addClass(element, 'module-port');
     dom.data(element, 'type', this.type());
-
-    var texts = [];
-
-    if (!this.plugDisabled())
-      texts.push('<div class="module-port-plug"></div>');
-
-    if (!this.socketDisabled())
-      texts.push('<div class="module-port-socket"><span></span></div>');
-
-    texts.push('<div class="module-port-label">' + this.label() + '</div>');
-    texts.push('<img class="module-port-hide-button" src="images/minus-square-o.svg">');
-
-    dom.html(element, texts.join(''));
+    dom.html(element,
+      (!this.plugDisabled() ? '<div class="module-port-plug"></div>' : '') +
+      (!this.socketDisabled() ? '<div class="module-port-socket"><span></span></div>' : '') +
+      '<div class="module-port-label">' + this.label() + '</div>' +
+      '<img class="module-port-hide-button" src="images/minus-square-o.svg">'
+    );
 
     return element;
   };
