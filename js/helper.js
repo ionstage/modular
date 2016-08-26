@@ -31,6 +31,17 @@
     return obj;
   };
 
+  helper.pick = function(obj, keys) {
+    var ret = {};
+    if (!obj)
+      return ret;
+    keys.forEach(function(key) {
+      if (key in obj)
+        ret[key] = obj[key];
+    });
+    return ret;
+  };
+
   helper.dig = function() {
     var args = Array.prototype.slice.call(arguments);
     return args.reduce(function(prev, curr) {
