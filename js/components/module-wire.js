@@ -74,7 +74,7 @@
     var cache = this.cache();
 
     if (highlighted !== cache.highlighted) {
-      dom.toggleClass(element, 'module-wire-highlight', this.highlighted());
+      dom.toggleClass(element, 'module-wire-highlight', highlighted);
       // update cache in 'redrawHandle' method
     }
 
