@@ -21,6 +21,14 @@
     return value;
   };
 
+  helper.clone = function(obj) {
+    var ret = {};
+    for (var key in obj) {
+      ret[key] = obj[key];
+    }
+    return ret;
+  };
+
   helper.extend = function(obj) {
     for (var i = 1, len = arguments.length; i < len; i++) {
       var src = arguments[i];
