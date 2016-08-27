@@ -2,6 +2,7 @@
   'use strict';
 
   var circuit = require('circuit');
+  var helper = app.helper || require('../helper.js');
 
   var Wrapper = function(obj, self) {
     obj.unwrap = Wrapper.unwrap.bind(self);
@@ -16,35 +17,28 @@
   Wrapper.KEY = {};
 
   var CircuitElementMember = function(props) {
-    this.label = props.label;
-    this.name = props.name;
-    this.type = props.type;
     this.callee = circuit[props.type](props.arg);
-    this.socketDisabled = !!props.socketDisabled;
-    this.plugDisabled = !!props.plugDisabled;
+    return this.wrapper(helper.extend(this.defaults(), helper.pick(props, CircuitElementMember.keys)));
+  };
 
-    return this.wrapper();
+  CircuitElementMember.prototype.defaults = function() {
+    return {
+      socketDisabled: false,
+      plugDisabled: false
+    };
   };
 
   CircuitElementMember.prototype.call = function() {
     return this.callee.apply(null, arguments);
   };
 
-  CircuitElementMember.prototype.props = function() {
-    return {
-      label: this.label,
-      name: this.name,
-      type: this.type,
-      socketDisabled: this.socketDisabled,
-      plugDisabled: this.plugDisabled
-    };
-  };
-
-  CircuitElementMember.prototype.wrapper = function() {
+  CircuitElementMember.prototype.wrapper = function(props) {
     var wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
-    wrapper.props = CircuitElementMember.prototype.props.bind(this);
+    wrapper.props = helper.clone.bind(null, props);
     return wrapper;
   };
+
+  CircuitElementMember.keys = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
 
   var CircuitElement = function(members) {
     var memberTable = {};
