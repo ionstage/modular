@@ -65,18 +65,18 @@
   };
 
   ModuleWire.prototype.redrawPath = function() {
+    var cache = this.cache();
+
+    var highlighted = this.highlighted();
+    if (highlighted !== cache.highlighted) {
+      dom.toggleClass(this.element(), 'module-wire-highlight', highlighted);
+      // update cache in 'redrawHandle' method
+    }
+
     var sourceX = this.sourceX();
     var sourceY = this.sourceY();
     var targetX = this.targetX();
     var targetY = this.targetY();
-    var highlighted = this.highlighted();
-    var element = this.element();
-    var cache = this.cache();
-
-    if (highlighted !== cache.highlighted) {
-      dom.toggleClass(element, 'module-wire-highlight', highlighted);
-      // update cache in 'redrawHandle' method
-    }
 
     if (sourceX === cache.sourceX && sourceY === cache.sourceY &&
         targetX === cache.targetX && targetY === cache.targetY) {
@@ -85,20 +85,16 @@
 
     var x = Math.min(sourceX, targetX);
     var y = Math.min(sourceY, targetY);
-
     var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
-    var d = [
-      'M', sourceX - x, sourceY - y,
-      'L', targetX - x, targetY - y
-    ].join(' ');
-
-    dom.css(element, {
+    dom.css(this.element(), {
       transform: translate,
       webkitTransform: translate
     });
 
-    dom.attr(this.pathElement(), { d: d });
+    dom.attr(this.pathElement(), {
+      d: ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' ')
+    });
 
     cache.sourceX = sourceX;
     cache.sourceY = sourceY;
@@ -107,24 +103,23 @@
   };
 
   ModuleWire.prototype.redrawHandle = function() {
-    var type = this.handleType();
-    var visible = this.handleVisible();
-    var highlighted = this.highlighted();
-    var element = this.handleElement();
     var cache = this.cache();
 
-    if (type !== cache.handleType) {
-      dom.data(element, 'type', type);
-      cache.handleType = type;
+    var handleType = this.handleType();
+    if (handleType !== cache.handleType) {
+      dom.data(this.handleElement(), 'type', handleType);
+      cache.handleType = handleType;
     }
 
-    if (visible !== cache.handleVisible) {
-      dom.toggleClass(element, 'hide', !visible);
-      cache.handleVisible = visible;
+    var handleVisible = this.handleVisible();
+    if (handleVisible !== cache.handleVisible) {
+      dom.toggleClass(this.handleElement(), 'hide', !handleVisible);
+      cache.handleVisible = handleVisible;
     }
 
+    var highlighted = this.highlighted();
     if (highlighted !== cache.highlighted) {
-      dom.toggleClass(element, 'module-wire-highlight', highlighted);
+      dom.toggleClass(this.handleElement(), 'module-wire-highlight', highlighted);
       cache.highlighted = highlighted;
     }
 
@@ -133,7 +128,7 @@
 
     if (x !== cache.x || y !== cache.y) {
       var translate = 'translate(' + x + 'px, ' + y + 'px)';
-      dom.css(element, {
+      dom.css(this.handleElement(), {
         transform: translate,
         webkitTransform: translate
       });
