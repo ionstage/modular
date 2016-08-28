@@ -97,7 +97,7 @@
 
     var labelHighlighted = this.labelHighlighted();
     if (labelHighlighted !== cache.labelHighlighted) {
-      dom.toggleClass(this.listItemElement(), 'module-port-highlight', labelHighlighted);
+      dom.toggleClass(this.listItemElement(), 'module-port-label-highlight', labelHighlighted);
       cache.labelHighlighted = labelHighlighted;
     }
 
