@@ -44,7 +44,6 @@
 
   ModulePort.prototype.renderListItem = function() {
     var element = dom.el('<div>');
-
     dom.addClass(element, 'module-port');
     dom.data(element, 'type', this.type());
     dom.html(element,
@@ -53,7 +52,6 @@
       '<div class="module-port-label">' + this.label() + '</div>' +
       '<img class="module-port-hide-button" src="images/minus-square-o.svg">'
     );
-
     return element;
   };
 
@@ -65,15 +63,9 @@
   };
 
   ModulePort.prototype.redraw = function() {
-    var visible = this.visible();
-    var top = this.top();
-    var socketConnected = this.socketConnected();
-    var labelHighlighted = this.labelHighlighted();
-    var plugHighlighted = this.plugHighlighted();
-    var socketHighlighted = this.socketHighlighted();
-    var hideable = this.hideable();
     var cache = this.cache();
 
+    var visible = this.visible();
     if (visible !== cache.visible) {
       if (visible) {
         dom.remove(this.optionElement());
@@ -87,6 +79,7 @@
       cache.visible = visible;
     }
 
+    var top = this.top();
     if (top !== cache.top) {
       var translate = 'translateY(' + top + 'px)';
       dom.css(this.listItemElement(), {
@@ -96,26 +89,31 @@
       cache.top = top;
     }
 
+    var socketConnected = this.socketConnected();
     if (socketConnected !== cache.socketConnected) {
       dom.toggleClass(this.listItemElement(), 'module-port-socket-connected', socketConnected);
       cache.socketConnected = socketConnected;
     }
 
+    var labelHighlighted = this.labelHighlighted();
     if (labelHighlighted !== cache.labelHighlighted) {
       dom.toggleClass(this.listItemElement(), 'module-port-highlight', labelHighlighted);
       cache.labelHighlighted = labelHighlighted;
     }
 
+    var plugHighlighted = this.plugHighlighted();
     if (plugHighlighted !== cache.plugHighlighted) {
       dom.toggleClass(this.listItemElement(), 'module-port-plug-highlight', plugHighlighted);
       cache.plugHighlighted = plugHighlighted;
     }
 
+    var socketHighlighted = this.socketHighlighted();
     if (socketHighlighted !== cache.socketHighlighted) {
       dom.toggleClass(this.listItemElement(), 'module-port-socket-highlight', socketHighlighted);
       cache.socketHighlighted = socketHighlighted;
     }
 
+    var hideable = this.hideable();
     if (hideable !== cache.hideable) {
       dom.toggleClass(this.listItemElement(), 'module-port-hide-disabled', !hideable);
       cache.hideable = hideable;
