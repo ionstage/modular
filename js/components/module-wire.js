@@ -27,6 +27,23 @@
     return dom.childNode(this.element(), 0, 0);
   };
 
+  ModuleWire.prototype.renderWire = function() {
+    var element = dom.el('<div>');
+    dom.addClass(element, 'module-wire');
+    dom.html(element, [
+      '<svg class="module-wire-path-container">',
+        '<path class="module-wire-path"></path>',
+      '</svg>'
+    ].join(''));
+    return element;
+  };
+
+  ModuleWire.prototype.renderHandle = function() {
+    var element = dom.el('<div>');
+    dom.addClass(element, 'module-wire-handle');
+    return element;
+  };
+
   ModuleWire.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
@@ -36,16 +53,11 @@
 
     // add element
     if (parentElement && !element) {
-      element = dom.el('<div>');
-      dom.addClass(element, 'module-wire');
-      dom.html(element, ModuleWire.TEMPLATE_HTML);
-      var handleElement = dom.el('<div>');
-      dom.addClass(handleElement, 'module-wire-handle');
-      this.element(element);
-      this.handleElement(handleElement);
+      this.element(this.renderWire());
+      this.handleElement(this.renderHandle());
       this.redraw();
-      dom.append(parentElement, element);
-      dom.append(this.parentHandleElement(), handleElement);
+      dom.append(parentElement, this.element());
+      dom.append(this.parentHandleElement(), this.handleElement());
       return;
     }
 
@@ -60,11 +72,11 @@
     }
 
     // update element
-    this.redrawPath();
+    this.redrawWire();
     this.redrawHandle();
   };
 
-  ModuleWire.prototype.redrawPath = function() {
+  ModuleWire.prototype.redrawWire = function() {
     var cache = this.cache();
 
     var highlighted = this.highlighted();
@@ -136,12 +148,6 @@
       cache.y = y;
     }
   };
-
-  ModuleWire.TEMPLATE_HTML = [
-    '<svg class="module-wire-path-container">',
-      '<path class="module-wire-path"></path>',
-    '</svg>'
-  ].join('');
 
   ModuleWire.HANDLE_WIDTH = 24;
 
