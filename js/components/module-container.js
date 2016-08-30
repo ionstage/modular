@@ -332,7 +332,7 @@
   ModuleContainer.prototype.portToggler = function(module, port) {
     if (!port.visible()) {
       // remove all connections with hidden port
-      var bindings = this.bindingList().toArray().filter(function(binding) {
+      this.bindingList().toArray().filter(function(binding) {
         return ((binding.sourceModule === module && binding.sourcePort === port) ||
                 (binding.targetModule === module && binding.targetPort === port));
       }).forEach(function(binding) {
