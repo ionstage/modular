@@ -67,6 +67,10 @@
     });
   };
 
+  helper.remove = function(array, item) {
+    array.splice(array.indexOf(item), 1);
+  };
+
   helper.List = (function() {
     var List = function() {
       this.data = [];
