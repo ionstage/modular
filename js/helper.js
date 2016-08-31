@@ -57,8 +57,8 @@
     });
   };
 
-  helper.sortBy = function(list, key) {
-    return list.slice().sort(function(a, b) {
+  helper.sortBy = function(array, key) {
+    return array.slice().sort(function(a, b) {
       if (a[key] > b[key])
         return 1;
       else if (a[key] < b[key])
