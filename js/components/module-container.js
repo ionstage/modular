@@ -423,7 +423,7 @@
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     this.draggingWires().push(wire);
     this.updatePortLabelHighlight(sourcePort);
-    sourceModule.deletable(!sourcePort.labelHighlighted());
+    sourceModule.markDirty();
     var highlightedEventList = this.highlightedEventList();
     highlightedEventList.addWire(sourcePort, wire);
     highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
@@ -493,7 +493,7 @@
       wire.handleVisible(true);
       currentTargetPort.socketConnected(false);
       this.updatePortLabelHighlight(currentTargetPort);
-      currentTargetModule.deletable(!currentTargetPort.labelHighlighted());
+      currentTargetModule.markDirty();
       highlightedEventList.removeTargetPort(sourcePort, currentTargetPort);
       currentTargetPort.socketHighlighted(false);
       highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
@@ -506,7 +506,7 @@
       targetPort.socketConnected(true);
       wire.handleVisible(false);
       this.updatePortLabelHighlight(targetPort);
-      targetModule.deletable(!targetPort.labelHighlighted());
+      targetModule.markDirty();
       highlightedEventList.addTargetPort(sourcePort, targetPort);
       highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
     }
@@ -523,11 +523,11 @@
 
     draggingWires.splice(draggingWires.indexOf(wire), 1);
     this.updatePortLabelHighlight(sourcePort);
-    sourceModule.deletable(!sourcePort.labelHighlighted());
+    sourceModule.markDirty();
 
     if (targetModule && targetPort) {
       this.updatePortLabelHighlight(targetPort);
-      targetModule.deletable(!targetPort.labelHighlighted());
+      targetModule.markDirty();
       return;
     }
 
@@ -558,8 +558,8 @@
 
     this.updatePortLabelHighlight(sourcePort);
     this.updatePortLabelHighlight(targetPort);
-    sourceModule.deletable(!sourcePort.labelHighlighted());
-    targetModule.deletable(!targetPort.labelHighlighted());
+    sourceModule.markDirty();
+    targetModule.markDirty();
 
     context.sourceModule = sourceModule;
     context.sourcePort = sourcePort;

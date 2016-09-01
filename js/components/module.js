@@ -18,7 +18,6 @@
     this.ports = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
-    this.deletable = this.prop(true);
     this.eventCircuitElement = this.prop(null);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
@@ -353,7 +352,9 @@
 
     // update element
     var cache = this.cache();
-    var deletable = this.deletable();
+    var deletable = this.ports().every(function(port) {
+      return port.hideable();
+    });
     if (deletable !== cache.deletable) {
       dom.toggleClass(element, 'module-delete-disabled', !deletable);
       cache.deletable = deletable;
