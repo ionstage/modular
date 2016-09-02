@@ -356,28 +356,17 @@
   };
 
   ModuleContainer.prototype.portEventer = function(module, port) {
-    var targetPorts = [];
-    var wires = [];
-
-    this.bindingList().toArray().filter(function(binding) {
-      return (binding.sourceModule === module && binding.sourcePort === port);
-    }).forEach(function(binding) {
-      targetPorts.push(binding.targetPort);
-      var wire = binding.targetPort.relations().filter(function(relation) {
-        return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
-      })[0].wire();
-      wires.push(wire);
-    });
-
     var highlightedEventList = this.highlightedEventList();
 
     highlightedEventList.addSourcePort(port);
 
-    targetPorts.forEach(function(targetPort) {
-      highlightedEventList.addTargetPort(port, targetPort);
-    });
-
-    wires.forEach(function(wire) {
+    this.bindingList().toArray().filter(function(binding) {
+      return (binding.sourceModule === module && binding.sourcePort === port);
+    }).forEach(function(binding) {
+      highlightedEventList.addTargetPort(port, binding.targetPort);
+      var wire = binding.targetPort.relations().filter(function(relation) {
+        return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
+      })[0].wire();
       highlightedEventList.addWire(port, wire);
     });
 
