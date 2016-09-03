@@ -132,7 +132,7 @@
       return new CircuitElement(member);
     };
     return function() {
-      var globalApp = (typeof module !== 'undefined' && module.exports) ? global.app : app;
+      var globalApp = dom.global().app;
       if (globalApp.ModularModule !== ModularModule)
         globalApp.ModularModule = ModularModule;
     };

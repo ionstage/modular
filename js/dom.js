@@ -7,6 +7,10 @@
     return (typeof document === 'undefined');
   };
 
+  dom.global = function(key, value) {
+    return (typeof module !== 'undefined' && module.exports) ? global : window;
+  };
+
   dom.el = function(selector) {
     if (selector.charAt(0) === '<') {
       selector = selector.match(/<(.+)>/)[1];
