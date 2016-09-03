@@ -45,12 +45,6 @@
     this.dragPortSocketEnder = props.dragPortSocketEnder;
   }, jCore.Component);
 
-  Module.prototype.port = function(name) {
-    return this.ports().filter(function(port) {
-      return port.name() === name;
-    })[0] || null;
-  };
-
   Module.prototype.headerElement = function() {
     return dom.child(this.element(), 0);
   };
@@ -125,6 +119,12 @@
       x: this.x() + ModulePort.SOCKET_OFFSET_X,
       y: this.y() + this.portListTop() + port.top() + port.height() / 2
     };
+  };
+
+  Module.prototype.port = function(name) {
+    return this.ports().filter(function(port) {
+      return port.name() === name;
+    })[0] || null;
   };
 
   Module.prototype.exportModularModule = (function() {
