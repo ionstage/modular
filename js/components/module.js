@@ -127,6 +127,16 @@
     })[0] || null;
   };
 
+  Module.prototype.url = function() {
+    return [
+      'modular_modules/',
+      this.name().split('/').map(function(s) {
+        return encodeURIComponent(s);
+      }).join('/'),
+      '.html'
+    ].join('');
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -139,19 +149,11 @@
   })();
 
   Module.prototype.loadComponent = function() {
-    var url = [
-      'modular_modules/',
-      this.name().split('/').map(function(s) {
-        return encodeURIComponent(s);
-      }).join('/'),
-      '.html'
-    ].join('');
-
     dom.addClass(this.element(), 'module-loading');
 
     return dom.ajax({
       type: 'GET',
-      url: url
+      url: this.url()
     }).then(function(text) {
       var componentElement = this.componentElement();
       var contentWindow = dom.contentWindow(componentElement);
