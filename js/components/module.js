@@ -127,6 +127,16 @@
     })[0] || null;
   };
 
+  Module.prototype.visiblePorts = function() {
+    return this.ports().filter(function(port) {
+      return port.visible();
+    });
+  };
+
+  Module.prototype.isAllPortsVisible = function() {
+    return (this.visiblePorts().length === this.ports().length);
+  };
+
   Module.prototype.url = function() {
     return [
       'modular_modules/',
@@ -266,9 +276,7 @@
   Module.prototype.hidePort = function(name) {
     var hiddenPort = null;
 
-    this.ports().filter(function(port) {
-      return port.visible();
-    }).sort(function(a, b) {
+    this.visiblePorts().sort(function(a, b) {
       return a.top() - b.top();
     }).forEach(function(port) {
       if (hiddenPort) {
@@ -435,11 +443,8 @@
   };
 
   Module.prototype.redrawFooter = function() {
+    var isAllPortsVisible = this.isAllPortsVisible();
     var cache = this.cache();
-
-    var isAllPortsVisible = this.ports().every(function(port) {
-      return port.visible();
-    });
 
     if (isAllPortsVisible === cache.isAllPortsVisible)
       return;
