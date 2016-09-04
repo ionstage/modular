@@ -137,6 +137,12 @@
     ].join('');
   };
 
+  Module.prototype.deletable = function() {
+    return this.ports().every(function(port) {
+      return port.hideable();
+    });
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -351,20 +357,23 @@
     }
 
     // update element
-    var cache = this.cache();
-    var deletable = this.ports().every(function(port) {
-      return port.hideable();
-    });
-    if (deletable !== cache.deletable) {
-      dom.toggleClass(element, 'module-delete-disabled', !deletable);
-      cache.deletable = deletable;
-    }
-
+    this.redrawModule();
     this.redrawTitle();
     this.redrawPosition();
     this.redrawZIndex();
     this.redrawPortList();
     this.redrawFooter();
+  };
+
+  Module.prototype.redrawModule = function() {
+    var deletable = this.deletable();
+    var cache = this.cache();
+
+    if (deletable === cache.deletable)
+      return;
+
+    dom.toggleClass(this.element(), 'module-delete-disabled', !deletable);
+    cache.deletable = deletable;
   };
 
   Module.prototype.redrawTitle = function() {
