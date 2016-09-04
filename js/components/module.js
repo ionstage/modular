@@ -365,23 +365,12 @@
     }
 
     // update element
-    this.redrawModule();
     this.redrawTitle();
     this.redrawPosition();
     this.redrawZIndex();
+    this.redrawDeletable();
     this.redrawPortList();
     this.redrawFooter();
-  };
-
-  Module.prototype.redrawModule = function() {
-    var deletable = this.deletable();
-    var cache = this.cache();
-
-    if (deletable === cache.deletable)
-      return;
-
-    dom.toggleClass(this.element(), 'module-delete-disabled', !deletable);
-    cache.deletable = deletable;
   };
 
   Module.prototype.redrawTitle = function() {
@@ -426,6 +415,17 @@
     });
 
     cache.zIndex = zIndex;
+  };
+
+  Module.prototype.redrawDeletable = function() {
+    var deletable = this.deletable();
+    var cache = this.cache();
+
+    if (deletable === cache.deletable)
+      return;
+
+    dom.toggleClass(this.element(), 'module-delete-disabled', !deletable);
+    cache.deletable = deletable;
   };
 
   Module.prototype.redrawPortList = function() {
