@@ -258,20 +258,17 @@
   };
 
   Module.prototype.hidePort = function(name) {
-    var visiblePorts = this.ports().slice().filter(function(port) {
+    var hiddenPort = null;
+
+    this.ports().filter(function(port) {
       return port.visible();
     }).sort(function(a, b) {
       return a.top() - b.top();
-    });
-
-    var hiddenPort = null;
-
-    visiblePorts.forEach(function(port) {
+    }).forEach(function(port) {
       if (hiddenPort) {
         // move up the ports below the hidden port
         port.top(port.top() - hiddenPort.height());
       } else if (port.name() === name) {
-        port.visible(false);
         hiddenPort = port;
       }
     });
@@ -279,6 +276,7 @@
     if (!hiddenPort)
       return;
 
+    hiddenPort.visible(false);
     this.portListHeight(this.portListHeight() - hiddenPort.height());
     this.portToggler(this, hiddenPort);
   };
