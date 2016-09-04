@@ -450,6 +450,7 @@
       return;
 
     dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
+    cache.isAllPortsVisible = isAllPortsVisible;
   };
 
   Module.prototype.onstart = function(x, y, event) {
