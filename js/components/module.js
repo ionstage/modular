@@ -274,25 +274,24 @@
   };
 
   Module.prototype.hidePort = function(name) {
-    var hiddenPort = null;
+    var port = this.port(name);
 
-    this.visiblePorts().sort(function(a, b) {
-      return a.top() - b.top();
-    }).forEach(function(port) {
-      if (hiddenPort) {
-        // move up the ports below the hidden port
-        port.top(port.top() - hiddenPort.height());
-      } else if (port.name() === name) {
-        hiddenPort = port;
-      }
-    });
-
-    if (!hiddenPort)
+    if (!port || !port.visible())
       return;
 
-    hiddenPort.visible(false);
-    this.portListHeight(this.portListHeight() - hiddenPort.height());
-    this.portToggler(this, hiddenPort);
+    var visiblePorts = this.visiblePorts().sort(function(a, b) {
+      return a.top() - b.top();
+    });
+
+    port.visible(false);
+
+    // move up the ports below the hidden port
+    visiblePorts.slice(visiblePorts.indexOf(port) + 1).forEach(function(visiblePort) {
+      visiblePort.top(visiblePort.top() - port.height());
+    });
+
+    this.portListHeight(this.portListHeight() - port.height());
+    this.portToggler(this, port);
   };
 
   Module.prototype.deselectOption = function() {
