@@ -306,7 +306,6 @@
       return;
 
     var element = this.portOptGroupElement(type);
-
     helper.sortBy(dom.children(element), 'textContent').forEach(function(child) {
       dom.append(element, child);
     });
@@ -409,10 +408,7 @@
     if (zIndex === cache.zIndex)
       return;
 
-    dom.css(this.element(), {
-      zIndex: zIndex
-    });
-
+    dom.css(this.element(), { zIndex: zIndex });
     cache.zIndex = zIndex;
   };
 
@@ -434,10 +430,7 @@
     if (portListHeight === cache.portListHeight)
       return;
 
-    dom.css(this.portListElement(), {
-      height: portListHeight + 'px'
-    });
-
+    dom.css(this.portListElement(), { height: portListHeight + 'px' });
     cache.portListHeight = portListHeight;
   };
 
