@@ -311,6 +311,13 @@
     });
   };
 
+  Module.prototype.render = function() {
+    var element = dom.el('<div>');
+    dom.addClass(element, 'module');
+    dom.html(element, Module.TEMPLATE_HTML);
+    return element;
+  };
+
   Module.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
@@ -320,20 +327,17 @@
 
     // add element
     if (parentElement && !element) {
-      element = dom.el('<div>');
-      dom.addClass(element, 'module');
-      dom.html(element, Module.TEMPLATE_HTML);
+      this.element(this.render());
       this.draggable(new dom.Draggable({
-        element: element,
+        element: this.element(),
         onstart: Module.prototype.onstart.bind(this),
         onmove: Module.prototype.onmove.bind(this),
         onend: Module.prototype.onend.bind(this)
       }));
-      this.element(element);
       dom.on(this.portSelectElement(), 'change', this.onchange);
       dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
       this.redraw();
-      dom.append(parentElement, element);
+      dom.append(parentElement, this.element());
       return;
     }
 
