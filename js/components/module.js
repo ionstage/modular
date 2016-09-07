@@ -449,26 +449,27 @@
     cache.isAllPortsVisible = isAllPortsVisible;
   };
 
+  Module.prototype.dragType = function(target) {
+    if (target === this.titleElement())
+      return 'position';
+    else if (target === this.deleteButtonElement())
+      return 'delete';
+    else if (dom.hasClass(target, 'module-port-hide-button'))
+      return 'hidePort';
+    else if (dom.hasClass(target, 'module-port-label'))
+      return 'sortPort';
+    else if (dom.hasClass(target, 'module-port-plug'))
+      return 'dragPortPlug';
+    else if (dom.hasClass(dom.parent(target), 'module-port-socket'))
+      return 'dragPortSocket';
+    else
+      return null;
+  };
+
   Module.prototype.onstart = function(x, y, event) {
     var context = this.dragContext();
     var target = dom.target(event);
-
-    if (target === this.titleElement())
-      context.type = 'position';
-    else if (target === this.deleteButtonElement())
-      context.type = 'delete';
-    else if (dom.hasClass(target, 'module-port-hide-button'))
-      context.type = 'hidePort';
-    else if (dom.hasClass(target, 'module-port-label'))
-      context.type = 'sortPort';
-    else if (dom.hasClass(target, 'module-port-plug'))
-      context.type = 'dragPortPlug';
-    else if (dom.hasClass(dom.parent(target), 'module-port-socket'))
-      context.type = 'dragPortSocket';
-    else
-      context.type = null;
-
-    var type = context.type;
+    var type = context.type = this.dragType(target);
 
     if (!type)
       return;
