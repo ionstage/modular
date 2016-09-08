@@ -153,6 +153,18 @@
     });
   };
 
+  Module.prototype.createPorts = function() {
+    return this.circuitElement().getAll().map(function(member) {
+      var props = member.props();
+      return new ModulePort(helper.extend({}, props, {
+        parentListElement: this.portListElement(),
+        parentOptGroupElement: this.portOptGroupElement(props.type),
+        optionDeselector: this.optionDeselector,
+        optGroupSorter: this.optGroupSorter
+      }));
+    }.bind(this));
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -197,15 +209,7 @@
               if (!circuitElement)
                 throw new Error('Invalid circuit element');
 
-              this.ports(circuitElement.getAll().map(function(member) {
-                var props = member.props();
-                return new ModulePort(helper.extend({}, props, {
-                  parentListElement: this.portListElement(),
-                  parentOptGroupElement: this.portOptGroupElement(props.type),
-                  optionDeselector: this.optionDeselector,
-                  optGroupSorter: this.optGroupSorter
-                }));
-              }.bind(this)));
+              this.ports(this.createPorts());
 
               var eventCircuitElement = new CircuitElement(this.ports().filter(function(port) {
                 return (port.type() === ModulePort.TYPE_EVENT);
