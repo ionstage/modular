@@ -224,13 +224,11 @@
       type: 'GET',
       url: this.url()
     }).then(function(text) {
-      var componentElement = this.componentElement();
       var data = Date.now().toString();
 
       this.exportModularModule();
-
       dom.name(this.componentContentWindow(), data);
-      dom.writeContent(componentElement, text);
+      dom.writeContent(this.componentElement(), text);
 
       var onmessage;
 
@@ -266,7 +264,7 @@
       ]).then(function() {
         dom.off(this.componentContentWindow(), 'message', onmessage);
         dom.removeClass(this.element(), 'module-loading');
-        dom.fillContentHeight(componentElement);
+        dom.fillContentHeight(this.componentElement());
         this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
       }.bind(this)).catch(function(e) {
         dom.off(this.componentContentWindow(), 'message', onmessage);
