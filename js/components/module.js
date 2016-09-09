@@ -247,10 +247,7 @@
               this.ports(this.createPorts());
               this.eventCircuitElement(this.createEventCircuitElement());
               this.bindEventCircuitElement();
-
-              var contentWindow = dom.contentWindow(this.componentElement());
-              if (contentWindow)
-                dom.on(contentWindow, dom.eventType('start'), this.onpoint, true);
+              dom.on(contentWindow, dom.eventType('start'), this.onpoint, true);
 
               resolve();
             } catch(e) {
@@ -372,8 +369,7 @@
       dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
 
       var contentWindow = dom.contentWindow(this.componentElement());
-      if (contentWindow)
-        dom.off(contentWindow, dom.eventType('start'), this.onpoint, true);
+      dom.off(contentWindow, dom.eventType('start'), this.onpoint, true);
 
       this.unbindEventCircuitElement();
 
