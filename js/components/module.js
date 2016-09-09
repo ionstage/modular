@@ -78,8 +78,12 @@
     return dom.child(this.element(), 2, 1, index);
   };
 
+  Module.prototype.componentContentWindow = function() {
+    return dom.contentWindow(this.componentElement());
+  };
+
   Module.prototype.circuitElement = function() {
-    return helper.dig(dom.contentWindow(this.componentElement()), 'modular', 'exports');
+    return helper.dig(this.componentContentWindow(), 'modular', 'exports');
   };
 
   Module.prototype.circuitElementMember = function(name) {
@@ -221,12 +225,11 @@
       url: this.url()
     }).then(function(text) {
       var componentElement = this.componentElement();
-      var contentWindow = dom.contentWindow(componentElement);
       var data = Date.now().toString();
 
       this.exportModularModule();
 
-      dom.name(contentWindow, data);
+      dom.name(this.componentContentWindow(), data);
       dom.writeContent(componentElement, text);
 
       var onmessage;
@@ -247,7 +250,7 @@
               this.ports(this.createPorts());
               this.eventCircuitElement(this.createEventCircuitElement());
               this.bindEventCircuitElement();
-              dom.on(contentWindow, dom.eventType('start'), this.onpoint, true);
+              dom.on(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
 
               resolve();
             } catch(e) {
@@ -255,20 +258,20 @@
             }
           }.bind(this);
 
-          dom.on(contentWindow, 'message', onmessage);
+          dom.on(this.componentContentWindow(), 'message', onmessage);
         }.bind(this)),
         new Promise(function(resolve, reject) {
           setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
         })
       ]).then(function() {
-        dom.off(contentWindow, 'message', onmessage);
+        dom.off(this.componentContentWindow(), 'message', onmessage);
         dom.removeClass(this.element(), 'module-loading');
         dom.fillContentHeight(componentElement);
         this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
       }.bind(this)).catch(function(e) {
-        dom.off(contentWindow, 'message', onmessage);
+        dom.off(this.componentContentWindow(), 'message', onmessage);
         throw e;
-      });
+      }.bind(this));
     }.bind(this)).catch(function(e) {
       dom.addClass(this.element(), 'module-error');
       throw e;
@@ -367,12 +370,8 @@
       this.draggable().destroy();
       dom.off(this.portSelectElement(), 'change', this.onchange);
       dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
-
-      var contentWindow = dom.contentWindow(this.componentElement());
-      dom.off(contentWindow, dom.eventType('start'), this.onpoint, true);
-
+      dom.off(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
       this.unbindEventCircuitElement();
-
       dom.remove(element);
       this.element(null);
       this.cache({});
