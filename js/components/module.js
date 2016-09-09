@@ -178,6 +178,30 @@
     }.bind(this)));
   };
 
+  Module.prototype.bindEventCircuitElement = function() {
+    var eventCircuitElement = this.eventCircuitElement();
+
+    if (!eventCircuitElement)
+      return;
+
+    var circuitElement = this.circuitElement();
+    eventCircuitElement.getAll().forEach(function(member) {
+      CircuitElement.bind(circuitElement.get(member.props().name), member);
+    });
+  };
+
+  Module.prototype.unbindEventCircuitElement = function() {
+    var eventCircuitElement = this.eventCircuitElement();
+
+    if (!eventCircuitElement)
+      return;
+
+    var circuitElement = this.circuitElement();
+    eventCircuitElement.getAll().forEach(function(member) {
+      CircuitElement.unbind(circuitElement.get(member.props().name), member);
+    });
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -217,17 +241,12 @@
               if (event.data !== data)
                 throw new Error('Invalid content data');
 
-              var circuitElement = this.circuitElement();
-
-              if (!circuitElement)
+              if (!this.circuitElement())
                 throw new Error('Invalid circuit element');
 
               this.ports(this.createPorts());
               this.eventCircuitElement(this.createEventCircuitElement());
-
-              this.eventCircuitElement().getAll().forEach(function(member) {
-                CircuitElement.bind(circuitElement.get(member.props().name), member);
-              });
+              this.bindEventCircuitElement();
 
               var contentWindow = dom.contentWindow(this.componentElement());
               if (contentWindow)
@@ -356,13 +375,7 @@
       if (contentWindow)
         dom.off(contentWindow, dom.eventType('start'), this.onpoint, true);
 
-      var eventCircuitElement = this.eventCircuitElement();
-      if (eventCircuitElement) {
-        var circuitElement = this.circuitElement();
-        eventCircuitElement.getAll().forEach(function(member) {
-          CircuitElement.unbind(circuitElement.get(member.props().name), member);
-        });
-      }
+      this.unbindEventCircuitElement();
 
       dom.remove(element);
       this.element(null);
