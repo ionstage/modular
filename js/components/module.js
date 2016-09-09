@@ -165,6 +165,19 @@
     }.bind(this));
   };
 
+  Module.prototype.createEventCircuitElement = function() {
+    return new CircuitElement(this.ports().filter(function(port) {
+      return (port.type() === ModulePort.TYPE_EVENT);
+    }).map(function(port) {
+      return {
+        label: port.label(),
+        name: port.name(),
+        type: port.type(),
+        arg: this.portEventer.bind(null, this, port)
+      };
+    }.bind(this)));
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -210,23 +223,11 @@
                 throw new Error('Invalid circuit element');
 
               this.ports(this.createPorts());
+              this.eventCircuitElement(this.createEventCircuitElement());
 
-              var eventCircuitElement = new CircuitElement(this.ports().filter(function(port) {
-                return (port.type() === ModulePort.TYPE_EVENT);
-              }).map(function(port) {
-                return {
-                  label: port.label(),
-                  name: port.name(),
-                  type: port.type(),
-                  arg: this.portEventer.bind(null, this, port)
-                };
-              }.bind(this)));
-
-              eventCircuitElement.getAll().forEach(function(member) {
+              this.eventCircuitElement().getAll().forEach(function(member) {
                 CircuitElement.bind(circuitElement.get(member.props().name), member);
               });
-
-              this.eventCircuitElement(eventCircuitElement);
 
               var contentWindow = dom.contentWindow(this.componentElement());
               if (contentWindow)
