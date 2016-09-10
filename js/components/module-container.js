@@ -312,6 +312,10 @@
     port.labelHighlighted(isDragging);
   };
 
+  ModuleContainer.prototype.updateModuleDeletable = function(module) {
+    module.markDirty();
+  };
+
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
     var index = modules.indexOf(module);
@@ -412,7 +416,7 @@
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     this.draggingWires().push(wire);
     this.updatePortLabelHighlight(sourcePort);
-    sourceModule.markDirty();
+    this.updateModuleDeletable(sourceModule);
     var highlightedEventList = this.highlightedEventList();
     highlightedEventList.addWire(sourcePort, wire);
     highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
@@ -482,7 +486,7 @@
       wire.handleVisible(true);
       currentTargetPort.socketConnected(false);
       this.updatePortLabelHighlight(currentTargetPort);
-      currentTargetModule.markDirty();
+      this.updateModuleDeletable(currentTargetModule);
       highlightedEventList.removeTargetPort(sourcePort, currentTargetPort);
       currentTargetPort.socketHighlighted(false);
       highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
@@ -495,7 +499,7 @@
       targetPort.socketConnected(true);
       wire.handleVisible(false);
       this.updatePortLabelHighlight(targetPort);
-      targetModule.markDirty();
+      this.updateModuleDeletable(targetModule);
       highlightedEventList.addTargetPort(sourcePort, targetPort);
       highlightedEventList.highlighted(sourcePort, sourcePort.plugHighlighted());
     }
@@ -512,11 +516,11 @@
 
     draggingWires.splice(draggingWires.indexOf(wire), 1);
     this.updatePortLabelHighlight(sourcePort);
-    sourceModule.markDirty();
+    this.updateModuleDeletable(sourceModule);
 
     if (targetModule && targetPort) {
       this.updatePortLabelHighlight(targetPort);
-      targetModule.markDirty();
+      this.updateModuleDeletable(targetModule);
       return;
     }
 
@@ -547,8 +551,8 @@
 
     this.updatePortLabelHighlight(sourcePort);
     this.updatePortLabelHighlight(targetPort);
-    sourceModule.markDirty();
-    targetModule.markDirty();
+    this.updateModuleDeletable(sourceModule);
+    this.updateModuleDeletable(targetModule);
 
     context.sourceModule = sourceModule;
     context.sourcePort = sourcePort;
