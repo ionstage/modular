@@ -623,7 +623,6 @@
 
   Module.prototype.onchange = function(event) {
     this.showPort(dom.value(dom.target(event)));
-    this.deselectOption();
     dom.removeFocus();
   };
 
