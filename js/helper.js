@@ -3,6 +3,17 @@
 
   var helper = {};
 
+  helper.randomString = function(len) {
+    var s = [];
+    for (var i = 0, n = Math.floor(len / 7); i < n; i++) {
+      s.push(Math.random().toString(36).slice(-7));
+    }
+    var rem = len % 7;
+    if (rem)
+      s.push(Math.random().toString(36).slice(-rem));
+    return s.join('');
+  };
+
   helper.inherits = function(ctor, superCtor) {
     ctor.super_ = superCtor;
     ctor.prototype = Object.create(superCtor.prototype, {

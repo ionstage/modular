@@ -19,6 +19,7 @@
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
     this.eventCircuitElement = this.prop(null);
+    this.messageData = this.prop(helper.randomString(7));
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -224,10 +225,8 @@
       type: 'GET',
       url: this.url()
     }).then(function(text) {
-      var data = Date.now().toString();
-
       this.exportModularModule();
-      dom.name(this.componentContentWindow(), data);
+      dom.name(this.componentContentWindow(), this.messageData());
       dom.writeContent(this.componentElement(), text);
 
       var onmessage;
@@ -239,7 +238,7 @@
               if (event.origin !== dom.origin())
                 throw new Error('Invalid content origin');
 
-              if (event.data !== data)
+              if (event.data !== this.messageData())
                 throw new Error('Invalid content data');
 
               if (!this.circuitElement())
