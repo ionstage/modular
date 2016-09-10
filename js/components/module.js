@@ -207,6 +207,14 @@
     });
   };
 
+  Module.prototype.registerComponentPointListener = function() {
+    dom.on(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
+  };
+
+  Module.prototype.unregisterComponentPointListener = function() {
+    dom.off(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -247,7 +255,7 @@
               this.ports(this.createPorts());
               this.eventCircuitElement(this.createEventCircuitElement());
               this.bindEventCircuitElement();
-              dom.on(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
+              this.registerComponentPointListener();
 
               resolve();
             } catch(e) {
@@ -367,7 +375,7 @@
       this.draggable().destroy();
       dom.off(this.portSelectElement(), 'change', this.onchange);
       dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
-      dom.off(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
+      this.unregisterComponentPointListener();
       this.unbindEventCircuitElement();
       dom.remove(element);
       this.element(null);
