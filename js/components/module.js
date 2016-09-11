@@ -245,6 +245,11 @@
     this.onmessage = null;
   };
 
+  Module.prototype.setComponentContent = function(contentText, messageData) {
+    dom.name(this.componentContentWindow(), messageData);
+    dom.writeContent(this.componentElement(), contentText);
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -264,9 +269,7 @@
       url: this.url()
     }).then(function(text) {
       this.exportModularModule();
-      dom.name(this.componentContentWindow(), this.messageData());
-      dom.writeContent(this.componentElement(), text);
-
+      this.setComponentContent(text, this.messageData());
       return Promise.race([
         new Promise(this.registerMessageListener.bind(this)),
         new Promise(function(resolve, reject) {
