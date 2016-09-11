@@ -26,6 +26,7 @@
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
 
+    this.onmessage = null;
     this.onchange = Module.prototype.onchange.bind(this);
     this.onpoint = Module.prototype.onpoint.bind(this);
 
@@ -210,6 +211,43 @@
     dom.off(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
   };
 
+  Module.prototype.registerMessageListener = function(resolve, reject) {
+    if (this.onmessage)
+      return;
+
+    this.onmessage = function(event) {
+      try {
+        if (event.origin !== dom.origin())
+          throw new Error('Invalid content origin');
+
+        if (event.data !== this.messageData())
+          throw new Error('Invalid content data');
+
+        if (!this.circuitElement())
+          throw new Error('Invalid circuit element');
+
+        this.ports(this.createPorts());
+        this.eventCircuitElement(this.createEventCircuitElement());
+        this.bindEventCircuitElement();
+        this.registerComponentPointListener();
+
+        resolve();
+      } catch(e) {
+        reject(e);
+      }
+    }.bind(this);
+
+    dom.on(this.componentContentWindow(), 'message', this.onmessage);
+  };
+
+  Module.prototype.unregisterMessageListener = function() {
+    if (!this.onmessage)
+      return;
+
+    dom.off(this.componentContentWindow(), 'message', this.onmessage);
+    this.onmessage = null;
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -232,44 +270,20 @@
       dom.name(this.componentContentWindow(), this.messageData());
       dom.writeContent(this.componentElement(), text);
 
-      var onmessage;
-
       return Promise.race([
         new Promise(function(resolve, reject) {
-          onmessage = function(event) {
-            try {
-              if (event.origin !== dom.origin())
-                throw new Error('Invalid content origin');
-
-              if (event.data !== this.messageData())
-                throw new Error('Invalid content data');
-
-              if (!this.circuitElement())
-                throw new Error('Invalid circuit element');
-
-              this.ports(this.createPorts());
-              this.eventCircuitElement(this.createEventCircuitElement());
-              this.bindEventCircuitElement();
-              this.registerComponentPointListener();
-
-              resolve();
-            } catch(e) {
-              reject(e);
-            }
-          }.bind(this);
-
-          dom.on(this.componentContentWindow(), 'message', onmessage);
+          this.registerMessageListener(resolve, reject);
         }.bind(this)),
         new Promise(function(resolve, reject) {
           setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
         })
       ]).then(function() {
-        dom.off(this.componentContentWindow(), 'message', onmessage);
+        this.unregisterMessageListener();
         dom.removeClass(this.element(), 'module-loading');
         dom.fillContentHeight(this.componentElement());
         this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
       }.bind(this)).catch(function(e) {
-        dom.off(this.componentContentWindow(), 'message', onmessage);
+        this.unregisterMessageListener();
         throw e;
       }.bind(this));
     }.bind(this)).catch(function(e) {
