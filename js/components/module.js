@@ -29,9 +29,6 @@
     this.onchange = Module.prototype.onchange.bind(this);
     this.onpoint = Module.prototype.onpoint.bind(this);
 
-    this.optionDeselector = Module.prototype.deselectOption.bind(this);
-    this.optGroupSorter = Module.prototype.sortOptGroup.bind(this);
-
     this.deleter = props.deleter;
     this.fronter = props.fronter;
     this.portToggler = props.portToggler;
@@ -163,9 +160,7 @@
       var props = member.props();
       return new ModulePort(helper.extend({}, props, {
         parentListElement: this.portListElement(),
-        parentOptGroupElement: this.portOptGroupElement(props.type),
-        optionDeselector: this.optionDeselector,
-        optGroupSorter: this.optGroupSorter
+        parentOptGroupElement: this.portOptGroupElement(props.type)
       }));
     }.bind(this));
   };
@@ -294,6 +289,7 @@
     this.portListHeight(portListHeight + port.height());
     port.top(portListHeight);
     port.visible(true);
+    this.needsUpdatePortSelect(port);
 
     // move right not to position the port-socket outside
     if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket())
@@ -313,6 +309,7 @@
     });
 
     port.visible(false);
+    this.needsUpdatePortSelect(port);
 
     // move up the ports below the hidden port
     visiblePorts.slice(visiblePorts.indexOf(port) + 1).forEach(function(visiblePort) {
@@ -323,21 +320,11 @@
     this.portToggler(this, port);
   };
 
-  Module.prototype.deselectOption = function() {
-    if (!this.element())
-      return;
-
-    dom.value(this.portSelectElement(), '');
-  };
-
-  Module.prototype.sortOptGroup = function(type) {
-    if (!this.element())
-      return;
-
-    var element = this.portOptGroupElement(type);
-    helper.sortBy(dom.children(element), 'textContent').forEach(function(child) {
-      dom.append(element, child);
-    });
+  Module.prototype.needsUpdatePortSelect = function(port) {
+    var cache = this.cache();
+    if (!cache.toggledPortList)
+      cache.toggledPortList = new helper.List();
+    cache.toggledPortList.add(port);
   };
 
   Module.prototype.render = function() {
@@ -391,6 +378,7 @@
     this.redrawDeletable();
     this.redrawPortList();
     this.redrawFooter();
+    this.redrawPortSelect();
   };
 
   Module.prototype.redrawTitle = function() {
@@ -465,6 +453,32 @@
 
     dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
     cache.isAllPortsVisible = isAllPortsVisible;
+  };
+
+  Module.prototype.redrawPortSelect = function() {
+    var cache = this.cache();
+    var toggledPortList = cache.toggledPortList;
+
+    if (!toggledPortList)
+      return;
+
+    // update select element of toggled port
+    toggledPortList.toArray().forEach(function(port) {
+      port.redraw();
+    });
+
+    // sort options by name
+    [ModulePort.TYPE_PROP, ModulePort.TYPE_EVENT].forEach(function(type) {
+      var portOptGroupElement = this.portOptGroupElement(type);
+      helper.sortBy(dom.children(portOptGroupElement), 'textContent').forEach(function(child) {
+        dom.append(portOptGroupElement, child);
+      });
+    }.bind(this));
+
+    // deselect option
+    dom.value(this.portSelectElement(), '');
+
+    cache.toggledPortList = null;
   };
 
   Module.prototype.dragType = function(target) {
