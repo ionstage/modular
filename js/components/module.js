@@ -215,27 +215,24 @@
     if (this.onmessage)
       return;
 
-    this.onmessage = function(event) {
+    this.onmessage = (function(event) {
       try {
         if (event.origin !== dom.origin())
           throw new Error('Invalid content origin');
-
         if (event.data !== this.messageData())
           throw new Error('Invalid content data');
-
         if (!this.circuitElement())
           throw new Error('Invalid circuit element');
-
-        this.ports(this.createPorts());
-        this.eventCircuitElement(this.createEventCircuitElement());
-        this.bindEventCircuitElement();
-        this.registerComponentPointListener();
-
-        resolve();
       } catch(e) {
         reject(e);
+        return;
       }
-    }.bind(this);
+      this.ports(this.createPorts());
+      this.eventCircuitElement(this.createEventCircuitElement());
+      this.bindEventCircuitElement();
+      this.registerComponentPointListener();
+      resolve();
+    }).bind(this);
 
     dom.on(this.componentContentWindow(), 'message', this.onmessage);
   };
@@ -271,9 +268,7 @@
       dom.writeContent(this.componentElement(), text);
 
       return Promise.race([
-        new Promise(function(resolve, reject) {
-          this.registerMessageListener(resolve, reject);
-        }.bind(this)),
+        new Promise(this.registerMessageListener.bind(this)),
         new Promise(function(resolve, reject) {
           setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
         })
