@@ -250,6 +250,11 @@
     dom.writeContent(this.componentElement(), contentText);
   };
 
+  Module.prototype.resetComponentHeight = function() {
+    dom.fillContentHeight(this.componentElement());
+    this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -278,8 +283,7 @@
       ]).then(function() {
         this.unregisterMessageListener();
         dom.removeClass(this.element(), 'module-loading');
-        dom.fillContentHeight(this.componentElement());
-        this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
+        this.resetComponentHeight();
       }.bind(this)).catch(function(e) {
         this.unregisterMessageListener();
         throw e;
