@@ -268,7 +268,6 @@
 
   Module.prototype.loadComponent = function() {
     dom.addClass(this.element(), 'module-loading');
-
     return dom.ajax({
       type: 'GET',
       url: this.url()
@@ -280,15 +279,13 @@
         new Promise(function(resolve, reject) {
           setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
         })
-      ]).then(function() {
-        this.unregisterMessageListener();
-        dom.removeClass(this.element(), 'module-loading');
-        this.resetComponentHeight();
-      }.bind(this)).catch(function(e) {
-        this.unregisterMessageListener();
-        throw e;
-      }.bind(this));
+      ]);
+    }.bind(this)).then(function() {
+      this.unregisterMessageListener();
+      dom.removeClass(this.element(), 'module-loading');
+      this.resetComponentHeight();
     }.bind(this)).catch(function(e) {
+      this.unregisterMessageListener();
       dom.addClass(this.element(), 'module-error');
       throw e;
     }.bind(this));
