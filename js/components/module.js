@@ -20,6 +20,8 @@
     this.portListHeight = this.prop(0);
     this.eventCircuitElement = this.prop(null);
     this.messageData = this.prop(helper.randomString(7));
+    this.isLoading = this.prop(false);
+    this.isError = this.prop(false);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -267,7 +269,7 @@
   })();
 
   Module.prototype.loadComponent = function() {
-    dom.addClass(this.element(), 'module-loading');
+    this.isLoading(true);
     return dom.ajax({
       type: 'GET',
       url: this.url()
@@ -282,11 +284,11 @@
       ]);
     }.bind(this)).then(function() {
       this.unregisterMessageListener();
-      dom.removeClass(this.element(), 'module-loading');
+      this.isLoading(false);
       this.resetComponentHeight();
     }.bind(this)).catch(function(e) {
       this.unregisterMessageListener();
-      dom.addClass(this.element(), 'module-error');
+      this.isError(true);
       throw e;
     }.bind(this));
   };
@@ -392,6 +394,7 @@
     this.redrawPortList();
     this.redrawFooter();
     this.redrawPortSelect();
+    this.redrawStates();
   };
 
   Module.prototype.redrawTitle = function() {
@@ -492,6 +495,22 @@
     dom.value(this.portSelectElement(), '');
 
     cache.toggledPortList = null;
+  };
+
+  Module.prototype.redrawStates = function() {
+    var cache = this.cache();
+
+    var isLoading = this.isLoading();
+    if (isLoading !== cache.isLoading) {
+      dom.toggleClass(this.element(), 'module-loading', isLoading);
+      cache.isLoading = isLoading;
+    }
+
+    var isError = this.isError();
+    if (isError !== cache.isError) {
+      dom.toggleClass(this.element(), 'module-error', isError);
+      cache.isError = isError;
+    }
   };
 
   Module.prototype.dragType = function(target) {
