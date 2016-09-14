@@ -22,6 +22,7 @@
     this.messageData = this.prop(helper.randomString(7));
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
+    this.isMoving = this.prop(false);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -511,6 +512,12 @@
       dom.toggleClass(this.element(), 'module-error', isError);
       cache.isError = isError;
     }
+
+    var isMoving = this.isMoving();
+    if (isMoving !== cache.isMoving) {
+      dom.toggleClass(this.element(), 'module-moving', isMoving);
+      cache.isMoving = isMoving;
+    }
   };
 
   Module.prototype.dragType = function(target) {
@@ -543,7 +550,7 @@
     if (type === 'position') {
       context.x = this.x();
       context.y = this.y();
-      dom.addClass(this.element(), 'module-moving');
+      this.isMoving(true);
     } else if (type === 'delete') {
       context.target = target;
       dom.addClass(this.element(), 'module-deleting');
@@ -639,7 +646,7 @@
       return;
 
     if (type === 'position') {
-      dom.removeClass(this.element(), 'module-moving');
+      this.isMoving(false);
     } else if (type === 'delete') {
       if (target === context.target) {
         // remove all connections of connected ports
