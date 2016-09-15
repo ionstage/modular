@@ -23,6 +23,7 @@
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
+    this.isDeleting = this.prop(false);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
     this.cache = this.prop({});
@@ -518,6 +519,12 @@
       dom.toggleClass(this.element(), 'module-moving', isMoving);
       cache.isMoving = isMoving;
     }
+
+    var isDeleting = this.isDeleting();
+    if (isDeleting !== cache.isDeleting) {
+      dom.toggleClass(this.element(), 'module-deleting', isDeleting);
+      cache.isDeleting = isDeleting;
+    }
   };
 
   Module.prototype.dragType = function(target) {
@@ -553,7 +560,7 @@
       this.isMoving(true);
     } else if (type === 'delete') {
       context.target = target;
-      dom.addClass(this.element(), 'module-deleting');
+      this.isDeleting(true);
     } else if (type === 'hidePort') {
       context.target = target;
       context.port = this.ports().filter(function(port) {
@@ -596,7 +603,7 @@
       this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0)));
       this.y(Math.max(context.y + dy, 0));
     } else if (type === 'delete') {
-      dom.toggleClass(this.element(), 'module-deleting', dom.target(event) === context.target);
+      this.isDeleting(dom.target(event) === context.target);
     } else if (type === 'sortPort') {
       var targetPort = context.port;
       var targetPortHeight = targetPort.height();
@@ -656,7 +663,7 @@
         this.parentElement(null);
         this.deleter(this);
       } else {
-        dom.removeClass(this.element(), 'module-deleting');
+        this.isDeleting(false);
       }
     } else if (type === 'hidePort') {
       if (target === context.target)
