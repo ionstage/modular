@@ -500,30 +500,18 @@
   };
 
   Module.prototype.redrawStates = function() {
+    this.redrawState('isLoading', 'module-loading');
+    this.redrawState('isError', 'module-error');
+    this.redrawState('isMoving', 'module-moving');
+    this.redrawState('isDeleting', 'module-deleting');
+  };
+
+  Module.prototype.redrawState = function(key, className) {
     var cache = this.cache();
-
-    var isLoading = this.isLoading();
-    if (isLoading !== cache.isLoading) {
-      dom.toggleClass(this.element(), 'module-loading', isLoading);
-      cache.isLoading = isLoading;
-    }
-
-    var isError = this.isError();
-    if (isError !== cache.isError) {
-      dom.toggleClass(this.element(), 'module-error', isError);
-      cache.isError = isError;
-    }
-
-    var isMoving = this.isMoving();
-    if (isMoving !== cache.isMoving) {
-      dom.toggleClass(this.element(), 'module-moving', isMoving);
-      cache.isMoving = isMoving;
-    }
-
-    var isDeleting = this.isDeleting();
-    if (isDeleting !== cache.isDeleting) {
-      dom.toggleClass(this.element(), 'module-deleting', isDeleting);
-      cache.isDeleting = isDeleting;
+    var value = this[key]();
+    if (value !== cache[key]) {
+      dom.toggleClass(this.element(), className, value);
+      cache[key] = value;
     }
   };
 
