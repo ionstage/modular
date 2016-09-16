@@ -574,7 +574,7 @@
       context.port = port;
       context.top = top;
       context.placeholderTop = top;
-      dom.addClass(port.listItemElement(), 'module-port-sorting');
+      port.isMoving(true);
     } else if (type === 'dragPortPlug') {
       context.port = this.ports().filter(function(port) {
         return dom.contains(port.listItemElement(), target);
@@ -671,7 +671,7 @@
     } else if (type === 'sortPort') {
       var port = context.port;
       port.top(context.placeholderTop);
-      dom.removeClass(port.listItemElement(), 'module-port-sorting');
+      port.isMoving(false);
     } else if (type === 'dragPortPlug') {
       this.dragPortPlugEnder(this, context.port, context.context);
     } else if (type === 'dragPortSocket') {

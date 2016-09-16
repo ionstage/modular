@@ -20,6 +20,7 @@
     this.labelHighlighted = this.prop(false);
     this.plugHighlighted = this.prop(false);
     this.socketHighlighted = this.prop(false);
+    this.isMoving = this.prop(false);
     this.listItemElement = this.prop(this.renderListItem());
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
@@ -106,6 +107,12 @@
     if (socketHighlighted !== cache.socketHighlighted) {
       dom.toggleClass(this.listItemElement(), 'module-port-socket-highlight', socketHighlighted);
       cache.socketHighlighted = socketHighlighted;
+    }
+
+    var isMoving = this.isMoving();
+    if (isMoving !== cache.isMoving) {
+      dom.toggleClass(this.listItemElement(), 'module-port-moving', isMoving);
+      cache.isMoving = isMoving;
     }
 
     var hideable = this.hideable();
