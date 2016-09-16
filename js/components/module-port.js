@@ -89,40 +89,24 @@
       cache.top = top;
     }
 
-    var socketConnected = this.socketConnected();
-    if (socketConnected !== cache.socketConnected) {
-      dom.toggleClass(this.listItemElement(), 'module-port-socket-connected', socketConnected);
-      cache.socketConnected = socketConnected;
-    }
+    this.redrawStates();
+  };
 
-    var labelHighlighted = this.labelHighlighted();
-    if (labelHighlighted !== cache.labelHighlighted) {
-      dom.toggleClass(this.listItemElement(), 'module-port-label-highlight', labelHighlighted);
-      cache.labelHighlighted = labelHighlighted;
-    }
+  ModulePort.prototype.redrawStates = function() {
+    this.redrawState('socketConnected', 'module-port-socket-connected');
+    this.redrawState('labelHighlighted', 'module-port-label-highlight');
+    this.redrawState('plugHighlighted', 'module-port-plug-highlight');
+    this.redrawState('socketHighlighted', 'module-port-socket-highlight');
+    this.redrawState('isMoving', 'module-port-moving');
+    this.redrawState('hideDisabled', 'module-port-hide-disabled');
+  };
 
-    var plugHighlighted = this.plugHighlighted();
-    if (plugHighlighted !== cache.plugHighlighted) {
-      dom.toggleClass(this.listItemElement(), 'module-port-plug-highlight', plugHighlighted);
-      cache.plugHighlighted = plugHighlighted;
-    }
-
-    var socketHighlighted = this.socketHighlighted();
-    if (socketHighlighted !== cache.socketHighlighted) {
-      dom.toggleClass(this.listItemElement(), 'module-port-socket-highlight', socketHighlighted);
-      cache.socketHighlighted = socketHighlighted;
-    }
-
-    var isMoving = this.isMoving();
-    if (isMoving !== cache.isMoving) {
-      dom.toggleClass(this.listItemElement(), 'module-port-moving', isMoving);
-      cache.isMoving = isMoving;
-    }
-
-    var hideDisabled = this.hideDisabled();
-    if (hideDisabled !== cache.hideDisabled) {
-      dom.toggleClass(this.listItemElement(), 'module-port-hide-disabled', hideDisabled);
-      cache.hideDisabled = hideDisabled;
+  ModulePort.prototype.redrawState = function(key, className) {
+    var cache = this.cache();
+    var value = this[key]();
+    if (value !== cache[key]) {
+      dom.toggleClass(this.listItemElement(), className, value);
+      cache[key] = value;
     }
   };
 
