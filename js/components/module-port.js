@@ -36,6 +36,10 @@
     return !this.labelHighlighted();
   };
 
+  ModulePort.prototype.hideDisabled = function() {
+    return !this.hideable();
+  };
+
   ModulePort.prototype.bottom = function() {
     return this.top() + this.height();
   };
@@ -115,10 +119,10 @@
       cache.isMoving = isMoving;
     }
 
-    var hideable = this.hideable();
-    if (hideable !== cache.hideable) {
-      dom.toggleClass(this.listItemElement(), 'module-port-hide-disabled', !hideable);
-      cache.hideable = hideable;
+    var hideDisabled = this.hideDisabled();
+    if (hideDisabled !== cache.hideDisabled) {
+      dom.toggleClass(this.listItemElement(), 'module-port-hide-disabled', hideDisabled);
+      cache.hideDisabled = hideDisabled;
     }
   };
 
