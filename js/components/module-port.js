@@ -79,17 +79,25 @@
       cache.visible = visible;
     }
 
-    var top = this.top();
-    if (top !== cache.top) {
-      var translate = 'translateY(' + top + 'px)';
-      dom.css(this.listItemElement(), {
-        transform: translate,
-        webkitTransform: translate
-      });
-      cache.top = top;
-    }
-
+    this.redrawPosition();
     this.redrawStates();
+  };
+
+  ModulePort.prototype.redrawPosition = function() {
+    var top = this.top();
+    var cache = this.cache();
+
+    if (top === cache.top)
+      return;
+
+    var translate = 'translateY(' + top + 'px)';
+
+    dom.css(this.listItemElement(), {
+      transform: translate,
+      webkitTransform: translate
+    });
+
+    cache.top = top;
   };
 
   ModulePort.prototype.redrawStates = function() {
