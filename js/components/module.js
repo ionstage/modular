@@ -597,7 +597,7 @@
       var targetPortHeight = targetPort.height();
 
       // move the target port within the port list
-      var targetPortTop = Math.min(Math.max(context.top + dy, 0), this.portListHeight() - targetPortHeight);
+      var targetPortTop = helper.clamp(context.top + dy, 0, this.portListHeight() - targetPortHeight);
 
       targetPort.top(targetPortTop);
 

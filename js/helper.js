@@ -14,6 +14,10 @@
     return s.join('');
   };
 
+  helper.clamp = function(number, lower, upper) {
+    return Math.min(Math.max(number, lower), upper);
+  };
+
   helper.inherits = function(ctor, superCtor) {
     ctor.super_ = superCtor;
     ctor.prototype = Object.create(superCtor.prototype, {
