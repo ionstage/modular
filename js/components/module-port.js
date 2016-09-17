@@ -65,22 +65,27 @@
   };
 
   ModulePort.prototype.redraw = function() {
-    var cache = this.cache();
-
-    var visible = this.visible();
-    if (visible !== cache.visible) {
-      if (visible) {
-        dom.remove(this.optionElement());
-        dom.append(this.parentListElement(), this.listItemElement());
-      } else {
-        dom.remove(this.listItemElement());
-        dom.append(this.parentOptGroupElement(), this.optionElement());
-      }
-      cache.visible = visible;
-    }
-
+    this.redrawVisibility();
     this.redrawPosition();
     this.redrawStates();
+  };
+
+  ModulePort.prototype.redrawVisibility = function() {
+    var visible = this.visible();
+    var cache = this.cache();
+
+    if (visible === cache.visible)
+      return;
+
+    if (visible) {
+      dom.remove(this.optionElement());
+      dom.append(this.parentListElement(), this.listItemElement());
+    } else {
+      dom.remove(this.listItemElement());
+      dom.append(this.parentOptGroupElement(), this.optionElement());
+    }
+
+    cache.visible = visible;
   };
 
   ModulePort.prototype.redrawPosition = function() {
