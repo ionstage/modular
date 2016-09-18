@@ -400,11 +400,11 @@
 
     // remove element
     if (!parentElement && element) {
-      this.unregisterComponentPointListener();
-      this.unbindEventCircuitElement();
-      this.unregisterPointListener();
-      this.unregisterPortSelectChangeListener();
       this.unregisterDragListener();
+      this.unregisterPortSelectChangeListener();
+      this.unregisterPointListener();
+      this.unbindEventCircuitElement();
+      this.unregisterComponentPointListener();
       dom.remove(element);
       this.element(null);
       this.cache({});
