@@ -215,6 +215,19 @@
     dom.off(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
   };
 
+  Module.prototype.registerDragListener = function() {
+    this.draggable(new dom.Draggable({
+      element: this.element(),
+      onstart: Module.prototype.onstart.bind(this),
+      onmove: Module.prototype.onmove.bind(this),
+      onend: Module.prototype.onend.bind(this)
+    }));
+  };
+
+  Module.prototype.unregisterDragListener = function() {
+    this.draggable().destroy();
+  };
+
   Module.prototype.registerMessageListener = function(resolve, reject) {
     if (this.onmessage)
       return;
@@ -361,12 +374,7 @@
     // add element
     if (parentElement && !element) {
       this.element(this.render());
-      this.draggable(new dom.Draggable({
-        element: this.element(),
-        onstart: Module.prototype.onstart.bind(this),
-        onmove: Module.prototype.onmove.bind(this),
-        onend: Module.prototype.onend.bind(this)
-      }));
+      this.registerDragListener();
       dom.on(this.portSelectElement(), 'change', this.onchange);
       dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
       this.redraw();
@@ -376,11 +384,11 @@
 
     // remove element
     if (!parentElement && element) {
-      this.draggable().destroy();
       dom.off(this.portSelectElement(), 'change', this.onchange);
       dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
       this.unregisterComponentPointListener();
       this.unbindEventCircuitElement();
+      this.unregisterDragListener();
       dom.remove(element);
       this.element(null);
       this.cache({});
