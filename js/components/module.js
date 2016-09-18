@@ -236,6 +236,14 @@
     dom.off(this.portSelectElement(), 'change', this.onchange);
   };
 
+  Module.prototype.registerPointListener = function() {
+    dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
+  };
+
+  Module.prototype.unregisterPointListener = function() {
+    dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
+  };
+
   Module.prototype.registerMessageListener = function(resolve, reject) {
     if (this.onmessage)
       return;
@@ -384,7 +392,7 @@
       this.element(this.render());
       this.registerDragListener();
       this.registerPortSelectChangeListener();
-      dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
+      this.registerPointListener();
       this.redraw();
       dom.append(parentElement, this.element());
       return;
@@ -392,9 +400,9 @@
 
     // remove element
     if (!parentElement && element) {
-      dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
       this.unregisterComponentPointListener();
       this.unbindEventCircuitElement();
+      this.unregisterPointListener();
       this.unregisterPortSelectChangeListener();
       this.unregisterDragListener();
       dom.remove(element);
