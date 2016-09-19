@@ -40,6 +40,10 @@
     return !this.hideable();
   };
 
+  ModulePort.prototype.middle = function() {
+    return this.top() + this.height() / 2;
+  };
+
   ModulePort.prototype.bottom = function() {
     return this.top() + this.height();
   };

@@ -117,14 +117,14 @@
   Module.prototype.plugPosition = function(port) {
     return {
       x: this.x() + ModulePort.PLUG_OFFSET_X,
-      y: this.y() + this.portListTop() + port.top() + port.height() / 2
+      y: this.y() + this.portListTop() + port.middle()
     };
   };
 
   Module.prototype.socketPosition = function(port) {
     return {
       x: this.x() + ModulePort.SOCKET_OFFSET_X,
-      y: this.y() + this.portListTop() + port.top() + port.height() / 2
+      y: this.y() + this.portListTop() + port.middle()
     };
   };
 
@@ -625,7 +625,7 @@
 
       targetPort.top(targetPortTop);
 
-      var targetPortCenter = targetPortTop + targetPortHeight / 2;
+      var targetPortMiddle = targetPort.middle();
       var placeholderTop = context.placeholderTop;
       var nextPlaceholderTop = placeholderTop;
       var isDown = (targetPortTop - placeholderTop > 0);
@@ -637,11 +637,11 @@
         var top = port.top();
         var bottom = port.bottom();
 
-        if (isDown && placeholderTop <= top && top < targetPortCenter) {
+        if (isDown && placeholderTop <= top && top < targetPortMiddle) {
           // move up the ports over the target port
           port.top(top - targetPortHeight);
           nextPlaceholderTop = Math.max(nextPlaceholderTop, port.bottom());
-        } else if (!isDown && targetPortCenter < bottom && bottom <= placeholderTop) {
+        } else if (!isDown && targetPortMiddle < bottom && bottom <= placeholderTop) {
           // move down the ports under the target port
           port.top(top + targetPortHeight);
           nextPlaceholderTop = Math.min(nextPlaceholderTop, top);
