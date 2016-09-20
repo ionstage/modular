@@ -604,7 +604,7 @@
     this.dragStarter();
   };
 
-  Module.prototype.onmove = function(dx, dy) {
+  Module.prototype.onmove = function(dx, dy, event) {
     var context = this.dragContext();
     var type = context.type;
 
