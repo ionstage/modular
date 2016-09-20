@@ -541,66 +541,30 @@
 
   Module.prototype.dragType = function(target) {
     if (target === this.titleElement())
-      return 'position';
+      return Module.DRAG_TYPE_POSITION;
     else if (target === this.deleteButtonElement())
-      return 'delete';
+      return Module.DRAG_TYPE_DELETE;
     else if (dom.hasClass(target, 'module-port-hide-button'))
-      return 'hidePort';
+      return Module.DRAG_TYPE_HIDE_PORT;
     else if (dom.hasClass(target, 'module-port-label'))
-      return 'sortPort';
+      return Module.DRAG_TYPE_SORT_PORT;
     else if (dom.hasClass(target, 'module-port-plug'))
-      return 'dragPortPlug';
+      return Module.DRAG_TYPE_DRAG_PORT_PLAG;
     else if (dom.hasClass(dom.parent(target), 'module-port-socket'))
-      return 'dragPortSocket';
+      return Module.DRAG_TYPE_DRAG_PORT_SOCKET;
     else
       return null;
   };
 
   Module.prototype.onstart = function(x, y, event) {
     var context = this.dragContext();
-    var target = dom.target(event);
-    var type = context.type = this.dragType(target);
+    var type = context.type = this.dragType(dom.target(event));
 
     if (!type)
       return;
 
     dom.cancel(event);
-
-    if (type === 'position') {
-      context.x = this.x();
-      context.y = this.y();
-      this.isMoving(true);
-    } else if (type === 'delete') {
-      context.target = target;
-      this.isDeleting(true);
-    } else if (type === 'hidePort') {
-      context.target = target;
-      context.port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
-    } else if (type === 'sortPort') {
-      var port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
-      var top = port.top();
-      context.port = port;
-      context.top = top;
-      context.placeholderTop = top;
-      port.isMoving(true);
-    } else if (type === 'dragPortPlug') {
-      context.port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
-      context.context = {};
-      this.dragPortPlugStarter(this, context.port, context.context);
-    } else if (type === 'dragPortSocket') {
-      context.port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
-      context.context = {};
-      this.dragPortSocketStarter(this, context.port, context.context);
-    }
-
+    Module.DRAG_LISTENERS[type].onstart.call(this, x, y, event, context);
     this.dragStarter();
   };
 
@@ -611,12 +575,101 @@
     if (!type)
       return;
 
-    if (type === 'position') {
+    Module.DRAG_LISTENERS[type].onmove.call(this, dx, dy, event, context);
+  };
+
+  Module.prototype.onend = function(dx, dy, event) {
+    var context = this.dragContext();
+    var type = context.type;
+
+    if (!type)
+      return;
+
+    Module.DRAG_LISTENERS[type].onend.call(this, dx, dy, event, context);
+    this.dragEnder();
+  };
+
+  Module.prototype.onchange = function(event) {
+    this.showPort(dom.value(dom.target(event)));
+    dom.removeFocus();
+  };
+
+  Module.prototype.onpoint = function() {
+    this.fronter(this);
+  };
+
+  Module.DRAG_TYPE_POSITION = 'position';
+  Module.DRAG_TYPE_DELETE = 'delete';
+  Module.DRAG_TYPE_HIDE_PORT = 'hidePort';
+  Module.DRAG_TYPE_SORT_PORT = 'sortPort';
+  Module.DRAG_TYPE_DRAG_PORT_PLAG = 'dragPortPlug';
+  Module.DRAG_TYPE_DRAG_PORT_SOCKET = 'dragPortSocket';
+
+  Module.DRAG_TYPE_POSITION_LISTENER = {
+    onstart: function(x, y, event, context) {
+      context.x = this.x();
+      context.y = this.y();
+      this.isMoving(true);
+    },
+    onmove: function(dx, dy, event, context) {
       this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0)));
       this.y(Math.max(context.y + dy, 0));
-    } else if (type === 'delete') {
+    },
+    onend: function(dx, dy, event, context) {
+      this.isMoving(false);
+    }
+  };
+
+  Module.DRAG_TYPE_DELETE_LISTENER = {
+    onstart: function(x, y, event, context) {
+      context.target = dom.target(event);
+      this.isDeleting(true);
+    },
+    onmove: function(dx, dy, event, context) {
       this.isDeleting(dom.target(event) === context.target);
-    } else if (type === 'sortPort') {
+    },
+    onend: function(dx, dy, event, context) {
+      if (dom.target(event) === context.target) {
+        // remove all connections of connected ports
+        this.ports().forEach(function(port) {
+          this.hidePort(port.name());
+        }.bind(this));
+        this.parentElement(null);
+        this.deleter(this);
+      } else {
+        this.isDeleting(false);
+      }
+    }
+  };
+
+  Module.DRAG_TYPE_HIDE_PORT_LISTENER = {
+    onstart: function(x, y, event, context) {
+      var target = dom.target(event);
+      context.target = target;
+      context.port = this.ports().filter(function(port) {
+        return dom.contains(port.listItemElement(), target);
+      })[0];
+    },
+    onmove: function() { /* do nothing */ },
+    onend: function(dx, dy, event, context) {
+      if (dom.target(event) === context.target)
+        this.hidePort(context.port.name());
+    }
+  };
+
+  Module.DRAG_TYPE_SORT_PORT_LISTENER = {
+    onstart: function(x, y, event, context) {
+      var target = dom.target(event);
+      var port = this.ports().filter(function(port) {
+        return dom.contains(port.listItemElement(), target);
+      })[0];
+      var top = port.top();
+      context.port = port;
+      context.top = top;
+      context.placeholderTop = top;
+      port.isMoving(true);
+    },
+    onmove: function(dx, dy, event, context) {
       var targetPort = context.port;
       var targetPortHeight = targetPort.height();
 
@@ -649,58 +702,58 @@
       });
 
       context.placeholderTop = nextPlaceholderTop;
-    } else if (type === 'dragPortPlug') {
-      this.dragPortPlugMover(this, context.port, dx, dy, context.context);
-    } else if (type === 'dragPortSocket') {
-      this.dragPortSocketMover(this, context.port, dx, dy, context.context);
-    }
-  };
-
-  Module.prototype.onend = function(dx, dy, event) {
-    var context = this.dragContext();
-    var type = context.type;
-    var target = dom.target(event);
-
-    if (!type)
-      return;
-
-    if (type === 'position') {
-      this.isMoving(false);
-    } else if (type === 'delete') {
-      if (target === context.target) {
-        // remove all connections of connected ports
-        this.ports().forEach(function(port) {
-          this.hidePort(port.name());
-        }.bind(this));
-        this.parentElement(null);
-        this.deleter(this);
-      } else {
-        this.isDeleting(false);
-      }
-    } else if (type === 'hidePort') {
-      if (target === context.target)
-        this.hidePort(context.port.name());
-    } else if (type === 'sortPort') {
+    },
+    onend: function(dx, dy, event, context) {
       var port = context.port;
       port.top(context.placeholderTop);
       port.isMoving(false);
-    } else if (type === 'dragPortPlug') {
+    }
+  };
+
+  Module.DRAG_TYPE_DRAG_PORT_PLAG_LISTENER = {
+    onstart: function(x, y, event, context) {
+      var target = dom.target(event);
+      context.port = this.ports().filter(function(port) {
+        return dom.contains(port.listItemElement(), target);
+      })[0];
+      context.context = {};
+      this.dragPortPlugStarter(this, context.port, context.context);
+    },
+    onmove: function(dx, dy, event, context) {
+      this.dragPortPlugMover(this, context.port, dx, dy, context.context);
+    },
+    onend: function(dx, dy, event, context) {
       this.dragPortPlugEnder(this, context.port, context.context);
-    } else if (type === 'dragPortSocket') {
+    }
+  };
+
+  Module.DRAG_TYPE_DRAG_PORT_SOCKET_LISTENER = {
+    onstart: function(x, y, event, context) {
+      var target = dom.target(event);
+      context.port = this.ports().filter(function(port) {
+        return dom.contains(port.listItemElement(), target);
+      })[0];
+      context.context = {};
+      this.dragPortSocketStarter(this, context.port, context.context);
+    },
+    onmove: function(dx, dy, event, context) {
+      this.dragPortSocketMover(this, context.port, dx, dy, context.context);
+    },
+    onend: function(dx, dy, event, context) {
       this.dragPortSocketEnder(this, context.port, context.context);
     }
-
-    this.dragEnder();
   };
 
-  Module.prototype.onchange = function(event) {
-    this.showPort(dom.value(dom.target(event)));
-    dom.removeFocus();
-  };
-
-  Module.prototype.onpoint = function() {
-    this.fronter(this);
-  };
+  Module.DRAG_LISTENERS = (function() {
+    var listeners = {};
+    listeners[Module.DRAG_TYPE_POSITION] = Module.DRAG_TYPE_POSITION_LISTENER;
+    listeners[Module.DRAG_TYPE_DELETE] = Module.DRAG_TYPE_DELETE_LISTENER;
+    listeners[Module.DRAG_TYPE_HIDE_PORT] = Module.DRAG_TYPE_HIDE_PORT_LISTENER;
+    listeners[Module.DRAG_TYPE_SORT_PORT] = Module.DRAG_TYPE_SORT_PORT_LISTENER;
+    listeners[Module.DRAG_TYPE_DRAG_PORT_PLAG] = Module.DRAG_TYPE_DRAG_PORT_PLAG_LISTENER;
+    listeners[Module.DRAG_TYPE_DRAG_PORT_SOCKET] = Module.DRAG_TYPE_DRAG_PORT_SOCKET_LISTENER;
+    return listeners;
+  })();
 
   Module.TEMPLATE_HTML = [
     '<div class="module-header">',
