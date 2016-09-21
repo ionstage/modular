@@ -645,10 +645,9 @@
       this.isDeleting(dom.target(event) === context.target);
     },
     onend: function(dx, dy, event, context) {
+      this.isDeleting(false);
       if (dom.target(event) === context.target)
         this.delete();
-      else
-        this.isDeleting(false);
     }
   };
 
