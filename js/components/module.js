@@ -379,6 +379,16 @@
     cache.toggledPortList.add(port);
   };
 
+  Module.prototype.delete = function() {
+    // remove all connections of connected ports
+    this.ports().forEach(function(port) {
+      this.hidePort(port.name());
+    }.bind(this));
+
+    this.parentElement(null);
+    this.deleter(this);
+  };
+
   Module.prototype.render = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module');
@@ -635,16 +645,10 @@
       this.isDeleting(dom.target(event) === context.target);
     },
     onend: function(dx, dy, event, context) {
-      if (dom.target(event) === context.target) {
-        // remove all connections of connected ports
-        this.ports().forEach(function(port) {
-          this.hidePort(port.name());
-        }.bind(this));
-        this.parentElement(null);
-        this.deleter(this);
-      } else {
+      if (dom.target(event) === context.target)
+        this.delete();
+      else
         this.isDeleting(false);
-      }
     }
   };
 
