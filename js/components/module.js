@@ -283,6 +283,12 @@
     this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
   };
 
+  Module.prototype.resetPortSelect = function() {
+    this.ports().forEach(function(port) {
+      this.needsUpdatePortSelect(port);
+    }.bind(this));
+  };
+
   Module.prototype.exportModularModule = (function() {
     var ModularModule = function(member) {
       return new CircuitElement(member);
@@ -313,6 +319,7 @@
       this.isLoading(false);
       this.resetComponentHeight();
       this.ports(this.createPorts());
+      this.resetPortSelect();
       this.eventCircuitElement(this.createEventCircuitElement());
       this.bindEventCircuitElement();
       this.registerComponentPointListener();

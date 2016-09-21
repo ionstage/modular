@@ -26,9 +26,6 @@
     this.optionElement = this.prop(this.renderOption());
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
     this.cache = this.prop({});
-
-    // update the list-item element or the option element
-    this.markDirty();
   }, jCore.Component);
 
   ModulePort.prototype.hideable = function() {
