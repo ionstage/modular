@@ -256,15 +256,10 @@
           throw new Error('Invalid content data');
         if (!this.circuitElement())
           throw new Error('Invalid circuit element');
+        resolve();
       } catch(e) {
         reject(e);
-        return;
       }
-      this.ports(this.createPorts());
-      this.eventCircuitElement(this.createEventCircuitElement());
-      this.bindEventCircuitElement();
-      this.registerComponentPointListener();
-      resolve();
     }).bind(this);
 
     dom.on(this.componentContentWindow(), 'message', this.onmessage);
@@ -317,6 +312,10 @@
       this.unregisterMessageListener();
       this.isLoading(false);
       this.resetComponentHeight();
+      this.ports(this.createPorts());
+      this.eventCircuitElement(this.createEventCircuitElement());
+      this.bindEventCircuitElement();
+      this.registerComponentPointListener();
     }.bind(this)).catch(function(e) {
       this.unregisterMessageListener();
       this.isError(true);
