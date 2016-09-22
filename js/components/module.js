@@ -140,6 +140,12 @@
     })[0] || null;
   };
 
+  Module.prototype.eventPorts = function() {
+    return this.ports().filter(function(port) {
+      return (port.type() === ModulePort.TYPE_EVENT);
+    });
+  };
+
   Module.prototype.visiblePorts = function() {
     return this.ports().filter(function(port) {
       return port.visible();
@@ -177,9 +183,7 @@
   };
 
   Module.prototype.createEventCircuitElement = function() {
-    return new CircuitElement(this.ports().filter(function(port) {
-      return (port.type() === ModulePort.TYPE_EVENT);
-    }).map(function(port) {
+    return new CircuitElement(this.eventPorts().map(function(port) {
       return {
         label: port.label(),
         name: port.name(),
