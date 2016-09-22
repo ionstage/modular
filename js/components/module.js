@@ -527,10 +527,7 @@
 
     // sort options by name
     [ModulePort.TYPE_PROP, ModulePort.TYPE_EVENT].forEach(function(type) {
-      var portOptGroupElement = this.portOptGroupElement(type);
-      helper.sortBy(dom.children(portOptGroupElement), 'textContent').forEach(function(child) {
-        dom.append(portOptGroupElement, child);
-      });
+      dom.sort(this.portOptGroupElement(type));
     }.bind(this));
 
     // deselect option

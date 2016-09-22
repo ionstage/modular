@@ -1,6 +1,8 @@
 (function(app) {
   'use strict';
 
+  var helper = app.helper || require('./helper.js');
+
   var dom = {};
 
   dom.unsupported = function() {
@@ -170,6 +172,12 @@
 
   dom.removeFocus = function() {
     document.activeElement.blur();
+  };
+
+  dom.sort = function(el) {
+    helper.sortBy(dom.children(el), 'textContent').forEach(function(child) {
+      dom.append(el, child);
+    });
   };
 
   dom.animate = function(callback) {
