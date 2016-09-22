@@ -134,6 +134,12 @@
     })[0] || null;
   };
 
+  Module.prototype.targetPort = function(target) {
+    return this.ports().filter(function(port) {
+      return dom.contains(port.listItemElement(), target);
+    })[0] || null;
+  };
+
   Module.prototype.visiblePorts = function() {
     return this.ports().filter(function(port) {
       return port.visible();
@@ -650,11 +656,8 @@
 
   Module.DRAG_TYPE_HIDE_PORT_LISTENER = {
     onstart: function(x, y, event, context) {
-      var target = dom.target(event);
-      context.target = target;
-      context.port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
+      context.target = dom.target(event);
+      context.port = this.targetPort(context.target);
     },
     onmove: function() { /* do nothing */ },
     onend: function(dx, dy, event, context) {
@@ -665,10 +668,7 @@
 
   Module.DRAG_TYPE_SORT_PORT_LISTENER = {
     onstart: function(x, y, event, context) {
-      var target = dom.target(event);
-      var port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
+      var port = this.targetPort(dom.target(event));
       var top = port.top();
       context.port = port;
       context.top = top;
@@ -718,10 +718,7 @@
 
   Module.DRAG_TYPE_DRAG_PORT_PLAG_LISTENER = {
     onstart: function(x, y, event, context) {
-      var target = dom.target(event);
-      context.port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
+      context.port = this.targetPort(dom.target(event));
       context.context = {};
       this.dragPortPlugStarter(this, context.port, context.context);
     },
@@ -735,10 +732,7 @@
 
   Module.DRAG_TYPE_DRAG_PORT_SOCKET_LISTENER = {
     onstart: function(x, y, event, context) {
-      var target = dom.target(event);
-      context.port = this.ports().filter(function(port) {
-        return dom.contains(port.listItemElement(), target);
-      })[0];
+      context.port = this.targetPort(dom.target(event));
       context.context = {};
       this.dragPortSocketStarter(this, context.port, context.context);
     },
