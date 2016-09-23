@@ -681,37 +681,49 @@
     },
     onmove: function(dx, dy, event, context) {
       var targetPort = context.port;
-      var targetPortHeight = targetPort.height();
 
       // move the target port within the port list
-      var targetPortTop = helper.clamp(context.top + dy, 0, this.portListHeight() - targetPortHeight);
+      targetPort.top(helper.clamp(context.top + dy, 0, this.portListHeight() - targetPort.height()));
 
-      targetPort.top(targetPortTop);
-
+      if (targetPort.top() - context.placeholderTop > 0)
+        Module.DRAG_TYPE_SORT_PORT_LISTENER.onmovedown.call(this, dx, dy, event, context);
+      else
+        Module.DRAG_TYPE_SORT_PORT_LISTENER.onmoveup.call(this, dx, dy, event, context);
+    },
+    onmovedown: function(dx, dy, event, context) {
+      var targetPort = context.port;
+      var targetPortHeight = targetPort.height();
       var targetPortMiddle = targetPort.middle();
       var placeholderTop = context.placeholderTop;
-      var nextPlaceholderTop = placeholderTop;
-      var isDown = (targetPortTop - placeholderTop > 0);
 
-      this.ports().forEach(function(port) {
-        if (!port.visible() || port === targetPort)
-          return;
-
+      // move up the ports over the target port
+      this.visiblePorts().filter(function(port) {
         var top = port.top();
-        var bottom = port.bottom();
-
-        if (isDown && placeholderTop <= top && top < targetPortMiddle) {
-          // move up the ports over the target port
-          port.top(top - targetPortHeight);
-          nextPlaceholderTop = Math.max(nextPlaceholderTop, port.bottom());
-        } else if (!isDown && targetPortMiddle < bottom && bottom <= placeholderTop) {
-          // move down the ports under the target port
-          port.top(top + targetPortHeight);
-          nextPlaceholderTop = Math.min(nextPlaceholderTop, top);
-        }
+        return (port !== targetPort && placeholderTop <= top && top < targetPortMiddle);
+      }).forEach(function(port) {
+        port.top(port.top() - targetPortHeight);
+        placeholderTop = Math.max(placeholderTop, port.bottom());
       });
 
-      context.placeholderTop = nextPlaceholderTop;
+      context.placeholderTop = placeholderTop;
+    },
+    onmoveup: function(dx, dy, event, context) {
+      var targetPort = context.port;
+      var targetPortHeight = targetPort.height();
+      var targetPortMiddle = targetPort.middle();
+      var placeholderTop = context.placeholderTop;
+
+      // move down the ports under the target port
+      this.visiblePorts().filter(function(port) {
+        var bottom = port.bottom();
+        return (port !== targetPort && targetPortMiddle < bottom && bottom <= placeholderTop);
+      }).forEach(function(port) {
+        var top = port.top();
+        port.top(top + targetPortHeight);
+        placeholderTop = Math.min(placeholderTop, top);
+      });
+
+      context.placeholderTop = placeholderTop;
     },
     onend: function(dx, dy, event, context) {
       var port = context.port;
