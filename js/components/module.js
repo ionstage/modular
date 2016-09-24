@@ -175,7 +175,7 @@
   Module.prototype.createPorts = function() {
     return this.circuitElement().getAll().map(function(member) {
       var props = member.props();
-      return new ModulePort(helper.extend({}, props, {
+      return new ModulePort(helper.extend(helper.clone(props), {
         parentListElement: this.portListElement(),
         parentOptGroupElement: this.portOptGroupElement(props.type)
       }));

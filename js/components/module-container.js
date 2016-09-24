@@ -263,7 +263,7 @@
   };
 
   ModuleContainer.prototype.loadModule = function(props) {
-    var module = new Module(helper.extend({}, props, {
+    var module = new Module(helper.extend(helper.clone(props), {
       deleter: this.deleter,
       fronter: this.fronter,
       portToggler: this.portToggler,
