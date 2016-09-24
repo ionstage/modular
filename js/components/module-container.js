@@ -16,16 +16,20 @@
     this.targetPort = props.targetPort;
   };
 
+  Binding.prototype.source = function() {
+    return this.sourceModule.circuitElementMember(this.sourcePort.name());
+  };
+
+  Binding.prototype.target = function() {
+    return this.targetModule.circuitElementMember(this.targetPort.name());
+  };
+
   Binding.prototype.bind = function() {
-    var source = this.sourceModule.circuitElementMember(this.sourcePort.name());
-    var target = this.targetModule.circuitElementMember(this.targetPort.name());
-    CircuitElement.bind(source, target);
+    CircuitElement.bind(this.source(), this.target());
   };
 
   Binding.prototype.unbind = function() {
-    var source = this.sourceModule.circuitElementMember(this.sourcePort.name());
-    var target = this.targetModule.circuitElementMember(this.targetPort.name());
-    CircuitElement.unbind(source, target);
+    CircuitElement.unbind(this.source(), this.target());
   };
 
   var BindingList = helper.inherits(function() {
