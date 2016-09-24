@@ -434,6 +434,7 @@
       dom.remove(element);
       this.element(null);
       this.cache({});
+      this.draggable(null);
       this.dragContext({});
       return;
     }
