@@ -103,14 +103,14 @@
   };
 
   Module.prototype.hasVisiblePortPlug = function() {
-    return this.ports().some(function(port) {
-      return port.visible() && !port.plugDisabled();
+    return this.visiblePorts().some(function(port) {
+      return !port.plugDisabled();
     });
   };
 
   Module.prototype.hasVisiblePortSocket = function() {
-    return this.ports().some(function(port) {
-      return port.visible() && !port.socketDisabled();
+    return this.visiblePorts().some(function(port) {
+      return !port.socketDisabled();
     });
   };
 
