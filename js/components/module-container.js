@@ -16,6 +16,12 @@
     this.targetPort = props.targetPort;
   };
 
+  Binding.prototype.equal = function(other) {
+    return Object.keys(this).every(function(key) {
+      return (this[key] === other[key]);
+    }.bind(this));
+  };
+
   Binding.prototype.source = function() {
     return this.sourceModule.circuitElementMember(this.sourcePort.name());
   };
@@ -37,10 +43,7 @@
   }, helper.List);
 
   BindingList.prototype.equal = function(a, b) {
-    return (a.sourceModule === b.sourceModule &&
-            a.sourcePort === b.sourcePort &&
-            a.targetModule === b.targetModule &&
-            a.targetPort === b.targetPort);
+    return a.equal(b);
   };
 
   var HighlightedEvent = function(props) {
