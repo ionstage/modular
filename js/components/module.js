@@ -384,9 +384,10 @@
 
   Module.prototype.needsUpdatePortSelect = function(port) {
     var cache = this.cache();
-    if (!cache.toggledPortList)
-      cache.toggledPortList = new helper.List();
-    cache.toggledPortList.add(port);
+    if (!cache.toggledPorts)
+      cache.toggledPorts = [];
+    if (cache.toggledPorts.indexOf(port) === -1)
+      cache.toggledPorts.push(port);
   };
 
   Module.prototype.delete = function() {
@@ -526,13 +527,13 @@
 
   Module.prototype.redrawPortSelect = function() {
     var cache = this.cache();
-    var toggledPortList = cache.toggledPortList;
+    var toggledPorts = cache.toggledPorts;
 
-    if (!toggledPortList)
+    if (!toggledPorts)
       return;
 
     // update select element of toggled port
-    toggledPortList.toArray().forEach(function(port) {
+    toggledPorts.forEach(function(port) {
       port.redraw();
     });
 
@@ -544,7 +545,7 @@
     // deselect option
     dom.value(this.portSelectElement(), '');
 
-    cache.toggledPortList = null;
+    cache.toggledPorts = null;
   };
 
   Module.prototype.redrawStates = function() {
