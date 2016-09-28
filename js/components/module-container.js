@@ -52,12 +52,16 @@
     this.wireSet = new helper.Set();
   };
 
+  HighlightedEvent.prototype.equal = function(other) {
+    return (this.sourcePort === other.sourcePort);
+  };
+
   var HighlightedEventSet = helper.inherits(function() {
     HighlightedEventSet.super_.call(this);
   }, helper.Set);
 
   HighlightedEventSet.prototype.equal = function(a, b) {
-    return (a.sourcePort === b.sourcePort);
+    return a.equal(b);
   };
 
   HighlightedEventSet.prototype.highlightEvent = function(sourcePort) {
