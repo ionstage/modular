@@ -28,7 +28,6 @@
         configurable: true
       }
     });
-
     return ctor;
   };
 
@@ -98,7 +97,6 @@
 
     Set.prototype.remove = function(item) {
       var data = this.data;
-
       for (var i = data.length - 1; i >= 0; i--) {
         if (data[i].equal(item)) {
           data.splice(i, 1);
