@@ -100,7 +100,7 @@
       var data = this.data;
 
       for (var i = data.length - 1; i >= 0; i--) {
-        if (this.equal(data[i], item)) {
+        if (data[i].equal(item)) {
           data.splice(i, 1);
           break;
         }
@@ -109,12 +109,8 @@
 
     Set.prototype.contains = function(item) {
       return this.data.some(function(dataItem) {
-        return this.equal(dataItem, item);
-      }.bind(this));
-    };
-
-    Set.prototype.equal = function(a, b) {
-      return a === b;
+        return dataItem.equal(item);
+      });
     };
 
     Set.prototype.toArray = function() {

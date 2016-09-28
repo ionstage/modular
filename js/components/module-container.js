@@ -42,10 +42,6 @@
     BindingSet.super_.call(this);
   }, helper.Set);
 
-  BindingSet.prototype.equal = function(a, b) {
-    return a.equal(b);
-  };
-
   var HighlightedEvent = function(props) {
     this.sourcePort = props.sourcePort;
     this.targetPortSet = new helper.Set();
@@ -59,10 +55,6 @@
   var HighlightedEventSet = helper.inherits(function() {
     HighlightedEventSet.super_.call(this);
   }, helper.Set);
-
-  HighlightedEventSet.prototype.equal = function(a, b) {
-    return a.equal(b);
-  };
 
   HighlightedEventSet.prototype.highlightEvent = function(sourcePort) {
     return this.toArray().filter(function(highlightEvent) {
