@@ -53,7 +53,7 @@
   };
 
   var HighlightedEventList = helper.inherits(function() {
-    BindingList.super_.call(this);
+    HighlightedEventList.super_.call(this);
   }, helper.List);
 
   HighlightedEventList.prototype.equal = function(a, b) {
