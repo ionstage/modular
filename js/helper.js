@@ -86,17 +86,17 @@
     array.splice(array.indexOf(item), 1);
   };
 
-  helper.List = (function() {
-    var List = function() {
+  helper.Set = (function() {
+    var Set = function() {
       this.data = [];
     };
 
-    List.prototype.add = function(item) {
+    Set.prototype.add = function(item) {
       if (!this.contains(item))
         this.data.push(item);
     };
 
-    List.prototype.remove = function(item) {
+    Set.prototype.remove = function(item) {
       var data = this.data;
 
       for (var i = data.length - 1; i >= 0; i--) {
@@ -107,21 +107,21 @@
       }
     };
 
-    List.prototype.contains = function(item) {
+    Set.prototype.contains = function(item) {
       return this.data.some(function(dataItem) {
         return this.equal(dataItem, item);
       }.bind(this));
     };
 
-    List.prototype.equal = function(a, b) {
+    Set.prototype.equal = function(a, b) {
       return a === b;
     };
 
-    List.prototype.toArray = function() {
+    Set.prototype.toArray = function() {
       return this.data.slice();
     };
 
-    return List;
+    return Set;
   })();
 
   if (typeof module !== 'undefined' && module.exports)
