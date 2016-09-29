@@ -85,6 +85,16 @@
     array.splice(array.indexOf(item), 1);
   };
 
+  helper.moveToBack = function(array, item) {
+    var index = array.indexOf(item);
+
+    if (index === -1)
+      return;
+
+    array.splice(index, 1);
+    array.push(item);
+  };
+
   helper.Set = (function() {
     var Set = function() {
       this.data = [];
