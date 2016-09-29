@@ -52,6 +52,16 @@
     this.add(binding);
   };
 
+  BindingSet.prototype.removeBinding = function(props) {
+    var binding = new Binding(props);
+
+    if (!this.has(binding))
+      return;
+
+    binding.unbind();
+    this.delete(binding);
+  };
+
   var HighlightedEvent = function(props) {
     this.sourcePort = props.sourcePort;
     this.targetPortSet = new helper.Set();
@@ -207,20 +217,12 @@
   };
 
   ModuleContainer.prototype.unbind = function(sourceModule, sourcePort, targetModule, targetPort) {
-    var bindingSet = this.bindingSet();
-
-    var binding = new Binding({
+    this.bindingSet().removeBinding({
       sourceModule: sourceModule,
       sourcePort: sourcePort,
       targetModule: targetModule,
       targetPort: targetPort
     });
-
-    if (!bindingSet.has(binding))
-      return;
-
-    binding.unbind();
-    bindingSet.delete(binding);
   };
 
   ModuleContainer.prototype.connect = function(sourceModule, sourcePort, targetModule, targetPort) {
