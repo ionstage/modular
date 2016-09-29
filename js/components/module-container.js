@@ -85,7 +85,7 @@
   };
 
   HighlightedEventSet.prototype.removeSourcePort = function(sourcePort) {
-    this.remove(new HighlightedEvent({ sourcePort: sourcePort }));
+    this.delete(new HighlightedEvent({ sourcePort: sourcePort }));
   };
 
   HighlightedEventSet.prototype.removeTargetPort = function(sourcePort, targetPort) {
@@ -94,7 +94,7 @@
     if (!highlightEvent)
       return;
 
-    highlightEvent.targetPortSet.remove(targetPort);
+    highlightEvent.targetPortSet.delete(targetPort);
   };
 
   HighlightedEventSet.prototype.highlighted = function(sourcePort, highlighted) {
@@ -197,7 +197,7 @@
       targetPort: targetPort
     });
 
-    if (bindingSet.contains(binding))
+    if (bindingSet.has(binding))
       return;
 
     binding.bind();
@@ -214,11 +214,11 @@
       targetPort: targetPort
     });
 
-    if (!bindingSet.contains(binding))
+    if (!bindingSet.has(binding))
       return;
 
     binding.unbind();
-    bindingSet.remove(binding);
+    bindingSet.delete(binding);
   };
 
   ModuleContainer.prototype.connect = function(sourceModule, sourcePort, targetModule, targetPort) {

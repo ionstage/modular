@@ -91,11 +91,11 @@
     };
 
     Set.prototype.add = function(item) {
-      if (!this.contains(item))
+      if (!this.has(item))
         this.data.push(item);
     };
 
-    Set.prototype.remove = function(item) {
+    Set.prototype.delete = function(item) {
       var data = this.data;
       for (var i = data.length - 1; i >= 0; i--) {
         if (data[i].equal(item)) {
@@ -105,7 +105,7 @@
       }
     };
 
-    Set.prototype.contains = function(item) {
+    Set.prototype.has = function(item) {
       return this.data.some(function(dataItem) {
         return dataItem.equal(item);
       });
