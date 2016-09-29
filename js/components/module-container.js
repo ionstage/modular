@@ -42,6 +42,16 @@
     BindingSet.super_.call(this);
   }, helper.Set);
 
+  BindingSet.prototype.addBinding = function(props) {
+    var binding = new Binding(props);
+
+    if (this.has(binding))
+      return;
+
+    binding.bind();
+    this.add(binding);
+  };
+
   var HighlightedEvent = function(props) {
     this.sourcePort = props.sourcePort;
     this.targetPortSet = new helper.Set();
@@ -188,20 +198,12 @@
   };
 
   ModuleContainer.prototype.bind = function(sourceModule, sourcePort, targetModule, targetPort) {
-    var bindingSet = this.bindingSet();
-
-    var binding = new Binding({
+    this.bindingSet().addBinding({
       sourceModule: sourceModule,
       sourcePort: sourcePort,
       targetModule: targetModule,
       targetPort: targetPort
     });
-
-    if (bindingSet.has(binding))
-      return;
-
-    binding.bind();
-    bindingSet.add(binding);
   };
 
   ModuleContainer.prototype.unbind = function(sourceModule, sourcePort, targetModule, targetPort) {
