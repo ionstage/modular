@@ -55,6 +55,12 @@
     });
   };
 
+  BindingSet.prototype.targetBindings = function(module, port) {
+    return this.toArray().filter(function(binding) {
+      return (binding.targetModule === module && binding.targetPort === port);
+    });
+  };
+
   BindingSet.prototype.addBinding = function(props) {
     var binding = new Binding(props);
 
@@ -550,10 +556,7 @@
     context.wire = wire;
     context.type = targetPort.type();
 
-    var binding = this.bindingSet().toArray().filter(function(binding) {
-      return (binding.targetModule === targetModule && binding.targetPort === targetPort);
-    })[0];
-
+    var binding = this.bindingSet().targetBindings(targetModule, targetPort)[0];
     var sourceModule = binding.sourceModule;
     var sourcePort = binding.sourcePort;
 
