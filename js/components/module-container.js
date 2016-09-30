@@ -42,6 +42,13 @@
     BindingSet.super_.call(this);
   }, helper.Set);
 
+  BindingSet.prototype.bindings = function(module, port) {
+    return this.toArray().filter(function(binding) {
+      return ((binding.sourceModule === module && binding.sourcePort === port) ||
+              (binding.targetModule === module && binding.targetPort === port));
+    });
+  };
+
   BindingSet.prototype.addBinding = function(props) {
     var binding = new Binding(props);
 
@@ -336,10 +343,7 @@
   ModuleContainer.prototype.portToggler = function(module, port) {
     if (!port.visible()) {
       // remove all connections with hidden port
-      this.bindingSet().toArray().filter(function(binding) {
-        return ((binding.sourceModule === module && binding.sourcePort === port) ||
-                (binding.targetModule === module && binding.targetPort === port));
-      }).forEach(function(binding) {
+      this.bindingSet().bindings(module, port).forEach(function(binding) {
         var sourceModule = binding.sourceModule;
         var sourcePort = binding.sourcePort;
         var targetModule = binding.targetModule;
