@@ -49,6 +49,12 @@
     });
   };
 
+  BindingSet.prototype.sourceBindings = function(module, port) {
+    return this.toArray().filter(function(binding) {
+      return (binding.sourceModule === module && binding.sourcePort === port);
+    });
+  };
+
   BindingSet.prototype.addBinding = function(props) {
     var binding = new Binding(props);
 
@@ -368,9 +374,7 @@
 
     highlightedEventSet.addSourcePort(port);
 
-    this.bindingSet().toArray().filter(function(binding) {
-      return (binding.sourceModule === module && binding.sourcePort === port);
-    }).forEach(function(binding) {
+    this.bindingSet().sourceBindings(module, port).forEach(function(binding) {
       highlightedEventSet.addTargetPort(port, binding.targetPort);
       var wire = binding.targetPort.relations().filter(function(relation) {
         return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
