@@ -218,9 +218,8 @@
     for (var i = relations.length - 1; i >= 0; i--) {
       var relation = relations[i];
       if (relation.consistsOf(type, module, port, wire)) {
-        relations.splice(i, 1);
-        var moduleRelations = module.relations();
-        moduleRelations.splice(moduleRelations.indexOf(relation), 1);
+        helper.remove(relations, relation);
+        helper.remove(module.relations(), relation);
         break;
       }
     }
@@ -337,12 +336,11 @@
 
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
-    var index = modules.indexOf(module);
 
-    if (index === -1)
+    if (modules.indexOf(module) === -1)
       return;
 
-    modules.splice(index, 1);
+    helper.remove(modules, module);
     this.updateZIndex();
     this.markDirty();
   };
@@ -523,12 +521,11 @@
   };
 
   ModuleContainer.prototype.dragPortPlugEnder = function(sourceModule, sourcePort, context) {
-    var draggingWires = this.draggingWires();
     var wire = context.wire;
     var targetModule = context.targetModule;
     var targetPort = context.targetPort;
 
-    draggingWires.splice(draggingWires.indexOf(wire), 1);
+    helper.remove(this.draggingWires(), wire);
     this.updatePortLabelHighlight(sourcePort);
     this.updateModuleDeletable(sourceModule);
 
