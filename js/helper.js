@@ -128,6 +128,52 @@
     return Set;
   })();
 
+  helper.Map = (function() {
+    var Map = function() {
+      this.data = [];
+    };
+
+    Map.prototype.set = function(key, value) {
+      var data = this.data;
+      if (!this.has(key)) {
+        data.push([key, value]);
+        return;
+      }
+      for (var i = data.length - 1; i >= 0; i--) {
+        var item = data[i];
+        if (item[0].equal(key)) {
+          item[1] = value;
+          break;
+        }
+      }
+    };
+
+    Map.prototype.get = function(key) {
+      var item = this.data.filter(function(item) {
+        return item[0].equal(key);
+      })[0];
+      return (item ? item[1] : null);
+    };
+
+    Map.prototype.delete = function(key) {
+      var data = this.data;
+      for (var i = data.length - 1; i >= 0; i--) {
+        if (data[i][0].equal(key)) {
+          data.splice(i, 1);
+          break;
+        }
+      }
+    };
+
+    Map.prototype.has = function(key) {
+      return this.data.some(function(item) {
+        return item[0].equal(key);
+      });
+    };
+
+    return Map;
+  })();
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = helper;
   else
