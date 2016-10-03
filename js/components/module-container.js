@@ -38,30 +38,30 @@
     CircuitElement.unbind(this.source(), this.target());
   };
 
-  var BindingSet = helper.inherits(function() {
-    BindingSet.super_.call(this);
+  var BindingCollection = helper.inherits(function() {
+    BindingCollection.super_.call(this);
   }, helper.Set);
 
-  BindingSet.prototype.bindings = function(module, port) {
+  BindingCollection.prototype.bindings = function(module, port) {
     return this.toArray().filter(function(binding) {
       return ((binding.sourceModule === module && binding.sourcePort === port) ||
               (binding.targetModule === module && binding.targetPort === port));
     });
   };
 
-  BindingSet.prototype.sourceBindings = function(module, port) {
+  BindingCollection.prototype.sourceBindings = function(module, port) {
     return this.toArray().filter(function(binding) {
       return (binding.sourceModule === module && binding.sourcePort === port);
     });
   };
 
-  BindingSet.prototype.targetBindings = function(module, port) {
+  BindingCollection.prototype.targetBindings = function(module, port) {
     return this.toArray().filter(function(binding) {
       return (binding.targetModule === module && binding.targetPort === port);
     });
   };
 
-  BindingSet.prototype.addBinding = function(props) {
+  BindingCollection.prototype.addBinding = function(props) {
     var binding = new Binding(props);
 
     if (this.has(binding))
@@ -71,7 +71,7 @@
     this.add(binding);
   };
 
-  BindingSet.prototype.removeBinding = function(props) {
+  BindingCollection.prototype.removeBinding = function(props) {
     var binding = new Binding(props);
 
     if (!this.has(binding))
@@ -155,7 +155,7 @@
     ModuleContainer.super_.call(this);
 
     this.modules = this.prop([]);
-    this.bindingSet = this.prop(new BindingSet());
+    this.bindingCollection = this.prop(new BindingCollection());
     this.highlightedEventSet = this.prop(new HighlightedEventSet());
     this.element = this.prop(props.element);
     this.dragCount = this.prop(0);
@@ -226,7 +226,7 @@
   };
 
   ModuleContainer.prototype.bind = function(sourceModule, sourcePort, targetModule, targetPort) {
-    this.bindingSet().addBinding({
+    this.bindingCollection().addBinding({
       sourceModule: sourceModule,
       sourcePort: sourcePort,
       targetModule: targetModule,
@@ -235,7 +235,7 @@
   };
 
   ModuleContainer.prototype.unbind = function(sourceModule, sourcePort, targetModule, targetPort) {
-    this.bindingSet().removeBinding({
+    this.bindingCollection().removeBinding({
       sourceModule: sourceModule,
       sourcePort: sourcePort,
       targetModule: targetModule,
@@ -353,7 +353,7 @@
   ModuleContainer.prototype.portToggler = function(module, port) {
     if (!port.visible()) {
       // remove all connections with hidden port
-      this.bindingSet().bindings(module, port).forEach(function(binding) {
+      this.bindingCollection().bindings(module, port).forEach(function(binding) {
         var sourceModule = binding.sourceModule;
         var sourcePort = binding.sourcePort;
         var targetModule = binding.targetModule;
@@ -378,7 +378,7 @@
 
     highlightedEventSet.addSourcePort(port);
 
-    this.bindingSet().sourceBindings(module, port).forEach(function(binding) {
+    this.bindingCollection().sourceBindings(module, port).forEach(function(binding) {
       highlightedEventSet.addTargetPort(port, binding.targetPort);
       var wire = binding.targetPort.relations().filter(function(relation) {
         return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
@@ -553,7 +553,7 @@
     context.wire = wire;
     context.type = targetPort.type();
 
-    var binding = this.bindingSet().targetBindings(targetModule, targetPort)[0];
+    var binding = this.bindingCollection().targetBindings(targetModule, targetPort)[0];
     var sourceModule = binding.sourceModule;
     var sourcePort = binding.sourcePort;
 
