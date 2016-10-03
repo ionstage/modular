@@ -38,47 +38,49 @@
     CircuitElement.unbind(this.source(), this.target());
   };
 
-  var BindingCollection = helper.inherits(function() {
-    BindingCollection.super_.call(this);
-  }, helper.Set);
+  var BindingCollection = function() {
+    this.data = new helper.Set();
+  };
 
   BindingCollection.prototype.bindings = function(module, port) {
-    return this.toArray().filter(function(binding) {
+    return this.data.toArray().filter(function(binding) {
       return ((binding.sourceModule === module && binding.sourcePort === port) ||
               (binding.targetModule === module && binding.targetPort === port));
     });
   };
 
   BindingCollection.prototype.sourceBindings = function(module, port) {
-    return this.toArray().filter(function(binding) {
+    return this.data.toArray().filter(function(binding) {
       return (binding.sourceModule === module && binding.sourcePort === port);
     });
   };
 
   BindingCollection.prototype.targetBindings = function(module, port) {
-    return this.toArray().filter(function(binding) {
+    return this.data.toArray().filter(function(binding) {
       return (binding.targetModule === module && binding.targetPort === port);
     });
   };
 
-  BindingCollection.prototype.addBinding = function(props) {
+  BindingCollection.prototype.add = function(props) {
+    var data = this.data;
     var binding = new Binding(props);
 
-    if (this.has(binding))
+    if (data.has(binding))
       return;
 
     binding.bind();
-    this.add(binding);
+    data.add(binding);
   };
 
-  BindingCollection.prototype.removeBinding = function(props) {
+  BindingCollection.prototype.remove = function(props) {
+    var data = this.data;
     var binding = new Binding(props);
 
-    if (!this.has(binding))
+    if (!data.has(binding))
       return;
 
     binding.unbind();
-    this.delete(binding);
+    data.delete(binding);
   };
 
   var HighlightedEvent = function(props) {
@@ -226,7 +228,7 @@
   };
 
   ModuleContainer.prototype.bind = function(sourceModule, sourcePort, targetModule, targetPort) {
-    this.bindingCollection().addBinding({
+    this.bindingCollection().add({
       sourceModule: sourceModule,
       sourcePort: sourcePort,
       targetModule: targetModule,
@@ -235,7 +237,7 @@
   };
 
   ModuleContainer.prototype.unbind = function(sourceModule, sourcePort, targetModule, targetPort) {
-    this.bindingCollection().removeBinding({
+    this.bindingCollection().remove({
       sourceModule: sourceModule,
       sourcePort: sourcePort,
       targetModule: targetModule,
