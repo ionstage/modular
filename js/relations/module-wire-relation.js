@@ -14,7 +14,7 @@
   }, jCore.Relation);
 
   ModuleWireRelation.prototype.positionType = (function() {
-    var map = { source: 'plug', target: 'socket' };
+    var map = { plug: 'source', socket: 'target' };
     return function() {
       return map[this.type()];
     };
@@ -28,16 +28,16 @@
   };
 
   ModuleWireRelation.prototype.update = function() {
-    var type = this.type();
     var wire = this.wire();
-    var position = this.module()[this.positionType() + 'Position'](this.port());
+    var positionType = this.positionType();
+    var position = this.module()[this.type() + 'Position'](this.port());
 
-    wire[type + 'X'](position.x);
-    wire[type + 'Y'](position.y);
+    wire[positionType + 'X'](position.x);
+    wire[positionType + 'Y'](position.y);
   };
 
-  ModuleWireRelation.TYPE_SOURCE = 'source';
-  ModuleWireRelation.TYPE_TARGET = 'target';
+  ModuleWireRelation.TYPE_PLUG = 'plug';
+  ModuleWireRelation.TYPE_SOCKET = 'socket';
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleWireRelation;

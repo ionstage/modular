@@ -544,7 +544,7 @@
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
     var relation = targetPort.relations().filter(function(relation) {
-      return (relation.type() === ModuleWireRelation.TYPE_TARGET);
+      return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
     })[0];
 
     var wire = relation.wire();
@@ -578,8 +578,8 @@
     this.dragPortPlugEnder(context.sourceModule, context.sourcePort, context);
   };
 
-  ModuleContainer.LOCK_TYPE_PLUG = ModuleWireRelation.TYPE_SOURCE;
-  ModuleContainer.LOCK_TYPE_SOCKET = ModuleWireRelation.TYPE_TARGET;
+  ModuleContainer.LOCK_TYPE_PLUG = ModuleWireRelation.TYPE_PLUG;
+  ModuleContainer.LOCK_TYPE_SOCKET = ModuleWireRelation.TYPE_SOCKET;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleContainer;
