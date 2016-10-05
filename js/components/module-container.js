@@ -7,7 +7,7 @@
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
   var Module = app.Module || require('./module.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
-  var ModuleWireRelation = app.ModuleWireRelation || require('../relations/module-wire-relation.js');
+  var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
 
   var Binding = function(props) {
     this.sourceModule = props.sourceModule;
@@ -203,7 +203,7 @@
     if (hasRelation)
       return;
 
-    var relation = new ModuleWireRelation({
+    var relation = new LockRelation({
       type: type,
       module: module,
       port: port,
@@ -578,8 +578,8 @@
     this.dragPortPlugEnder(context.sourceModule, context.sourcePort, context);
   };
 
-  ModuleContainer.LOCK_TYPE_PLUG = ModuleWireRelation.TYPE_PLUG;
-  ModuleContainer.LOCK_TYPE_SOCKET = ModuleWireRelation.TYPE_SOCKET;
+  ModuleContainer.LOCK_TYPE_PLUG = LockRelation.TYPE_PLUG;
+  ModuleContainer.LOCK_TYPE_SOCKET = LockRelation.TYPE_SOCKET;
 
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleContainer;
