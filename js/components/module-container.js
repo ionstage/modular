@@ -9,6 +9,34 @@
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
 
+  var LockRelationCollection = function() {
+    this.data = new helper.Map();
+  };
+
+  LockRelationCollection.prototype.add = function(props) {
+    var data = this.data;
+    var relation = new LockRelation(props);
+
+    if (data.has(relation))
+      return;
+
+    props.port.relations().push(relation);
+    props.module.relations().push(relation);
+    data.set(relation, relation);
+  };
+
+  LockRelationCollection.prototype.remove = function(props) {
+    var data = this.data;
+    var relation = data.get(new LockRelation(props));
+
+    if (!relation)
+      return;
+
+    helper.remove(props.port.relations(), relation);
+    helper.remove(props.module.relations(), relation);
+    data.delete(relation);
+  };
+
   var Binding = function(props) {
     this.sourceModule = props.sourceModule;
     this.sourcePort = props.sourcePort;
@@ -157,6 +185,7 @@
     ModuleContainer.super_.call(this);
 
     this.modules = this.prop([]);
+    this.lockRelationCollection = this.prop(new LockRelationCollection());
     this.bindingCollection = this.prop(new BindingCollection());
     this.highlightedEventSet = this.prop(new HighlightedEventSet());
     this.element = this.prop(props.element);
@@ -194,37 +223,21 @@
   };
 
   ModuleContainer.prototype.lock = function(type, module, port, wire) {
-    var relations = port.relations();
-
-    var hasRelation = relations.some(function(relation) {
-      return relation.consistsOf(type, module, port, wire);
-    });
-
-    if (hasRelation)
-      return;
-
-    var relation = new LockRelation({
+    this.lockRelationCollection().add({
       type: type,
       module: module,
       port: port,
       wire: wire
     });
-
-    relations.push(relation);
-    module.relations().push(relation);
   };
 
   ModuleContainer.prototype.unlock = function(type, module, port, wire) {
-    var relations = port.relations();
-
-    for (var i = relations.length - 1; i >= 0; i--) {
-      var relation = relations[i];
-      if (relation.consistsOf(type, module, port, wire)) {
-        helper.remove(relations, relation);
-        helper.remove(module.relations(), relation);
-        break;
-      }
-    }
+    this.lockRelationCollection().remove({
+      type: type,
+      module: module,
+      port: port,
+      wire: wire
+    });
   };
 
   ModuleContainer.prototype.bind = function(sourceModule, sourcePort, targetModule, targetPort) {
