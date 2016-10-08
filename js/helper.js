@@ -35,6 +35,10 @@
     return value;
   };
 
+  helper.equal = function(a, b) {
+    return (typeof a.equal === 'function') ? a.equal(b) : (a === b);
+  };
+
   helper.clone = function(obj) {
     var ret = {};
     for (var key in obj) {
@@ -108,7 +112,7 @@
     Set.prototype.delete = function(item) {
       var data = this.data;
       for (var i = data.length - 1; i >= 0; i--) {
-        if (data[i].equal(item)) {
+        if (helper.equal(data[i], item)) {
           data.splice(i, 1);
           break;
         }
@@ -117,7 +121,7 @@
 
     Set.prototype.has = function(item) {
       return this.data.some(function(dataItem) {
-        return dataItem.equal(item);
+        return helper.equal(dataItem, item);
       });
     };
 
@@ -141,7 +145,7 @@
       }
       for (var i = data.length - 1; i >= 0; i--) {
         var item = data[i];
-        if (item[0].equal(key)) {
+        if (helper.equal(item[0], key)) {
           item[1] = value;
           break;
         }
@@ -150,7 +154,7 @@
 
     Map.prototype.get = function(key) {
       var item = this.data.filter(function(item) {
-        return item[0].equal(key);
+        return helper.equal(item[0], key);
       })[0];
       return (item ? item[1] : null);
     };
@@ -158,7 +162,7 @@
     Map.prototype.delete = function(key) {
       var data = this.data;
       for (var i = data.length - 1; i >= 0; i--) {
-        if (data[i][0].equal(key)) {
+        if (helper.equal(data[i][0], key)) {
           data.splice(i, 1);
           break;
         }
@@ -167,7 +171,7 @@
 
     Map.prototype.has = function(key) {
       return this.data.some(function(item) {
-        return item[0].equal(key);
+        return helper.equal(item[0], key);
       });
     };
 
