@@ -267,6 +267,7 @@
       targetX: targetPosition.x,
       targetY: targetPosition.y,
       handleType: sourcePort.type(),
+      handleVisible: false,
       parentHandleElement: this.wireHandleContainerElement()
     });
     wire.parentElement(this.wireContainerElement());

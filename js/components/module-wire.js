@@ -13,7 +13,7 @@
     this.targetX = this.prop(props.targetX);
     this.targetY = this.prop(props.targetY);
     this.handleType = this.prop(props.handleType);
-    this.handleVisible = this.prop(!!props.handleVisible);
+    this.handleVisible = this.prop(props.handleVisible);
     this.highlighted = this.prop(false);
     this.element = this.prop(null);
     this.parentElement = this.prop(null);
