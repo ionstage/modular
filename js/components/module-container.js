@@ -222,6 +222,21 @@
     return dom.child(this.element(), 3);
   };
 
+  ModuleContainer.prototype.createConnectingWire = function(sourceModule, sourcePort, targetModule, targetPort) {
+    var sourcePosition = sourceModule.plugPosition(sourcePort);
+    var targetPosition = targetModule.plugPosition(targetPort);
+    return new ModuleWire({
+      sourceX: sourcePosition.x,
+      sourceY: sourcePosition.y,
+      targetX: targetPosition.x,
+      targetY: targetPosition.y,
+      handleType: sourcePort.type(),
+      handleVisible: false,
+      parentElement: this.wireContainerElement(),
+      parentHandleElement: this.wireHandleContainerElement()
+    });
+  };
+
   ModuleContainer.prototype.lock = function(type, module, port, wire) {
     this.lockRelationCollection().add({
       type: type,
@@ -259,18 +274,7 @@
   };
 
   ModuleContainer.prototype.connect = function(sourceModule, sourcePort, targetModule, targetPort) {
-    var sourcePosition = sourceModule.plugPosition(sourcePort);
-    var targetPosition = targetModule.plugPosition(targetPort);
-    var wire = new ModuleWire({
-      sourceX: sourcePosition.x,
-      sourceY: sourcePosition.y,
-      targetX: targetPosition.x,
-      targetY: targetPosition.y,
-      handleType: sourcePort.type(),
-      handleVisible: false,
-      parentElement: this.wireContainerElement(),
-      parentHandleElement: this.wireHandleContainerElement()
-    });
+    var wire = this.createConnectingWire(sourceModule, sourcePort, targetModule, targetPort);
     wire.markDirty();
     targetPort.socketConnected(true);
     this.bind(sourceModule, sourcePort, targetModule, targetPort);
