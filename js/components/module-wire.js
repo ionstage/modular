@@ -16,7 +16,7 @@
     this.handleVisible = this.prop(props.handleVisible);
     this.highlighted = this.prop(false);
     this.element = this.prop(null);
-    this.parentElement = this.prop(null);
+    this.parentElement = this.prop(props.parentElement);
     this.handleElement = this.prop(null);
     this.parentHandleElement = this.prop(props.parentHandleElement);
     this.cache = this.prop({});

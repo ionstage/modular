@@ -268,9 +268,10 @@
       targetY: targetPosition.y,
       handleType: sourcePort.type(),
       handleVisible: false,
+      parentElement: this.wireContainerElement(),
       parentHandleElement: this.wireHandleContainerElement()
     });
-    wire.parentElement(this.wireContainerElement());
+    wire.markDirty();
     targetPort.socketConnected(true);
     this.bind(sourceModule, sourcePort, targetModule, targetPort);
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
@@ -438,9 +439,10 @@
       targetY: y,
       handleType: sourcePort.type(),
       handleVisible: true,
+      parentElement: this.wireContainerElement(),
       parentHandleElement: this.wireHandleContainerElement()
     });
-    wire.parentElement(this.wireContainerElement());
+    wire.markDirty();
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     this.draggingWires().push(wire);
     this.updatePortLabelHighlight(sourcePort);
