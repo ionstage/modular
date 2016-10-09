@@ -237,6 +237,20 @@
     });
   };
 
+  ModuleContainer.prototype.createDraggingWire = function(sourceModule, sourcePort) {
+    var position = sourceModule.plugPosition(sourcePort);
+    return new ModuleWire({
+      sourceX: position.x,
+      sourceY: position.y,
+      targetX: position.x,
+      targetY: position.y,
+      handleType: sourcePort.type(),
+      handleVisible: true,
+      parentElement: this.wireContainerElement(),
+      parentHandleElement: this.wireHandleContainerElement()
+    });
+  };
+
   ModuleContainer.prototype.lock = function(type, module, port, wire) {
     this.lockRelationCollection().add({
       type: type,
@@ -433,19 +447,7 @@
   };
 
   ModuleContainer.prototype.dragPortPlugStarter = function(sourceModule, sourcePort, context) {
-    var position = sourceModule.plugPosition(sourcePort);
-    var x = position.x;
-    var y = position.y;
-    var wire = new ModuleWire({
-      sourceX: x,
-      sourceY: y,
-      targetX: x,
-      targetY: y,
-      handleType: sourcePort.type(),
-      handleVisible: true,
-      parentElement: this.wireContainerElement(),
-      parentHandleElement: this.wireHandleContainerElement()
-    });
+    var wire = this.createDraggingWire(sourceModule, sourcePort);
     wire.markDirty();
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceModule, sourcePort, wire);
     this.draggingWires().push(wire);
@@ -454,8 +456,9 @@
     var highlightedEventSet = this.highlightedEventSet();
     highlightedEventSet.addWire(sourcePort, wire);
     highlightedEventSet.highlighted(sourcePort, sourcePort.plugHighlighted());
-    context.x = x;
-    context.y = y;
+    var position = sourceModule.plugPosition(sourcePort);
+    context.x = position.x;
+    context.y = position.y;
     context.wire = wire;
     context.type = sourcePort.type();
     context.targetModule = null;
