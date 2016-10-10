@@ -324,6 +324,7 @@
 
   ModuleContainer.prototype.loadModule = function(props) {
     var module = new Module(helper.extend(helper.clone(props), {
+      parentElement: this.contentElement(),
       deleter: this.deleter,
       fronter: this.fronter,
       portToggler: this.portToggler,
@@ -340,7 +341,6 @@
     this.modules().push(module);
     this.updateZIndex();
     this.markDirty();
-    module.parentElement(this.contentElement());
     module.redraw();
     return module.loadComponent().then(function() {
       return module;

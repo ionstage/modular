@@ -25,7 +25,7 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
     this.element = this.prop(null);
-    this.parentElement = this.prop(null);
+    this.parentElement = this.prop(props.parentElement);
     this.cache = this.prop({});
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
