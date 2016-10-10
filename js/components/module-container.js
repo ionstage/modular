@@ -222,6 +222,24 @@
     return dom.child(this.element(), 3);
   };
 
+  ModuleContainer.prototype.createModule = function(props) {
+    return new Module(helper.extend(helper.clone(props), {
+      parentElement: this.contentElement(),
+      deleter: this.deleter,
+      fronter: this.fronter,
+      portToggler: this.portToggler,
+      portEventer: this.portEventer,
+      dragStarter: this.dragStarter,
+      dragEnder: this.dragEnder,
+      dragPortPlugStarter: this.dragPortPlugStarter,
+      dragPortPlugMover: this.dragPortPlugMover,
+      dragPortPlugEnder: this.dragPortPlugEnder,
+      dragPortSocketStarter: this.dragPortSocketStarter,
+      dragPortSocketMover: this.dragPortSocketMover,
+      dragPortSocketEnder: this.dragPortSocketEnder
+    }));
+  };
+
   ModuleContainer.prototype.createConnectingWire = function(sourceModule, sourcePort, targetModule, targetPort) {
     var sourcePosition = sourceModule.plugPosition(sourcePort);
     var targetPosition = targetModule.plugPosition(targetPort);
@@ -323,21 +341,7 @@
   };
 
   ModuleContainer.prototype.loadModule = function(props) {
-    var module = new Module(helper.extend(helper.clone(props), {
-      parentElement: this.contentElement(),
-      deleter: this.deleter,
-      fronter: this.fronter,
-      portToggler: this.portToggler,
-      portEventer: this.portEventer,
-      dragStarter: this.dragStarter,
-      dragEnder: this.dragEnder,
-      dragPortPlugStarter: this.dragPortPlugStarter,
-      dragPortPlugMover: this.dragPortPlugMover,
-      dragPortPlugEnder: this.dragPortPlugEnder,
-      dragPortSocketStarter: this.dragPortSocketStarter,
-      dragPortSocketMover: this.dragPortSocketMover,
-      dragPortSocketEnder: this.dragPortSocketEnder
-    }));
+    var module = this.createModule(props);
     this.modules().push(module);
     this.updateZIndex();
     this.markDirty();
