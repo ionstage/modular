@@ -570,11 +570,10 @@
   };
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
-    var relation = targetPort.relations().filter(function(relation) {
+    var wire = targetPort.relations().filter(function(relation) {
       return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
-    })[0];
+    })[0].wire();
 
-    var wire = relation.wire();
     this.draggingWires().push(wire);
 
     context.x = wire.targetX();
