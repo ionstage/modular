@@ -175,6 +175,12 @@
       });
     };
 
+    Map.prototype.forEach = function(callback) {
+      this.data.forEach(function(item) {
+        callback(item[1], item[0], this);
+      }.bind(this));
+    };
+
     return Map;
   })();
 
