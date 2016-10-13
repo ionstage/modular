@@ -26,13 +26,6 @@
     }.bind(this));
   };
 
-  LockRelation.prototype.consistsOf = function(type, module, port, wire) {
-    return (this.type() === type &&
-            this.module() === module &&
-            this.port() === port &&
-            this.wire() === wire);
-  };
-
   LockRelation.prototype.update = function() {
     var wire = this.wire();
     var positionType = this.positionType();
