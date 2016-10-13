@@ -77,15 +77,15 @@
     });
   };
 
-  BindingCollection.prototype.sourceBindings = function(module, port) {
+  BindingCollection.prototype.sourceBindings = function(sourceModule, sourcePort) {
     return this.data.toArray().filter(function(binding) {
-      return (binding.sourceModule === module && binding.sourcePort === port);
+      return (binding.sourceModule === sourceModule && binding.sourcePort === sourcePort);
     });
   };
 
-  BindingCollection.prototype.targetBindings = function(module, port) {
+  BindingCollection.prototype.targetBindings = function(targetModule, targetPort) {
     return this.data.toArray().filter(function(binding) {
-      return (binding.targetModule === module && binding.targetPort === port);
+      return (binding.targetModule === targetModule && binding.targetPort === targetPort);
     });
   };
 
