@@ -22,7 +22,7 @@
 
   LockRelation.prototype.equal = function(other) {
     return Object.keys(this).every(function(key) {
-      return (this[key]() === other[key]());
+      return helper.equal(this[key](), other[key]());
     }.bind(this));
   };
 
