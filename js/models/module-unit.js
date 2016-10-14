@@ -14,6 +14,14 @@
     }.bind(this));
   };
 
+  ModuleUnit.prototype.plugPosition = function() {
+    return this.module.plugPosition(this.port);
+  };
+
+  ModuleUnit.prototype.socketPosition = function() {
+    return this.module.socketPosition(this.port);
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleUnit;
   else
