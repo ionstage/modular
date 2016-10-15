@@ -22,6 +22,16 @@
     return this.module.socketPosition(this.port);
   };
 
+  ModuleUnit.prototype.addRelation = function(relation) {
+    this.module.relations().push(relation);
+    this.port.relations().push(relation);
+  };
+
+  ModuleUnit.prototype.removeRelation = function(relation) {
+    helper.remove(this.module.relations(), relation);
+    helper.remove(this.port.relations(), relation);
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleUnit;
   else
