@@ -8,8 +8,7 @@
     LockRelation.super_.call(this);
 
     this.type = this.prop(props.type);
-    this.module = this.prop(props.module);
-    this.port = this.prop(props.port);
+    this.unit = this.prop(props.unit);
     this.wire = this.prop(props.wire);
   }, jCore.Relation);
 
@@ -29,7 +28,7 @@
   LockRelation.prototype.update = function() {
     var wire = this.wire();
     var positionType = this.positionType();
-    var position = this.module()[this.type() + 'Position'](this.port());
+    var position = this.unit()[this.type() + 'Position']();
 
     wire[positionType + 'X'](position.x);
     wire[positionType + 'Y'](position.y);

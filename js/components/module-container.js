@@ -5,6 +5,7 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
+  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var Module = app.Module || require('./module.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
@@ -20,8 +21,7 @@
     if (data.has(relation))
       return;
 
-    props.port.relations().push(relation);
-    props.module.relations().push(relation);
+    props.unit.addRelation(relation);
     data.set(relation, relation);
   };
 
@@ -32,8 +32,7 @@
     if (!relation)
       return;
 
-    helper.remove(props.port.relations(), relation);
-    helper.remove(props.module.relations(), relation);
+    props.unit.removeRelation(relation);
     data.delete(relation);
   };
 
@@ -272,8 +271,7 @@
   ModuleContainer.prototype.lock = function(type, module, port, wire) {
     this.lockRelationCollection().add({
       type: type,
-      module: module,
-      port: port,
+      unit: new ModuleUnit({ module: module, port: port }),
       wire: wire
     });
   };
@@ -281,8 +279,7 @@
   ModuleContainer.prototype.unlock = function(type, module, port, wire) {
     this.lockRelationCollection().remove({
       type: type,
-      module: module,
-      port: port,
+      unit: new ModuleUnit({ module: module, port: port }),
       wire: wire
     });
   };
