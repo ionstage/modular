@@ -36,6 +36,15 @@
     data.delete(relation);
   };
 
+  LockRelationCollection.prototype.wires = function(type, unit) {
+    var wires = [];
+    this.data.forEach(function(relation) {
+      if (helper.equal(relation.type(), type) && helper.equal(relation.unit(), unit))
+        wires.push(relation.wire());
+    });
+    return wires;
+  };
+
   var Binding = function(props) {
     this.sourceModule = props.sourceModule;
     this.sourcePort = props.sourcePort;
