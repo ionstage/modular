@@ -18,6 +18,10 @@
     return this.port.type();
   };
 
+  ModuleUnit.prototype.circuitElementMember = function() {
+    return this.module.circuitElementMember(this.port.name());
+  };
+
   ModuleUnit.prototype.plugPosition = function() {
     return this.module.plugPosition(this.port);
   };
