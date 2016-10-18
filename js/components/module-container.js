@@ -250,7 +250,7 @@
 
   ModuleContainer.prototype.createConnectingWire = function(sourceModule, sourcePort, targetModule, targetPort) {
     var sourcePosition = sourceModule.plugPosition(sourcePort);
-    var targetPosition = targetModule.plugPosition(targetPort);
+    var targetPosition = targetModule.socketPosition(targetPort);
     return new ModuleWire({
       sourceX: sourcePosition.x,
       sourceY: sourcePosition.y,
