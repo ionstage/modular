@@ -14,6 +14,10 @@
     }.bind(this));
   };
 
+  ModuleUnit.prototype.portType = function() {
+    return this.port.type();
+  };
+
   ModuleUnit.prototype.plugPosition = function() {
     return this.module.plugPosition(this.port);
   };
