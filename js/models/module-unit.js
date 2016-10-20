@@ -18,6 +18,10 @@
     return this.port.type();
   };
 
+  ModuleUnit.prototype.portSocketConnected = function(value) {
+    return this.port.socketConnected(value);
+  };
+
   ModuleUnit.prototype.circuitElementMember = function() {
     return this.module.circuitElementMember(this.port.name());
   };
