@@ -248,15 +248,15 @@
     }));
   };
 
-  ModuleContainer.prototype.createConnectingWire = function(sourceModule, sourcePort, targetModule, targetPort) {
-    var sourcePosition = sourceModule.plugPosition(sourcePort);
-    var targetPosition = targetModule.socketPosition(targetPort);
+  ModuleContainer.prototype.createConnectingWire = function(sourceUnit, targetUnit) {
+    var sourcePosition = sourceUnit.plugPosition();
+    var targetPosition = targetUnit.socketPosition();
     return new ModuleWire({
       sourceX: sourcePosition.x,
       sourceY: sourcePosition.y,
       targetX: targetPosition.x,
       targetY: targetPosition.y,
-      handleType: sourcePort.type(),
+      handleType: sourceUnit.portType(),
       handleVisible: false,
       parentElement: this.wireContainerElement(),
       parentHandleElement: this.wireHandleContainerElement()
@@ -314,7 +314,7 @@
   ModuleContainer.prototype.connect = function(sourceModule, sourcePort, targetModule, targetPort) {
     var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
     var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
-    var wire = this.createConnectingWire(sourceModule, sourcePort, targetModule, targetPort);
+    var wire = this.createConnectingWire(sourceUnit, targetUnit);
     wire.markDirty();
     targetPort.socketConnected(true);
     this.bind(sourceModule, sourcePort, targetModule, targetPort);
