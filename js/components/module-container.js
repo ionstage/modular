@@ -433,18 +433,12 @@
 
     this.bindingCollection().sourceBindings(module, port).forEach(function(binding) {
       highlightedEventSet.addTargetPort(port, binding.targetPort);
-      var wire = this.connectedWire(binding);
-      highlightedEventSet.addWire(port, wire);
     }.bind(this));
 
-    var draggingWire = this.draggingWires().filter(function(wire) {
-      return port.relations().some(function(relation) {
-        return (relation.wire() === wire);
-      });
-    })[0];
-
-    if (draggingWire)
-      highlightedEventSet.addWire(port, draggingWire);
+    var unit = new ModuleUnit({ module: module, port: port });
+    this.lockRelationCollection().wires(ModuleContainer.LOCK_TYPE_PLUG, unit).forEach(function(wire) {
+      highlightedEventSet.addWire(port, wire);
+    });
 
     highlightedEventSet.highlighted(port, true);
 
