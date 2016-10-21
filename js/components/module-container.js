@@ -36,13 +36,25 @@
     data.delete(relation);
   };
 
-  LockRelationCollection.prototype.wires = function(type, unit) {
-    var wires = [];
+  LockRelationCollection.prototype.filter = function(props) {
+    var relations = [];
     this.data.forEach(function(relation) {
-      if (helper.equal(relation.type(), type) && helper.equal(relation.unit(), unit))
-        wires.push(relation.wire());
+      var matched = Object.keys(props).map(function(key) {
+        return helper.equal(relation[key](), props[key]);
+      }).every(helper.identity);
+      if (matched)
+        relations.push(relation);
     });
-    return wires;
+    return relations;
+  };
+
+  LockRelationCollection.prototype.wires = function(type, unit) {
+    return this.filter({
+      type: type,
+      unit: unit
+    }).map(function(relation) {
+      return relation.wire();
+    });
   };
 
   var Binding = function(props) {
