@@ -48,15 +48,6 @@
     return relations;
   };
 
-  LockRelationCollection.prototype.wires = function(type, unit) {
-    return this.filter({
-      type: type,
-      unit: unit
-    }).map(function(relation) {
-      return relation.wire();
-    });
-  };
-
   var Binding = function(props) {
     this.sourceModule = props.sourceModule;
     this.sourcePort = props.sourcePort;
@@ -242,10 +233,19 @@
     return dom.child(this.element(), 3);
   };
 
+  ModuleContainer.prototype.lockedWires = function(type, unit) {
+    return this.lockRelationCollection().filter({
+      type: type,
+      unit: unit
+    }).map(function(relation) {
+      return relation.wire();
+    });
+  };
+
   ModuleContainer.prototype.connectedWire = function(binding) {
     // socket of the target port can only be connected to one wire
     var targetUnit = new ModuleUnit({ module: binding.targetModule, port: binding.targetPort });
-    return this.lockRelationCollection().wires(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit)[0];
+    return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit)[0];
   };
 
   ModuleContainer.prototype.createModule = function(props) {
@@ -448,7 +448,7 @@
     }.bind(this));
 
     var unit = new ModuleUnit({ module: module, port: port });
-    this.lockRelationCollection().wires(ModuleContainer.LOCK_TYPE_PLUG, unit).forEach(function(wire) {
+    this.lockedWires(ModuleContainer.LOCK_TYPE_PLUG, unit).forEach(function(wire) {
       highlightedEventSet.addWire(port, wire);
     });
 
