@@ -230,6 +230,12 @@
     return dom.child(this.element(), 3);
   };
 
+  ModuleContainer.prototype.connectedWire = function(binding) {
+    // socket of the target port can only be connected to one wire
+    var targetUnit = new ModuleUnit({ module: binding.targetModule, port: binding.targetPort });
+    return this.lockRelationCollection().wires(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit)[0];
+  };
+
   ModuleContainer.prototype.createModule = function(props) {
     return new Module(helper.extend(helper.clone(props), {
       parentElement: this.contentElement(),
@@ -405,9 +411,7 @@
         var sourcePort = binding.sourcePort;
         var targetModule = binding.targetModule;
         var targetPort = binding.targetPort;
-        var wire = binding.targetPort.relations().filter(function(relation) {
-          return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
-        })[0].wire();
+        var wire = this.connectedWire(binding);
         var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
         var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
         this.unbind(sourceModule, sourcePort, targetModule, targetPort);
@@ -429,11 +433,9 @@
 
     this.bindingCollection().sourceBindings(module, port).forEach(function(binding) {
       highlightedEventSet.addTargetPort(port, binding.targetPort);
-      var wire = binding.targetPort.relations().filter(function(relation) {
-        return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
-      })[0].wire();
+      var wire = this.connectedWire(binding);
       highlightedEventSet.addWire(port, wire);
-    });
+    }.bind(this));
 
     var draggingWire = this.draggingWires().filter(function(wire) {
       return port.relations().some(function(relation) {
@@ -584,9 +586,8 @@
   };
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
-    var wire = targetPort.relations().filter(function(relation) {
-      return (relation.type() === ModuleContainer.LOCK_TYPE_SOCKET);
-    })[0].wire();
+    var binding = this.bindingCollection().targetBindings(targetModule, targetPort)[0];
+    var wire = this.connectedWire(binding);
 
     this.draggingWires().push(wire);
 
@@ -595,7 +596,6 @@
     context.wire = wire;
     context.type = targetPort.type();
 
-    var binding = this.bindingCollection().targetBindings(targetModule, targetPort)[0];
     var sourceModule = binding.sourceModule;
     var sourcePort = binding.sourcePort;
 
