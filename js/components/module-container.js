@@ -49,10 +49,8 @@
   };
 
   var Binding = function(props) {
-    this.sourceModule = props.sourceModule;
-    this.sourcePort = props.sourcePort;
-    this.targetModule = props.targetModule;
-    this.targetPort = props.targetPort;
+    this.sourceUnit = props.sourceUnit;
+    this.targetUnit = props.targetUnit;
   };
 
   Binding.prototype.equal = function(other) {
@@ -62,11 +60,11 @@
   };
 
   Binding.prototype.source = function() {
-    return this.sourceModule.circuitElementMember(this.sourcePort.name());
+    return this.sourceUnit.circuitElementMember();
   };
 
   Binding.prototype.target = function() {
-    return this.targetModule.circuitElementMember(this.targetPort.name());
+    return this.targetUnit.circuitElementMember();
   };
 
   Binding.prototype.bind = function() {
@@ -82,21 +80,23 @@
   };
 
   BindingCollection.prototype.bindings = function(module, port) {
+    var unit = new ModuleUnit({ module: module, port: port });
     return this.data.toArray().filter(function(binding) {
-      return ((binding.sourceModule === module && binding.sourcePort === port) ||
-              (binding.targetModule === module && binding.targetPort === port));
+      return (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit));
     });
   };
 
   BindingCollection.prototype.sourceBindings = function(sourceModule, sourcePort) {
+    var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
     return this.data.toArray().filter(function(binding) {
-      return (binding.sourceModule === sourceModule && binding.sourcePort === sourcePort);
+      return helper.equal(binding.sourceUnit, sourceUnit);
     });
   };
 
   BindingCollection.prototype.targetBindings = function(targetModule, targetPort) {
+    var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
     return this.data.toArray().filter(function(binding) {
-      return (binding.targetModule === targetModule && binding.targetPort === targetPort);
+      return helper.equal(binding.targetUnit, targetUnit);
     });
   };
 
@@ -244,8 +244,7 @@
 
   ModuleContainer.prototype.connectedWire = function(binding) {
     // socket of the target port can only be connected to one wire
-    var targetUnit = new ModuleUnit({ module: binding.targetModule, port: binding.targetPort });
-    return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit)[0];
+    return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, binding.targetUnit)[0];
   };
 
   ModuleContainer.prototype.createModule = function(props) {
@@ -311,21 +310,17 @@
     });
   };
 
-  ModuleContainer.prototype.bind = function(sourceModule, sourcePort, targetModule, targetPort) {
+  ModuleContainer.prototype.bind = function(sourceUnit, targetUnit) {
     this.bindingCollection().add({
-      sourceModule: sourceModule,
-      sourcePort: sourcePort,
-      targetModule: targetModule,
-      targetPort: targetPort
+      sourceUnit: sourceUnit,
+      targetUnit: targetUnit
     });
   };
 
-  ModuleContainer.prototype.unbind = function(sourceModule, sourcePort, targetModule, targetPort) {
+  ModuleContainer.prototype.unbind = function(sourceUnit, targetUnit) {
     this.bindingCollection().remove({
-      sourceModule: sourceModule,
-      sourcePort: sourcePort,
-      targetModule: targetModule,
-      targetPort: targetPort
+      sourceUnit: sourceUnit,
+      targetUnit: targetUnit
     });
   };
 
@@ -334,8 +329,8 @@
     var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
     var wire = this.createConnectingWire(sourceUnit, targetUnit);
     wire.markDirty();
-    targetPort.socketConnected(true);
-    this.bind(sourceModule, sourcePort, targetModule, targetPort);
+    targetUnit.portSocketConnected(true);
+    this.bind(sourceUnit, targetUnit);
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
     this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
   };
@@ -419,17 +414,13 @@
     if (!port.visible()) {
       // remove all connections with hidden port
       this.bindingCollection().bindings(module, port).forEach(function(binding) {
-        var sourceModule = binding.sourceModule;
-        var sourcePort = binding.sourcePort;
-        var targetModule = binding.targetModule;
-        var targetPort = binding.targetPort;
+        var sourceUnit = binding.sourceUnit;
+        var targetUnit = binding.targetUnit;
         var wire = this.connectedWire(binding);
-        var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
-        var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
-        this.unbind(sourceModule, sourcePort, targetModule, targetPort);
+        this.unbind(sourceUnit, targetUnit);
         this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
         this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
-        targetPort.socketConnected(false);
+        targetUnit.portSocketConnected(false);
         wire.parentElement(null);
       }.bind(this));
     }
@@ -444,7 +435,7 @@
     highlightedEventSet.addSourcePort(port);
 
     this.bindingCollection().sourceBindings(module, port).forEach(function(binding) {
-      highlightedEventSet.addTargetPort(port, binding.targetPort);
+      highlightedEventSet.addTargetPort(port, binding.targetUnit.port);
     }.bind(this));
 
     var unit = new ModuleUnit({ module: module, port: port });
@@ -479,11 +470,11 @@
     var highlightedEventSet = this.highlightedEventSet();
     highlightedEventSet.addWire(sourcePort, wire);
     highlightedEventSet.highlighted(sourcePort, sourcePort.plugHighlighted());
-    var position = sourceModule.plugPosition(sourcePort);
+    var position = sourceUnit.plugPosition();
     context.x = position.x;
     context.y = position.y;
     context.wire = wire;
-    context.type = sourcePort.type();
+    context.type = sourceUnit.portType();
     context.targetModule = null;
     context.targetPort = null;
   };
@@ -540,12 +531,13 @@
     var highlightedEventSet = this.highlightedEventSet();
 
     if (currentTargetModule && currentTargetPort) {
+      var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
       var currentTargetUnit = new ModuleUnit({ module: currentTargetModule, port: currentTargetPort });
-      this.unbind(sourceModule, sourcePort, currentTargetModule, currentTargetPort);
+      this.unbind(sourceUnit, currentTargetUnit);
       // detach the wire-handle from the current target port-socket
       this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetUnit, wire);
       wire.handleVisible(true);
-      currentTargetPort.socketConnected(false);
+      currentTargetUnit.portSocketConnected(false);
       this.updatePortLabelHighlight(currentTargetPort);
       this.updateModuleDeletable(currentTargetModule);
       highlightedEventSet.removeTargetPort(sourcePort, currentTargetPort);
@@ -554,11 +546,12 @@
     }
 
     if (targetModule && targetPort) {
+      var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
       var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
-      this.bind(sourceModule, sourcePort, targetModule, targetPort);
+      this.bind(sourceUnit, targetUnit);
       // attach the wire-handle to the target port-socket
       this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
-      targetPort.socketConnected(true);
+      targetUnit.portSocketConnected(true);
       wire.handleVisible(false);
       this.updatePortLabelHighlight(targetPort);
       this.updateModuleDeletable(targetModule);
@@ -602,8 +595,8 @@
     context.wire = wire;
     context.type = targetPort.type();
 
-    var sourceModule = binding.sourceModule;
-    var sourcePort = binding.sourcePort;
+    var sourceModule = binding.sourceUnit.module;
+    var sourcePort = binding.sourceUnit.port;
 
     this.updatePortLabelHighlight(sourcePort);
     this.updatePortLabelHighlight(targetPort);
