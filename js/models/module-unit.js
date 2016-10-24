@@ -18,6 +18,10 @@
     return this.port.type();
   };
 
+  ModuleUnit.prototype.portVisible = function(value) {
+    return this.port.visible(value);
+  };
+
   ModuleUnit.prototype.portSocketConnected = function(value) {
     return this.port.socketConnected(value);
   };
