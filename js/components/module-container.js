@@ -421,6 +421,7 @@
         this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
         this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
         targetUnit.portSocketConnected(false);
+        targetUnit.portSocketHighlighted(false);
         wire.parentElement(null);
       }.bind(this));
     }
