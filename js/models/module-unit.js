@@ -26,6 +26,14 @@
     return this.port.socketConnected(value);
   };
 
+  ModuleUnit.prototype.portPlugHighlighted = function(value) {
+    return this.port.plugHighlighted(value);
+  };
+
+  ModuleUnit.prototype.portSocketHighlighted = function(value) {
+    return this.port.socketHighlighted(value);
+  };
+
   ModuleUnit.prototype.circuitElementMember = function() {
     return this.module.circuitElementMember(this.port.name());
   };
