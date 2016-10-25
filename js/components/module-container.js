@@ -542,7 +542,6 @@
       this.updateModuleDeletable(currentTargetModule);
       eventHighlightSet.removeTargetPort(sourcePort, currentTargetPort);
       currentTargetPort.socketHighlighted(false);
-      eventHighlightSet.highlighted(sourcePort, sourcePort.plugHighlighted());
     }
 
     if (targetModule && targetPort) {
