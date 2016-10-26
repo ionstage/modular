@@ -239,9 +239,8 @@
     });
   };
 
-  ModuleContainer.prototype.connectedWire = function(binding) {
-    // socket of the target port can only be connected to one wire
-    return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, binding.targetUnit)[0];
+  ModuleContainer.prototype.connectedWire = function(targetUnit) {
+    return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit)[0];
   };
 
   ModuleContainer.prototype.bindings = function() {
@@ -420,7 +419,7 @@
       }).forEach(function(binding) {
         var sourceUnit = binding.sourceUnit;
         var targetUnit = binding.targetUnit;
-        var wire = this.connectedWire(binding);
+        var wire = this.connectedWire(targetUnit);
         this.unbind(sourceUnit, targetUnit);
         this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
         this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
@@ -590,7 +589,7 @@
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
     var binding = this.bindingCollection().targetBindings(targetModule, targetPort)[0];
-    var wire = this.connectedWire(binding);
+    var wire = this.connectedWire(binding.targetUnit);
 
     this.draggingWires().push(wire);
 
