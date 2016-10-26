@@ -79,6 +79,10 @@
     this.data = new helper.Set();
   };
 
+  BindingCollection.prototype.toArray = function() {
+    return this.data.toArray();
+  };
+
   BindingCollection.prototype.bindings = function(module, port) {
     var unit = new ModuleUnit({ module: module, port: port });
     return this.data.toArray().filter(function(binding) {
@@ -245,6 +249,10 @@
   ModuleContainer.prototype.connectedWire = function(binding) {
     // socket of the target port can only be connected to one wire
     return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, binding.targetUnit)[0];
+  };
+
+  ModuleContainer.prototype.bindings = function() {
+    return this.bindingCollection().toArray();
   };
 
   ModuleContainer.prototype.createModule = function(props) {
