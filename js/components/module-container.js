@@ -83,13 +83,6 @@
     return this.data.toArray();
   };
 
-  BindingCollection.prototype.bindings = function(module, port) {
-    var unit = new ModuleUnit({ module: module, port: port });
-    return this.data.toArray().filter(function(binding) {
-      return (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit));
-    });
-  };
-
   BindingCollection.prototype.sourceBindings = function(sourceModule, sourcePort) {
     var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
     return this.data.toArray().filter(function(binding) {
@@ -421,7 +414,10 @@
   ModuleContainer.prototype.portToggler = function(module, port) {
     if (!port.visible()) {
       // remove all connections with hidden port
-      this.bindingCollection().bindings(module, port).forEach(function(binding) {
+      var unit = new ModuleUnit({ module: module, port: port });
+      this.bindings().filter(function(binding) {
+        return (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit));
+      }).forEach(function(binding) {
         var sourceUnit = binding.sourceUnit;
         var targetUnit = binding.targetUnit;
         var wire = this.connectedWire(binding);
