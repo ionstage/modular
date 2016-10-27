@@ -59,6 +59,15 @@
     }.bind(this));
   };
 
+  Binding.prototype.flatProps = function() {
+    return {
+      sourceModule: this.sourceUnit.module,
+      sourcePort: this.sourceUnit.port,
+      targetModule: this.targetUnit.module,
+      targetPort: this.targetUnit.port
+    };
+  };
+
   Binding.prototype.source = function() {
     return this.sourceUnit.circuitElementMember();
   };
@@ -369,18 +378,9 @@
     if (!port.visible()) {
       // remove all connections with hidden port
       var unit = new ModuleUnit({ module: module, port: port });
-      this.bindings().filter(function(binding) {
-        return (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit));
-      }).forEach(function(binding) {
-        var sourceUnit = binding.sourceUnit;
-        var targetUnit = binding.targetUnit;
-        var wire = this.attachedWire(targetUnit);
-        this.unbind(sourceUnit, targetUnit);
-        this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-        this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
-        targetUnit.portSocketConnected(false);
-        targetUnit.portSocketHighlighted(false);
-        wire.parentElement(null);
+      this.bindings().forEach(function(binding) {
+        if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit))
+          this.disconnect(binding.flatProps());
       }.bind(this));
     }
 
