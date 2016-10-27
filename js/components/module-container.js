@@ -239,7 +239,7 @@
     });
   };
 
-  ModuleContainer.prototype.connectedWire = function(targetUnit) {
+  ModuleContainer.prototype.attachedWire = function(targetUnit) {
     return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit)[0];
   };
 
@@ -419,7 +419,7 @@
       }).forEach(function(binding) {
         var sourceUnit = binding.sourceUnit;
         var targetUnit = binding.targetUnit;
-        var wire = this.connectedWire(targetUnit);
+        var wire = this.attachedWire(targetUnit);
         this.unbind(sourceUnit, targetUnit);
         this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
         this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
@@ -589,7 +589,7 @@
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
     var binding = this.bindingCollection().targetBindings(targetModule, targetPort)[0];
-    var wire = this.connectedWire(binding.targetUnit);
+    var wire = this.attachedWire(binding.targetUnit);
 
     this.draggingWires().push(wire);
 
