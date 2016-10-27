@@ -105,83 +105,12 @@
     data.delete(binding);
   };
 
-  var EventHighlight = function(props) {
-    this.sourcePort = props.sourcePort;
-    this.targetPortSet = new helper.Set();
-    this.wireSet = new helper.Set();
-  };
-
-  EventHighlight.prototype.equal = function(other) {
-    return (this.sourcePort === other.sourcePort);
-  };
-
-  var EventHighlightSet = helper.inherits(function() {
-    EventHighlightSet.super_.call(this);
-  }, helper.Set);
-
-  EventHighlightSet.prototype.eventHighlight = function(sourcePort) {
-    return this.toArray().filter(function(eventHighlight) {
-      return (eventHighlight.sourcePort === sourcePort);
-    })[0] || null;
-  };
-
-  EventHighlightSet.prototype.addSourcePort = function(sourcePort) {
-    this.add(new EventHighlight({ sourcePort: sourcePort }));
-  };
-
-  EventHighlightSet.prototype.addTargetPort = function(sourcePort, targetPort) {
-    var eventHighlight = this.eventHighlight(sourcePort);
-
-    if (!eventHighlight)
-      return;
-
-    eventHighlight.targetPortSet.add(targetPort);
-  };
-
-  EventHighlightSet.prototype.addWire = function(sourcePort, wire) {
-    var eventHighlight = this.eventHighlight(sourcePort);
-
-    if (!eventHighlight)
-      return;
-
-    eventHighlight.wireSet.add(wire);
-  };
-
-  EventHighlightSet.prototype.removeSourcePort = function(sourcePort) {
-    this.delete(new EventHighlight({ sourcePort: sourcePort }));
-  };
-
-  EventHighlightSet.prototype.removeTargetPort = function(sourcePort, targetPort) {
-    var eventHighlight = this.eventHighlight(sourcePort);
-
-    if (!eventHighlight)
-      return;
-
-    eventHighlight.targetPortSet.delete(targetPort);
-  };
-
-  EventHighlightSet.prototype.highlighted = function(sourcePort, highlighted) {
-    var eventHighlight = this.eventHighlight(sourcePort);
-
-    if (!eventHighlight)
-      return;
-
-    eventHighlight.sourcePort.plugHighlighted(highlighted);
-    eventHighlight.targetPortSet.toArray().forEach(function(targetPort) {
-      targetPort.socketHighlighted(highlighted);
-    });
-    eventHighlight.wireSet.toArray().forEach(function(wire) {
-      wire.highlighted(highlighted);
-    });
-  };
-
   var ModuleContainer = helper.inherits(function(props) {
     ModuleContainer.super_.call(this);
 
     this.modules = this.prop([]);
     this.lockRelationCollection = this.prop(new LockRelationCollection());
     this.bindingCollection = this.prop(new BindingCollection());
-    this.eventHighlightSet = this.prop(new EventHighlightSet());
     this.element = this.prop(props.element);
     this.dragCount = this.prop(0);
     this.draggingWires = this.prop([]);
@@ -397,6 +326,16 @@
     module.markDirty();
   };
 
+  ModuleContainer.prototype.updateEventHighlight = function(sourceUnit) {
+    var highlighted = sourceUnit.portPlugHighlighted();
+    this.connectedTargetUnits(sourceUnit).forEach(function(targetUnit) {
+      targetUnit.portSocketHighlighted(highlighted);
+    });
+    this.lockedWires(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit).forEach(function(wire) {
+      wire.highlighted(highlighted);
+    });
+  };
+
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
 
@@ -437,26 +376,15 @@
   };
 
   ModuleContainer.prototype.portEventer = function(module, port) {
-    var eventHighlightSet = this.eventHighlightSet();
+    var sourceUnit = new ModuleUnit({ module: module, port: port });
 
-    eventHighlightSet.addSourcePort(port);
-
-    var unit = new ModuleUnit({ module: module, port: port });
-
-    this.connectedTargetUnits(unit).forEach(function(targetUnit) {
-      eventHighlightSet.addTargetPort(port, targetUnit.port);
-    }.bind(this));
-
-    this.lockedWires(ModuleContainer.LOCK_TYPE_PLUG, unit).forEach(function(wire) {
-      eventHighlightSet.addWire(port, wire);
-    });
-
-    eventHighlightSet.highlighted(port, true);
+    sourceUnit.portPlugHighlighted(true);
+    this.updateEventHighlight(sourceUnit);
 
     setTimeout(function() {
-      eventHighlightSet.highlighted(port, false);
-      eventHighlightSet.removeSourcePort(port);
-    }, 100);
+      sourceUnit.portPlugHighlighted(false);
+      this.updateEventHighlight(sourceUnit);
+    }.bind(this), 100);
   };
 
   ModuleContainer.prototype.dragStarter = function() {
@@ -475,9 +403,7 @@
     this.draggingWires().push(wire);
     this.updatePortLabelHighlight(sourcePort);
     this.updateModuleDeletable(sourceModule);
-    var eventHighlightSet = this.eventHighlightSet();
-    eventHighlightSet.addWire(sourcePort, wire);
-    eventHighlightSet.highlighted(sourcePort, sourcePort.plugHighlighted());
+    this.updateEventHighlight(sourceUnit);
     var position = sourceUnit.plugPosition();
     context.x = position.x;
     context.y = position.y;
@@ -536,8 +462,6 @@
       return;
     }
 
-    var eventHighlightSet = this.eventHighlightSet();
-
     if (currentTargetModule && currentTargetPort) {
       var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
       var currentTargetUnit = new ModuleUnit({ module: currentTargetModule, port: currentTargetPort });
@@ -548,7 +472,6 @@
       currentTargetUnit.portSocketConnected(false);
       this.updatePortLabelHighlight(currentTargetPort);
       this.updateModuleDeletable(currentTargetModule);
-      eventHighlightSet.removeTargetPort(sourcePort, currentTargetPort);
       currentTargetPort.socketHighlighted(false);
     }
 
@@ -562,8 +485,7 @@
       wire.handleVisible(false);
       this.updatePortLabelHighlight(targetPort);
       this.updateModuleDeletable(targetModule);
-      eventHighlightSet.addTargetPort(sourcePort, targetPort);
-      eventHighlightSet.highlighted(sourcePort, sourcePort.plugHighlighted());
+      this.updateEventHighlight(sourceUnit);
     }
 
     context.targetModule = targetModule;
