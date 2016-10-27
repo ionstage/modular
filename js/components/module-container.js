@@ -326,7 +326,7 @@
     var module = this.createModule(props);
     this.modules().push(module);
     this.updateZIndex();
-    this.markDirty();
+    this.updateWireHandleContainer();
     module.redraw();
     return module.loadComponent().then(function() {
       return module;
@@ -335,6 +335,14 @@
 
   ModuleContainer.prototype.toFront = function(module) {
     helper.moveToBack(this.modules(), module);
+  };
+
+  ModuleContainer.prototype.updateRetainer = function() {
+    this.markDirty();
+  };
+
+  ModuleContainer.prototype.updateWireHandleContainer = function() {
+    this.markDirty();
   };
 
   ModuleContainer.prototype.updateZIndex = function() {
@@ -373,7 +381,7 @@
 
     helper.remove(modules, module);
     this.updateZIndex();
-    this.markDirty();
+    this.updateWireHandleContainer();
   };
 
   ModuleContainer.prototype.fronter = function(module) {
@@ -385,8 +393,7 @@
     if (!port.visible())
       this.disconnectAll(new ModuleUnit({ module: module, port: port }));
 
-    // resize the element
-    this.markDirty();
+    this.updateRetainer();
   };
 
   ModuleContainer.prototype.portEventer = function(module, port) {
