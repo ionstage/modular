@@ -83,13 +83,6 @@
     return this.data.toArray();
   };
 
-  BindingCollection.prototype.sourceBindings = function(sourceModule, sourcePort) {
-    var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
-    return this.data.toArray().filter(function(binding) {
-      return helper.equal(binding.sourceUnit, sourceUnit);
-    });
-  };
-
   BindingCollection.prototype.targetBindings = function(targetModule, targetPort) {
     var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
     return this.data.toArray().filter(function(binding) {
@@ -245,6 +238,14 @@
 
   ModuleContainer.prototype.bindings = function() {
     return this.bindingCollection().toArray();
+  };
+
+  ModuleContainer.prototype.connectedTargetUnits = function(sourceUnit) {
+    return this.bindings().filter(function(binding) {
+      return helper.equal(binding.sourceUnit, sourceUnit);
+    }).map(function(binding) {
+      return binding.targetUnit;
+    });
   };
 
   ModuleContainer.prototype.createModule = function(props) {
@@ -438,11 +439,12 @@
 
     eventHighlightSet.addSourcePort(port);
 
-    this.bindingCollection().sourceBindings(module, port).forEach(function(binding) {
-      eventHighlightSet.addTargetPort(port, binding.targetUnit.port);
+    var unit = new ModuleUnit({ module: module, port: port });
+
+    this.connectedTargetUnits(unit).forEach(function(targetUnit) {
+      eventHighlightSet.addTargetPort(port, targetUnit.port);
     }.bind(this));
 
-    var unit = new ModuleUnit({ module: module, port: port });
     this.lockedWires(ModuleContainer.LOCK_TYPE_PLUG, unit).forEach(function(wire) {
       eventHighlightSet.addWire(port, wire);
     });
