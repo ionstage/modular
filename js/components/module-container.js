@@ -289,6 +289,13 @@
     targetUnit.portSocketHighlighted(false);
   };
 
+  ModuleContainer.prototype.disconnectAll = function(unit) {
+    this.bindings().forEach(function(binding) {
+      if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit))
+        this.disconnect(binding.flatProps());
+    }.bind(this));
+  };
+
   ModuleContainer.prototype.redraw = function() {
     var modules = this.modules();
     var x = 0;
@@ -375,14 +382,8 @@
   };
 
   ModuleContainer.prototype.portToggler = function(module, port) {
-    if (!port.visible()) {
-      // remove all connections with hidden port
-      var unit = new ModuleUnit({ module: module, port: port });
-      this.bindings().forEach(function(binding) {
-        if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit))
-          this.disconnect(binding.flatProps());
-      }.bind(this));
-    }
+    if (!port.visible())
+      this.disconnectAll(new ModuleUnit({ module: module, port: port }));
 
     // resize the element
     this.markDirty();
