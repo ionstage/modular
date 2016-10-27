@@ -268,6 +268,18 @@
     this.updateEventHighlight(sourceUnit);
   };
 
+  ModuleContainer.prototype.disconnect = function(props) {
+    var sourceUnit = new ModuleUnit({ module: props.sourceModule, port: props.sourcePort });
+    var targetUnit = new ModuleUnit({ module: props.targetModule, port: props.targetPort });
+    var wire = this.attachedWire(targetUnit);
+    wire.parentElement(null);
+    targetUnit.portSocketConnected(false);
+    this.unbind(sourceUnit, targetUnit);
+    this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
+    this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    targetUnit.portSocketHighlighted(false);
+  };
+
   ModuleContainer.prototype.redraw = function() {
     var modules = this.modules();
     var x = 0;
