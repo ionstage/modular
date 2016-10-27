@@ -83,13 +83,6 @@
     return this.data.toArray();
   };
 
-  BindingCollection.prototype.targetBindings = function(targetModule, targetPort) {
-    var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
-    return this.data.toArray().filter(function(binding) {
-      return helper.equal(binding.targetUnit, targetUnit);
-    });
-  };
-
   BindingCollection.prototype.add = function(props) {
     var data = this.data;
     var binding = new Binding(props);
@@ -246,6 +239,15 @@
     }).map(function(binding) {
       return binding.targetUnit;
     });
+  };
+
+  ModuleContainer.prototype.connectedSourceUnit = function(targetUnit) {
+    // socket of the target port can only be connected to one wire
+    return this.bindings().filter(function(binding) {
+      return helper.equal(binding.targetUnit, targetUnit);
+    }).map(function(binding) {
+      return binding.sourceUnit;
+    })[0] || null;
   };
 
   ModuleContainer.prototype.createModule = function(props) {
@@ -590,8 +592,8 @@
   };
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
-    var binding = this.bindingCollection().targetBindings(targetModule, targetPort)[0];
-    var wire = this.attachedWire(binding.targetUnit);
+    var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
+    var wire = this.attachedWire(targetUnit);
 
     this.draggingWires().push(wire);
 
@@ -600,8 +602,9 @@
     context.wire = wire;
     context.type = targetPort.type();
 
-    var sourceModule = binding.sourceUnit.module;
-    var sourcePort = binding.sourceUnit.port;
+    var sourceUnit = this.connectedSourceUnit(targetUnit);
+    var sourceModule = sourceUnit.module;
+    var sourcePort = sourceUnit.port;
 
     this.updatePortLabelHighlight(sourcePort);
     this.updatePortLabelHighlight(targetPort);
