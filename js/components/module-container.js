@@ -265,6 +265,7 @@
     this.bind(sourceUnit, targetUnit);
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
     this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    this.updateEventHighlight(sourceUnit);
   };
 
   ModuleContainer.prototype.redraw = function() {
