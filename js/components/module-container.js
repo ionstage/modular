@@ -351,21 +351,6 @@
     });
   };
 
-  ModuleContainer.prototype.updatePortLabelHighlight = function(port) {
-    var draggingWires = this.draggingWires();
-    var isDragging = port.relations().some(function(relation) {
-      return (draggingWires.indexOf(relation.wire()) !== -1);
-    });
-    port.labelHighlighted(isDragging);
-  };
-
-  ModuleContainer.prototype.updateModuleDeletable = function(module) {
-    // module is deletable if all port labels are NOT highlighted
-    module.deletable(module.ports().every(function(port) {
-      return !port.labelHighlighted();
-    }));
-  };
-
   ModuleContainer.prototype.updateEventHighlight = function(sourceUnit) {
     var highlighted = sourceUnit.portPlugHighlighted();
     this.connectedTargetUnits(sourceUnit).forEach(function(targetUnit) {
@@ -374,6 +359,16 @@
     this.lockedWires(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit).forEach(function(wire) {
       wire.highlighted(highlighted);
     });
+  };
+
+  ModuleContainer.prototype.updateDragHighlight = function(unit) {
+    var draggingWires = this.draggingWires();
+    var highlighted = this.lockRelationCollection().filter({
+      unit: unit
+    }).some(function(relation) {
+      return (draggingWires.indexOf(relation.wire()) !== -1);
+    });
+    unit.labelHighlighted(highlighted);
   };
 
   ModuleContainer.prototype.deleter = function(module) {
@@ -424,10 +419,9 @@
     var wire = this.createDraggingWire(sourceUnit);
     wire.markDirty();
     this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-    this.draggingWires().push(wire);
-    this.updatePortLabelHighlight(sourcePort);
-    this.updateModuleDeletable(sourceModule);
     this.updateEventHighlight(sourceUnit);
+    this.draggingWires().push(wire);
+    this.updateDragHighlight(sourceUnit);
     var position = sourceUnit.plugPosition();
     context.x = position.x;
     context.y = position.y;
@@ -494,9 +488,8 @@
       this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetUnit, wire);
       wire.handleVisible(true);
       currentTargetUnit.portSocketConnected(false);
-      this.updatePortLabelHighlight(currentTargetPort);
-      this.updateModuleDeletable(currentTargetModule);
       currentTargetPort.socketHighlighted(false);
+      this.updateDragHighlight(currentTargetUnit);
     }
 
     if (targetModule && targetPort) {
@@ -507,9 +500,8 @@
       this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
       targetUnit.portSocketConnected(true);
       wire.handleVisible(false);
-      this.updatePortLabelHighlight(targetPort);
-      this.updateModuleDeletable(targetModule);
       this.updateEventHighlight(sourceUnit);
+      this.updateDragHighlight(targetUnit);
     }
 
     context.targetModule = targetModule;
@@ -521,18 +513,17 @@
     var targetModule = context.targetModule;
     var targetPort = context.targetPort;
 
+    var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
+
     helper.remove(this.draggingWires(), wire);
-    this.updatePortLabelHighlight(sourcePort);
-    this.updateModuleDeletable(sourceModule);
+    this.updateDragHighlight(sourceUnit);
 
     if (targetModule && targetPort) {
-      this.updatePortLabelHighlight(targetPort);
-      this.updateModuleDeletable(targetModule);
+      this.updateDragHighlight(new ModuleUnit({ module: targetModule, port: targetPort }));
       return;
     }
 
     // remove the dragging wire
-    var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
     this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
     wire.parentElement(null);
   };
@@ -552,10 +543,8 @@
     var sourceModule = sourceUnit.module;
     var sourcePort = sourceUnit.port;
 
-    this.updatePortLabelHighlight(sourcePort);
-    this.updatePortLabelHighlight(targetPort);
-    this.updateModuleDeletable(sourceModule);
-    this.updateModuleDeletable(targetModule);
+    this.updateDragHighlight(sourceUnit);
+    this.updateDragHighlight(targetUnit);
 
     context.sourceModule = sourceModule;
     context.sourcePort = sourcePort;

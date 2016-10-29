@@ -46,6 +46,15 @@
     return this.module.socketPosition(this.port);
   };
 
+  ModuleUnit.prototype.labelHighlighted = function(value) {
+    this.port.labelHighlighted(value);
+
+    // module is deletable if all port labels are NOT highlighted
+    this.module.deletable(this.module.ports().every(function(port) {
+      return !port.labelHighlighted();
+    }));
+  };
+
   ModuleUnit.prototype.addRelation = function(relation) {
     this.module.relations().push(relation);
     this.port.relations().push(relation);
