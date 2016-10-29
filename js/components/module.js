@@ -15,6 +15,7 @@
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
     this.zIndex = this.prop('auto');
+    this.deletable = this.prop(true);
     this.ports = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
@@ -164,12 +165,6 @@
       }).join('/'),
       '.html'
     ].join('');
-  };
-
-  Module.prototype.deletable = function() {
-    return this.ports().every(function(port) {
-      return port.hideable();
-    });
   };
 
   Module.prototype.createPorts = function() {

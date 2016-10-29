@@ -360,7 +360,10 @@
   };
 
   ModuleContainer.prototype.updateModuleDeletable = function(module) {
-    module.markDirty();
+    var deletable = module.ports().every(function(port) {
+      return port.hideable();
+    });
+    module.deletable(deletable);
   };
 
   ModuleContainer.prototype.updateEventHighlight = function(sourceUnit) {
