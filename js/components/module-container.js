@@ -59,15 +59,6 @@
     }.bind(this));
   };
 
-  Binding.prototype.flatProps = function() {
-    return {
-      sourceModule: this.sourceUnit.module,
-      sourcePort: this.sourceUnit.port,
-      targetModule: this.targetUnit.module,
-      targetPort: this.targetUnit.port
-    };
-  };
-
   Binding.prototype.source = function() {
     return this.sourceUnit.circuitElementMember();
   };
@@ -275,9 +266,7 @@
     this.updateEventHighlight(sourceUnit);
   };
 
-  ModuleContainer.prototype.disconnect = function(props) {
-    var sourceUnit = new ModuleUnit({ module: props.sourceModule, port: props.sourcePort });
-    var targetUnit = new ModuleUnit({ module: props.targetModule, port: props.targetPort });
+  ModuleContainer.prototype.disconnect = function(sourceUnit, targetUnit) {
     var wire = this.attachedWire(targetUnit);
     wire.parentElement(null);
     targetUnit.portSocketConnected(false);
@@ -290,7 +279,7 @@
   ModuleContainer.prototype.disconnectAll = function(unit) {
     this.bindings().forEach(function(binding) {
       if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit))
-        this.disconnect(binding.flatProps());
+        this.disconnect(binding.sourceUnit, binding.targetUnit);
     }.bind(this));
   };
 
