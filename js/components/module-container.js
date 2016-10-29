@@ -265,9 +265,7 @@
     });
   };
 
-  ModuleContainer.prototype.connect = function(props) {
-    var sourceUnit = new ModuleUnit({ module: props.sourceModule, port: props.sourcePort });
-    var targetUnit = new ModuleUnit({ module: props.targetModule, port: props.targetPort });
+  ModuleContainer.prototype.connect = function(sourceUnit, targetUnit) {
     var wire = this.createConnectingWire(sourceUnit, targetUnit);
     wire.markDirty();
     targetUnit.portSocketConnected(true);
