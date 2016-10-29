@@ -320,10 +320,6 @@
     });
   };
 
-  ModuleContainer.prototype.toFront = function(module) {
-    helper.moveToBack(this.modules(), module);
-  };
-
   ModuleContainer.prototype.updateRetainer = function() {
     this.markDirty();
   };
@@ -370,7 +366,7 @@
   };
 
   ModuleContainer.prototype.fronter = function(module) {
-    this.toFront(module);
+    helper.moveToBack(this.modules(), module);
     this.updateZIndex();
   };
 
