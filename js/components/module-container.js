@@ -360,10 +360,10 @@
   };
 
   ModuleContainer.prototype.updateModuleDeletable = function(module) {
-    var deletable = module.ports().every(function(port) {
-      return port.hideable();
-    });
-    module.deletable(deletable);
+    // module is deletable if all port labels are NOT highlighted
+    module.deletable(module.ports().every(function(port) {
+      return !port.labelHighlighted();
+    }));
   };
 
   ModuleContainer.prototype.updateEventHighlight = function(sourceUnit) {

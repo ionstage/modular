@@ -28,13 +28,9 @@
     this.cache = this.prop({});
   }, jCore.Component);
 
-  ModulePort.prototype.hideable = function() {
-    // don't hide label-highlighted port
-    return !this.labelHighlighted();
-  };
-
   ModulePort.prototype.hideDisabled = function() {
-    return !this.hideable();
+    // don't hide label-highlighted port
+    return this.labelHighlighted();
   };
 
   ModulePort.prototype.middle = function() {
