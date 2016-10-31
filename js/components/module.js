@@ -231,6 +231,7 @@
 
   Module.prototype.unregisterDragListener = function() {
     this.draggable().destroy();
+    this.draggable(null);
   };
 
   Module.prototype.registerPortSelectChangeListener = function() {
@@ -430,7 +431,6 @@
       dom.remove(element);
       this.element(null);
       this.cache({});
-      this.draggable(null);
       this.dragContext({});
       return;
     }
