@@ -39,9 +39,9 @@
   LockRelationCollection.prototype.filter = function(props) {
     var relations = [];
     this.data.forEach(function(relation) {
-      var matched = Object.keys(props).map(function(key) {
+      var matched = Object.keys(props).every(function(key) {
         return helper.equal(relation[key](), props[key]);
-      }).every(helper.identity);
+      });
       if (matched)
         relations.push(relation);
     });
