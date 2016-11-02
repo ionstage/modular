@@ -246,6 +246,15 @@
     }
   };
 
+  ModuleContainer.prototype.attachDraggingWire = function(sourceUnit, targetUnit, wire) {
+    wire.handleVisible(false);
+    targetUnit.portSocketConnected(true);
+    this.bind(sourceUnit, targetUnit);
+    this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    this.updateEventHighlight(sourceUnit);
+    this.updateDragHighlight(targetUnit);
+  };
+
   ModuleContainer.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection().add({
       type: type,
@@ -496,13 +505,7 @@
     if (targetModule && targetPort) {
       var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
       var targetUnit = new ModuleUnit({ module: targetModule, port: targetPort });
-      this.bind(sourceUnit, targetUnit);
-      // attach the wire-handle to the target port-socket
-      this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
-      targetUnit.portSocketConnected(true);
-      wire.handleVisible(false);
-      this.updateEventHighlight(sourceUnit);
-      this.updateDragHighlight(targetUnit);
+      this.attachDraggingWire(sourceUnit, targetUnit, wire);
     }
 
     context.targetModule = targetModule;
