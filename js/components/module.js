@@ -5,6 +5,7 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
+  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
 
   var Module = helper.inherits(function(props) {
@@ -353,7 +354,7 @@
     if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket())
       this.x(ModulePort.SOCKET_WIDTH);
 
-    this.portToggler(this, port);
+    this.portToggler(new ModuleUnit({ module: this, port: port }));
   };
 
   Module.prototype.hidePort = function(name) {
@@ -375,7 +376,7 @@
     });
 
     this.portListHeight(this.portListHeight() - port.height());
-    this.portToggler(this, port);
+    this.portToggler(new ModuleUnit({ module: this, port: port }));
   };
 
   Module.prototype.needsUpdatePortSelect = function(port) {

@@ -408,9 +408,9 @@
     this.updateZIndex();
   };
 
-  ModuleContainer.prototype.portToggler = function(module, port) {
-    if (!port.visible())
-      this.disconnectAll(new ModuleUnit({ module: module, port: port }));
+  ModuleContainer.prototype.portToggler = function(unit) {
+    if (!unit.portVisible())
+      this.disconnectAll(unit);
 
     this.updateRetainer();
   };
