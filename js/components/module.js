@@ -184,7 +184,7 @@
         label: port.label(),
         name: port.name(),
         type: port.type(),
-        arg: this.portEventer.bind(null, this, port)
+        arg: this.portEventer.bind(null, new ModuleUnit({ module: this, port: port }))
       };
     }.bind(this)));
   };
