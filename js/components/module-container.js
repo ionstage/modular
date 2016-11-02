@@ -226,6 +226,13 @@
     });
   };
 
+  ModuleContainer.prototype.appendDraggingWire = function(sourceUnit, wire) {
+    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
+    this.updateEventHighlight(sourceUnit);
+    this.draggingWires().push(wire);
+    this.updateDragHighlight(sourceUnit);
+  };
+
   ModuleContainer.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection().add({
       type: type,
@@ -401,10 +408,8 @@
     var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
     var wire = this.createDraggingWire(sourceUnit);
     wire.markDirty();
-    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-    this.updateEventHighlight(sourceUnit);
-    this.draggingWires().push(wire);
-    this.updateDragHighlight(sourceUnit);
+    this.appendDraggingWire(sourceUnit, wire);
+
     var position = sourceUnit.plugPosition();
     context.x = position.x;
     context.y = position.y;
