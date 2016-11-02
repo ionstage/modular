@@ -233,6 +233,19 @@
     this.updateDragHighlight(sourceUnit);
   };
 
+  ModuleContainer.prototype.removeDraggingWire = function(sourceUnit, targetUnit, wire) {
+    helper.remove(this.draggingWires(), wire);
+    this.updateDragHighlight(sourceUnit);
+
+    // keep the element of wire if the target unit is connected with the wire
+    if (targetUnit) {
+      this.updateDragHighlight(targetUnit);
+    } else {
+      this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
+      wire.parentElement(null);
+    }
+  };
+
   ModuleContainer.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection().add({
       type: type,
@@ -500,20 +513,9 @@
     var wire = context.wire;
     var targetModule = context.targetModule;
     var targetPort = context.targetPort;
-
     var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
-
-    helper.remove(this.draggingWires(), wire);
-    this.updateDragHighlight(sourceUnit);
-
-    if (targetModule && targetPort) {
-      this.updateDragHighlight(new ModuleUnit({ module: targetModule, port: targetPort }));
-      return;
-    }
-
-    // remove the dragging wire
-    this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-    wire.parentElement(null);
+    var targetUnit = (targetModule && targetPort) ? new ModuleUnit({ module: targetModule, port: targetPort }) : null;
+    this.removeDraggingWire(sourceUnit, targetUnit, wire);
   };
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetModule, targetPort, context) {
