@@ -255,6 +255,15 @@
     this.updateDragHighlight(targetUnit);
   };
 
+  ModuleContainer.prototype.detachDraggingWire = function(sourceUnit, targetUnit, wire) {
+    wire.handleVisible(true);
+    targetUnit.portSocketConnected(false);
+    this.unbind(sourceUnit, targetUnit);
+    this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    targetUnit.portSocketHighlighted(false);
+    this.updateDragHighlight(targetUnit);
+  };
+
   ModuleContainer.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection().add({
       type: type,
@@ -493,13 +502,7 @@
     if (currentTargetModule && currentTargetPort) {
       var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
       var currentTargetUnit = new ModuleUnit({ module: currentTargetModule, port: currentTargetPort });
-      this.unbind(sourceUnit, currentTargetUnit);
-      // detach the wire-handle from the current target port-socket
-      this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, currentTargetUnit, wire);
-      wire.handleVisible(true);
-      currentTargetUnit.portSocketConnected(false);
-      currentTargetPort.socketHighlighted(false);
-      this.updateDragHighlight(currentTargetUnit);
+      this.detachDraggingWire(sourceUnit, currentTargetUnit, wire);
     }
 
     if (targetModule && targetPort) {
