@@ -449,14 +449,10 @@
   };
 
   ModuleContainer.prototype.dragPortPlugMover = function(sourceModule, sourcePort, dx, dy, context) {
-    var wire = context.wire;
+    var modules = this.modules();
     var x = context.x + dx;
     var y = context.y + dy;
-
-    wire.targetX(x);
-    wire.targetY(y);
-
-    var modules = this.modules();
+    var wire = context.wire;
     var type = context.type;
     var currentTargetModule = context.targetModule;
     var currentTargetPort = context.targetPort;
@@ -489,13 +485,13 @@
         break;
     }
 
-    if (targetModule === currentTargetModule && targetPort === currentTargetPort) {
-      if (targetPort) {
+    if (targetModule && targetPort && targetModule === currentTargetModule && targetPort === currentTargetPort) {
         // fix the target position of the wire
-        targetPort.markDirty();
-      }
-      return;
+        return;
     }
+
+    wire.targetX(x);
+    wire.targetY(y);
 
     if (currentTargetModule && currentTargetPort) {
       var sourceUnit = new ModuleUnit({ module: sourceModule, port: sourcePort });
