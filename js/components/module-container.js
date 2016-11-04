@@ -321,6 +321,26 @@
     }.bind(this));
   };
 
+  ModuleContainer.prototype.unitFromSocketPosition = function(x, y) {
+    var modules = this.modules();
+    for (var mi = modules.length - 1; mi >= 0; mi--) {
+      var module = modules[mi];
+      var ports = module.ports();
+      for (var pi = ports.length - 1; pi >= 0; pi--) {
+        var port = ports[pi];
+        var position = module.socketPosition(port);
+        if (Math.abs(x - position.x) > 18)
+          break;
+        if (Math.abs(y - position.y) > 18)
+          continue;
+        if (!port.visible() || port.socketDisabled())
+          continue;
+        return new ModuleUnit({ module: module, port: port });
+      }
+    }
+    return null;
+  };
+
   ModuleContainer.prototype.redraw = function() {
     var modules = this.modules();
     var x = 0;
@@ -449,46 +469,34 @@
   };
 
   ModuleContainer.prototype.dragPortPlugMover = function(sourceModule, sourcePort, dx, dy, context) {
-    var modules = this.modules();
     var x = context.x + dx;
     var y = context.y + dy;
-    var wire = context.wire;
     var type = context.type;
     var currentTargetModule = context.targetModule;
     var currentTargetPort = context.targetPort;
     var targetModule = null;
     var targetPort = null;
 
-    // search the target port-socket by the position of the dragging wire-handle
-    for (var mi = modules.length - 1; mi >= 0; mi--) {
-      var module = modules[mi];
-      var ports = module.ports();
-      for (var pi = ports.length - 1; pi >= 0; pi--) {
-        var port = ports[pi];
-        var position = module.socketPosition(port);
-        if (Math.abs(x - position.x) > 18)
-          break;
-        if (Math.abs(y - position.y) > 18)
-          continue;
-        if (!port.visible() || port.socketDisabled())
-          continue;
-        if (!port.socketConnected() && type === port.type()) {
-          targetModule = module;
-          targetPort = port;
-        } else if (module === currentTargetModule && port === currentTargetPort) {
-          targetModule = currentTargetModule;
-          targetPort = currentTargetPort;
-        }
-        break;
+    var unit = this.unitFromSocketPosition(x, y);
+
+    if (unit) {
+      var module = unit.module;
+      var port = unit.port;
+      if (!port.socketConnected() && type === port.type()) {
+        targetModule = module;
+        targetPort = port;
+      } else if (module === currentTargetModule && port === currentTargetPort) {
+        targetModule = currentTargetModule;
+        targetPort = currentTargetPort;
       }
-      if (targetModule && targetPort)
-        break;
     }
 
     if (targetModule && targetPort && targetModule === currentTargetModule && targetPort === currentTargetPort) {
         // fix the target position of the wire
         return;
     }
+
+    var wire = context.wire;
 
     wire.targetX(x);
     wire.targetY(y);
