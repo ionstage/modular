@@ -36,7 +36,7 @@
   };
 
   helper.equal = function(a, b) {
-    return (typeof a.equal === 'function') ? a.equal(b) : (a === b);
+    return (a != null && typeof a.equal === 'function') ? a.equal(b) : (a === b);
   };
 
   helper.clone = function(obj) {
