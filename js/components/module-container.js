@@ -472,24 +472,16 @@
   ModuleContainer.prototype.dragPortPlugMover = function(sourceModule, sourcePort, dx, dy, context) {
     var x = context.x + dx;
     var y = context.y + dy;
-    var type = context.type;
     var currentTargetUnit = context.targetUnit;
-    var targetUnit = null;
-
     var unit = this.unitFromSocketPosition(x, y);
 
-    if (unit) {
-      if (!unit.portSocketConnected() && type === unit.portType())
-        targetUnit = unit;
-      else if (currentTargetUnit && helper.equal(unit, currentTargetUnit))
-        targetUnit = currentTargetUnit;
+    if (unit && helper.equal(unit, currentTargetUnit)) {
+      // fix the target position of the wire
+      return;
     }
 
-    if (targetUnit && currentTargetUnit && helper.equal(targetUnit, currentTargetUnit)) {
-        // fix the target position of the wire
-        return;
-    }
-
+    var isAttaching = (unit && context.type === unit.portType() && !unit.portSocketConnected());
+    var targetUnit = (isAttaching ? unit : null);
     var wire = context.wire;
 
     wire.targetX(x);
