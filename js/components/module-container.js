@@ -464,7 +464,6 @@
     context.x = position.x;
     context.y = position.y;
     context.wire = wire;
-    context.type = sourceUnit.portType();
     context.targetUnit = null;
   };
 
@@ -479,8 +478,9 @@
       return;
     }
 
-    var isAttaching = (unit && context.type === unit.portType() && !unit.portSocketConnected());
-    var targetUnit = (isAttaching ? unit : null);
+    var isSameType = (unit && unit.portType() === sourceUnit.portType());
+    var isAttaching = (unit && !unit.portSocketConnected());
+    var targetUnit = ((isSameType && isAttaching) ? unit : null);
     var wire = context.wire;
 
     wire.targetX(x);
@@ -507,7 +507,6 @@
     context.x = wire.targetX();
     context.y = wire.targetY();
     context.wire = wire;
-    context.type = targetUnit.portType();
 
     var sourceUnit = this.connectedSourceUnit(targetUnit);
 
