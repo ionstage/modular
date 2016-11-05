@@ -501,18 +501,15 @@
 
   ModuleContainer.prototype.dragPortSocketStarter = function(targetUnit, context) {
     var wire = this.attachedWire(targetUnit);
+    var sourceUnit = this.connectedSourceUnit(targetUnit);
 
     this.draggingWires().push(wire);
+    this.updateDragHighlight(sourceUnit);
+    this.updateDragHighlight(targetUnit);
 
     context.x = wire.targetX();
     context.y = wire.targetY();
     context.wire = wire;
-
-    var sourceUnit = this.connectedSourceUnit(targetUnit);
-
-    this.updateDragHighlight(sourceUnit);
-    this.updateDragHighlight(targetUnit);
-
     context.sourceUnit = sourceUnit;
     context.targetUnit = targetUnit;
   };
