@@ -732,29 +732,31 @@
 
   Module.DRAG_TYPE_DRAG_PORT_PLAG_LISTENER = {
     onstart: function(x, y, event, context) {
-      context.port = this.targetPort(dom.target(event));
+      var port = this.targetPort(dom.target(event));
+      context.unit = new ModuleUnit({ module: this, port: port });
       context.context = {};
-      this.dragPortPlugStarter(this, context.port, context.context);
+      this.dragPortPlugStarter(context.unit, context.context);
     },
     onmove: function(dx, dy, event, context) {
-      this.dragPortPlugMover(this, context.port, dx, dy, context.context);
+      this.dragPortPlugMover(context.unit, dx, dy, context.context);
     },
     onend: function(dx, dy, event, context) {
-      this.dragPortPlugEnder(this, context.port, context.context);
+      this.dragPortPlugEnder(context.unit, context.context);
     }
   };
 
   Module.DRAG_TYPE_DRAG_PORT_SOCKET_LISTENER = {
     onstart: function(x, y, event, context) {
-      context.port = this.targetPort(dom.target(event));
+      var port = this.targetPort(dom.target(event));
+      context.unit = new ModuleUnit({ module: this, port: port });
       context.context = {};
-      this.dragPortSocketStarter(this, context.port, context.context);
+      this.dragPortSocketStarter(context.unit, context.context);
     },
     onmove: function(dx, dy, event, context) {
-      this.dragPortSocketMover(this, context.port, dx, dy, context.context);
+      this.dragPortSocketMover(context.unit, dx, dy, context.context);
     },
     onend: function(dx, dy, event, context) {
-      this.dragPortSocketEnder(this, context.port, context.context);
+      this.dragPortSocketEnder(context.unit, context.context);
     }
   };
 
