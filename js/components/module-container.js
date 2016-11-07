@@ -181,6 +181,26 @@
     })[0] || null;
   };
 
+  ModuleContainer.prototype.unitFromSocketPosition = function(x, y) {
+    var modules = this.modules();
+    for (var mi = modules.length - 1; mi >= 0; mi--) {
+      var module = modules[mi];
+      var ports = module.ports();
+      for (var pi = ports.length - 1; pi >= 0; pi--) {
+        var port = ports[pi];
+        var position = module.socketPosition(port);
+        if (Math.abs(x - position.x) > 18)
+          break;
+        if (Math.abs(y - position.y) > 18)
+          continue;
+        if (!port.visible() || port.socketDisabled())
+          continue;
+        return new ModuleUnit({ module: module, port: port });
+      }
+    }
+    return null;
+  };
+
   ModuleContainer.prototype.createModule = function(props) {
     return new Module(helper.extend(helper.clone(props), {
       parentElement: this.contentElement(),
@@ -228,42 +248,15 @@
     });
   };
 
-  ModuleContainer.prototype.appendDraggingWire = function(sourceUnit, wire) {
-    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-    this.updateEventHighlight(sourceUnit);
-    this.draggingWires().push(wire);
-    this.updateDragHighlight(sourceUnit);
-  };
-
-  ModuleContainer.prototype.removeDraggingWire = function(sourceUnit, targetUnit, wire) {
-    helper.remove(this.draggingWires(), wire);
-    this.updateDragHighlight(sourceUnit);
-
-    // keep the element of wire if the target unit is connected with the wire
-    if (targetUnit) {
-      this.updateDragHighlight(targetUnit);
-    } else {
-      this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-      wire.parentElement(null);
-    }
-  };
-
-  ModuleContainer.prototype.attachDraggingWire = function(sourceUnit, targetUnit, wire) {
-    wire.handleVisible(false);
-    targetUnit.portSocketConnected(true);
-    this.bind(sourceUnit, targetUnit);
-    this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
-    this.updateEventHighlight(sourceUnit);
-    this.updateDragHighlight(targetUnit);
-  };
-
-  ModuleContainer.prototype.detachDraggingWire = function(sourceUnit, targetUnit, wire) {
-    wire.handleVisible(true);
-    targetUnit.portSocketConnected(false);
-    this.unbind(sourceUnit, targetUnit);
-    this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
-    targetUnit.portSocketHighlighted(false);
-    this.updateDragHighlight(targetUnit);
+  ModuleContainer.prototype.loadModule = function(props) {
+    var module = this.createModule(props);
+    this.modules().push(module);
+    this.updateZIndex();
+    this.updateWireHandleContainer();
+    module.redraw();
+    return module.loadComponent().then(function() {
+      return module;
+    });
   };
 
   ModuleContainer.prototype.lock = function(type, unit, wire) {
@@ -323,61 +316,42 @@
     }.bind(this));
   };
 
-  ModuleContainer.prototype.unitFromSocketPosition = function(x, y) {
-    var modules = this.modules();
-    for (var mi = modules.length - 1; mi >= 0; mi--) {
-      var module = modules[mi];
-      var ports = module.ports();
-      for (var pi = ports.length - 1; pi >= 0; pi--) {
-        var port = ports[pi];
-        var position = module.socketPosition(port);
-        if (Math.abs(x - position.x) > 18)
-          break;
-        if (Math.abs(y - position.y) > 18)
-          continue;
-        if (!port.visible() || port.socketDisabled())
-          continue;
-        return new ModuleUnit({ module: module, port: port });
-      }
+  ModuleContainer.prototype.appendDraggingWire = function(sourceUnit, wire) {
+    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
+    this.updateEventHighlight(sourceUnit);
+    this.draggingWires().push(wire);
+    this.updateDragHighlight(sourceUnit);
+  };
+
+  ModuleContainer.prototype.attachDraggingWire = function(sourceUnit, targetUnit, wire) {
+    wire.handleVisible(false);
+    targetUnit.portSocketConnected(true);
+    this.bind(sourceUnit, targetUnit);
+    this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    this.updateEventHighlight(sourceUnit);
+    this.updateDragHighlight(targetUnit);
+  };
+
+  ModuleContainer.prototype.detachDraggingWire = function(sourceUnit, targetUnit, wire) {
+    wire.handleVisible(true);
+    targetUnit.portSocketConnected(false);
+    this.unbind(sourceUnit, targetUnit);
+    this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    targetUnit.portSocketHighlighted(false);
+    this.updateDragHighlight(targetUnit);
+  };
+
+  ModuleContainer.prototype.removeDraggingWire = function(sourceUnit, targetUnit, wire) {
+    helper.remove(this.draggingWires(), wire);
+    this.updateDragHighlight(sourceUnit);
+
+    // keep the element of wire if the target unit is connected with the wire
+    if (targetUnit) {
+      this.updateDragHighlight(targetUnit);
+    } else {
+      this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
+      wire.parentElement(null);
     }
-    return null;
-  };
-
-  ModuleContainer.prototype.redraw = function() {
-    var modules = this.modules();
-    var x = 0;
-    var y = 0;
-
-    modules.forEach(function(module) {
-      var diagonalPoint = module.diagonalPoint();
-      x = Math.max(diagonalPoint.x, x);
-      y = Math.max(diagonalPoint.y, y);
-    });
-
-    var padding = 80;
-    var translate = 'translate(' + (x - 1 + padding) + 'px, ' + (y - 1 + padding) + 'px)';
-
-    dom.css(this.retainerElement(), {
-      transform: translate,
-      webkitTransform: translate
-    });
-
-    dom.toggleClass(this.element(), 'module-dragging', this.dragCount() > 0);
-
-    dom.css(this.wireHandleContainerElement(), {
-      zIndex: modules.length + 1
-    });
-  };
-
-  ModuleContainer.prototype.loadModule = function(props) {
-    var module = this.createModule(props);
-    this.modules().push(module);
-    this.updateZIndex();
-    this.updateWireHandleContainer();
-    module.redraw();
-    return module.loadComponent().then(function() {
-      return module;
-    });
   };
 
   ModuleContainer.prototype.updateRetainer = function() {
@@ -412,6 +386,32 @@
       return (draggingWires.indexOf(relation.wire()) !== -1);
     });
     unit.labelHighlighted(highlighted);
+  };
+
+  ModuleContainer.prototype.redraw = function() {
+    var modules = this.modules();
+    var x = 0;
+    var y = 0;
+
+    modules.forEach(function(module) {
+      var diagonalPoint = module.diagonalPoint();
+      x = Math.max(diagonalPoint.x, x);
+      y = Math.max(diagonalPoint.y, y);
+    });
+
+    var padding = 80;
+    var translate = 'translate(' + (x - 1 + padding) + 'px, ' + (y - 1 + padding) + 'px)';
+
+    dom.css(this.retainerElement(), {
+      transform: translate,
+      webkitTransform: translate
+    });
+
+    dom.toggleClass(this.element(), 'module-dragging', this.dragCount() > 0);
+
+    dom.css(this.wireHandleContainerElement(), {
+      zIndex: modules.length + 1
+    });
   };
 
   ModuleContainer.prototype.deleter = function(module) {
