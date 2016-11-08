@@ -147,6 +147,16 @@
     return dom.child(this.element(), 3);
   };
 
+  ModuleContainer.prototype.diagonalPoint = function() {
+    var point = { x: 0, y: 0 };
+    this.modules().forEach(function(module) {
+      var diagonalPoint = module.diagonalPoint();
+      point.x = Math.max(diagonalPoint.x, point.x);
+      point.y = Math.max(diagonalPoint.y, point.y);
+    });
+    return point;
+  };
+
   ModuleContainer.prototype.lockedWires = function(type, unit) {
     return this.lockRelationCollection().filter({
       type: type,
@@ -389,18 +399,11 @@
   };
 
   ModuleContainer.prototype.redraw = function() {
-    var modules = this.modules();
-    var x = 0;
-    var y = 0;
-
-    modules.forEach(function(module) {
-      var diagonalPoint = module.diagonalPoint();
-      x = Math.max(diagonalPoint.x, x);
-      y = Math.max(diagonalPoint.y, y);
-    });
-
+    var point = this.diagonalPoint();
     var padding = 80;
-    var translate = 'translate(' + (x - 1 + padding) + 'px, ' + (y - 1 + padding) + 'px)';
+    var x = point.x - 1 + padding;
+    var y = point.y - 1 + padding;
+    var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
     dom.css(this.retainerElement(), {
       transform: translate,
@@ -410,7 +413,7 @@
     dom.toggleClass(this.element(), 'module-dragging', this.dragCount() > 0);
 
     dom.css(this.wireHandleContainerElement(), {
-      zIndex: modules.length + 1
+      zIndex: this.modules().length + 1
     });
   };
 
