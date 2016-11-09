@@ -114,6 +114,7 @@
     this.lockRelationCollection = this.prop(new LockRelationCollection());
     this.bindingCollection = this.prop(new BindingCollection());
     this.element = this.prop(props.element);
+    this.cache = this.prop({});
     this.dragCount = this.prop(0);
     this.draggingWires = this.prop([]);
 
@@ -399,22 +400,52 @@
   };
 
   ModuleContainer.prototype.redraw = function() {
+    this.redrawDragCount();
+    this.redrawRetainer();
+    this.redrawWireHandleContainer();
+  };
+
+  ModuleContainer.prototype.redrawDragCount = function() {
+    var dragCount = this.dragCount();
+    var cache = this.cache();
+
+    if (dragCount === cache.dragCount)
+      return;
+
+    dom.toggleClass(this.element(), 'module-dragging', dragCount > 0);
+    cache.dragCount = dragCount;
+  };
+
+  ModuleContainer.prototype.redrawRetainer = function() {
     var point = this.diagonalPoint();
     var padding = 80;
-    var x = point.x - 1 + padding;
-    var y = point.y - 1 + padding;
-    var translate = 'translate(' + x + 'px, ' + y + 'px)';
+    var retainerX = point.x - 1 + padding;
+    var retainerY = point.y - 1 + padding;
+    var cache = this.cache();
+
+    if (retainerX === cache.retainerX && retainerY === cache.retainerY)
+      return;
+
+    var translate = 'translate(' + retainerX + 'px, ' + retainerY + 'px)';
 
     dom.css(this.retainerElement(), {
       transform: translate,
       webkitTransform: translate
     });
 
-    dom.toggleClass(this.element(), 'module-dragging', this.dragCount() > 0);
+    cache.retainerX = retainerX;
+    cache.retainerY = retainerY;
+  };
 
-    dom.css(this.wireHandleContainerElement(), {
-      zIndex: this.modules().length + 1
-    });
+  ModuleContainer.prototype.redrawWireHandleContainer = function() {
+    var zIndex = this.modules().length + 1;
+    var cache = this.cache();
+
+    if (zIndex === cache.zIndex)
+      return;
+
+    dom.css(this.wireHandleContainerElement(), { zIndex: zIndex });
+    cache.zIndex = zIndex;
   };
 
   ModuleContainer.prototype.deleter = function(module) {
