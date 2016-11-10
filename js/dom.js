@@ -18,6 +18,7 @@
       selector = selector.match(/<(.+)>/)[1];
       return document.createElement(selector);
     }
+    return document.querySelector(selector);
   };
 
   dom.append = function(parent, el) {
