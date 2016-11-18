@@ -21,6 +21,10 @@
     return document.querySelector(selector);
   };
 
+  dom.body = function() {
+    return document.body;
+  };
+
   dom.append = function(parent, el) {
     parent.appendChild(el);
   };
