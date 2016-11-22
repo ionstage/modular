@@ -10,10 +10,22 @@
 
     this.sidebarToggleType = this.prop(ContentHeader.SIDEBAR_TOGGLE_TYPE_COLLAPSE);
     this.element = this.prop(props.element);
+    this.cache = this.prop({});
   }, jCore.Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {
     return dom.child(this.element(), 0);
+  };
+
+  ContentHeader.prototype.redraw = function() {
+    var sidebarToggleType = this.sidebarToggleType();
+    var cache = this.cache();
+
+    if (sidebarToggleType === cache.sidebarToggleType)
+      return;
+
+    dom.data(this.sidebarToggleButtonElement(), 'type', sidebarToggleType);
+    cache.sidebarToggleType = sidebarToggleType;
   };
 
   ContentHeader.SIDEBAR_TOGGLE_TYPE_COLLAPSE = 'collapse';
