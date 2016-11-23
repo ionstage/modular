@@ -144,6 +144,10 @@
     el.value = s;
   };
 
+  dom.disabled = function(el, disabled) {
+    el.disabled = disabled;
+  };
+
   dom.rect = function(el) {
     return el.getBoundingClientRect();
   };
