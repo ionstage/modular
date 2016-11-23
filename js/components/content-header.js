@@ -9,6 +9,7 @@
     ContentHeader.super_.call(this);
 
     this.sidebarToggleType = this.prop(ContentHeader.SIDEBAR_TOGGLE_TYPE_COLLAPSE);
+    this.sidebarToggleDisabled = this.prop(false);
     this.element = this.prop(props.element);
     this.cache = this.prop({});
   }, jCore.Component);
@@ -18,14 +19,19 @@
   };
 
   ContentHeader.prototype.redraw = function() {
-    var sidebarToggleType = this.sidebarToggleType();
     var cache = this.cache();
 
-    if (sidebarToggleType === cache.sidebarToggleType)
-      return;
+    var sidebarToggleType = this.sidebarToggleType();
+    if (sidebarToggleType !== cache.sidebarToggleType) {
+      dom.data(this.sidebarToggleButtonElement(), 'type', sidebarToggleType);
+      cache.sidebarToggleType = sidebarToggleType;
+    }
 
-    dom.data(this.sidebarToggleButtonElement(), 'type', sidebarToggleType);
-    cache.sidebarToggleType = sidebarToggleType;
+    var sidebarToggleDisabled = this.sidebarToggleDisabled();
+    if (sidebarToggleDisabled !== cache.sidebarToggleDisabled) {
+      dom.disabled(this.sidebarToggleButtonElement(), sidebarToggleDisabled);
+      cache.sidebarToggleDisabled = sidebarToggleDisabled;
+    }
   };
 
   ContentHeader.SIDEBAR_TOGGLE_TYPE_COLLAPSE = 'collapse';
