@@ -18,19 +18,30 @@
   }, jCore.Component);
 
   SidebarToggleButton.prototype.redraw = function() {
+    this.redrawType();
+    this.redrawDisabled();
+  };
+
+  SidebarToggleButton.prototype.redrawType = function() {
+    var type = this.type();
     var cache = this.cache();
 
-    var type = this.type();
-    if (type !== cache.type) {
-      dom.data(this.element(), 'type', type);
-      cache.type = type;
-    }
+    if (type === cache.type)
+      return;
 
+    dom.data(this.element(), 'type', type);
+    cache.type = type;
+  };
+
+  SidebarToggleButton.prototype.redrawDisabled = function() {
     var disabled = this.disabled();
-    if (disabled !== cache.disabled) {
-      dom.disabled(this.element(), disabled);
-      cache.disabled = disabled;
-    }
+    var cache = this.cache();
+
+    if (disabled === cache.disabled)
+      return;
+
+    dom.disabled(this.element(), disabled);
+    cache.disabled = disabled;
   };
 
   SidebarToggleButton.TYPE_COLLAPSE = 'collapse';
