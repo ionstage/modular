@@ -12,6 +12,9 @@
     this.disabled = this.prop(false);
     this.element = this.prop(props.element);
     this.cache = this.prop({});
+
+    this.collapser = props.collapser;
+    this.expander = props.expander;
   }, jCore.Component);
 
   SidebarToggleButton.prototype.redraw = function() {
@@ -39,7 +42,9 @@
     this.element = this.prop(props.element);
 
     this.sidebarToggleButton = this.prop(new SidebarToggleButton({
-      element: this.sidebarToggleButtonElement()
+      element: this.sidebarToggleButtonElement(),
+      collapser: props.sidebarCollapser,
+      expander: props.sidebarExpander
     }));
   }, jCore.Component);
 
