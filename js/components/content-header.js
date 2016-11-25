@@ -17,6 +17,28 @@
     this.expander = props.expander;
   }, jCore.Component);
 
+  SidebarToggleButton.prototype.registerClickListener = function() {
+    dom.on(this.element(), 'click', function() {
+      this.disabled(true);
+      Promise.resolve().then(function() {
+        var type = this.type();
+        if (type === SidebarToggleButton.TYPE_COLLAPSE)
+          return this.collapser();
+        else if (type === SidebarToggleButton.TYPE_EXPAND)
+          return this.expander();
+      }.bind(this)).then(function() {
+        var type = this.type();
+        if (type === SidebarToggleButton.TYPE_COLLAPSE)
+          this.type(SidebarToggleButton.TYPE_EXPAND);
+        else if (type === SidebarToggleButton.TYPE_EXPAND)
+          this.type(SidebarToggleButton.TYPE_COLLAPSE);
+        this.disabled(false);
+      }.bind(this)).catch(function() {
+        this.disabled(false);
+      }.bind(this));
+    }.bind(this));
+  };
+
   SidebarToggleButton.prototype.redraw = function() {
     this.redrawType();
     this.redrawDisabled();
@@ -57,6 +79,8 @@
       collapser: props.sidebarCollapser,
       expander: props.sidebarExpander
     }));
+
+    this.sidebarToggleButton().registerClickListener();
   }, jCore.Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {
