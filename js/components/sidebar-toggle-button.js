@@ -41,16 +41,8 @@
         dom.removeFocus();
       },
       onend: function(dx, dy, event) {
-        if (dom.target(event) !== target)
-          return;
-
-        this.disabled(true);
-        this.toggler().then(function() {
-          this.switchType();
-          this.disabled(false);
-        }.bind(this)).catch(function() {
-          this.disabled(false);
-        }.bind(this));
+        if (dom.target(event) === target)
+          this.ontap();
       }.bind(this)
     });
   };
@@ -80,6 +72,16 @@
 
     dom.disabled(this.element(), disabled);
     cache.disabled = disabled;
+  };
+
+  SidebarToggleButton.prototype.ontap = function() {
+    this.disabled(true);
+    this.toggler().then(function() {
+      this.switchType();
+      this.disabled(false);
+    }.bind(this)).catch(function() {
+      this.disabled(false);
+    }.bind(this));
   };
 
   SidebarToggleButton.TYPE_COLLAPSE = 'collapse';
