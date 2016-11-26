@@ -38,6 +38,7 @@
       onstart: function(x, y, event) {
         target = dom.target(event);
         dom.cancel(event);
+        dom.removeFocus();
       },
       onend: function(dx, dy, event) {
         if (dom.target(event) !== target)
