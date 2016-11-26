@@ -17,16 +17,17 @@
     this.expander = props.expander;
   }, jCore.Component);
 
+  SidebarToggleButton.prototype.toggler = (function() {
+    var map = { collapse: 'collapser', expand: 'expander' };
+    return function() {
+      return this[map[this.type()]]();
+    };
+  })();
+
   SidebarToggleButton.prototype.registerClickListener = function() {
     dom.on(this.element(), 'click', function() {
       this.disabled(true);
-      Promise.resolve().then(function() {
-        var type = this.type();
-        if (type === SidebarToggleButton.TYPE_COLLAPSE)
-          return this.collapser();
-        else if (type === SidebarToggleButton.TYPE_EXPAND)
-          return this.expander();
-      }.bind(this)).then(function() {
+      this.toggler().then(function() {
         var type = this.type();
         if (type === SidebarToggleButton.TYPE_COLLAPSE)
           this.type(SidebarToggleButton.TYPE_EXPAND);
