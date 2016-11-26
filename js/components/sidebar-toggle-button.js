@@ -9,6 +9,7 @@
     SidebarToggleButton.super_.call(this);
 
     this.type = this.prop(SidebarToggleButton.TYPE_COLLAPSE);
+    this.isActive = this.prop(false);
     this.disabled = this.prop(false);
     this.element = this.prop(props.element);
     this.cache = this.prop({});
@@ -49,6 +50,7 @@
 
   SidebarToggleButton.prototype.redraw = function() {
     this.redrawType();
+    this.redrawIsActive();
     this.redrawDisabled();
   };
 
@@ -61,6 +63,17 @@
 
     dom.data(this.element(), 'type', type);
     cache.type = type;
+  };
+
+  SidebarToggleButton.prototype.redrawIsActive = function() {
+    var isActive = this.isActive();
+    var cache = this.cache();
+
+    if (isActive === cache.isActive)
+      return;
+
+    dom.toggleClass(this.element(), 'active', isActive);
+    cache.isActive = isActive;
   };
 
   SidebarToggleButton.prototype.redrawDisabled = function() {
