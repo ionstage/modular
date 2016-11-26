@@ -24,15 +24,18 @@
     };
   })();
 
+  SidebarToggleButton.prototype.switchType = (function() {
+    var map = { collapse: 'expand', expand: 'collapse' };
+    return function() {
+      this.type(map[this.type()]);
+    };
+  })();
+
   SidebarToggleButton.prototype.registerClickListener = function() {
     dom.on(this.element(), 'click', function() {
       this.disabled(true);
       this.toggler().then(function() {
-        var type = this.type();
-        if (type === SidebarToggleButton.TYPE_COLLAPSE)
-          this.type(SidebarToggleButton.TYPE_EXPAND);
-        else if (type === SidebarToggleButton.TYPE_EXPAND)
-          this.type(SidebarToggleButton.TYPE_COLLAPSE);
+        this.switchType();
         this.disabled(false);
       }.bind(this)).catch(function() {
         this.disabled(false);
