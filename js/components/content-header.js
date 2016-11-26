@@ -17,7 +17,7 @@
       expander: props.sidebarExpander
     }));
 
-    this.sidebarToggleButton().registerClickListener();
+    this.sidebarToggleButton().registerTapListener();
   }, jCore.Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {
