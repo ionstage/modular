@@ -40,8 +40,13 @@
         target = dom.target(event);
         dom.cancel(event);
         dom.removeFocus();
-      },
+        this.isActive(true);
+      }.bind(this),
+      onmove: function(dx, dy, event) {
+        this.isActive(dom.target(event) === target);
+      }.bind(this),
       onend: function(dx, dy, event) {
+        this.isActive(false);
         if (dom.target(event) === target)
           this.ontap();
       }.bind(this)
