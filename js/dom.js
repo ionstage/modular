@@ -288,17 +288,16 @@
       this.identifier = dom.identifier(event);
       this.startingPoint = dom.pagePoint(event);
 
-      var element = this.element;
       var onstart = this.onstart;
-
-      var rect = dom.rect(element);
-      var p = dom.clientPoint(event, {
-        x: rect.left - dom.scrollLeft(element),
-        y: rect.top - dom.scrollTop(element)
-      });
-
-      if (typeof onstart === 'function')
+      if (typeof onstart === 'function') {
+        var element = this.element;
+        var rect = dom.rect(element);
+        var p = dom.clientPoint(event, {
+          x: rect.left - dom.scrollLeft(element),
+          y: rect.top - dom.scrollTop(element)
+        });
         onstart(p.x, p.y, event);
+      }
 
       dom.on(document, dom.eventType('move'), this.move);
       dom.on(document, dom.eventType('end'), this.end);
@@ -311,10 +310,10 @@
         return;
 
       var onmove = this.onmove;
-      var d = dom.pagePoint(event, this.startingPoint);
-
-      if (typeof onmove === 'function')
+      if (typeof onmove === 'function') {
+        var d = dom.pagePoint(event, this.startingPoint);
         onmove(d.x, d.y, event);
+      }
     };
 
     var end = function(event) {
@@ -327,10 +326,10 @@
       dom.off(document, dom.eventType('end'), this.end);
 
       var onend = this.onend;
-      var d = dom.pagePoint(event, this.startingPoint);
-
-      if (typeof onend === 'function')
+      if (typeof onend === 'function') {
+        var d = dom.pagePoint(event, this.startingPoint);
         onend(d.x, d.y, event);
+      }
 
       this.lock = false;
     };
