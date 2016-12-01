@@ -9,12 +9,14 @@
     Button.super_.call(this);
 
     this.isActive = this.prop(false);
+    this.disabled = this.prop(false);
     this.element = this.prop(props.element);
     this.cache = this.prop({});
   }, jCore.Component);
 
   Button.prototype.redraw = function() {
     this.redrawIsActive();
+    this.redrawDisabled();
   };
 
   Button.prototype.redrawIsActive = function() {
@@ -26,6 +28,17 @@
 
     dom.toggleClass(this.element(), 'active', isActive);
     cache.isActive = isActive;
+  };
+
+  Button.prototype.redrawDisabled = function() {
+    var disabled = this.disabled();
+    var cache = this.cache();
+
+    if (disabled === cache.disabled)
+      return;
+
+    dom.disabled(this.element(), disabled);
+    cache.disabled = disabled;
   };
 
   if (typeof module !== 'undefined' && module.exports)
