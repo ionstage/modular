@@ -1,22 +1,18 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Button = app.Button || require('./button.js');
 
   var SidebarToggleButton = helper.inherits(function(props) {
-    SidebarToggleButton.super_.call(this);
+    SidebarToggleButton.super_.call(this, props);
 
     this.type = this.prop(SidebarToggleButton.TYPE_COLLAPSE);
-    this.isActive = this.prop(false);
-    this.disabled = this.prop(false);
-    this.element = this.prop(props.element);
-    this.cache = this.prop({});
 
     this.collapser = props.collapser;
     this.expander = props.expander;
-  }, jCore.Component);
+  }, Button);
 
   SidebarToggleButton.prototype.toggler = (function() {
     var map = { collapse: 'collapser', expand: 'expander' };
@@ -32,31 +28,9 @@
     };
   })();
 
-  SidebarToggleButton.prototype.registerTapListener = function() {
-    var target;
-    new dom.Draggable({
-      element: this.element(),
-      onstart: function(x, y, event) {
-        target = dom.target(event);
-        dom.cancel(event);
-        dom.removeFocus();
-        this.isActive(true);
-      }.bind(this),
-      onmove: function(dx, dy, event) {
-        this.isActive(dom.target(event) === target);
-      }.bind(this),
-      onend: function(dx, dy, event) {
-        this.isActive(false);
-        if (dom.target(event) === target)
-          this.ontap();
-      }.bind(this)
-    });
-  };
-
   SidebarToggleButton.prototype.redraw = function() {
+    SidebarToggleButton.super_.prototype.redraw.call(this);
     this.redrawType();
-    this.redrawIsActive();
-    this.redrawDisabled();
   };
 
   SidebarToggleButton.prototype.redrawType = function() {
@@ -68,28 +42,6 @@
 
     dom.data(this.element(), 'type', type);
     cache.type = type;
-  };
-
-  SidebarToggleButton.prototype.redrawIsActive = function() {
-    var isActive = this.isActive();
-    var cache = this.cache();
-
-    if (isActive === cache.isActive)
-      return;
-
-    dom.toggleClass(this.element(), 'active', isActive);
-    cache.isActive = isActive;
-  };
-
-  SidebarToggleButton.prototype.redrawDisabled = function() {
-    var disabled = this.disabled();
-    var cache = this.cache();
-
-    if (disabled === cache.disabled)
-      return;
-
-    dom.disabled(this.element(), disabled);
-    cache.disabled = disabled;
   };
 
   SidebarToggleButton.prototype.ontap = function() {
