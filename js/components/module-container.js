@@ -212,6 +212,28 @@
     return null;
   };
 
+  ModuleContainer.prototype.load = function(data) {
+    return Promise.all(data.modules.map(function(moduleData) {
+      return this.loadModule(moduleData.props).then(function(module) {
+        moduleData.visiblePortNames.forEach(function(name) {
+          module.showPort(name);
+        });
+        return module;
+      });
+    }.bind(this))).then(function(modules) {
+      data.connections.forEach(function(connectionData) {
+        var source = connectionData.source;
+        var target = connectionData.target;
+        var sourceModule = modules[source.moduleIndex];
+        var targetModule = modules[target.moduleIndex];
+        this.connect(
+          new ModuleUnit({ module: sourceModule, port: sourceModule.port(source.portName) }),
+          new ModuleUnit({ module: targetModule, port: targetModule.port(target.portName) })
+        );
+      }.bind(this));
+    }.bind(this));
+  };
+
   ModuleContainer.prototype.createModule = function(props) {
     return new Module(helper.extend(helper.clone(props), {
       parentElement: this.contentElement(),
