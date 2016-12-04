@@ -67,6 +67,17 @@
     helper.remove(this.port.relations(), relation);
   };
 
+  ModuleUnit.fromModuleAndPortName = function(module, portName) {
+    if (!module)
+      return null;
+
+    var port = module.port(portName);
+    if (!port)
+      return null;
+
+    return new ModuleUnit({ module: module, port: port });
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = ModuleUnit;
   else

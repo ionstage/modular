@@ -219,12 +219,9 @@
       data.connections.forEach(function(connectionData) {
         var source = connectionData.source;
         var target = connectionData.target;
-        var sourceModule = modules[source.moduleIndex];
-        var targetModule = modules[target.moduleIndex];
-        this.connect(
-          new ModuleUnit({ module: sourceModule, port: sourceModule.port(source.portName) }),
-          new ModuleUnit({ module: targetModule, port: targetModule.port(target.portName) })
-        );
+        var sourceUnit = ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName);
+        var targetUnit = ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName);
+        this.connect(sourceUnit, targetUnit);
       }.bind(this));
     }.bind(this));
   };
