@@ -214,12 +214,7 @@
 
   ModuleContainer.prototype.load = function(data) {
     return Promise.all(data.modules.map(function(moduleData) {
-      return this.loadModule(moduleData.props).then(function(module) {
-        moduleData.visiblePortNames.forEach(function(name) {
-          module.showPort(name);
-        });
-        return module;
-      });
+      return this.loadModule(moduleData.props, moduleData.visiblePortNames);
     }.bind(this))).then(function(modules) {
       data.connections.forEach(function(connectionData) {
         var source = connectionData.source;
@@ -281,13 +276,16 @@
     });
   };
 
-  ModuleContainer.prototype.loadModule = function(props) {
+  ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
     var module = this.createModule(props);
     this.modules().push(module);
     this.updateZIndex();
     this.updateWireHandleContainer();
     module.redraw();
     return module.loadComponent().then(function() {
+      visiblePortNames.forEach(function(name) {
+        module.showPort(name);
+      });
       return module;
     });
   };
