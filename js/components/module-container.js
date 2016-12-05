@@ -317,6 +317,25 @@
     });
   };
 
+  ModuleContainer.prototype.canConnect = function(sourceUnit, targetUnit) {
+    if (!sourceUnit || !targetUnit)
+      return false;
+
+    if (sourceUnit.portType() !== targetUnit.portType())
+      return false;
+
+    if (sourceUnit.portPlugDisabled() || targetUnit.portSocketDisabled())
+      return false;
+
+    if (!sourceUnit.portVisible() || !targetUnit.portVisible())
+      return false;
+
+    if (targetUnit.portSocketConnected())
+      return false;
+
+    return true;
+  };
+
   ModuleContainer.prototype.connect = function(sourceUnit, targetUnit) {
     var wire = this.createConnectingWire(sourceUnit, targetUnit);
     wire.markDirty();
