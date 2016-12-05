@@ -24,6 +24,10 @@
     return this.port.plugDisabled(value);
   };
 
+  ModuleUnit.prototype.portSocketDisabled = function(value) {
+    return this.port.socketDisabled(value);
+  };
+
   ModuleUnit.prototype.portVisible = function(value) {
     return this.port.visible(value);
   };
