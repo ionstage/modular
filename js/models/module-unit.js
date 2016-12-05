@@ -20,6 +20,10 @@
     return this.port.type();
   };
 
+  ModuleUnit.prototype.portPlugDisabled = function(value) {
+    return this.port.plugDisabled(value);
+  };
+
   ModuleUnit.prototype.portVisible = function(value) {
     return this.port.visible(value);
   };
