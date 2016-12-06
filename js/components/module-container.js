@@ -216,12 +216,20 @@
     return Promise.all(data.modules.map(function(moduleData) {
       return this.loadModule(moduleData.props, moduleData.visiblePortNames);
     }.bind(this))).then(function(modules) {
-      data.connections.forEach(function(connectionData) {
+      return Promise.all(data.connections.map(function(connectionData) {
         var source = connectionData.source;
         var target = connectionData.target;
-        var sourceUnit = ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName);
-        var targetUnit = ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName);
-        this.connect(sourceUnit, targetUnit);
+        var unitMap = {
+          source: ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
+          target: ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName)
+        };
+        if (!this.canConnect(unitMap.source, unitMap.target))
+          throw new Error('Invalid connection');
+        return unitMap;
+      }.bind(this))).then(function(unitMaps) {
+        unitMaps.forEach(function(unitMap) {
+          this.connect(unitMap.source, unitMap.target);
+        }.bind(this));
       }.bind(this));
     }.bind(this));
   };
