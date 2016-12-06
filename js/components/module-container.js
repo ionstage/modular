@@ -213,23 +213,31 @@
   };
 
   ModuleContainer.prototype.load = function(data) {
-    return Promise.all(data.modules.map(function(moduleData) {
+    return this.loadModules(data.modules).then(function(modules) {
+      return this.loadConnections(data.connections, modules);
+    }.bind(this));
+  };
+
+  ModuleContainer.prototype.loadModules = function(modulesData) {
+    return Promise.all(modulesData.map(function(moduleData) {
       return this.loadModule(moduleData.props, moduleData.visiblePortNames);
-    }.bind(this))).then(function(modules) {
-      return Promise.all(data.connections.map(function(connectionData) {
-        var source = connectionData.source;
-        var target = connectionData.target;
-        var unitMap = {
-          source: ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
-          target: ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName)
-        };
-        if (!this.canConnect(unitMap.source, unitMap.target))
-          throw new Error('Invalid connection');
-        return unitMap;
-      }.bind(this))).then(function(unitMaps) {
-        unitMaps.forEach(function(unitMap) {
-          this.connect(unitMap.source, unitMap.target);
-        }.bind(this));
+    }.bind(this)));
+  };
+
+  ModuleContainer.prototype.loadConnections = function(connectionsData, modules) {
+    return Promise.all(connectionsData.map(function(connectionData) {
+      var source = connectionData.source;
+      var target = connectionData.target;
+      var unitMap = {
+        source: ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
+        target: ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName)
+      };
+      if (!this.canConnect(unitMap.source, unitMap.target))
+        throw new Error('Invalid connection');
+      return unitMap;
+    }.bind(this))).then(function(unitMaps) {
+      unitMaps.forEach(function(unitMap) {
+        this.connect(unitMap.source, unitMap.target);
       }.bind(this));
     }.bind(this));
   };
