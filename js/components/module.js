@@ -168,6 +168,15 @@
     ].join('');
   };
 
+  Module.prototype.props = function() {
+    return {
+      title: this.title(),
+      name: this.name(),
+      x: this.x(),
+      y: this.y()
+    };
+  };
+
   Module.prototype.createPorts = function() {
     return this.circuitElement().getAll().map(function(member) {
       var props = member.props();
