@@ -242,6 +242,12 @@
     }.bind(this));
   };
 
+  ModuleContainer.prototype.clear = function() {
+    this.modules().slice().forEach(function(module) {
+      module.delete();
+    });
+  };
+
   ModuleContainer.prototype.createModule = function(props) {
     return new Module(helper.extend(helper.clone(props), {
       parentElement: this.contentElement(),
