@@ -177,6 +177,14 @@
     };
   };
 
+  Module.prototype.visiblePortNames = function() {
+    return this.visiblePorts().sort(function(a, b) {
+      return a.top() - b.top();
+    }).map(function(port) {
+      return port.name();
+    });
+  };
+
   Module.prototype.createPorts = function() {
     return this.circuitElement().getAll().map(function(member) {
       var props = member.props();
