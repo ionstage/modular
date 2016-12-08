@@ -16,6 +16,12 @@
     }.bind(this));
   };
 
+  ModuleUnit.prototype.contains = function(component) {
+    return Object.keys(this).some(function(key) {
+      return helper.equal(this[key], component);
+    }.bind(this));
+  };
+
   ModuleUnit.prototype.portType = function() {
     return this.port.type();
   };
