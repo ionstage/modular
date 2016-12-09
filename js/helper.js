@@ -99,6 +99,14 @@
     array.push(item);
   };
 
+  helper.findIndex = function(array, callback) {
+    for (var i = 0, len = array.length; i < len; i++) {
+      if (callback(array[i], i, array))
+        return i;
+    }
+    return -1;
+  };
+
   helper.Set = (function() {
     var Set = function() {
       this.data = [];
