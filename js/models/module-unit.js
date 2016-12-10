@@ -22,6 +22,10 @@
     }.bind(this));
   };
 
+  ModuleUnit.prototype.portName = function() {
+    return this.port.name();
+  };
+
   ModuleUnit.prototype.portType = function() {
     return this.port.type();
   };
