@@ -30,16 +30,16 @@
     return this.port.type();
   };
 
-  ModuleUnit.prototype.portPlugDisabled = function(value) {
-    return this.port.plugDisabled(value);
+  ModuleUnit.prototype.portPlugDisabled = function() {
+    return this.port.plugDisabled();
   };
 
-  ModuleUnit.prototype.portSocketDisabled = function(value) {
-    return this.port.socketDisabled(value);
+  ModuleUnit.prototype.portSocketDisabled = function() {
+    return this.port.socketDisabled();
   };
 
-  ModuleUnit.prototype.portVisible = function(value) {
-    return this.port.visible(value);
+  ModuleUnit.prototype.portVisible = function() {
+    return this.port.visible();
   };
 
   ModuleUnit.prototype.portSocketConnected = function(value) {
