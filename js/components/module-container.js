@@ -213,29 +213,36 @@
   };
 
   ModuleContainer.prototype.toData = function() {
-    var modules = this.modules();
     return {
-      modules: modules.map(function(module) {
-        return {
-          props: module.props(),
-          visiblePortNames: module.visiblePortNames()
-        };
-      }),
-      connections: this.bindings().map(function(binding) {
-        var sourceUnit = binding.sourceUnit;
-        var targetUnit = binding.targetUnit;
-        var sourceModuleIndex = helper.findIndex(modules, function(module) {
-          return sourceUnit.contains(module);
-        });
-        var targetModuleIndex = helper.findIndex(modules, function(module) {
-          return targetUnit.contains(module);
-        });
-        return {
-          source: { moduleIndex: sourceModuleIndex, portName: sourceUnit.portName() },
-          target: { moduleIndex: targetModuleIndex, portName: targetUnit.portName() },
-        };
-      })
+      modules: this.toModulesData(),
+      connections: this.toConnectionsData(this.modules())
     };
+  };
+
+  ModuleContainer.prototype.toModulesData = function() {
+    return this.modules().map(function(module) {
+      return {
+        props: module.props(),
+        visiblePortNames: module.visiblePortNames()
+      };
+    });
+  };
+
+  ModuleContainer.prototype.toConnectionsData = function(modules) {
+    return this.bindings().map(function(binding) {
+      var sourceUnit = binding.sourceUnit;
+      var targetUnit = binding.targetUnit;
+      var sourceModuleIndex = helper.findIndex(modules, function(module) {
+        return sourceUnit.contains(module);
+      });
+      var targetModuleIndex = helper.findIndex(modules, function(module) {
+        return targetUnit.contains(module);
+      });
+      return {
+        source: { moduleIndex: sourceModuleIndex, portName: sourceUnit.portName() },
+        target: { moduleIndex: targetModuleIndex, portName: targetUnit.portName() },
+      };
+    });
   };
 
   ModuleContainer.prototype.load = function(data) {
