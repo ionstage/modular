@@ -24,6 +24,10 @@
     return dom.child(this.element(), 0);
   };
 
+  ContentHeader.prototype.loadButtonElement = function() {
+    return dom.child(this.element(), 1);
+  };
+
   ContentHeader.prototype.redraw = function() {
     this.sidebarToggleButton().redraw();
   };
