@@ -28,6 +28,10 @@
     return dom.child(this.element(), 1);
   };
 
+  ContentHeader.prototype.saveButtonElement = function() {
+    return dom.child(this.element(), 2);
+  };
+
   ContentHeader.prototype.redraw = function() {
     this.sidebarToggleButton().redraw();
   };
