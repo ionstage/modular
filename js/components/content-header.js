@@ -4,7 +4,12 @@
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Button = app.Button || require('./button.js');
   var SidebarToggleButton = app.SidebarToggleButton || require('./sidebar-toggle-button.js');
+
+  var LoadButton = helper.inherits(function(props) {
+    LoadButton.super_.call(this, props);
+  }, Button);
 
   var ContentHeader = helper.inherits(function(props) {
     ContentHeader.super_.call(this);
