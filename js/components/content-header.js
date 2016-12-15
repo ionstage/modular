@@ -11,6 +11,10 @@
     LoadButton.super_.call(this, props);
   }, Button);
 
+  var SaveButton = helper.inherits(function(props) {
+    SaveButton.super_.call(this, props);
+  }, Button);
+
   var ContentHeader = helper.inherits(function(props) {
     ContentHeader.super_.call(this);
 
