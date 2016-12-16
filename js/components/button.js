@@ -36,30 +36,17 @@
   };
 
   Button.prototype.redraw = function() {
-    this.redrawIsActive();
-    this.redrawDisabled();
+    this.redrawState('isActive', 'active');
+    this.redrawState('disabled', 'disabled');
   };
 
-  Button.prototype.redrawIsActive = function() {
-    var isActive = this.isActive();
+  Button.prototype.redrawState = function(key, className) {
     var cache = this.cache();
-
-    if (isActive === cache.isActive)
-      return;
-
-    dom.toggleClass(this.element(), 'active', isActive);
-    cache.isActive = isActive;
-  };
-
-  Button.prototype.redrawDisabled = function() {
-    var disabled = this.disabled();
-    var cache = this.cache();
-
-    if (disabled === cache.disabled)
-      return;
-
-    dom.toggleClass(this.element(), 'disabled', disabled);
-    cache.disabled = disabled;
+    var value = this[key]();
+    if (value !== cache[key]) {
+      dom.toggleClass(this.element(), className, value);
+      cache[key] = value;
+    }
   };
 
   Button.prototype.ontap = function() {};
