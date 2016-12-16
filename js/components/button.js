@@ -58,7 +58,7 @@
     if (disabled === cache.disabled)
       return;
 
-    dom.disabled(this.element(), disabled);
+    dom.toggleClass(this.element(), 'disabled', disabled);
     cache.disabled = disabled;
   };
 
