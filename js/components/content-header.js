@@ -26,6 +26,10 @@
       expander: props.sidebarExpander
     }));
 
+    this.loadButton = this.prop(new LoadButton({
+      element: this.loadButtonElement()
+    }));
+
     this.sidebarToggleButton().registerTapListener();
   }, jCore.Component);
 
