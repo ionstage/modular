@@ -30,6 +30,10 @@
       element: this.loadButtonElement()
     }));
 
+    this.saveButton = this.prop(new SaveButton({
+      element: this.saveButtonElement()
+    }));
+
     this.sidebarToggleButton().registerTapListener();
   }, jCore.Component);
 
