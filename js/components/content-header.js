@@ -11,6 +11,10 @@
     LoadButton.super_.call(this, props);
   }, Button);
 
+  LoadButton.prototype.inputElement = function() {
+    return dom.child(this.element(), 0);
+  };
+
   var SaveButton = helper.inherits(function(props) {
     SaveButton.super_.call(this, props);
   }, Button);
