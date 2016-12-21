@@ -337,6 +337,25 @@
     return Draggable;
   })();
 
+  dom.load = function(file) {
+    return new Promise(function(resolve, reject) {
+      var reader = new FileReader();
+
+      var onfailed = function() {
+        reject(new Error('Failed to load file: ' + file.name));
+      };
+
+      reader.onload = function(event) {
+        resolve(event.target.result);
+      };
+
+      reader.onerror = onfailed;
+      reader.onabort = onfailed;
+
+      reader.readAsText(file);
+    });
+  };
+
   dom.ajax = function(opt) {
     var type = opt.type;
     var url = opt.url;
