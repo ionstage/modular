@@ -39,6 +39,7 @@
     }));
 
     this.sidebarToggleButton().registerTapListener();
+    this.loadButton().registerTapListener();
   }, jCore.Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {
