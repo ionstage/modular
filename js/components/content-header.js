@@ -40,6 +40,7 @@
 
     this.sidebarToggleButton().registerTapListener();
     this.loadButton().registerTapListener();
+    this.saveButton().registerTapListener();
   }, jCore.Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {
