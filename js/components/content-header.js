@@ -17,7 +17,12 @@
 
   var SaveButton = helper.inherits(function(props) {
     SaveButton.super_.call(this, props);
+    this.saver = props.saver;
   }, Button);
+
+  SaveButton.prototype.ontap = function() {
+    this.saver();
+  };
 
   var ContentHeader = helper.inherits(function(props) {
     ContentHeader.super_.call(this);
@@ -35,7 +40,8 @@
     }));
 
     this.saveButton = this.prop(new SaveButton({
-      element: this.saveButtonElement()
+      element: this.saveButtonElement(),
+      saver: props.fileSaver
     }));
 
     this.sidebarToggleButton().registerTapListener();
