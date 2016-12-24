@@ -25,6 +25,11 @@
     }.bind(this));
   };
 
+  LoadButton.prototype.registerListeners = function() {
+    this.registerTapListener();
+    this.registerChangeListener();
+  };
+
   var SaveButton = helper.inherits(function(props) {
     SaveButton.super_.call(this, props);
     this.saver = props.saver;
@@ -56,8 +61,7 @@
     }));
 
     this.sidebarToggleButton().registerTapListener();
-    this.loadButton().registerTapListener();
-    this.loadButton().registerChangeListener();
+    this.loadButton().registerListeners();
     this.saveButton().registerTapListener();
   }, jCore.Component);
 
