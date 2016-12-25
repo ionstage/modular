@@ -30,6 +30,11 @@
     this.registerChangeListener();
   };
 
+  LoadButton.prototype.ontap = function() {
+    if (dom.supportsTouch())
+      this.inputElement().click();
+  };
+
   var SaveButton = helper.inherits(function(props) {
     SaveButton.super_.call(this, props);
     this.saver = props.saver;
