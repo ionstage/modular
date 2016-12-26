@@ -48,9 +48,11 @@
     dom.html(element,
       (!this.plugDisabled() ? '<div class="module-port-plug"></div>' : '') +
       (!this.socketDisabled() ? '<div class="module-port-socket"><span></span></div>' : '') +
-      '<div class="module-port-label">' + this.label() + '</div>' +
+      '<div class="module-port-label"></div>' +
       '<img class="module-port-hide-button" src="images/minus-square-o.svg">'
     );
+    var children = dom.children(element);
+    dom.text(children[children.length - 2], this.label());
     return element;
   };
 
