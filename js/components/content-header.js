@@ -47,7 +47,9 @@
   var ContentHeader = helper.inherits(function(props) {
     ContentHeader.super_.call(this);
 
+    this.disabled = this.prop(false);
     this.element = this.prop(props.element);
+    this.cache = this.prop({});
 
     this.sidebarToggleButton = this.prop(new SidebarToggleButton({
       element: this.sidebarToggleButtonElement(),
@@ -84,6 +86,16 @@
 
   ContentHeader.prototype.redraw = function() {
     this.sidebarToggleButton().redraw();
+    this.redrawState('disabled', 'disabled');
+  };
+
+  ContentHeader.prototype.redrawState = function(key, className) {
+    var cache = this.cache();
+    var value = this[key]();
+    if (value !== cache[key]) {
+      dom.toggleClass(this.element(), className, value);
+      cache[key] = value;
+    }
   };
 
   if (typeof module !== 'undefined' && module.exports)
