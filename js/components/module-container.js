@@ -113,6 +113,7 @@
     this.modules = this.prop([]);
     this.lockRelationCollection = this.prop(new LockRelationCollection());
     this.bindingCollection = this.prop(new BindingCollection());
+    this.disabled = this.prop(false);
     this.element = this.prop(props.element);
     this.cache = this.prop({});
     this.dragCount = this.prop(0);
@@ -491,9 +492,19 @@
   };
 
   ModuleContainer.prototype.redraw = function() {
+    this.redrawState('disabled', 'disabled');
     this.redrawDragCount();
     this.redrawRetainer();
     this.redrawWireHandleContainer();
+  };
+
+  ModuleContainer.prototype.redrawState = function(key, className) {
+    var cache = this.cache();
+    var value = this[key]();
+    if (value !== cache[key]) {
+      dom.toggleClass(this.element(), className, value);
+      cache[key] = value;
+    }
   };
 
   ModuleContainer.prototype.redrawDragCount = function() {
