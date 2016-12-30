@@ -18,8 +18,9 @@
     var data = this.data;
     var relation = new LockRelation(props);
 
-    if (data.has(relation))
+    if (data.has(relation)) {
       return;
+    }
 
     props.unit.addRelation(relation);
     data.set(relation, relation);
@@ -29,8 +30,9 @@
     var data = this.data;
     var relation = data.get(new LockRelation(props));
 
-    if (!relation)
+    if (!relation) {
       return;
+    }
 
     props.unit.removeRelation(relation);
     data.delete(relation);
@@ -42,8 +44,9 @@
       var matched = Object.keys(props).every(function(key) {
         return helper.equal(relation[key](), props[key]);
       });
-      if (matched)
+      if (matched) {
         relations.push(relation);
+      }
     });
     return relations;
   };
@@ -54,8 +57,9 @@
   };
 
   Binding.prototype.equal = function(other) {
-    if (!other)
+    if (!other) {
       return false;
+    }
     return Object.keys(this).every(function(key) {
       return helper.equal(this[key], other[key]);
     }.bind(this));
@@ -89,8 +93,9 @@
     var data = this.data;
     var binding = new Binding(props);
 
-    if (data.has(binding))
+    if (data.has(binding)) {
       return;
+    }
 
     binding.bind();
     data.add(binding);
@@ -100,8 +105,9 @@
     var data = this.data;
     var binding = new Binding(props);
 
-    if (!data.has(binding))
+    if (!data.has(binding)) {
       return;
+    }
 
     binding.unbind();
     data.delete(binding);
@@ -201,12 +207,15 @@
       for (var pi = ports.length - 1; pi >= 0; pi--) {
         var port = ports[pi];
         var position = module.socketPosition(port);
-        if (Math.abs(x - position.x) > 18)
+        if (Math.abs(x - position.x) > 18) {
           break;
-        if (Math.abs(y - position.y) > 18)
+        }
+        if (Math.abs(y - position.y) > 18) {
           continue;
-        if (!port.visible() || port.socketDisabled())
+        }
+        if (!port.visible() || port.socketDisabled()) {
           continue;
+        }
         return new ModuleUnit({ module: module, port: port });
       }
     }
@@ -266,8 +275,9 @@
         source: ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
         target: ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName),
       };
-      if (!this.canConnect(unitMap.source, unitMap.target))
+      if (!this.canConnect(unitMap.source, unitMap.target)) {
         throw new Error('Invalid connection');
+      }
       return unitMap;
     }.bind(this))).then(function(unitMaps) {
       unitMaps.forEach(function(unitMap) {
@@ -374,20 +384,25 @@
   };
 
   ModuleContainer.prototype.canConnect = function(sourceUnit, targetUnit) {
-    if (!sourceUnit || !targetUnit)
+    if (!sourceUnit || !targetUnit) {
       return false;
+    }
 
-    if (sourceUnit.portType() !== targetUnit.portType())
+    if (sourceUnit.portType() !== targetUnit.portType()) {
       return false;
+    }
 
-    if (sourceUnit.portPlugDisabled() || targetUnit.portSocketDisabled())
+    if (sourceUnit.portPlugDisabled() || targetUnit.portSocketDisabled()) {
       return false;
+    }
 
-    if (!sourceUnit.portVisible() || !targetUnit.portVisible())
+    if (!sourceUnit.portVisible() || !targetUnit.portVisible()) {
       return false;
+    }
 
-    if (targetUnit.portSocketConnected())
+    if (targetUnit.portSocketConnected()) {
       return false;
+    }
 
     return true;
   };
@@ -414,8 +429,9 @@
 
   ModuleContainer.prototype.disconnectAll = function(unit) {
     this.bindings().forEach(function(binding) {
-      if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit))
+      if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit)) {
         this.disconnect(binding.sourceUnit, binding.targetUnit);
+      }
     }.bind(this));
   };
 
@@ -511,8 +527,9 @@
     var dragCount = this.dragCount();
     var cache = this.cache();
 
-    if (dragCount === cache.dragCount)
+    if (dragCount === cache.dragCount) {
       return;
+    }
 
     dom.toggleClass(this.element(), 'module-dragging', dragCount > 0);
     cache.dragCount = dragCount;
@@ -525,8 +542,9 @@
     var retainerY = point.y - 1 + padding;
     var cache = this.cache();
 
-    if (retainerX === cache.retainerX && retainerY === cache.retainerY)
+    if (retainerX === cache.retainerX && retainerY === cache.retainerY) {
       return;
+    }
 
     var translate = 'translate(' + retainerX + 'px, ' + retainerY + 'px)';
 
@@ -543,8 +561,9 @@
     var zIndex = this.modules().length + 1;
     var cache = this.cache();
 
-    if (zIndex === cache.zIndex)
+    if (zIndex === cache.zIndex) {
       return;
+    }
 
     dom.css(this.wireHandleContainerElement(), { zIndex: zIndex });
     cache.zIndex = zIndex;
@@ -553,8 +572,9 @@
   ModuleContainer.prototype.deleter = function(module) {
     var modules = this.modules();
 
-    if (modules.indexOf(module) === -1)
+    if (modules.indexOf(module) === -1) {
       return;
+    }
 
     helper.remove(modules, module);
     this.updateZIndex();
@@ -567,8 +587,9 @@
   };
 
   ModuleContainer.prototype.portToggler = function(unit) {
-    if (!unit.portVisible())
+    if (!unit.portVisible()) {
       this.disconnectAll(unit);
+    }
 
     this.updateRetainer();
   };
@@ -622,11 +643,13 @@
     wire.targetX(x);
     wire.targetY(y);
 
-    if (currentTargetUnit)
+    if (currentTargetUnit) {
       this.detachDraggingWire(sourceUnit, currentTargetUnit, wire);
+    }
 
-    if (targetUnit)
+    if (targetUnit) {
       this.attachDraggingWire(sourceUnit, targetUnit, wire);
+    }
 
     context.targetUnit = targetUnit;
   };
@@ -661,8 +684,9 @@
   ModuleContainer.LOCK_TYPE_PLUG = LockRelation.TYPE_PLUG;
   ModuleContainer.LOCK_TYPE_SOCKET = LockRelation.TYPE_SOCKET;
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModuleContainer;
-  else
+  } else {
     app.ModuleContainer = ModuleContainer;
+  }
 })(this.app || (this.app = {}));

@@ -31,15 +31,17 @@
 
   dom.remove = function(el) {
     var parentNode = el.parentNode;
-    if (parentNode)
+    if (parentNode) {
       parentNode.removeChild(el);
+    }
   };
 
   dom.child = function(el, index) {
     var len = arguments.length;
 
-    if (len === 2)
+    if (len === 2) {
       return el.children[index];
+    }
 
     for (var i = 1; i < len; i++) {
       index = arguments[i];
@@ -52,8 +54,9 @@
   dom.childNode = function(el, index) {
     var len = arguments.length;
 
-    if (len === 2)
+    if (len === 2) {
       return el.childNodes[index];
+    }
 
     for (var i = 1; i < len; i++) {
       index = arguments[i];
@@ -102,8 +105,9 @@
       el.classList.toggle(className);
       return;
     }
-    if (force)
+    if (force) {
       el.classList.add(className);
+    }
     else
       el.classList.remove(className);
   };
@@ -113,12 +117,14 @@
   };
 
   dom.data = function(el, key, value) {
-    if (typeof value === 'undefined')
+    if (typeof value === 'undefined') {
       return el.dataset[key];
+    }
 
     if (value === null) {
-      if (key in el.dataset)
+      if (key in el.dataset) {
         delete el.dataset[key];
+      }
       return;
     }
 
@@ -138,8 +144,9 @@
   };
 
   dom.value = function(el, s) {
-    if (typeof s === 'undefined')
+    if (typeof s === 'undefined') {
       return el.value;
+    }
 
     el.value = s;
   };
@@ -232,8 +239,9 @@
   };
 
   dom.pagePoint = function(event, offset) {
-    if (dom.supportsTouch())
+    if (dom.supportsTouch()) {
       event = event.changedTouches[0];
+    }
 
     return {
       x: event.pageX - (offset ? offset.x : 0),
@@ -242,8 +250,9 @@
   };
 
   dom.clientPoint = function(event, offset) {
-    if (dom.supportsTouch())
+    if (dom.supportsTouch()) {
       event = event.changedTouches[0];
+    }
 
     return {
       x: event.clientX - (offset ? offset.x : 0),
@@ -252,8 +261,9 @@
   };
 
   dom.identifier = function(event) {
-    if (dom.supportsTouch())
+    if (dom.supportsTouch()) {
       return event.changedTouches[0].identifier;
+    }
 
     return null;
   };
@@ -281,8 +291,9 @@
     };
 
     var start = function(event) {
-      if (this.lock)
+      if (this.lock) {
         return;
+      }
 
       this.lock = true;
       this.identifier = dom.identifier(event);
@@ -306,8 +317,9 @@
     var move = function(event) {
       var identifier = this.identifier;
 
-      if (identifier && identifier !== dom.identifier(event))
+      if (identifier && identifier !== dom.identifier(event)) {
         return;
+      }
 
       var onmove = this.onmove;
       if (typeof onmove === 'function') {
@@ -319,8 +331,9 @@
     var end = function(event) {
       var identifier = this.identifier;
 
-      if (identifier && identifier !== dom.identifier(event))
+      if (identifier && identifier !== dom.identifier(event)) {
         return;
+      }
 
       dom.off(document, dom.eventType('move'), this.move);
       dom.off(document, dom.eventType('end'), this.end);
@@ -368,10 +381,11 @@
       };
 
       req.onload = function() {
-        if (req.status >= 200 && req.status < 400)
+        if (req.status >= 200 && req.status < 400) {
           resolve(req.responseText);
-        else
+        } else {
           onfailed();
+        }
       };
 
       req.onerror = onfailed;
@@ -386,10 +400,11 @@
     return location.protocol + '//' + location.host;
   };
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = dom;
-  else
+  } else {
     app.dom = dom;
+  }
 })(this.app || (this.app = {}));
 
 (function(global) {

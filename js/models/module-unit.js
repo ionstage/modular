@@ -9,8 +9,9 @@
   };
 
   ModuleUnit.prototype.equal = function(other) {
-    if (!other)
+    if (!other) {
       return false;
+    }
     return Object.keys(this).every(function(key) {
       return helper.equal(this[key], other[key]);
     }.bind(this));
@@ -86,18 +87,21 @@
   };
 
   ModuleUnit.fromModuleAndPortName = function(module, portName) {
-    if (!module)
+    if (!module) {
       return null;
+    }
 
     var port = module.port(portName);
-    if (!port)
+    if (!port) {
       return null;
+    }
 
     return new ModuleUnit({ module: module, port: port });
   };
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModuleUnit;
-  else
+  } else {
     app.ModuleUnit = ModuleUnit;
+  }
 })(this.app || (this.app = {}));

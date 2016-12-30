@@ -48,8 +48,9 @@
     var element = this.element();
     var parentElement = this.parentElement();
 
-    if (!parentElement && !element)
+    if (!parentElement && !element) {
       return;
+    }
 
     // add element
     if (parentElement && !element) {
@@ -151,8 +152,9 @@
 
   ModuleWire.HANDLE_WIDTH = 24;
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModuleWire;
-  else
+  } else {
     app.ModuleWire = ModuleWire;
+  }
 })(this.app || (this.app = {}));

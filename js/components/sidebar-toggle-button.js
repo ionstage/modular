@@ -37,8 +37,9 @@
     var type = this.type();
     var cache = this.cache();
 
-    if (type === cache.type)
+    if (type === cache.type) {
       return;
+    }
 
     dom.data(this.element(), 'type', type);
     cache.type = type;
@@ -57,8 +58,9 @@
   SidebarToggleButton.TYPE_COLLAPSE = 'collapse';
   SidebarToggleButton.TYPE_EXPAND = 'expand';
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = SidebarToggleButton;
-  else
+  } else {
     app.SidebarToggleButton = SidebarToggleButton;
+  }
 })(this.app || (this.app = {}));

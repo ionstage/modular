@@ -10,8 +10,9 @@
   };
 
   Wrapper.unwrap = function(key) {
-    if (key === Wrapper.KEY)
+    if (key === Wrapper.KEY) {
       return this;
+    }
   };
 
   Wrapper.KEY = {};
@@ -87,8 +88,9 @@
     circuit.unbind(sourceMember.callee, targetMember.callee);
   };
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = CircuitElement;
-  else
+  } else {
     app.CircuitElement = CircuitElement;
+  }
 })(this.app || (this.app = {}));

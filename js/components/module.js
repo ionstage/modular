@@ -209,8 +209,9 @@
   Module.prototype.bindEventCircuitElement = function() {
     var eventCircuitElement = this.eventCircuitElement();
 
-    if (!eventCircuitElement)
+    if (!eventCircuitElement) {
       return;
+    }
 
     var circuitElement = this.circuitElement();
     eventCircuitElement.getAll().forEach(function(member) {
@@ -221,8 +222,9 @@
   Module.prototype.unbindEventCircuitElement = function() {
     var eventCircuitElement = this.eventCircuitElement();
 
-    if (!eventCircuitElement)
+    if (!eventCircuitElement) {
       return;
+    }
 
     var circuitElement = this.circuitElement();
     eventCircuitElement.getAll().forEach(function(member) {
@@ -269,17 +271,21 @@
   };
 
   Module.prototype.registerMessageListener = function(resolve, reject) {
-    if (this.onmessage)
+    if (this.onmessage) {
       return;
+    }
 
     this.onmessage = (function(event) {
       try {
-        if (event.origin !== dom.origin())
+        if (event.origin !== dom.origin()) {
           throw new Error('Invalid content origin');
-        if (event.data !== this.messageData())
+        }
+        if (event.data !== this.messageData()) {
           throw new Error('Invalid content data');
-        if (!this.circuitElement())
+        }
+        if (!this.circuitElement()) {
           throw new Error('Invalid circuit element');
+        }
         resolve();
       } catch(e) {
         reject(e);
@@ -290,8 +296,9 @@
   };
 
   Module.prototype.unregisterMessageListener = function() {
-    if (!this.onmessage)
+    if (!this.onmessage) {
       return;
+    }
 
     dom.off(this.componentContentWindow(), 'message', this.onmessage);
     this.onmessage = null;
@@ -319,8 +326,9 @@
     };
     return function() {
       var globalApp = dom.global().app;
-      if (globalApp.ModularModule !== ModularModule)
+      if (globalApp.ModularModule !== ModularModule) {
         globalApp.ModularModule = ModularModule;
+      }
     };
   })();
 
@@ -357,8 +365,9 @@
   Module.prototype.showPort = function(name) {
     var port = this.port(name);
 
-    if (!port || port.visible())
+    if (!port || port.visible()) {
       return;
+    }
 
     // add the port to the end of the list
     var portListHeight = this.portListHeight();
@@ -368,8 +377,9 @@
     this.needsUpdatePortSelect(port);
 
     // move right not to position the port-socket outside
-    if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket())
+    if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket()) {
       this.x(ModulePort.SOCKET_WIDTH);
+    }
 
     this.portToggler(new ModuleUnit({ module: this, port: port }));
   };
@@ -377,8 +387,9 @@
   Module.prototype.hidePort = function(name) {
     var port = this.port(name);
 
-    if (!port || !port.visible())
+    if (!port || !port.visible()) {
       return;
+    }
 
     var visiblePorts = this.visiblePorts().sort(function(a, b) {
       return a.top() - b.top();
@@ -398,10 +409,12 @@
 
   Module.prototype.needsUpdatePortSelect = function(port) {
     var cache = this.cache();
-    if (!cache.toggledPorts)
+    if (!cache.toggledPorts) {
       cache.toggledPorts = [];
-    if (cache.toggledPorts.indexOf(port) === -1)
+    }
+    if (cache.toggledPorts.indexOf(port) === -1) {
       cache.toggledPorts.push(port);
+    }
   };
 
   Module.prototype.delete = function() {
@@ -425,8 +438,9 @@
     var element = this.element();
     var parentElement = this.parentElement();
 
-    if (!parentElement && !element)
+    if (!parentElement && !element) {
       return;
+    }
 
     // add element
     if (parentElement && !element) {
@@ -468,8 +482,9 @@
     var title = this.title();
     var cache = this.cache();
 
-    if (title === cache.title)
+    if (title === cache.title) {
       return;
+    }
 
     dom.text(this.titleElement(), title);
     cache.title = title;
@@ -480,8 +495,9 @@
     var y = this.y();
     var cache = this.cache();
 
-    if (x === cache.x && y === cache.y)
+    if (x === cache.x && y === cache.y) {
       return;
+    }
 
     var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
@@ -498,8 +514,9 @@
     var zIndex = this.zIndex();
     var cache = this.cache();
 
-    if (zIndex === cache.zIndex)
+    if (zIndex === cache.zIndex) {
       return;
+    }
 
     dom.css(this.element(), { zIndex: zIndex });
     cache.zIndex = zIndex;
@@ -509,8 +526,9 @@
     var deletable = this.deletable();
     var cache = this.cache();
 
-    if (deletable === cache.deletable)
+    if (deletable === cache.deletable) {
       return;
+    }
 
     dom.toggleClass(this.element(), 'module-delete-disabled', !deletable);
     cache.deletable = deletable;
@@ -520,8 +538,9 @@
     var portListHeight = this.portListHeight();
     var cache = this.cache();
 
-    if (portListHeight === cache.portListHeight)
+    if (portListHeight === cache.portListHeight) {
       return;
+    }
 
     dom.css(this.portListElement(), { height: portListHeight + 'px' });
     cache.portListHeight = portListHeight;
@@ -531,8 +550,9 @@
     var isAllPortsVisible = this.isAllPortsVisible();
     var cache = this.cache();
 
-    if (isAllPortsVisible === cache.isAllPortsVisible)
+    if (isAllPortsVisible === cache.isAllPortsVisible) {
       return;
+    }
 
     dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
     cache.isAllPortsVisible = isAllPortsVisible;
@@ -542,8 +562,9 @@
     var cache = this.cache();
     var toggledPorts = cache.toggledPorts;
 
-    if (!toggledPorts)
+    if (!toggledPorts) {
       return;
+    }
 
     // update select element of toggled port
     toggledPorts.forEach(function(port) {
@@ -578,28 +599,30 @@
   };
 
   Module.prototype.dragType = function(target) {
-    if (target === this.titleElement())
+    if (target === this.titleElement()) {
       return Module.DRAG_TYPE_POSITION;
-    else if (target === this.deleteButtonElement())
+    } else if (target === this.deleteButtonElement()) {
       return Module.DRAG_TYPE_DELETE;
-    else if (dom.hasClass(target, 'module-port-hide-button'))
+    } else if (dom.hasClass(target, 'module-port-hide-button')) {
       return Module.DRAG_TYPE_HIDE_PORT;
-    else if (dom.hasClass(target, 'module-port-label'))
+    } else if (dom.hasClass(target, 'module-port-label')) {
       return Module.DRAG_TYPE_SORT_PORT;
-    else if (dom.hasClass(target, 'module-port-plug'))
+    } else if (dom.hasClass(target, 'module-port-plug')) {
       return Module.DRAG_TYPE_DRAG_PORT_PLAG;
-    else if (dom.hasClass(dom.parent(target), 'module-port-socket'))
+    } else if (dom.hasClass(dom.parent(target), 'module-port-socket')) {
       return Module.DRAG_TYPE_DRAG_PORT_SOCKET;
-    else
+    } else {
       return null;
+    }
   };
 
   Module.prototype.onstart = function(x, y, event) {
     var context = this.dragContext();
     var type = context.type = this.dragType(dom.target(event));
 
-    if (!type)
+    if (!type) {
       return;
+    }
 
     dom.cancel(event);
     Module.DRAG_LISTENERS[type].onstart.call(this, x, y, event, context);
@@ -610,8 +633,9 @@
     var context = this.dragContext();
     var type = context.type;
 
-    if (!type)
+    if (!type) {
       return;
+    }
 
     Module.DRAG_LISTENERS[type].onmove.call(this, dx, dy, event, context);
   };
@@ -620,8 +644,9 @@
     var context = this.dragContext();
     var type = context.type;
 
-    if (!type)
+    if (!type) {
       return;
+    }
 
     Module.DRAG_LISTENERS[type].onend.call(this, dx, dy, event, context);
     this.dragEnder();
@@ -668,8 +693,9 @@
     },
     onend: function(dx, dy, event, context) {
       this.isDeleting(false);
-      if (dom.target(event) === context.target)
+      if (dom.target(event) === context.target) {
         this.delete();
+      }
     },
   };
 
@@ -680,8 +706,9 @@
     },
     onmove: function() { /* do nothing */ },
     onend: function(dx, dy, event, context) {
-      if (dom.target(event) === context.target)
+      if (dom.target(event) === context.target) {
         this.hidePort(context.port.name());
+      }
     },
   };
 
@@ -700,10 +727,11 @@
       // move the target port within the port list
       targetPort.top(helper.clamp(context.top + dy, 0, this.portListHeight() - targetPort.height()));
 
-      if (targetPort.top() - context.placeholderTop > 0)
+      if (targetPort.top() - context.placeholderTop > 0) {
         Module.DRAG_TYPE_SORT_PORT_LISTENER.onmovedown.call(this, dx, dy, event, context);
-      else
+      } else {
         Module.DRAG_TYPE_SORT_PORT_LISTENER.onmoveup.call(this, dx, dy, event, context);
+      }
     },
     onmovedown: function(dx, dy, event, context) {
       var targetPort = context.port;
@@ -806,8 +834,9 @@
     '</div>'
   ].join('');
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = Module;
-  else
+  } else {
     app.Module = Module;
+  }
 })(this.app || (this.app = {}));

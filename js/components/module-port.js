@@ -73,8 +73,9 @@
     var visible = this.visible();
     var cache = this.cache();
 
-    if (visible === cache.visible)
+    if (visible === cache.visible) {
       return;
+    }
 
     if (visible) {
       dom.remove(this.optionElement());
@@ -91,8 +92,9 @@
     var top = this.top();
     var cache = this.cache();
 
-    if (top === cache.top)
+    if (top === cache.top) {
       return;
+    }
 
     var translate = 'translateY(' + top + 'px)';
 
@@ -131,8 +133,9 @@
   ModulePort.SOCKET_OFFSET_X = -25;
   ModulePort.SOCKET_WIDTH = 50;
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModulePort;
-  else
+  } else {
     app.ModulePort = ModulePort;
+  }
 })(this.app || (this.app = {}));

@@ -31,8 +31,9 @@
   };
 
   LoadButton.prototype.ontap = function() {
-    if (dom.supportsTouch())
+    if (dom.supportsTouch()) {
       this.inputElement().click();
+    }
   };
 
   var SaveButton = helper.inherits(function(props) {
@@ -98,8 +99,9 @@
     }
   };
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = ContentHeader;
-  else
+  } else {
     app.ContentHeader = ContentHeader;
+  }
 })(this.app || (this.app = {}));

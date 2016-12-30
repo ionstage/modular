@@ -9,8 +9,9 @@
       s.push(Math.random().toString(36).slice(-7));
     }
     var rem = len % 7;
-    if (rem)
+    if (rem) {
       s.push(Math.random().toString(36).slice(-rem));
+    }
     return s.join('');
   };
 
@@ -59,11 +60,13 @@
 
   helper.pick = function(obj, keys) {
     var ret = {};
-    if (!obj)
+    if (!obj) {
       return ret;
+    }
     keys.forEach(function(key) {
-      if (key in obj)
+      if (key in obj) {
         ret[key] = obj[key];
+      }
     });
     return ret;
   };
@@ -77,10 +80,11 @@
 
   helper.sortBy = function(array, key) {
     return array.slice().sort(function(a, b) {
-      if (a[key] > b[key])
+      if (a[key] > b[key]) {
         return 1;
-      else if (a[key] < b[key])
+      } else if (a[key] < b[key]) {
         return -1;
+      }
       return 0;
     });
   };
@@ -92,8 +96,9 @@
   helper.moveToBack = function(array, item) {
     var index = array.indexOf(item);
 
-    if (index === -1)
+    if (index === -1) {
       return;
+    }
 
     array.splice(index, 1);
     array.push(item);
@@ -101,8 +106,9 @@
 
   helper.findIndex = function(array, callback) {
     for (var i = 0, len = array.length; i < len; i++) {
-      if (callback(array[i], i, array))
+      if (callback(array[i], i, array)) {
         return i;
+      }
     }
     return -1;
   };
@@ -113,8 +119,9 @@
     };
 
     Set.prototype.add = function(item) {
-      if (!this.has(item))
+      if (!this.has(item)) {
         this.data.push(item);
+      }
     };
 
     Set.prototype.delete = function(item) {
@@ -192,8 +199,9 @@
     return Map;
   })();
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = helper;
-  else
+  } else {
     app.helper = helper;
+  }
 })(this.app || (this.app = {}));

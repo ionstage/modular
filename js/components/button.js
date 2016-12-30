@@ -29,8 +29,9 @@
       }.bind(this),
       onend: function(dx, dy, event) {
         this.isActive(false);
-        if (dom.target(event) === target)
+        if (dom.target(event) === target) {
           this.ontap();
+        }
       }.bind(this),
     });
   };
@@ -51,8 +52,9 @@
 
   Button.prototype.ontap = function() {};
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = Button;
-  else
+  } else {
     app.Button = Button;
+  }
 })(this.app || (this.app = {}));

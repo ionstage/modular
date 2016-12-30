@@ -19,8 +19,9 @@
     return dom.child(this.element(), 1);
   };
 
-  if (typeof module !== 'undefined' && module.exports)
+  if (typeof module !== 'undefined' && module.exports) {
     module.exports = Sidebar;
-  else
+  } else {
     app.Sidebar = Sidebar;
+  }
 })(this.app || (this.app = {}));
