@@ -98,7 +98,7 @@
 
     dom.css(this.listItemElement(), {
       transform: translate,
-      webkitTransform: translate
+      webkitTransform: translate,
     });
 
     cache.top = top;

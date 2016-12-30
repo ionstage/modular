@@ -162,7 +162,7 @@
   ModuleContainer.prototype.lockedWires = function(type, unit) {
     return this.lockRelationCollection().filter({
       type: type,
-      unit: unit
+      unit: unit,
     }).map(function(relation) {
       return relation.wire();
     });
@@ -216,7 +216,7 @@
   ModuleContainer.prototype.toData = function() {
     return {
       modules: this.toModulesData(),
-      connections: this.toConnectionsData(this.modules())
+      connections: this.toConnectionsData(this.modules()),
     };
   };
 
@@ -224,7 +224,7 @@
     return this.modules().map(function(module) {
       return {
         props: module.props(),
-        visiblePortNames: module.visiblePortNames()
+        visiblePortNames: module.visiblePortNames(),
       };
     });
   };
@@ -264,7 +264,7 @@
       var target = connectionData.target;
       var unitMap = {
         source: ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
-        target: ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName)
+        target: ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName),
       };
       if (!this.canConnect(unitMap.source, unitMap.target))
         throw new Error('Invalid connection');
@@ -296,7 +296,7 @@
       dragPortPlugEnder: this.dragPortPlugEnder,
       dragPortSocketStarter: this.dragPortSocketStarter,
       dragPortSocketMover: this.dragPortSocketMover,
-      dragPortSocketEnder: this.dragPortSocketEnder
+      dragPortSocketEnder: this.dragPortSocketEnder,
     }));
   };
 
@@ -311,7 +311,7 @@
       handleType: sourceUnit.portType(),
       handleVisible: false,
       parentElement: this.wireContainerElement(),
-      parentHandleElement: this.wireHandleContainerElement()
+      parentHandleElement: this.wireHandleContainerElement(),
     });
   };
 
@@ -325,7 +325,7 @@
       handleType: sourceUnit.portType(),
       handleVisible: true,
       parentElement: this.wireContainerElement(),
-      parentHandleElement: this.wireHandleContainerElement()
+      parentHandleElement: this.wireHandleContainerElement(),
     });
   };
 
@@ -347,7 +347,7 @@
     this.lockRelationCollection().add({
       type: type,
       unit: unit,
-      wire: wire
+      wire: wire,
     });
   };
 
@@ -355,21 +355,21 @@
     this.lockRelationCollection().remove({
       type: type,
       unit: unit,
-      wire: wire
+      wire: wire,
     });
   };
 
   ModuleContainer.prototype.bind = function(sourceUnit, targetUnit) {
     this.bindingCollection().add({
       sourceUnit: sourceUnit,
-      targetUnit: targetUnit
+      targetUnit: targetUnit,
     });
   };
 
   ModuleContainer.prototype.unbind = function(sourceUnit, targetUnit) {
     this.bindingCollection().remove({
       sourceUnit: sourceUnit,
-      targetUnit: targetUnit
+      targetUnit: targetUnit,
     });
   };
 
@@ -484,7 +484,7 @@
   ModuleContainer.prototype.updateDragHighlight = function(unit) {
     var draggingWires = this.draggingWires();
     var highlighted = this.lockRelationCollection().filter({
-      unit: unit
+      unit: unit,
     }).some(function(relation) {
       return (draggingWires.indexOf(relation.wire()) !== -1);
     });
@@ -532,7 +532,7 @@
 
     dom.css(this.retainerElement(), {
       transform: translate,
-      webkitTransform: translate
+      webkitTransform: translate,
     });
 
     cache.retainerX = retainerX;

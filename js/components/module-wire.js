@@ -101,11 +101,11 @@
 
     dom.css(this.element(), {
       transform: translate,
-      webkitTransform: translate
+      webkitTransform: translate,
     });
 
     dom.attr(this.pathElement(), {
-      d: ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' ')
+      d: ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' '),
     });
 
     cache.sourceX = sourceX;
@@ -142,7 +142,7 @@
       var translate = 'translate(' + x + 'px, ' + y + 'px)';
       dom.css(this.handleElement(), {
         transform: translate,
-        webkitTransform: translate
+        webkitTransform: translate,
       });
       cache.x = x;
       cache.y = y;

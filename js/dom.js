@@ -237,7 +237,7 @@
 
     return {
       x: event.pageX - (offset ? offset.x : 0),
-      y: event.pageY - (offset ? offset.y : 0)
+      y: event.pageY - (offset ? offset.y : 0),
     };
   };
 
@@ -247,7 +247,7 @@
 
     return {
       x: event.clientX - (offset ? offset.x : 0),
-      y: event.clientY - (offset ? offset.y : 0)
+      y: event.clientY - (offset ? offset.y : 0),
     };
   };
 
@@ -294,7 +294,7 @@
         var rect = dom.rect(element);
         var p = dom.clientPoint(event, {
           x: rect.left - dom.scrollLeft(element),
-          y: rect.top - dom.scrollTop(element)
+          y: rect.top - dom.scrollTop(element),
         });
         onstart(p.x, p.y, event);
       }

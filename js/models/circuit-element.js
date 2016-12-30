@@ -24,7 +24,7 @@
   CircuitElementMember.prototype.defaults = function() {
     return {
       socketDisabled: false,
-      plugDisabled: false
+      plugDisabled: false,
     };
   };
 
@@ -71,7 +71,7 @@
   CircuitElement.prototype.wrapper = function() {
     return {
       get: CircuitElement.prototype.get.bind(this),
-      getAll: CircuitElement.prototype.getAll.bind(this)
+      getAll: CircuitElement.prototype.getAll.bind(this),
     };
   };
 

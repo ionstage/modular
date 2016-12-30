@@ -54,17 +54,17 @@
     this.sidebarToggleButton = this.prop(new SidebarToggleButton({
       element: this.sidebarToggleButtonElement(),
       collapser: props.sidebarCollapser,
-      expander: props.sidebarExpander
+      expander: props.sidebarExpander,
     }));
 
     this.loadButton = this.prop(new LoadButton({
       element: this.loadButtonElement(),
-      loader: props.fileLoader
+      loader: props.fileLoader,
     }));
 
     this.saveButton = this.prop(new SaveButton({
       element: this.saveButtonElement(),
-      saver: props.fileSaver
+      saver: props.fileSaver,
     }));
 
     this.sidebarToggleButton().registerTapListener();

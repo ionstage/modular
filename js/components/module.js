@@ -100,7 +100,7 @@
     var rect = dom.rect(this.element());
     return {
       x: this.x() + rect.width + (this.hasVisiblePortPlug() ? ModulePort.PLUG_WIDTH : 0),
-      y: this.y() + rect.height
+      y: this.y() + rect.height,
     };
   };
 
@@ -119,14 +119,14 @@
   Module.prototype.plugPosition = function(port) {
     return {
       x: this.x() + ModulePort.PLUG_OFFSET_X,
-      y: this.y() + this.portListTop() + port.middle()
+      y: this.y() + this.portListTop() + port.middle(),
     };
   };
 
   Module.prototype.socketPosition = function(port) {
     return {
       x: this.x() + ModulePort.SOCKET_OFFSET_X,
-      y: this.y() + this.portListTop() + port.middle()
+      y: this.y() + this.portListTop() + port.middle(),
     };
   };
 
@@ -173,7 +173,7 @@
       title: this.title(),
       name: this.name(),
       x: this.x(),
-      y: this.y()
+      y: this.y(),
     };
   };
 
@@ -190,7 +190,7 @@
       var props = member.props();
       return new ModulePort(helper.extend(helper.clone(props), {
         parentListElement: this.portListElement(),
-        parentOptGroupElement: this.portOptGroupElement(props.type)
+        parentOptGroupElement: this.portOptGroupElement(props.type),
       }));
     }.bind(this));
   };
@@ -201,7 +201,7 @@
         label: port.label(),
         name: port.name(),
         type: port.type(),
-        arg: this.portEventer.bind(null, new ModuleUnit({ module: this, port: port }))
+        arg: this.portEventer.bind(null, new ModuleUnit({ module: this, port: port })),
       };
     }.bind(this)));
   };
@@ -243,7 +243,7 @@
       element: this.element(),
       onstart: Module.prototype.onstart.bind(this),
       onmove: Module.prototype.onmove.bind(this),
-      onend: Module.prototype.onend.bind(this)
+      onend: Module.prototype.onend.bind(this),
     }));
   };
 
@@ -328,7 +328,7 @@
     this.isLoading(true);
     return dom.ajax({
       type: 'GET',
-      url: this.url()
+      url: this.url(),
     }).then(function(text) {
       this.exportModularModule();
       this.setComponentContent(text, this.messageData());
@@ -487,7 +487,7 @@
 
     dom.css(this.element(), {
       transform: translate,
-      webkitTransform: translate
+      webkitTransform: translate,
     });
 
     cache.x = x;
@@ -655,7 +655,7 @@
     },
     onend: function(dx, dy, event, context) {
       this.isMoving(false);
-    }
+    },
   };
 
   Module.DRAG_TYPE_DELETE_LISTENER = {
@@ -670,7 +670,7 @@
       this.isDeleting(false);
       if (dom.target(event) === context.target)
         this.delete();
-    }
+    },
   };
 
   Module.DRAG_TYPE_HIDE_PORT_LISTENER = {
@@ -682,7 +682,7 @@
     onend: function(dx, dy, event, context) {
       if (dom.target(event) === context.target)
         this.hidePort(context.port.name());
-    }
+    },
   };
 
   Module.DRAG_TYPE_SORT_PORT_LISTENER = {
@@ -744,7 +744,7 @@
       var port = context.port;
       port.top(context.placeholderTop);
       port.isMoving(false);
-    }
+    },
   };
 
   Module.DRAG_TYPE_DRAG_PORT_PLAG_LISTENER = {
@@ -759,7 +759,7 @@
     },
     onend: function(dx, dy, event, context) {
       this.dragPortPlugEnder(context.unit, context.context);
-    }
+    },
   };
 
   Module.DRAG_TYPE_DRAG_PORT_SOCKET_LISTENER = {
@@ -774,7 +774,7 @@
     },
     onend: function(dx, dy, event, context) {
       this.dragPortSocketEnder(context.unit, context.context);
-    }
+    },
   };
 
   Module.DRAG_LISTENERS = (function() {

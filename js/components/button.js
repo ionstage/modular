@@ -31,7 +31,7 @@
         this.isActive(false);
         if (dom.target(event) === target)
           this.ontap();
-      }.bind(this)
+      }.bind(this),
     });
   };
 

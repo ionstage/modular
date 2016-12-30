@@ -25,8 +25,8 @@
         value: ctor,
         enumerable: false,
         writable: true,
-        configurable: true
-      }
+        configurable: true,
+      },
     });
     return ctor;
   };
