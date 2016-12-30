@@ -15,6 +15,10 @@
     return dom.child(this.element(), 0);
   };
 
+  Content.prototype.moduleContainerElement = function() {
+    return dom.child(this.element(), 1);
+  };
+
   if (typeof module !== 'undefined' && module.exports)
     module.exports = Content;
   else
