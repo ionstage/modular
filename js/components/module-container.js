@@ -5,10 +5,10 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
-  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
-  var Module = app.Module || require('./module.js');
-  var ModuleWire = app.ModuleWire || require('./module-wire.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
+  var Module = app.Module || require('./module.js');
+  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
+  var ModuleWire = app.ModuleWire || require('./module-wire.js');
 
   var LockRelationCollection = function() {
     this.data = new helper.Map();

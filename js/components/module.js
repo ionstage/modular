@@ -5,8 +5,8 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
-  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
+  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
 
   var Module = helper.inherits(function(props) {
     Module.super_.call(this);
