@@ -34,6 +34,11 @@
     return dom.child(this.element(), 1);
   };
 
+  Content.prototype.disabled = function(value) {
+    this.contentHeader.disabled(value);
+    this.moduleContainer.disabled(value);
+  };
+
   Content.prototype.fileLoader = function(file) {
     dom.load(file).then(function(text) {
       var data = JSON.parse(text);
