@@ -38,31 +38,25 @@
 
   dom.child = function(el, index) {
     var len = arguments.length;
-
     if (len === 2) {
       return el.children[index];
     }
-
     for (var i = 1; i < len; i++) {
       index = arguments[i];
       el = el.children[index];
     }
-
     return el;
   };
 
   dom.childNode = function(el, index) {
     var len = arguments.length;
-
     if (len === 2) {
       return el.childNodes[index];
     }
-
     for (var i = 1; i < len; i++) {
       index = arguments[i];
       el = el.childNodes[index];
     }
-
     return el;
   };
 
@@ -86,7 +80,6 @@
 
   dom.css = function(el, props) {
     var style = el.style;
-
     for (var key in props) {
       style[key] = props[key];
     }
@@ -107,9 +100,9 @@
     }
     if (force) {
       el.classList.add(className);
-    }
-    else
+    } else {
       el.classList.remove(className);
+    }
   };
 
   dom.hasClass = function(el, className) {
@@ -120,14 +113,12 @@
     if (typeof value === 'undefined') {
       return el.dataset[key];
     }
-
     if (value === null) {
       if (key in el.dataset) {
         delete el.dataset[key];
       }
       return;
     }
-
     el.dataset[key] = value;
   };
 
@@ -147,7 +138,6 @@
     if (typeof s === 'undefined') {
       return el.value;
     }
-
     el.value = s;
   };
 
@@ -217,7 +207,6 @@
       event = event.changedTouches[0];
       return document.elementFromPoint(event.clientX, event.clientY);
     }
-
     return event.target;
   };
 
@@ -227,7 +216,6 @@
 
   dom.eventType = function(name) {
     var supportsTouch = dom.supportsTouch();
-
     switch (name) {
     case 'start':
       return (supportsTouch ? 'touchstart' : 'mousedown');
@@ -242,7 +230,6 @@
     if (dom.supportsTouch()) {
       event = event.changedTouches[0];
     }
-
     return {
       x: event.pageX - (offset ? offset.x : 0),
       y: event.pageY - (offset ? offset.y : 0),
@@ -253,7 +240,6 @@
     if (dom.supportsTouch()) {
       event = event.changedTouches[0];
     }
-
     return {
       x: event.clientX - (offset ? offset.x : 0),
       y: event.clientY - (offset ? offset.y : 0),
@@ -264,7 +250,6 @@
     if (dom.supportsTouch()) {
       return event.changedTouches[0].identifier;
     }
-
     return null;
   };
 
