@@ -40,13 +40,16 @@
   };
 
   Content.prototype.fileLoader = function(file) {
+    this.disabled(true);
     dom.load(file).then(function(text) {
       var data = JSON.parse(text);
       this.moduleContainer.clear();
       this.moduleContainer.load(data);
     }.bind(this)).catch(function(e) {
       alert(e);
-    });
+    }).then(function() {
+      this.disabled(false);
+    }.bind(this));
   };
 
   Content.prototype.fileSaver = function() {
