@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Component = app.Component || require('./component.js');
 
   var ModuleWire = helper.inherits(function(props) {
-    ModuleWire.super_.call(this);
+    ModuleWire.super_.call(this, props);
 
     this.sourceX = this.prop(props.sourceX);
     this.sourceY = this.prop(props.sourceY);
@@ -15,12 +15,10 @@
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(props.handleVisible);
     this.highlighted = this.prop(false);
-    this.element = this.prop(null);
     this.parentElement = this.prop(props.parentElement);
     this.handleElement = this.prop(null);
     this.parentHandleElement = this.prop(props.parentHandleElement);
-    this.cache = this.prop({});
-  }, jCore.Component);
+  }, Component);
 
   ModuleWire.prototype.pathElement = function() {
     // use 'dom.childNode' method for SVGElement

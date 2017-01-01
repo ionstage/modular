@@ -1,15 +1,15 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
+  var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
 
   var Module = helper.inherits(function(props) {
-    Module.super_.call(this);
+    Module.super_.call(this, props);
 
     this.title = this.prop(props.title);
     this.name = this.prop(props.name);
@@ -26,9 +26,7 @@
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
-    this.element = this.prop(null);
     this.parentElement = this.prop(props.parentElement);
-    this.cache = this.prop({});
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
 
@@ -48,7 +46,7 @@
     this.dragPortSocketStarter = props.dragPortSocketStarter;
     this.dragPortSocketMover = props.dragPortSocketMover;
     this.dragPortSocketEnder = props.dragPortSocketEnder;
-  }, jCore.Component);
+  }, Component);
 
   Module.prototype.headerElement = function() {
     return dom.child(this.element(), 0);
@@ -587,15 +585,6 @@
     this.redrawState('isError', 'module-error');
     this.redrawState('isMoving', 'module-moving');
     this.redrawState('isDeleting', 'module-deleting');
-  };
-
-  Module.prototype.redrawState = function(key, className) {
-    var cache = this.cache();
-    var value = this[key]();
-    if (value !== cache[key]) {
-      dom.toggleClass(this.element(), className, value);
-      cache[key] = value;
-    }
   };
 
   Module.prototype.dragType = function(target) {

@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Component = app.Component || require('./component.js');
 
   var ModulePort = helper.inherits(function(props) {
-    ModulePort.super_.call(this);
+    ModulePort.super_.call(this, props);
 
     this.label = this.prop(props.label);
     this.name = this.prop(props.name);
@@ -25,8 +25,10 @@
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
-    this.cache = this.prop({});
-  }, jCore.Component);
+
+    // update list-item in redrawState() method
+    this.element = this.listItemElement
+  }, Component);
 
   ModulePort.prototype.hideDisabled = function() {
     // don't hide label-highlighted port
@@ -113,15 +115,6 @@
     this.redrawState('socketHighlighted', 'module-port-socket-highlight');
     this.redrawState('isMoving', 'module-port-moving');
     this.redrawState('hideDisabled', 'module-port-hide-disabled');
-  };
-
-  ModulePort.prototype.redrawState = function(key, className) {
-    var cache = this.cache();
-    var value = this[key]();
-    if (value !== cache[key]) {
-      dom.toggleClass(this.listItemElement(), className, value);
-      cache[key] = value;
-    }
   };
 
   ModulePort.TYPE_PROP = 'prop';

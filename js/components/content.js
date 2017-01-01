@@ -2,16 +2,14 @@
   'use strict';
 
   var FileSaver = require('file-saver');
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Component = app.Component || require('./component.js');
   var ContentHeader = app.ContentHeader || require('./content-header.js');
   var ModuleContainer = app.ModuleContainer || require('./module-container.js');
 
   var Content = helper.inherits(function(props) {
-    Content.super_.call(this);
-
-    this.element = this.prop(props.element);
+    Content.super_.call(this, props);
 
     this.contentHeader = new ContentHeader({
       element: this.contentHeaderElement(),
@@ -24,7 +22,7 @@
     this.moduleContainer = new ModuleContainer({
       element: this.moduleContainerElement(),
     });
-  }, jCore.Component);
+  }, Component);
 
   Content.prototype.contentHeaderElement = function() {
     return dom.child(this.element(), 0);

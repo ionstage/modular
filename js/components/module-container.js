@@ -1,10 +1,10 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
+  var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
@@ -114,14 +114,12 @@
   };
 
   var ModuleContainer = helper.inherits(function(props) {
-    ModuleContainer.super_.call(this);
+    ModuleContainer.super_.call(this, props);
 
     this.modules = this.prop([]);
     this.lockRelationCollection = this.prop(new LockRelationCollection());
     this.bindingCollection = this.prop(new BindingCollection());
     this.disabled = this.prop(false);
-    this.element = this.prop(props.element);
-    this.cache = this.prop({});
     this.dragCount = this.prop(0);
     this.draggingWires = this.prop([]);
 
@@ -137,7 +135,7 @@
     this.dragPortSocketStarter = ModuleContainer.prototype.dragPortSocketStarter.bind(this);
     this.dragPortSocketMover = ModuleContainer.prototype.dragPortSocketMover.bind(this);
     this.dragPortSocketEnder = ModuleContainer.prototype.dragPortSocketEnder.bind(this);
-  }, jCore.Component);
+  }, Component);
 
   ModuleContainer.prototype.retainerElement = function() {
     return dom.child(this.element(), 0);
@@ -512,15 +510,6 @@
     this.redrawDragCount();
     this.redrawRetainer();
     this.redrawWireHandleContainer();
-  };
-
-  ModuleContainer.prototype.redrawState = function(key, className) {
-    var cache = this.cache();
-    var value = this[key]();
-    if (value !== cache[key]) {
-      dom.toggleClass(this.element(), className, value);
-      cache[key] = value;
-    }
   };
 
   ModuleContainer.prototype.redrawDragCount = function() {

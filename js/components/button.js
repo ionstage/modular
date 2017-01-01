@@ -1,18 +1,16 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Component = app.Component || require('./component.js');
 
   var Button = helper.inherits(function(props) {
-    Button.super_.call(this);
+    Button.super_.call(this, props);
 
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
-    this.element = this.prop(props.element);
-    this.cache = this.prop({});
-  }, jCore.Component);
+  }, Component);
 
   Button.prototype.registerTapListener = function() {
     var target;
@@ -39,15 +37,6 @@
   Button.prototype.redraw = function() {
     this.redrawState('isActive', 'active');
     this.redrawState('disabled', 'disabled');
-  };
-
-  Button.prototype.redrawState = function(key, className) {
-    var cache = this.cache();
-    var value = this[key]();
-    if (value !== cache[key]) {
-      dom.toggleClass(this.element(), className, value);
-      cache[key] = value;
-    }
   };
 
   Button.prototype.ontap = function() {};

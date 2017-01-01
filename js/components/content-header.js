@@ -1,10 +1,10 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
+  var Component = app.Component || require('./component.js');
   var SidebarToggleButton = app.SidebarToggleButton || require('./sidebar-toggle-button.js');
 
   var LoadButton = helper.inherits(function(props) {
@@ -46,11 +46,9 @@
   };
 
   var ContentHeader = helper.inherits(function(props) {
-    ContentHeader.super_.call(this);
+    ContentHeader.super_.call(this, props);
 
     this.disabled = this.prop(false);
-    this.element = this.prop(props.element);
-    this.cache = this.prop({});
 
     this.sidebarToggleButton = this.prop(new SidebarToggleButton({
       element: this.sidebarToggleButtonElement(),
@@ -71,7 +69,7 @@
     this.sidebarToggleButton().registerTapListener();
     this.loadButton().registerListeners();
     this.saveButton().registerTapListener();
-  }, jCore.Component);
+  }, Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {
     return dom.child(this.element(), 0);
@@ -88,15 +86,6 @@
   ContentHeader.prototype.redraw = function() {
     this.sidebarToggleButton().redraw();
     this.redrawState('disabled', 'disabled');
-  };
-
-  ContentHeader.prototype.redrawState = function(key, className) {
-    var cache = this.cache();
-    var value = this[key]();
-    if (value !== cache[key]) {
-      dom.toggleClass(this.element(), className, value);
-      cache[key] = value;
-    }
   };
 
   if (typeof module !== 'undefined' && module.exports) {
