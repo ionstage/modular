@@ -27,7 +27,7 @@
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
 
     // update list-item in redrawState() method
-    this.element = this.listItemElement
+    this.element = this.listItemElement;
   }, Component);
 
   ModulePort.prototype.hideDisabled = function() {
