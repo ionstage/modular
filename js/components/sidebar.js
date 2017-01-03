@@ -7,6 +7,9 @@
 
   var SidebarModule = helper.inherits(function(props) {
     SidebarModule.super_.call(this, props);
+
+    this.title = this.prop(props.title);
+    this.content = this.prop(props.content);
   }, Component);
 
   var Sidebar = helper.inherits(function(props) {
