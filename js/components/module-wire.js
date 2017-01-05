@@ -28,11 +28,7 @@
   ModuleWire.prototype.renderWire = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module-wire');
-    dom.html(element, [
-      '<svg class="module-wire-path-container">',
-        '<path class="module-wire-path"></path>',
-      '</svg>'
-    ].join(''));
+    dom.html(element, ModuleWire.TEMPLATE_HTML);
     return element;
   };
 
@@ -147,6 +143,12 @@
       cache.y = y;
     }
   };
+
+  ModuleWire.TEMPLATE_HTML = [
+    '<svg class="module-wire-path-container">',
+      '<path class="module-wire-path"></path>',
+    '</svg>',
+  ].join('');
 
   ModuleWire.HANDLE_WIDTH = 24;
 
