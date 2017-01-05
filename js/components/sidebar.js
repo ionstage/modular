@@ -13,6 +13,13 @@
     this.parentElement = this.prop(null);
   }, Component);
 
+  SidebarModule.prototype.render = function() {
+    var element = dom.el('<div>');
+    dom.addClass(element, 'module');
+    dom.html(element, SidebarModule.TEMPLATE_HTML);
+    return element;
+  };
+
   SidebarModule.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
@@ -23,9 +30,8 @@
 
     // add element
     if (parentElement && !element) {
-      element = dom.el('<div>');
-      this.element(element);
-      dom.append(parentElement, element);
+      this.element(this.render());
+      dom.append(parentElement, this.element());
       return;
     }
 
@@ -36,6 +42,11 @@
       return;
     }
   };
+
+  SidebarModule.TEMPLATE_HTML = [
+    '<div class="module-header"></div>',
+    '<div class="module-content"></div>',
+  ].join('');
 
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
