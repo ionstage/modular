@@ -162,7 +162,7 @@
       this.name().split('/').map(function(s) {
         return encodeURIComponent(s);
       }).join('/'),
-      '.html'
+      '.html',
     ].join('');
   };
 
@@ -342,7 +342,7 @@
         new Promise(this.registerMessageListener.bind(this)),
         new Promise(function(resolve, reject) {
           setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
-        })
+        }),
       ]);
     }.bind(this)).then(function() {
       this.unregisterMessageListener();
@@ -820,7 +820,7 @@
         '<optgroup label="Property"></optgroup>',
         '<optgroup label="Event"></optgroup>',
       '</select>',
-    '</div>'
+    '</div>',
   ].join('');
 
   if (typeof module !== 'undefined' && module.exports) {
