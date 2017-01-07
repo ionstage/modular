@@ -13,6 +13,10 @@
     this.parentElement = this.prop(null);
   }, Component);
 
+  SidebarModule.prototype.headerElement = function() {
+    return dom.child(this.element(), 0);
+  };
+
   SidebarModule.prototype.render = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module');
