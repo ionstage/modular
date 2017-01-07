@@ -39,6 +39,7 @@
     if (!parentElement && element) {
       dom.remove(element);
       this.element(null);
+      this.cache({});
       return;
     }
   };
