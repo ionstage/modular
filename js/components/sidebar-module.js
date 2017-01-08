@@ -54,6 +54,7 @@
 
     // update element
     this.redrawTitle();
+    this.redrawContent();
   };
 
   SidebarModule.prototype.redrawTitle = function() {
@@ -66,6 +67,18 @@
 
     dom.text(this.headerElement(), title);
     cache.title = title;
+  };
+
+  SidebarModule.prototype.redrawContent = function() {
+    var content = this.content();
+    var cache = this.cache();
+
+    if (content === cache.content) {
+      return;
+    }
+
+    dom.text(this.contentElement(), content);
+    cache.content = content;
   };
 
   SidebarModule.TEMPLATE_HTML = [
