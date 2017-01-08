@@ -39,6 +39,7 @@
     // add element
     if (parentElement && !element) {
       this.element(this.render());
+      this.redraw();
       dom.append(parentElement, this.element());
       return;
     }
@@ -50,6 +51,21 @@
       this.cache({});
       return;
     }
+
+    // update element
+    this.redrawTitle();
+  };
+
+  SidebarModule.prototype.redrawTitle = function() {
+    var title = this.title();
+    var cache = this.cache();
+
+    if (title === cache.title) {
+      return;
+    }
+
+    dom.text(this.headerElement(), title);
+    cache.title = title;
   };
 
   SidebarModule.TEMPLATE_HTML = [
