@@ -186,6 +186,10 @@
     });
   };
 
+  dom.clone = function(el) {
+    return el.cloneNode(true);
+  };
+
   dom.animate = function(callback) {
     return window.requestAnimationFrame(callback);
   };

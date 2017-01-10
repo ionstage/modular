@@ -21,6 +21,12 @@
     return dom.child(this.element(), 1);
   };
 
+  SidebarModule.prototype.makeCloneElement = function() {
+    var element = dom.clone(this.element());
+    dom.addClass(element, 'clone');
+    return element;
+  };
+
   SidebarModule.prototype.render = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module');
