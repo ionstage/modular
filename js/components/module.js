@@ -497,13 +497,7 @@
       return;
     }
 
-    var translate = 'translate(' + x + 'px, ' + y + 'px)';
-
-    dom.css(this.element(), {
-      transform: translate,
-      webkitTransform: translate,
-    });
-
+    dom.translate(this.element(), x, y);
     cache.x = x;
     cache.y = y;
   };

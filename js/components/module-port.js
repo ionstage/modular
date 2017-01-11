@@ -98,13 +98,7 @@
       return;
     }
 
-    var translate = 'translateY(' + top + 'px)';
-
-    dom.css(this.listItemElement(), {
-      transform: translate,
-      webkitTransform: translate,
-    });
-
+    dom.translateY(this.listItemElement(), top);
     cache.top = top;
   };
 

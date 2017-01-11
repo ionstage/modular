@@ -92,12 +92,8 @@
 
     var x = Math.min(sourceX, targetX);
     var y = Math.min(sourceY, targetY);
-    var translate = 'translate(' + x + 'px, ' + y + 'px)';
 
-    dom.css(this.element(), {
-      transform: translate,
-      webkitTransform: translate,
-    });
+    dom.translate(this.element(), x, y);
 
     dom.attr(this.pathElement(), {
       d: ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' '),
@@ -134,11 +130,7 @@
     var y = cache.targetY - ModuleWire.HANDLE_WIDTH / 2;
 
     if (x !== cache.x || y !== cache.y) {
-      var translate = 'translate(' + x + 'px, ' + y + 'px)';
-      dom.css(this.handleElement(), {
-        transform: translate,
-        webkitTransform: translate,
-      });
+      dom.translate(this.handleElement(), x, y);
       cache.x = x;
       cache.y = y;
     }

@@ -190,6 +190,22 @@
     return el.cloneNode(true);
   };
 
+  dom.translate = function(el, x, y) {
+    var translate = 'translate(' + x + 'px, ' + y + 'px)';
+    dom.css(el, {
+      transform: translate,
+      webkitTransform: translate,
+    });
+  };
+
+  dom.translateY = function(el, y) {
+    var translate = 'translateY(' + y + 'px)';
+    dom.css(el, {
+      transform: translate,
+      webkitTransform: translate,
+    });
+  };
+
   dom.animate = function(callback) {
     return window.requestAnimationFrame(callback);
   };

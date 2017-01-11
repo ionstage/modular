@@ -535,13 +535,7 @@
       return;
     }
 
-    var translate = 'translate(' + retainerX + 'px, ' + retainerY + 'px)';
-
-    dom.css(this.retainerElement(), {
-      transform: translate,
-      webkitTransform: translate,
-    });
-
+    dom.translate(this.retainerElement(), retainerX, retainerY);
     cache.retainerX = retainerX;
     cache.retainerY = retainerY;
   };
