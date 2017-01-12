@@ -11,6 +11,7 @@
     this.title = this.prop(props.title);
     this.content = this.prop(props.content);
     this.parentElement = this.prop(null);
+    this.draggable = this.prop(null);
   }, Component);
 
   SidebarModule.prototype.headerElement = function() {
@@ -19,6 +20,20 @@
 
   SidebarModule.prototype.contentElement = function() {
     return dom.child(this.element(), 1);
+  };
+
+  SidebarModule.prototype.registerDragListener = function() {
+    this.draggable(new dom.Draggable({
+      element: this.element(),
+      onstart: SidebarModule.prototype.onstart.bind(this),
+      onmove: SidebarModule.prototype.onmove.bind(this),
+      onend: SidebarModule.prototype.onend.bind(this),
+    }));
+  };
+
+  SidebarModule.prototype.unregisterDragListener = function() {
+    this.draggable().destroy();
+    this.draggable(null);
   };
 
   SidebarModule.prototype.makeCloneElement = function() {
@@ -45,6 +60,7 @@
     // add element
     if (parentElement && !element) {
       this.element(this.render());
+      this.registerDragListener();
       this.redraw();
       dom.append(parentElement, this.element());
       return;
@@ -52,6 +68,7 @@
 
     // remove element
     if (!parentElement && element) {
+      this.unregisterDragListener();
       dom.remove(element);
       this.element(null);
       this.cache({});
@@ -85,6 +102,18 @@
 
     dom.text(this.contentElement(), content);
     cache.content = content;
+  };
+
+  SidebarModule.prototype.onstart = function(x, y, event) {
+    /* TODO: handle dragstart event */
+  };
+
+  SidebarModule.prototype.onmove = function(dx, dy, event) {
+    /* TODO: handle dragmove event */
+  };
+
+  SidebarModule.prototype.onend = function(dx, dy, event) {
+    /* TODO: handle dragend event */
   };
 
   SidebarModule.TEMPLATE_HTML = [
