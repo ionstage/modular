@@ -253,6 +253,14 @@
     });
   };
 
+  ModuleContainer.prototype.incrementDragCount = function() {
+    this.dragCount(this.dragCount() + 1);
+  };
+
+  ModuleContainer.prototype.decrementDragCount = function() {
+    this.dragCount(this.dragCount() - 1);
+  };
+
   ModuleContainer.prototype.load = function(data) {
     return this.loadModules(data.modules).then(function(modules) {
       return this.loadConnections(data.connections, modules);
@@ -588,11 +596,11 @@
   };
 
   ModuleContainer.prototype.dragStarter = function() {
-    this.dragCount(this.dragCount() + 1);
+    this.incrementDragCount();
   };
 
   ModuleContainer.prototype.dragEnder = function() {
-    this.dragCount(this.dragCount() - 1);
+    this.decrementDragCount();
   };
 
   ModuleContainer.prototype.dragPortPlugStarter = function(sourceUnit, context) {
