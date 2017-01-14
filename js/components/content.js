@@ -21,6 +21,8 @@
 
     this.moduleContainer = new ModuleContainer({
       element: this.moduleContainerElement(),
+      dragStarter: props.moduleDragStarter,
+      dragEnder: props.moduleDragEnder,
     });
   }, Component);
 

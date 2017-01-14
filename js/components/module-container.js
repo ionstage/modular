@@ -120,21 +120,21 @@
     this.lockRelationCollection = this.prop(new LockRelationCollection());
     this.bindingCollection = this.prop(new BindingCollection());
     this.disabled = this.prop(false);
-    this.dragCount = this.prop(0);
     this.draggingWires = this.prop([]);
 
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
     this.portToggler = ModuleContainer.prototype.portToggler.bind(this);
     this.portEventer = ModuleContainer.prototype.portEventer.bind(this);
-    this.dragStarter = ModuleContainer.prototype.dragStarter.bind(this);
-    this.dragEnder = ModuleContainer.prototype.dragEnder.bind(this);
     this.dragPortPlugStarter = ModuleContainer.prototype.dragPortPlugStarter.bind(this);
     this.dragPortPlugMover = ModuleContainer.prototype.dragPortPlugMover.bind(this);
     this.dragPortPlugEnder = ModuleContainer.prototype.dragPortPlugEnder.bind(this);
     this.dragPortSocketStarter = ModuleContainer.prototype.dragPortSocketStarter.bind(this);
     this.dragPortSocketMover = ModuleContainer.prototype.dragPortSocketMover.bind(this);
     this.dragPortSocketEnder = ModuleContainer.prototype.dragPortSocketEnder.bind(this);
+
+    this.dragStarter = props.dragStarter;
+    this.dragEnder = props.dragEnder;
   }, Component);
 
   ModuleContainer.prototype.retainerElement = function() {
@@ -251,14 +251,6 @@
         target: { moduleIndex: targetModuleIndex, portName: targetUnit.portName() },
       };
     });
-  };
-
-  ModuleContainer.prototype.incrementDragCount = function() {
-    this.dragCount(this.dragCount() + 1);
-  };
-
-  ModuleContainer.prototype.decrementDragCount = function() {
-    this.dragCount(this.dragCount() - 1);
   };
 
   ModuleContainer.prototype.load = function(data) {
@@ -515,21 +507,8 @@
 
   ModuleContainer.prototype.redraw = function() {
     this.redrawState('disabled', 'disabled');
-    this.redrawDragCount();
     this.redrawRetainer();
     this.redrawWireHandleContainer();
-  };
-
-  ModuleContainer.prototype.redrawDragCount = function() {
-    var dragCount = this.dragCount();
-    var cache = this.cache();
-
-    if (dragCount === cache.dragCount) {
-      return;
-    }
-
-    dom.toggleClass(this.element(), 'module-dragging', dragCount > 0);
-    cache.dragCount = dragCount;
   };
 
   ModuleContainer.prototype.redrawRetainer = function() {
@@ -593,14 +572,6 @@
       sourceUnit.portPlugHighlighted(false);
       this.updateEventHighlight(sourceUnit);
     }.bind(this), 100);
-  };
-
-  ModuleContainer.prototype.dragStarter = function() {
-    this.incrementDragCount();
-  };
-
-  ModuleContainer.prototype.dragEnder = function() {
-    this.decrementDragCount();
   };
 
   ModuleContainer.prototype.dragPortPlugStarter = function(sourceUnit, context) {
