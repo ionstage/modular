@@ -45,6 +45,10 @@
     return element;
   };
 
+  SidebarModule.prototype.delete = function() {
+    this.parentElement(null);
+  };
+
   SidebarModule.prototype.render = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module');
