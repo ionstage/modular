@@ -108,6 +108,7 @@
   };
 
   SidebarModule.prototype.onstart = function(x, y, event) {
+    dom.cancel(event);
     this.dragStarter();
   };
 
