@@ -218,6 +218,10 @@
     el.removeEventListener(type, listener, !!useCapture);
   };
 
+  dom.ready = function(listener) {
+    document.addEventListener('DOMContentLoaded', listener);
+  };
+
   dom.supportsTouch = function() {
     return 'createTouch' in document;
   };
