@@ -12,6 +12,9 @@
     this.content = this.prop(props.content);
     this.parentElement = this.prop(null);
     this.draggable = this.prop(null);
+
+    this.dragStarter = props.dragStarter;
+    this.dragEnder = props.dragEnder;
   }, Component);
 
   SidebarModule.prototype.headerElement = function() {
@@ -105,7 +108,7 @@
   };
 
   SidebarModule.prototype.onstart = function(x, y, event) {
-    /* TODO: handle dragstart event */
+    this.dragStarter();
   };
 
   SidebarModule.prototype.onmove = function(dx, dy, event) {
@@ -113,7 +116,7 @@
   };
 
   SidebarModule.prototype.onend = function(dx, dy, event) {
-    /* TODO: handle dragend event */
+    this.dragEnder();
   };
 
   SidebarModule.TEMPLATE_HTML = [
