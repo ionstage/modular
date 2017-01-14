@@ -8,6 +8,8 @@
 
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
+
+    this.modules = this.prop([]);
   }, Component);
 
   Sidebar.prototype.searchInputElement = function() {
@@ -20,7 +22,15 @@
 
   Sidebar.prototype.appendModule = function(props) {
     var module = new SidebarModule(props);
+    this.modules().push(module);
     module.parentElement(this.contentElement());
+  };
+
+  Sidebar.prototype.removeAllModules = function() {
+    this.modules().forEach(function(module) {
+      module.delete();
+    });
+    this.modules([]);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
