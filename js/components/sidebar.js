@@ -6,6 +6,10 @@
   var Component = app.Component || require('./component.js');
   var SidebarModule = app.SidebarModule || require('./sidebar-module.js');
 
+  var SidebarContent = helper.inherits(function(props) {
+    SidebarContent.super_.call(this, props);
+  }, Component);
+
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
 
