@@ -11,8 +11,8 @@
   var Content = helper.inherits(function(props) {
     Content.super_.call(this, props);
 
-    this.contentHeader = new ContentHeader({
-      element: this.contentHeaderElement(),
+    this.header = new ContentHeader({
+      element: this.headerElement(),
       sidebarCollapser: props.sidebarCollapser,
       sidebarExpander: props.sidebarExpander,
       fileLoader: Content.prototype.fileLoader.bind(this),
@@ -26,7 +26,7 @@
     });
   }, Component);
 
-  Content.prototype.contentHeaderElement = function() {
+  Content.prototype.headerElement = function() {
     return dom.child(this.element(), 0);
   };
 
@@ -35,7 +35,7 @@
   };
 
   Content.prototype.disabled = function(value) {
-    this.contentHeader.disabled(value);
+    this.header.disabled(value);
     this.moduleContainer.disabled(value);
   };
 
@@ -59,7 +59,7 @@
   };
 
   Content.prototype.redraw = function() {
-    this.contentHeader.redraw();
+    this.header.redraw();
     this.moduleContainer.redraw();
   };
 
