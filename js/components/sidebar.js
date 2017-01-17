@@ -8,12 +8,28 @@
 
   var SidebarContent = helper.inherits(function(props) {
     SidebarContent.super_.call(this, props);
+    this.modules = this.prop([]);
   }, Component);
+
+  SidebarContent.prototype.appendModule = function(props) {
+    var module = new SidebarModule(props);
+    this.modules().push(module);
+    module.parentElement(this.element());
+  };
+
+  SidebarContent.prototype.clear = function() {
+    this.modules().forEach(function(module) {
+      module.delete();
+    });
+    this.modules([]);
+  };
 
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
 
-    this.modules = this.prop([]);
+    this.content = new SidebarContent({
+      element: this.contentElement(),
+    });
   }, Component);
 
   Sidebar.prototype.searchInputElement = function() {
@@ -22,19 +38,6 @@
 
   Sidebar.prototype.contentElement = function() {
     return dom.child(this.element(), 1);
-  };
-
-  Sidebar.prototype.appendModule = function(props) {
-    var module = new SidebarModule(props);
-    this.modules().push(module);
-    module.parentElement(this.contentElement());
-  };
-
-  Sidebar.prototype.removeAllModules = function() {
-    this.modules().forEach(function(module) {
-      module.delete();
-    });
-    this.modules([]);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
