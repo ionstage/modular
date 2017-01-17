@@ -22,6 +22,8 @@
 
     this.sidebar = new Sidebar({
       element: dom.el('.sidebar'),
+      moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
+      moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
     });
 
     dom.ready(Body.prototype.onready.bind(this));

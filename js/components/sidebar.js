@@ -8,11 +8,22 @@
 
   var SidebarContent = helper.inherits(function(props) {
     SidebarContent.super_.call(this, props);
+
     this.modules = this.prop([]);
+
+    this.dragStarter = props.dragStarter;
+    this.dragEnder = props.dragEnder;
   }, Component);
 
+  SidebarContent.prototype.createModule = function(props) {
+    return new SidebarModule(helper.extend(helper.clone(props), {
+      dragStarter: this.dragStarter,
+      dragEnder: this.dragEnder,
+    }));
+  };
+
   SidebarContent.prototype.appendModule = function(props) {
-    var module = new SidebarModule(props);
+    var module = this.createModule(props);
     this.modules().push(module);
     module.parentElement(this.element());
   };
@@ -29,6 +40,8 @@
 
     this.content = new SidebarContent({
       element: this.contentElement(),
+      dragStarter: props.moduleDragStarter,
+      dragEnder: props.moduleDragEnder,
     });
   }, Component);
 
