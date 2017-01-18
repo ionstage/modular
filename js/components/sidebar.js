@@ -45,6 +45,10 @@
     });
   }, Component);
 
+  Sidebar.prototype.headerElement = function() {
+    return dom.child(this.element(), 0);
+  };
+
   Sidebar.prototype.searchInputElement = function() {
     return dom.child(this.element(), 0, 0);
   };
