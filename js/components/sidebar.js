@@ -10,6 +10,10 @@
     SidebarHeader.super_.call(this, props);
   }, Component);
 
+  SidebarHeader.prototype.searchInputElement = function() {
+    return dom.child(this.element(), 0);
+  };
+
   var SidebarContent = helper.inherits(function(props) {
     SidebarContent.super_.call(this, props);
 
@@ -42,6 +46,10 @@
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
 
+    this.header = new SidebarHeader({
+      element: this.headerElement(),
+    });
+
     this.content = new SidebarContent({
       element: this.contentElement(),
       dragStarter: props.moduleDragStarter,
@@ -51,10 +59,6 @@
 
   Sidebar.prototype.headerElement = function() {
     return dom.child(this.element(), 0);
-  };
-
-  Sidebar.prototype.searchInputElement = function() {
-    return dom.child(this.element(), 0, 0);
   };
 
   Sidebar.prototype.contentElement = function() {
