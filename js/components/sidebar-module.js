@@ -10,6 +10,7 @@
 
     this.title = this.prop(props.title);
     this.content = this.prop(props.content);
+    this.name = this.prop(props.name);
     this.parentElement = this.prop(null);
     this.draggable = this.prop(null);
     this.dragContext = this.prop({});
