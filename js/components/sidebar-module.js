@@ -12,6 +12,7 @@
     this.content = this.prop(props.content);
     this.parentElement = this.prop(null);
     this.draggable = this.prop(null);
+    this.dragContext = this.prop({});
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
@@ -79,6 +80,7 @@
       dom.remove(element);
       this.element(null);
       this.cache({});
+      this.dragContext({});
       return;
     }
 
@@ -112,15 +114,31 @@
   };
 
   SidebarModule.prototype.onstart = function(x, y, event) {
+    var context = this.dragContext();
+    var cloneElement = this.makeCloneElement();
+    var rect = dom.rect(this.element());
+    var left = rect.left;
+    var top = rect.top;
+
     dom.cancel(event);
+    dom.translate(cloneElement, left, top);
+    dom.append(dom.body(), cloneElement);
+
+    context.cloneElement = cloneElement;
+    context.left = left;
+    context.top = top;
+
     this.dragStarter();
   };
 
   SidebarModule.prototype.onmove = function(dx, dy, event) {
-    /* TODO: handle dragmove event */
+    var context = this.dragContext();
+    dom.translate(context.cloneElement, context.left + dx, context.top + dy);
   };
 
   SidebarModule.prototype.onend = function(dx, dy, event) {
+    var context = this.dragContext();
+    dom.remove(context.cloneElement);
     this.dragEnder();
   };
 
