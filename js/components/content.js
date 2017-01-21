@@ -42,6 +42,11 @@
     this.moduleContainer.disabled(value);
   };
 
+  Content.prototype.redraw = function() {
+    this.header.redraw();
+    this.moduleContainer.redraw();
+  };
+
   Content.prototype.fileLoader = function(file) {
     this.disabled(true);
     dom.load(file).then(function(text) {
@@ -59,11 +64,6 @@
     var text = JSON.stringify(this.moduleContainer.toData());
     var blob = new Blob([text], { type: 'application/json' });
     FileSaver.saveAs(blob, 'download.json');
-  };
-
-  Content.prototype.redraw = function() {
-    this.header.redraw();
-    this.moduleContainer.redraw();
   };
 
   Content.prototype.dragStarter = function() {
