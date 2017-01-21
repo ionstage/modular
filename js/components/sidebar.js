@@ -21,12 +21,14 @@
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
+    this.dropper = props.dropper;
   }, Component);
 
   SidebarContent.prototype.createModule = function(props) {
     return new SidebarModule(helper.extend(helper.clone(props), {
       dragStarter: this.dragStarter,
       dragEnder: this.dragEnder,
+      dropper: this.dropper,
     }));
   };
 
@@ -54,6 +56,7 @@
       element: this.contentElement(),
       dragStarter: props.moduleDragStarter,
       dragEnder: props.moduleDragEnder,
+      dropper: props.moduleDropper,
     });
   }, Component);
 

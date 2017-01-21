@@ -24,6 +24,7 @@
       element: dom.el('.sidebar'),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
+      moduleDropper: Body.prototype.moduleDropper.bind(this),
     });
 
     dom.ready(Body.prototype.onready.bind(this));
@@ -91,6 +92,10 @@
 
   Body.prototype.moduleDragEnder = function() {
     this.decrementDragCount();
+  };
+
+  Body.prototype.moduleDropper = function(name, left, top) {
+    /* TODO: load dropped module */
   };
 
   if (typeof module !== 'undefined' && module.exports) {

@@ -17,6 +17,7 @@
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
+    this.dropper = props.dropper;
   }, Component);
 
   SidebarModule.prototype.headerElement = function() {
@@ -155,9 +156,12 @@
 
   SidebarModule.prototype.onend = function(dx, dy, event) {
     var context = this.dragContext();
-    if (context.cloneElement) {
-      dom.remove(context.cloneElement);
+    var cloneElement = context.cloneElement;
+    if (cloneElement) {
+      var rect = dom.rect(cloneElement);
+      dom.remove(cloneElement);
       this.dragEnder();
+      this.dropper(this.name(), rect.left, rect.top);
     } else if (context.timer) {
       clearTimeout(context.timer);
       context.timer = null;
