@@ -115,32 +115,53 @@
   };
 
   SidebarModule.prototype.onstart = function(x, y, event) {
-    var context = this.dragContext();
-    var cloneElement = this.makeCloneElement();
-    var rect = dom.rect(this.element());
-    var left = rect.left;
-    var top = rect.top;
+    var showCloneElement = function() {
+      var cloneElement = this.makeCloneElement();
+      var rect = dom.rect(this.element());
+      var left = rect.left;
+      var top = rect.top;
 
-    dom.cancel(event);
-    dom.translate(cloneElement, left, top);
-    dom.append(dom.body(), cloneElement);
+      dom.translate(cloneElement, left, top);
+      dom.append(dom.body(), cloneElement);
 
-    context.cloneElement = cloneElement;
-    context.left = left;
-    context.top = top;
+      var context = this.dragContext();
+      context.cloneElement = cloneElement;
+      context.left = left;
+      context.top = top;
+      context.timer = null;
 
-    this.dragStarter();
+      this.dragStarter();
+    }.bind(this);
+
+    if (dom.supportsTouch()) {
+      var context = this.dragContext();
+      context.cloneElement = null;
+      context.timer = setTimeout(showCloneElement, 300);
+    } else {
+      dom.cancel(event);
+      showCloneElement();
+    }
   };
 
   SidebarModule.prototype.onmove = function(dx, dy, event) {
     var context = this.dragContext();
-    dom.translate(context.cloneElement, context.left + dx, context.top + dy);
+    if (context.cloneElement) {
+      dom.translate(context.cloneElement, context.left + dx, context.top + dy);
+    } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+      clearTimeout(context.timer);
+      context.timer = null;
+    }
   };
 
   SidebarModule.prototype.onend = function(dx, dy, event) {
     var context = this.dragContext();
-    dom.remove(context.cloneElement);
-    this.dragEnder();
+    if (context.cloneElement) {
+      dom.remove(context.cloneElement);
+      this.dragEnder();
+    } else if (context.timer) {
+      clearTimeout(context.timer);
+      context.timer = null;
+    }
   };
 
   SidebarModule.TEMPLATE_HTML = [
