@@ -126,6 +126,8 @@
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
     this.portToggler = ModuleContainer.prototype.portToggler.bind(this);
     this.portEventer = ModuleContainer.prototype.portEventer.bind(this);
+    this.dragStarter = ModuleContainer.prototype.dragStarter.bind(this);
+    this.dragEnder = ModuleContainer.prototype.dragEnder.bind(this);
     this.dragPortPlugStarter = ModuleContainer.prototype.dragPortPlugStarter.bind(this);
     this.dragPortPlugMover = ModuleContainer.prototype.dragPortPlugMover.bind(this);
     this.dragPortPlugEnder = ModuleContainer.prototype.dragPortPlugEnder.bind(this);
@@ -133,8 +135,8 @@
     this.dragPortSocketMover = ModuleContainer.prototype.dragPortSocketMover.bind(this);
     this.dragPortSocketEnder = ModuleContainer.prototype.dragPortSocketEnder.bind(this);
 
-    this.dragStarter = props.dragStarter;
-    this.dragEnder = props.dragEnder;
+    this.moduleDragStarter = props.moduleDragStarter;
+    this.moduleDragEnder = props.moduleDragEnder;
   }, Component);
 
   ModuleContainer.prototype.retainerElement = function() {
@@ -572,6 +574,16 @@
       sourceUnit.portPlugHighlighted(false);
       this.updateEventHighlight(sourceUnit);
     }.bind(this), 100);
+  };
+
+  ModuleContainer.prototype.dragStarter = function() {
+    this.updateRetainer();
+    this.moduleDragStarter();
+  };
+
+  ModuleContainer.prototype.dragEnder = function() {
+    this.updateRetainer();
+    this.moduleDragEnder();
   };
 
   ModuleContainer.prototype.dragPortPlugStarter = function(sourceUnit, context) {

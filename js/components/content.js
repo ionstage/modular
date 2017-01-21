@@ -21,12 +21,9 @@
 
     this.moduleContainer = new ModuleContainer({
       element: this.moduleContainerElement(),
-      dragStarter: Content.prototype.dragStarter.bind(this),
-      dragEnder: Content.prototype.dragEnder.bind(this),
+      moduleDragStarter: props.moduleDragStarter,
+      moduleDragEnder: props.moduleDragEnder,
     });
-
-    this.moduleDragStarter = props.moduleDragStarter;
-    this.moduleDragEnder = props.moduleDragEnder;
   }, Component);
 
   Content.prototype.headerElement = function() {
@@ -64,16 +61,6 @@
     var text = JSON.stringify(this.moduleContainer.toData());
     var blob = new Blob([text], { type: 'application/json' });
     FileSaver.saveAs(blob, 'download.json');
-  };
-
-  Content.prototype.dragStarter = function() {
-    this.moduleContainer.updateRetainer();
-    this.moduleDragStarter();
-  };
-
-  Content.prototype.dragEnder = function() {
-    this.moduleContainer.updateRetainer();
-    this.moduleDragEnder();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
