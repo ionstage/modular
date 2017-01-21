@@ -118,8 +118,8 @@
     var showCloneElement = function() {
       var cloneElement = this.makeCloneElement();
       var rect = dom.rect(this.element());
-      var left = rect.left;
-      var top = rect.top;
+      var left = rect.left + dom.scrollX();
+      var top = rect.top + dom.scrollY();
 
       dom.translate(cloneElement, left, top);
       dom.append(dom.body(), cloneElement);

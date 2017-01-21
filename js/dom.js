@@ -161,6 +161,14 @@
     return el.scrollTop;
   };
 
+  dom.scrollX = function() {
+    return window.pageXOffset;
+  };
+
+  dom.scrollY = function() {
+    return window.pageYOffset;
+  };
+
   dom.contentWindow = function(iframe) {
     return iframe.contentWindow;
   };
