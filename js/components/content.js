@@ -21,9 +21,12 @@
 
     this.moduleContainer = new ModuleContainer({
       element: this.moduleContainerElement(),
-      dragStarter: props.moduleDragStarter,
-      dragEnder: props.moduleDragEnder,
+      dragStarter: Content.prototype.dragStarter.bind(this),
+      dragEnder: Content.prototype.dragEnder.bind(this),
     });
+
+    this.moduleDragStarter = props.moduleDragStarter;
+    this.moduleDragEnder = props.moduleDragEnder;
   }, Component);
 
   Content.prototype.headerElement = function() {
@@ -61,6 +64,16 @@
   Content.prototype.redraw = function() {
     this.header.redraw();
     this.moduleContainer.redraw();
+  };
+
+  Content.prototype.dragStarter = function() {
+    this.moduleContainer.updateRetainer();
+    this.moduleDragStarter();
+  };
+
+  Content.prototype.dragEnder = function() {
+    this.moduleContainer.updateRetainer();
+    this.moduleDragEnder();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
