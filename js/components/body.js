@@ -94,7 +94,7 @@
     this.decrementDragCount();
   };
 
-  Body.prototype.moduleDropper = function(name, left, top) {
+  Body.prototype.moduleDropper = function(name, x, y) {
     /* TODO: load dropped module */
   };
 
