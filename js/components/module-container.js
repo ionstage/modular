@@ -155,6 +155,14 @@
     return dom.child(this.element(), 3);
   };
 
+  ModuleContainer.prototype.scrollLeft = function() {
+    return dom.scrollLeft(this.element());
+  };
+
+  ModuleContainer.prototype.scrollTop = function() {
+    return dom.scrollTop(this.element());
+  };
+
   ModuleContainer.prototype.diagonalPoint = function() {
     var point = { x: 0, y: 0 };
     this.modules().forEach(function(module) {
