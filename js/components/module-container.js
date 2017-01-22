@@ -155,6 +155,11 @@
     return dom.child(this.element(), 3);
   };
 
+  ModuleContainer.prototype.clientPosition = function() {
+    var rect = dom.rect(this.element());
+    return { x: rect.left, y: rect.top };
+  };
+
   ModuleContainer.prototype.scrollLeft = function() {
     return dom.scrollLeft(this.element());
   };
