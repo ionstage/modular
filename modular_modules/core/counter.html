@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #content {
+      box-sizing: border-box;
+      font-family: monospace;
+      font-size: 42px;
+      height: 48px;
+      line-height: 48px;
+      overflow: hidden;
+      padding-right: 6px;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+  <script src="js/modular-module.js"></script>
+  <script>
+    (function() {
+      var countValue = 0;
+      var contentElement = document.getElementById('content');
+
+      var props = {
+        count: function(value) {
+          countValue = parseInt(value, 10);
+          contentElement.textContent = countValue;
+          return countValue;
+        },
+      };
+
+      var events = {
+        up: function() {
+          countValue += 1;
+          module.get('count')(countValue);
+        },
+        reset: function() {
+          module.get('count')(0);
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Count', name: 'count', type: 'prop', arg: props.count, socketDisabled: true },
+        { label: 'Up', name: 'up', type: 'event', arg: events.up, plugDisabled: true },
+        { label: 'Reset', name: 'reset', type: 'event', arg: events.reset, plugDisabled: true },
+      ]);
+
+      contentElement.textContent = countValue;
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
