@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #button {
+      -webkit-appearance: none;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 1px solid #d5d5d5;
+      box-sizing: border-box;
+      display: block;
+      height: 28px;
+      width: 100%;
+    }
+
+    #button:active {
+      background-color: #dcdcdc;
+      background-image: none;
+      border-color: #b5b5b5;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    #button::-moz-focus-inner {
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <button id="button"></button>
+  <script src="js/modular-module.js"></script>
+  <script>
+    (function() {
+      var buttonElement = document.getElementById('button');
+
+      var module = new modular.Module([
+        { label: 'Click', name: 'click', type: 'event', socketDisabled: true },
+      ]);
+
+      buttonElement.addEventListener('click', function() {
+        module.get('click')();
+      });
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
