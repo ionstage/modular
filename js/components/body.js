@@ -7,6 +7,12 @@
   var Content = app.Content || require('./content.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
+  var ModuleData = function(props) {
+    this.label = props.label;
+    this.description = props.description;
+    this.src = props.src;
+  };
+
   var Body = helper.inherits(function() {
     Body.super_.call(this, { element: dom.body() });
 
