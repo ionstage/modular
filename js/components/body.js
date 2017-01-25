@@ -11,6 +11,7 @@
     this.label = props.label;
     this.description = props.description;
     this.src = props.src;
+    this.visiblePortNames = props.visiblePortNames;
   };
 
   var Body = helper.inherits(function() {
