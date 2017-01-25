@@ -14,9 +14,14 @@
     this.visiblePortNames = props.visiblePortNames;
   };
 
+  var ModuleDataCollection = function() {
+    this.data = new helper.Map();
+  };
+
   var Body = helper.inherits(function() {
     Body.super_.call(this, { element: dom.body() });
 
+    this.moduleDataCollection = this.prop(new ModuleDataCollection());
     this.dragCount = this.prop(0);
 
     this.content = new Content({
