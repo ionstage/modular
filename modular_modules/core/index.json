@@ -1,0 +1,14 @@
+[
+  {
+    "label": "Button",
+    "description": "Dispatch click event",
+    "src": "button",
+    "visiblePortNames": ["click"]
+  },
+  {
+    "label": "Counter",
+    "description": "Count the number of events",
+    "src": "counter",
+    "visiblePortNames": ["count", "up"]
+  }
+]
