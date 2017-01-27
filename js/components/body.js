@@ -19,21 +19,35 @@
   };
 
   ModuleDataCollection.prototype.load = function() {
-    return dom.ajax({
-      type: 'GET',
-      url: 'modular_modules/index.json',
-    }).then(function(text) {
-      return Promise.all(JSON.parse(text).map(function(packageName) {
-        return dom.ajax({
-          type: 'GET',
-          url: 'modular_modules/' + packageName + '/index.json',
-        }).then(function(text) {
-          JSON.parse(text).forEach(function(props) {
-            this.data.set(packageName + '/' + props.src, new ModuleData(props));
+    return this.loadPackageNames().then(function(packageNames) {
+      return Promise.all(packageNames.map(function(packageName) {
+        return this.loadModuleDatas(packageName).then(function(moduleDatas) {
+          moduleDatas.forEach(function(moduleData) {
+            this.data.set(packageName + '/' + moduleData.src, moduleData);
           }.bind(this));
         }.bind(this));
       }.bind(this)));
     }.bind(this));
+  };
+
+  ModuleDataCollection.prototype.loadPackageNames = function() {
+    return dom.ajax({
+      type: 'GET',
+      url: 'modular_modules/index.json',
+    }).then(function(text) {
+      return JSON.parse(text);
+    });
+  };
+
+  ModuleDataCollection.prototype.loadModuleDatas = function(packageName) {
+    return dom.ajax({
+      type: 'GET',
+      url: 'modular_modules/' + packageName + '/index.json',
+    }).then(function(text) {
+      return JSON.parse(text).map(function(props) {
+        return new ModuleData(props);
+      });
+    });
   };
 
   var Body = helper.inherits(function() {
