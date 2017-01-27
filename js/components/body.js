@@ -15,7 +15,7 @@
   };
 
   var ModuleDataCollection = function() {
-    this.data = new helper.Map();
+    this.data = {};
   };
 
   ModuleDataCollection.prototype.load = function() {
@@ -23,7 +23,7 @@
       return Promise.all(packageNames.map(function(packageName) {
         return this.loadModuleDatas(packageName).then(function(moduleDatas) {
           moduleDatas.forEach(function(moduleData) {
-            this.data.set(packageName + '/' + moduleData.src, moduleData);
+            this.data[packageName + '/' + moduleData.src] = moduleData;
           }.bind(this));
         }.bind(this));
       }.bind(this)));
