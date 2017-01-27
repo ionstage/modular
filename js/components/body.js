@@ -15,6 +15,10 @@
     this.visiblePortNames = props.visiblePortNames || [];
   };
 
+  ModuleData.prototype.key = function() {
+    return this.packageName + '/' + this.src;
+  };
+
   var ModuleDataCollection = function() {
     this.data = {};
   };
@@ -24,7 +28,7 @@
       return Promise.all(packageNames.map(function(packageName) {
         return this.loadModuleDatas(packageName).then(function(moduleDatas) {
           moduleDatas.forEach(function(moduleData) {
-            this.data[packageName + '/' + moduleData.src] = moduleData;
+            this.data[moduleData.key()] = moduleData;
           }.bind(this));
         }.bind(this));
       }.bind(this)));
