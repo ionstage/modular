@@ -8,10 +8,10 @@
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
   var ModuleData = function(props) {
-    this.label = props.label;
-    this.description = props.description;
-    this.src = props.src;
-    this.visiblePortNames = props.visiblePortNames;
+    this.label = props.label || '';
+    this.description = props.description || '';
+    this.src = props.src || '';
+    this.visiblePortNames = props.visiblePortNames || [];
   };
 
   var ModuleDataCollection = function() {
