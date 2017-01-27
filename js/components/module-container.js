@@ -366,6 +366,21 @@
     });
   };
 
+  ModuleContainer.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
+    var clientPosition = this.clientPosition();
+    var x = props.x - clientPosition.x + this.scrollLeft();
+    var y = props.y - clientPosition.y + this.scrollTop();
+
+    if (x < 0 || y < 0) {
+      return Promise.reject(new Error('Invalid position'));
+    }
+
+    return this.loadModule(helper.extend(helper.clone(props), {
+      x: x,
+      y: y,
+    }), visiblePortNames);
+  };
+
   ModuleContainer.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection().add({
       type: type,

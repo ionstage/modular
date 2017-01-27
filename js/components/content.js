@@ -39,6 +39,10 @@
     this.moduleContainer.disabled(value);
   };
 
+  Content.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
+    return this.moduleContainer.loadModuleByClientPosition(props, visiblePortNames);
+  };
+
   Content.prototype.redraw = function() {
     this.header.redraw();
     this.moduleContainer.redraw();
