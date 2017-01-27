@@ -168,6 +168,14 @@
     return dom.scrollTop(this.element());
   };
 
+  ModuleContainer.prototype.localPoint = function(point) {
+    var clientPosition = this.clientPosition();
+    return {
+      x: point.x - clientPosition.x + this.scrollLeft(),
+      y: point.y - clientPosition.y + this.scrollTop(),
+    };
+  };
+
   ModuleContainer.prototype.diagonalPoint = function() {
     var point = { x: 0, y: 0 };
     this.modules().forEach(function(module) {
@@ -367,18 +375,13 @@
   };
 
   ModuleContainer.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
-    var clientPosition = this.clientPosition();
-    var x = props.x - clientPosition.x + this.scrollLeft();
-    var y = props.y - clientPosition.y + this.scrollTop();
+    var localPoint = this.localPoint(helper.pick(props, ['x', 'y']));
 
-    if (x < 0 || y < 0) {
+    if (localPoint.x < 0 || localPoint.y < 0) {
       return Promise.reject(new Error('Invalid position'));
     }
 
-    return this.loadModule(helper.extend(helper.clone(props), {
-      x: x,
-      y: y,
-    }), visiblePortNames);
+    return this.loadModule(helper.extend(helper.clone(props), localPoint), visiblePortNames);
   };
 
   ModuleContainer.prototype.lock = function(type, unit, wire) {
