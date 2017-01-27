@@ -8,6 +8,7 @@
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
   var ModuleData = function(props) {
+    this.packageName = props.packageName || '';
     this.label = props.label || '';
     this.description = props.description || '';
     this.src = props.src || '';
@@ -45,7 +46,7 @@
       url: 'modular_modules/' + packageName + '/index.json',
     }).then(function(text) {
       return JSON.parse(text).map(function(props) {
-        return new ModuleData(props);
+        return new ModuleData(helper.extend(helper.clone(props), { packageName: packageName }));
       });
     });
   };
