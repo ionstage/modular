@@ -622,9 +622,7 @@
       return;
     }
 
-    var isSameType = (unit && unit.portType() === sourceUnit.portType());
-    var isAttaching = (unit && !unit.portSocketConnected());
-    var targetUnit = ((isSameType && isAttaching) ? unit : null);
+    var targetUnit = (this.canConnect(sourceUnit, unit) ? unit : null);
     var wire = context.wire;
 
     wire.targetX(x);
