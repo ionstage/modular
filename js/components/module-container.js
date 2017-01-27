@@ -622,9 +622,7 @@
       return;
     }
 
-    var targetUnit = (this.canConnect(sourceUnit, unit) ? unit : null);
     var wire = context.wire;
-
     wire.targetX(x);
     wire.targetY(y);
 
@@ -632,6 +630,7 @@
       this.detachDraggingWire(sourceUnit, currentTargetUnit, wire);
     }
 
+    var targetUnit = (this.canConnect(sourceUnit, unit) ? unit : null);
     if (targetUnit) {
       this.attachDraggingWire(sourceUnit, targetUnit, wire);
     }
