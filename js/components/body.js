@@ -55,6 +55,10 @@
     });
   };
 
+  ModuleDataCollection.prototype.get = function(key) {
+    return this.data[key] || null;
+  };
+
   var Body = helper.inherits(function() {
     Body.super_.call(this, { element: dom.body() });
 
