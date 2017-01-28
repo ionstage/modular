@@ -148,7 +148,13 @@
   };
 
   Body.prototype.moduleDropper = function(name, x, y) {
-    /* TODO: load dropped module */
+    var moduleData = this.moduleDataCollection().get(name);
+    this.content.loadModuleByClientPosition({
+      title: moduleData.label,
+      name: name,
+      x: x,
+      y: y,
+    }, moduleData.visiblePortNames);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
