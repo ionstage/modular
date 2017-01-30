@@ -24,6 +24,10 @@
     this.dropper = props.dropper;
   }, Component);
 
+  SidebarContent.prototype.scrollerElement = function() {
+    return dom.child(this.element(), 0);
+  };
+
   SidebarContent.prototype.createModule = function(props) {
     return new SidebarModule(helper.extend(helper.clone(props), {
       dragStarter: this.dragStarter,
@@ -35,7 +39,7 @@
   SidebarContent.prototype.appendModule = function(props) {
     var module = this.createModule(props);
     this.modules().push(module);
-    module.parentElement(this.element());
+    module.parentElement(this.scrollerElement());
   };
 
   SidebarContent.prototype.clear = function() {
