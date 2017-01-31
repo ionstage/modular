@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var IScroll = require('iscroll');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
@@ -18,6 +19,14 @@
     SidebarContent.super_.call(this, props);
 
     this.modules = this.prop([]);
+    this.scrollable = this.prop(new IScroll(this.element(), {
+      disableMouse: true,
+      disablePointer: true,
+      fadeScrollbars: dom.supportsTouch(),
+      interactiveScrollbars: !dom.supportsTouch(),
+      mouseWheel: true,
+      scrollbars: true,
+    }));
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
