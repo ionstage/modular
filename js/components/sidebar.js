@@ -49,6 +49,7 @@
     var module = this.createModule(props);
     this.modules().push(module);
     module.parentElement(this.scrollerElement());
+    this.markDirty();
   };
 
   SidebarContent.prototype.clear = function() {
@@ -56,6 +57,13 @@
       module.delete();
     });
     this.modules([]);
+  };
+
+  SidebarContent.prototype.redraw = function() {
+    // XXX: zero timeout to wait for the repaint of iScroll
+    setTimeout(function() {
+      this.scrollable().refresh();
+    }.bind(this), 0);
   };
 
   var Sidebar = helper.inherits(function(props) {
