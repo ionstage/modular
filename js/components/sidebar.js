@@ -59,6 +59,14 @@
     this.modules([]);
   };
 
+  SidebarContent.prototype.scrollEnabled = function(enabled) {
+    if (enabled) {
+      this.scrollable().enable();
+    } else {
+      this.scrollable().disable();
+    }
+  };
+
   SidebarContent.prototype.redraw = function() {
     // XXX: zero timeout to wait for the repaint of iScroll
     setTimeout(function() {
