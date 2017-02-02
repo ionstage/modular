@@ -9,7 +9,7 @@
     return (typeof document === 'undefined');
   };
 
-  dom.global = function(key, value) {
+  dom.global = function() {
     return (typeof module !== 'undefined' && module.exports) ? global : window;
   };
 
