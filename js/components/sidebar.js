@@ -77,16 +77,21 @@
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
 
+    this.dragCount = this.prop(0);
+
     this.header = new SidebarHeader({
       element: this.headerElement(),
     });
 
     this.content = new SidebarContent({
       element: this.contentElement(),
-      dragStarter: props.moduleDragStarter,
-      dragEnder: props.moduleDragEnder,
+      dragStarter: Sidebar.prototype.dragStarter.bind(this),
+      dragEnder: Sidebar.prototype.dragEnder.bind(this),
       dropper: props.moduleDropper,
     });
+
+    this.moduleDragStarter = props.moduleDragStarter;
+    this.moduleDragEnder = props.moduleDragEnder;
   }, Component);
 
   Sidebar.prototype.headerElement = function() {
@@ -95,6 +100,40 @@
 
   Sidebar.prototype.contentElement = function() {
     return dom.child(this.element(), 1);
+  };
+
+  Sidebar.prototype.incrementDragCount = function() {
+    this.dragCount(this.dragCount() + 1);
+  };
+
+  Sidebar.prototype.decrementDragCount = function() {
+    this.dragCount(this.dragCount() - 1);
+  };
+
+  Sidebar.prototype.redraw = function() {
+    this.redrawDragCount();
+  };
+
+  Sidebar.prototype.redrawDragCount = function() {
+    var dragCount = this.dragCount();
+    var cache = this.cache();
+
+    if (dragCount === cache.dragCount) {
+      return;
+    }
+
+    this.content.scrollEnabled(dragCount === 0);
+    cache.dragCount = dragCount;
+  };
+
+  Sidebar.prototype.dragStarter = function() {
+    this.incrementDragCount();
+    this.moduleDragStarter();
+  };
+
+  Sidebar.prototype.dragEnder = function() {
+    this.decrementDragCount();
+    this.moduleDragEnder();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
