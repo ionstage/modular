@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #text-input {
+      border-radius: 0;
+      box-sizing: border-box;
+      font-size: 14px;
+      height: 28px;
+      padding: 0 4px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <input id="text-input" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
+  <script src="js/modular-module.js"></script>
+  <script>
+    (function() {
+      var textInputElement = document.getElementById('text-input');
+
+      var props = {
+        text: function(value) {
+          value = (value != null ? String(value) : '');
+          if (textInputElement.value !== value) {
+            textInputElement.value = value;
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Text', name: 'text', type: 'prop', arg: props.text },
+      ]);
+
+      textInputElement.addEventListener('input', function(event) {
+        module.get('text')(event.target.value);
+      });
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
