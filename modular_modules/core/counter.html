@@ -33,6 +33,7 @@
 
       var props = {
         count: function(value) {
+          value = (!isNaN(value) ? Number(value) : countValue);
           countValue = parseInt(value, 10);
           contentElement.textContent = countValue;
           return countValue;
