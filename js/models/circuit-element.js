@@ -48,7 +48,12 @@
     members.slice().reverse().forEach(function(props) {
       var name = props.name;
       if (!(name in memberTable)) {
-        memberTable[name] = new CircuitElementMember(props);
+        var member = new CircuitElementMember(props);
+        if (props.type === 'prop' && typeof props.arg === 'function') {
+          // initialize property value
+          member(props.arg());
+        }
+        memberTable[name] = member;
         memberNames.unshift(name);
       }
     });
