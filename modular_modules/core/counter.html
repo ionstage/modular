@@ -33,17 +33,18 @@
 
       var props = {
         count: function(value) {
-          value = (!isNaN(value) ? Number(value) : countValue);
-          countValue = parseInt(value, 10);
-          contentElement.textContent = countValue;
+          value = parseInt((!isNaN(value) ? Number(value) : countValue), 10);
+          if (value !== countValue) {
+            countValue = value;
+            contentElement.textContent = countValue;
+          }
           return countValue;
         },
       };
 
       var events = {
         up: function() {
-          countValue += 1;
-          module.get('count')(countValue);
+          module.get('count')(countValue + 1);
         },
         reset: function() {
           module.get('count')(0);
