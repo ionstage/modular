@@ -31,6 +31,8 @@
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
     this.dropper = props.dropper;
+
+    dom.on(this.element(), dom.eventType('start'), SidebarContent.prototype.onpoint.bind(this));
   }, Component);
 
   SidebarContent.prototype.scrollerElement = function() {
@@ -72,6 +74,10 @@
     setTimeout(function() {
       this.scrollable().refresh();
     }.bind(this), 0);
+  };
+
+  SidebarContent.prototype.onpoint = function() {
+    dom.removeFocus();
   };
 
   var Sidebar = helper.inherits(function(props) {
