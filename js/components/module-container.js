@@ -137,6 +137,8 @@
 
     this.moduleDragStarter = props.moduleDragStarter;
     this.moduleDragEnder = props.moduleDragEnder;
+
+    dom.on(this.element(), dom.eventType('start'), ModuleContainer.prototype.onpoint.bind(this));
   }, Component);
 
   ModuleContainer.prototype.retainerElement = function() {
@@ -570,6 +572,13 @@
 
     dom.css(this.wireHandleContainerElement(), { zIndex: zIndex });
     cache.zIndex = zIndex;
+  };
+
+  ModuleContainer.prototype.onpoint = function(event) {
+    // remove keyboard focus when pointing background
+    if (dom.target(event) === this.element()) {
+      dom.removeFocus();
+    }
   };
 
   ModuleContainer.prototype.deleter = function(module) {
