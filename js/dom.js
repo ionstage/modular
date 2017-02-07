@@ -141,6 +141,14 @@
     el.value = s;
   };
 
+  dom.hasSelection = function(el) {
+    return (el.selectionStart !== el.selectionEnd);
+  };
+
+  dom.selectAll = function(el) {
+    el.setSelectionRange(0, 9999);
+  };
+
   dom.disabled = function(el, disabled) {
     el.disabled = disabled;
   };
@@ -182,6 +190,10 @@
 
   dom.fillContentHeight = function(iframe) {
     iframe.style.height = iframe.contentDocument.documentElement.scrollHeight + 'px';
+  };
+
+  dom.isFocused = function(el) {
+    return (el === document.activeElement);
   };
 
   dom.removeFocus = function() {

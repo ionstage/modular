@@ -9,10 +9,27 @@
 
   var SidebarHeader = helper.inherits(function(props) {
     SidebarHeader.super_.call(this, props);
+
+    this.registerSearchInputFocusListener();
   }, Component);
 
   SidebarHeader.prototype.searchInputElement = function() {
     return dom.child(this.element(), 0);
+  };
+
+  SidebarHeader.prototype.registerSearchInputFocusListener = function() {
+    var searchInputElement = this.searchInputElement();
+    var isFocused = dom.isFocused(searchInputElement);
+
+    dom.on(searchInputElement, dom.eventType('start'), function() {
+      isFocused = dom.isFocused(searchInputElement);
+    });
+
+    dom.on(searchInputElement, 'click', function() {
+      if (!isFocused && !dom.hasSelection(searchInputElement)) {
+        dom.selectAll(searchInputElement);
+      }
+    });
   };
 
   var SidebarContent = helper.inherits(function(props) {
