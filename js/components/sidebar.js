@@ -17,6 +17,10 @@
     return dom.child(this.element(), 0);
   };
 
+  SidebarHeader.prototype.searchText = function() {
+    return dom.value(this.searchInputElement());
+  };
+
   SidebarHeader.prototype.registerSearchInputFocusListener = function() {
     var searchInputElement = this.searchInputElement();
     var isFocused = dom.isFocused(searchInputElement);
