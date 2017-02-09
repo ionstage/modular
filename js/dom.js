@@ -261,12 +261,12 @@
   dom.eventType = function(name) {
     var supportsTouch = dom.supportsTouch();
     switch (name) {
-    case 'start':
-      return (supportsTouch ? 'touchstart' : 'mousedown');
-    case 'move':
-      return (supportsTouch ? 'touchmove' : 'mousemove');
-    case 'end':
-      return (supportsTouch ? 'touchend' : 'mouseup');
+      case 'start':
+        return (supportsTouch ? 'touchstart' : 'mousedown');
+      case 'move':
+        return (supportsTouch ? 'touchmove' : 'mousemove');
+      case 'end':
+        return (supportsTouch ? 'touchend' : 'mouseup');
     }
   };
 
