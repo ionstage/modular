@@ -267,6 +267,8 @@
         return (supportsTouch ? 'touchmove' : 'mousemove');
       case 'end':
         return (supportsTouch ? 'touchend' : 'mouseup');
+      default:
+        throw new Error('Invalid error type');
     }
   };
 
