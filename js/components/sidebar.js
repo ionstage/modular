@@ -2,6 +2,7 @@
   'use strict';
 
   var IScroll = require('iscroll');
+  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
@@ -107,6 +108,10 @@
   SidebarContent.prototype.onpoint = function() {
     dom.removeFocus();
   };
+
+  var SidebarRelation = helper.inherits(function() {
+    SidebarRelation.super_.call(this);
+  }, jCore.Relation);
 
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
