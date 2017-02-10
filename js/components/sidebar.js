@@ -11,6 +11,7 @@
     SidebarHeader.super_.call(this, props);
 
     this.registerSearchInputFocusListener();
+    this.registerSearchInputInputListener();
   }, Component);
 
   SidebarHeader.prototype.searchInputElement = function() {
@@ -34,6 +35,12 @@
         dom.selectAll(searchInputElement);
       }
     });
+  };
+
+  SidebarHeader.prototype.registerSearchInputInputListener = function() {
+    dom.on(this.searchInputElement(), 'input', function() {
+      this.markDirty();
+    }.bind(this));
   };
 
   var SidebarContent = helper.inherits(function(props) {
