@@ -13,6 +13,7 @@
     this.description = props.description || '';
     this.src = props.src || '';
     this.visiblePortNames = props.visiblePortNames || [];
+    this.tags = props.tags || [];
   };
 
   ModuleData.prototype.key = function() {
