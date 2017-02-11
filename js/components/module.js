@@ -76,10 +76,12 @@
     return dom.child(this.element(), 2, 1);
   };
 
-  Module.prototype.portOptGroupElement = function(type) {
-    var index = ({ prop: 0, event: 1 })[type];
-    return dom.child(this.element(), 2, 1, index);
-  };
+  Module.prototype.portOptGroupElement = (function() {
+    var map = { prop: 0, event: 1 };
+    return function(type) {
+      return dom.child(this.element(), 2, 1, map[type]);
+    };
+  })();
 
   Module.prototype.componentContentWindow = function() {
     return dom.contentWindow(this.componentElement());
