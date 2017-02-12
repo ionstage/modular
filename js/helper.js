@@ -78,11 +78,13 @@
     });
   };
 
-  helper.sortBy = function(array, key) {
+  helper.sortBy = function(array, iteratee) {
     return array.slice().sort(function(a, b) {
-      if (a[key] > b[key]) {
+      var l = (typeof iteratee === 'function') ? iteratee(a) : a[iteratee];
+      var r = (typeof iteratee === 'function') ? iteratee(b) : b[iteratee];
+      if (l > r) {
         return 1;
-      } else if (a[key] < b[key]) {
+      } else if (l < r) {
         return -1;
       }
       return 0;
