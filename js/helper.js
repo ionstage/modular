@@ -40,6 +40,12 @@
     return (a != null && typeof a.equal === 'function') ? a.equal(b) : (a === b);
   };
 
+  helper.values = function(obj) {
+    return Object.keys(obj).map(function(key) {
+      return obj[key];
+    });
+  };
+
   helper.clone = function(obj) {
     var ret = {};
     for (var key in obj) {
