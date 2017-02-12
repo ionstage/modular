@@ -96,6 +96,15 @@
     return this.data[key] || null;
   };
 
+  ModuleDataCollection.prototype.search = function(keyword) {
+    return helper.sortBy(helper.values(this.data).filter(function(moduleData) {
+      return (moduleData.keywordScore(keyword) !== 0);
+    }), function(moduleData) {
+      // sort in descending order
+      return -(moduleData.keywordScore(keyword));
+    });
+  };
+
   var Body = helper.inherits(function() {
     Body.super_.call(this, { element: dom.body() });
 
