@@ -109,8 +109,10 @@
     dom.removeFocus();
   };
 
-  var SidebarRelation = helper.inherits(function() {
+  var SidebarRelation = helper.inherits(function(props) {
     SidebarRelation.super_.call(this);
+
+    this.moduleDataSearcher = props.moduleDataSearcher;
   }, jCore.Relation);
 
   var Sidebar = helper.inherits(function(props) {
@@ -127,6 +129,10 @@
       dragStarter: Sidebar.prototype.dragStarter.bind(this),
       dragEnder: Sidebar.prototype.dragEnder.bind(this),
       dropper: props.moduleDropper,
+    });
+
+    this.relation = new SidebarRelation({
+      moduleDataSearcher: props.moduleDataSearcher,
     });
 
     this.moduleDragStarter = props.moduleDragStarter;

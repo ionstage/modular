@@ -124,6 +124,7 @@
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       moduleDropper: Body.prototype.moduleDropper.bind(this),
+      moduleDataSearcher: Body.prototype.moduleDataSearcher.bind(this),
     });
 
     dom.ready(Body.prototype.onready.bind(this));
@@ -201,6 +202,10 @@
       x: x,
       y: y,
     }, moduleData.visiblePortNames);
+  };
+
+  Body.prototype.moduleDataSearcher = function(searchText) {
+    return this.moduleDataCollection().search(searchText);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
