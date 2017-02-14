@@ -112,6 +112,8 @@
   var SidebarRelation = helper.inherits(function(props) {
     SidebarRelation.super_.call(this);
 
+    this.header = props.header;
+    this.content = props.content;
     this.moduleDataSearcher = props.moduleDataSearcher;
   }, jCore.Relation);
 
@@ -132,6 +134,8 @@
     });
 
     this.relation = new SidebarRelation({
+      header: this.header,
+      content: this.content,
       moduleDataSearcher: props.moduleDataSearcher,
     });
 
