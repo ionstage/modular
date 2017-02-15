@@ -156,6 +156,7 @@
 
   Body.prototype.onready = function() {
     this.content.redraw();
+    this.moduleDataCollection().load();
   };
 
   Body.prototype.sidebarCollapser = function() {
