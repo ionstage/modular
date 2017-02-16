@@ -2,11 +2,11 @@
   'use strict';
 
   var IScroll = require('iscroll');
-  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
   var SidebarModule = app.SidebarModule || require('./sidebar-module.js');
+  var SidebarRelation = app.SidebarRelation || require('../relations/sidebar-relation.js');
 
   var SidebarHeader = helper.inherits(function(props) {
     SidebarHeader.super_.call(this, props);
@@ -107,27 +107,6 @@
 
   SidebarContent.prototype.onpoint = function() {
     dom.removeFocus();
-  };
-
-  var SidebarRelation = helper.inherits(function(props) {
-    SidebarRelation.super_.call(this);
-
-    this.header = props.header;
-    this.content = props.content;
-    this.moduleDataSearcher = props.moduleDataSearcher;
-  }, jCore.Relation);
-
-  SidebarRelation.prototype.update = function() {
-    var moduleDatas = this.moduleDataSearcher(this.header.searchText());
-    var content = this.content;
-    content.clear();
-    moduleDatas.forEach(function(moduleData) {
-      content.appendModule({
-        title: moduleData.label,
-        content: moduleData.description,
-        name: moduleData.key(),
-      });
-    });
   };
 
   var Sidebar = helper.inherits(function(props) {
