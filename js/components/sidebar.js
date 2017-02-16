@@ -117,6 +117,19 @@
     this.moduleDataSearcher = props.moduleDataSearcher;
   }, jCore.Relation);
 
+  SidebarRelation.prototype.update = function() {
+    var moduleDatas = this.moduleDataSearcher(this.header.searchText());
+    var content = this.content;
+    content.clear();
+    moduleDatas.forEach(function(moduleData) {
+      content.appendModule({
+        title: moduleData.label,
+        content: moduleData.description,
+        name: moduleData.key(),
+      });
+    });
+  };
+
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
 
@@ -141,6 +154,8 @@
 
     this.moduleDragStarter = props.moduleDragStarter;
     this.moduleDragEnder = props.moduleDragEnder;
+
+    this.header.relations().push(this.relation);
   }, Component);
 
   Sidebar.prototype.headerElement = function() {
