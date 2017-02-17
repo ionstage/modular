@@ -11,7 +11,7 @@
   var SidebarHeader = helper.inherits(function(props) {
     SidebarHeader.super_.call(this, props);
 
-    this.disabled = this.prop(false);
+    this.disabled = this.prop(true);
 
     this.registerSearchInputFocusListener();
     this.registerSearchInputInputListener();
@@ -169,6 +169,10 @@
 
   Sidebar.prototype.decrementDragCount = function() {
     this.dragCount(this.dragCount() - 1);
+  };
+
+  Sidebar.prototype.searchEnabled = function(enabled) {
+    this.header.disabled(!enabled);
   };
 
   Sidebar.prototype.redraw = function() {

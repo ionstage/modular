@@ -156,7 +156,9 @@
 
   Body.prototype.onready = function() {
     this.content.redraw();
-    this.moduleDataCollection().load();
+    this.moduleDataCollection().load().then(function() {
+      this.sidebar.searchEnabled(true);
+    }.bind(this));
   };
 
   Body.prototype.sidebarCollapser = function() {
