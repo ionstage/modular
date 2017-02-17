@@ -11,6 +11,8 @@
   var SidebarHeader = helper.inherits(function(props) {
     SidebarHeader.super_.call(this, props);
 
+    this.disabled = this.prop(false);
+
     this.registerSearchInputFocusListener();
     this.registerSearchInputInputListener();
   }, Component);
@@ -42,6 +44,22 @@
     dom.on(this.searchInputElement(), 'input', function() {
       this.markDirty();
     }.bind(this));
+  };
+
+  SidebarHeader.prototype.redraw = function() {
+    this.redrawDisabled();
+  };
+
+  SidebarHeader.prototype.redrawDisabled = function() {
+    var cache = this.cache();
+    var disabled = this.disabled();
+
+    if (disabled === cache.disabled) {
+      return;
+    }
+
+    dom.disabled(this.searchInputElement(), disabled);
+    cache.disabled = disabled;
   };
 
   var SidebarContent = helper.inherits(function(props) {
