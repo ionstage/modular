@@ -1,0 +1,21 @@
+.module-container {
+  -webkit-overflow-scrolling: touch;
+  background-color: white;
+  height: calc(100% - 49px);
+  overflow: auto;
+  position: relative;
+}
+
+.module-container.disabled {
+  pointer-events: none;
+}
+
+.module-container > * {
+  position: absolute;
+}
+
+.module-container-retainer {
+  height: 1px;
+  pointer-events: none;
+  width: 1px;
+}

@@ -1,0 +1,70 @@
+.sidebar-content {
+  -webkit-transform: translateY(49px);
+  background-color: #fafafa;
+  height: calc(100% - 49px);
+  overflow: hidden;
+  position: relative;
+  transform: translateY(49px);
+}
+
+.sidebar-content > .scroller {
+  position: absolute;
+  width: 100%;
+}
+
+.sidebar-content .module {
+  position: relative;
+  margin: 12px auto;
+}
+
+body > .module.clone {
+  left: 0;
+  margin: 0;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+}
+
+.sidebar-content .module > *,
+body > .module.clone > * {
+  pointer-events: none;
+}
+
+.sidebar-content .module > .module-header,
+body > .module.clone > .module-header {
+  box-sizing: border-box;
+  line-height: 29px;
+  overflow: hidden;
+  padding: 3px 8px 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+body > .module.clone > .module-header {
+  background-color: orange;
+}
+
+.sidebar-content .module > .module-content,
+body > .module.clone > .module-content {
+  border-radius: 0 0 3px 3px;
+  font-size: 12px;
+  height: 29px;
+  line-height: 29px;
+  overflow: hidden;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-content .module > .module-content {
+  border-bottom: 3px solid #333;
+}
+
+body > .module.clone > .module-content {
+  border-bottom: 3px solid orange;
+  border-left: 3px solid orange;
+  border-right: 3px solid orange;
+  color: orange;
+}

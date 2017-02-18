@@ -1,22 +1,67 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1">
   <title>Modular</title>
+  <link rel="stylesheet" href="css/module.css">
+  <link rel="stylesheet" href="css/module-container.css">
+  <link rel="stylesheet" href="css/content-header.css">
+  <link rel="stylesheet" href="css/sidebar-content.css">
+  <link rel="stylesheet" href="css/sidebar-header.css">
   <link rel="stylesheet" href="css/app.css">
 </head>
-<body class="unselectable">
-  <div id="container"></div>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <input class="search-input" type="search" placeholder="Search" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" disabled>
+    </div>
+    <div class="sidebar-content">
+      <div class="scroller"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content-header">
+      <div class="button sidebar-toggle-button">
+        <img class="icon angle-double-left" src="images/angle-double-left.svg">
+        <img class="icon angle-double-right" src="images/angle-double-right.svg">
+      </div>
+      <div class="button load-button">
+        <input type="file">
+        <img class="icon" src="images/file-o.svg">
+        <span>Load</span>
+      </div>
+      <div class="button save-button">
+        <img class="icon" src="images/floppy-o.svg">
+        <span>Save</span>
+      </div>
+    </div>
+    <div class="module-container">
+      <div class="module-container-retainer"></div>
+      <div class="module-wire-container"></div>
+      <div class="module-container-content"></div>
+      <div class="module-wire-handle-container"></div>
+    </div>
+  </div>
   <script src="js/bundle.js"></script>
-  <script src="js/lib.js"></script>
+  <script src="js/helper.js"></script>
   <script src="js/dom.js"></script>
-  <script src="js/components/side-panel-component.js"></script>
-  <script src="js/components/board-component.js"></script>
-  <script src="js/components/piece.js"></script>
-  <script src="js/components/port.js"></script>
-  <script src="js/components/board-event.js"></script>
-  <script src="js/components/main-panel-component.js"></script>
+  <script src="js/models/circuit-element.js"></script>
+  <script src="js/models/module-unit.js"></script>
+  <script src="js/components/component.js"></script>
+  <script src="js/components/module-port.js"></script>
+  <script src="js/components/module.js"></script>
+  <script src="js/components/module-wire.js"></script>
+  <script src="js/relations/lock-relation.js"></script>
+  <script src="js/components/module-container.js"></script>
+  <script src="js/components/button.js"></script>
+  <script src="js/components/sidebar-toggle-button.js"></script>
+  <script src="js/components/content-header.js"></script>
+  <script src="js/components/content.js"></script>
+  <script src="js/relations/sidebar-relation.js"></script>
+  <script src="js/components/sidebar-module.js"></script>
+  <script src="js/components/sidebar.js"></script>
+  <script src="js/components/body.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

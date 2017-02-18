@@ -1,0 +1,296 @@
+.module {
+  position: absolute;
+  width: 240px;
+}
+
+.module-dragging .module > .module-content > .module-component {
+  pointer-events: none;
+}
+
+.module.module-moving > .module-header {
+  background-color: orange;
+}
+
+.module.module-deleting > .module-header {
+  background-color: red;
+}
+
+.module.module-loading > .module-content {
+  height: 29px;
+  position: relative;
+  text-align: center;
+}
+
+.module.module-loading > .module-content::before {
+  content: 'Loading...';
+  font-size: 12px;
+  height: 29px;
+  line-height: 29px;
+}
+
+.module.module-loading > .module-content > .module-component {
+  position: absolute;
+  visibility: hidden;
+}
+
+.module.module-loading > .module-content > .module-port-list {
+  visibility: hidden;
+}
+
+.module.module-loading.module-error > .module-content::before {
+  background-color: pink;
+  content: 'ERROR';
+  color: red;
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.module-header {
+  background-color: #333;
+  border-radius: 3px 3px 0 0;
+  color: white;
+  height: 32px;
+}
+
+.module-header-title {
+  box-sizing: border-box;
+  cursor: move;
+  line-height: 29px;
+  overflow: hidden;
+  padding-left: 8px;
+  padding-top: 3px;
+  position: absolute;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 86%;
+}
+
+.module-header-delete-button {
+  cursor: pointer;
+  font-size: 19px;
+  line-height: 32px;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 14%;
+}
+
+.module-header-delete-button:hover {
+  opacity: 0.6;
+}
+
+.module-header-delete-button::before {
+  content: '×';
+}
+
+.module.module-delete-disabled > .module-header > .module-header-delete-button {
+  pointer-events: none;
+}
+
+.module-content {
+  background-color: white;
+  border-left: 3px solid #333;
+  border-right: 3px solid #333;
+}
+
+.module-component {
+  border: none;
+  height: 0;
+  overflow: hidden;
+  vertical-align: bottom;
+  width: 100%;
+}
+
+.module-port-list {
+  background-color: #333;
+  border-top: 1px solid #333;
+  position: relative;
+}
+
+.module-port {
+  background-color: white;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  height: 42px;
+  position: absolute;
+  width: 100%;
+}
+
+.module-port.module-port-moving {
+  z-index: 1;
+}
+
+.module-port.module-port-label-highlight {
+  background-color: orange;
+}
+
+.module-port > * {
+  position: absolute;
+}
+
+.module-port-plug {
+  left: calc(100% + 3px);
+  margin: 9px;
+}
+
+.module-port-socket {
+  border: 2px solid #333;
+  height: 28px;
+  left: -49px;
+  margin: 5px;
+  pointer-events: none;
+  width: 28px;
+}
+
+.module-port-plug,
+.module-port.module-port-socket-connected > .module-port-socket > span {
+  background-color: #333;
+  cursor: crosshair;
+  height: 24px;
+  width: 24px;
+}
+
+.module-port.module-port-socket-connected > .module-port-socket > span {
+  display: block;
+  margin: 2px;
+  pointer-events: auto;
+}
+
+.module-port[data-type='prop'] > .module-port-plug,
+.module-port[data-type='prop'].module-port-socket-connected > .module-port-socket > span {
+  border-radius: 3px;
+}
+
+.module-port[data-type='event'] > .module-port-plug,
+.module-port[data-type='event'].module-port-socket-connected > .module-port-socket > span {
+  border-radius: 12px;
+}
+
+.module-port[data-type='prop'] > .module-port-socket {
+  border-radius: 6px;
+}
+
+.module-port[data-type='event'] > .module-port-socket {
+  border-radius: 16px;
+}
+
+.module-port.module-port-plug-highlight > .module-port-plug {
+  background-color: red;
+}
+
+.module-port.module-port-socket-highlight > .module-port-socket {
+  border-color: red;
+}
+
+.module-port.module-port-socket-highlight > .module-port-socket > span {
+  background-color: red;
+}
+
+.module-port-label {
+  box-sizing: border-box;
+  line-height: 42px;
+  overflow: hidden;
+  padding-left: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 87%;
+}
+
+.module-port-hide-button {
+  cursor: pointer;
+  height: 42px;
+  right: 0;
+  text-align: center;
+  width: 13%;
+}
+
+.module-port-hide-button:hover {
+  opacity: 0.6;
+}
+
+.module-port.module-port-hide-disabled > .module-port-hide-button {
+  pointer-events: none;
+}
+
+.module-footer {
+  background-color: #333;
+  border-radius: 0 0 3px 3px;
+}
+
+.module-footer.hide {
+  border-bottom: 3px solid #333;
+}
+
+.module-footer.hide > * {
+  display: none;
+}
+
+.module-footer-icon {
+  height: 21px;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width: 21px;
+}
+
+.module-port-select {
+  border-radius: 3px;
+  height: 21px;
+  margin: 0;
+  opacity: 0;
+  width: 100%;
+}
+
+.module-wire {
+  display: inline-block;
+  overflow: visible;
+  position: absolute;
+}
+
+.module-wire > * {
+  position: absolute;
+}
+
+.module-wire-path-container {
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+  width: 1px;
+}
+
+.module-wire-path {
+  fill: none;
+  stroke: #333;
+  stroke-width: 2;
+}
+
+.module-wire.module-wire-highlight .module-wire-path {
+  stroke: red;
+}
+
+.module-wire-handle {
+  background-color: #333;
+  cursor: crosshair;
+  height: 24px;
+  position: absolute;
+  width: 24px;
+}
+
+.module-wire-handle.hide {
+  display: none;
+}
+
+.module-wire-handle[data-type='prop'] {
+  border-radius: 3px;
+}
+
+.module-wire-handle[data-type='event'] {
+  border-radius: 12px;
+}
+
+.module-wire-handle.module-wire-highlight {
+  background-color: red;
+}
