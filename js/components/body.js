@@ -7,7 +7,7 @@
   var Content = app.Content || require('./content.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
-  var ModuleData = function(props) {
+  var ModuleEntry = function(props) {
     this.packageName = props.packageName || '';
     this.label = props.label || '';
     this.description = props.description || '';
@@ -16,11 +16,11 @@
     this.tags = props.tags || [];
   };
 
-  ModuleData.prototype.key = function() {
+  ModuleEntry.prototype.key = function() {
     return this.packageName + '/' + this.src;
   };
 
-  ModuleData.prototype.keywordScore = function(keyword) {
+  ModuleEntry.prototype.keywordScore = function(keyword) {
     if (!keyword) {
       return 0;
     }
@@ -56,23 +56,23 @@
     return 0;
   };
 
-  var ModuleDataCollection = function() {
+  var ModuleEntryCollection = function() {
     this.data = {};
   };
 
-  ModuleDataCollection.prototype.load = function() {
+  ModuleEntryCollection.prototype.load = function() {
     return this.loadPackageNames().then(function(packageNames) {
       return Promise.all(packageNames.map(function(packageName) {
-        return this.loadModuleDatas(packageName).then(function(moduleDatas) {
-          moduleDatas.forEach(function(moduleData) {
-            this.data[moduleData.key()] = moduleData;
+        return this.loadModuleEntries(packageName).then(function(moduleEntries) {
+          moduleEntries.forEach(function(moduleEntry) {
+            this.data[moduleEntry.key()] = moduleEntry;
           }.bind(this));
         }.bind(this));
       }.bind(this)));
     }.bind(this));
   };
 
-  ModuleDataCollection.prototype.loadPackageNames = function() {
+  ModuleEntryCollection.prototype.loadPackageNames = function() {
     return dom.ajax({
       type: 'GET',
       url: 'modular_modules/index.json',
@@ -81,34 +81,34 @@
     });
   };
 
-  ModuleDataCollection.prototype.loadModuleDatas = function(packageName) {
+  ModuleEntryCollection.prototype.loadModuleEntries = function(packageName) {
     return dom.ajax({
       type: 'GET',
       url: 'modular_modules/' + packageName + '/index.json',
     }).then(function(text) {
       return JSON.parse(text).map(function(props) {
-        return new ModuleData(helper.extend(helper.clone(props), { packageName: packageName }));
+        return new ModuleEntry(helper.extend(helper.clone(props), { packageName: packageName }));
       });
     });
   };
 
-  ModuleDataCollection.prototype.get = function(key) {
+  ModuleEntryCollection.prototype.get = function(key) {
     return this.data[key] || null;
   };
 
-  ModuleDataCollection.prototype.search = function(keyword) {
-    return helper.sortBy(helper.values(this.data).filter(function(moduleData) {
-      return (moduleData.keywordScore(keyword) !== 0);
-    }), function(moduleData) {
+  ModuleEntryCollection.prototype.search = function(keyword) {
+    return helper.sortBy(helper.values(this.data).filter(function(moduleEntry) {
+      return (moduleEntry.keywordScore(keyword) !== 0);
+    }), function(moduleEntry) {
       // sort in descending order
-      return -(moduleData.keywordScore(keyword));
+      return -(moduleEntry.keywordScore(keyword));
     });
   };
 
   var Body = helper.inherits(function() {
     Body.super_.call(this, { element: dom.body() });
 
-    this.moduleDataCollection = this.prop(new ModuleDataCollection());
+    this.moduleEntryCollection = this.prop(new ModuleEntryCollection());
     this.dragCount = this.prop(0);
 
     this.content = new Content({
@@ -124,7 +124,7 @@
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       moduleDropper: Body.prototype.moduleDropper.bind(this),
-      moduleDataSearcher: Body.prototype.moduleDataSearcher.bind(this),
+      moduleEntrySearcher: Body.prototype.moduleEntrySearcher.bind(this),
     });
 
     dom.ready(Body.prototype.onready.bind(this));
@@ -156,7 +156,7 @@
 
   Body.prototype.onready = function() {
     this.content.redraw();
-    this.moduleDataCollection().load().then(function() {
+    this.moduleEntryCollection().load().then(function() {
       this.sidebar.searchEnabled(true);
     }.bind(this));
   };
@@ -198,17 +198,17 @@
   };
 
   Body.prototype.moduleDropper = function(name, x, y) {
-    var moduleData = this.moduleDataCollection().get(name);
+    var moduleEntry = this.moduleEntryCollection().get(name);
     this.content.loadModuleByClientPosition({
-      title: moduleData.label,
+      title: moduleEntry.label,
       name: name,
       x: x,
       y: y,
-    }, moduleData.visiblePortNames);
+    }, moduleEntry.visiblePortNames);
   };
 
-  Body.prototype.moduleDataSearcher = function(searchText) {
-    return this.moduleDataCollection().search(searchText);
+  Body.prototype.moduleEntrySearcher = function(searchText) {
+    return this.moduleEntryCollection().search(searchText);
   };
 
   if (typeof module !== 'undefined' && module.exports) {

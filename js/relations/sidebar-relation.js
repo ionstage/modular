@@ -9,18 +9,18 @@
 
     this.header = props.header;
     this.content = props.content;
-    this.moduleDataSearcher = props.moduleDataSearcher;
+    this.moduleEntrySearcher = props.moduleEntrySearcher;
   }, jCore.Relation);
 
   SidebarRelation.prototype.update = function() {
-    var moduleDatas = this.moduleDataSearcher(this.header.searchText());
+    var moduleEntries = this.moduleEntrySearcher(this.header.searchText());
     var content = this.content;
     content.clear();
-    moduleDatas.forEach(function(moduleData) {
+    moduleEntries.forEach(function(moduleEntry) {
       content.appendModule({
-        title: moduleData.label,
-        content: moduleData.description,
-        name: moduleData.key(),
+        title: moduleEntry.label,
+        content: moduleEntry.description,
+        name: moduleEntry.key(),
       });
     });
   };

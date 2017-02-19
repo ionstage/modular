@@ -146,7 +146,7 @@
     this.relation = new SidebarRelation({
       header: this.header,
       content: this.content,
-      moduleDataSearcher: props.moduleDataSearcher,
+      moduleEntrySearcher: props.moduleEntrySearcher,
     });
 
     this.moduleDragStarter = props.moduleDragStarter;
