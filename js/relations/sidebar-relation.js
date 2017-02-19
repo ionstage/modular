@@ -12,11 +12,14 @@
     this.moduleEntrySearcher = props.moduleEntrySearcher;
   }, jCore.Relation);
 
+  SidebarRelation.prototype.moduleEntries = function() {
+    return this.moduleEntrySearcher(this.header.searchText());
+  };
+
   SidebarRelation.prototype.update = function() {
-    var moduleEntries = this.moduleEntrySearcher(this.header.searchText());
     var content = this.content;
     content.clear();
-    moduleEntries.forEach(function(moduleEntry) {
+    this.moduleEntries().forEach(function(moduleEntry) {
       content.appendModule({
         title: moduleEntry.label,
         content: moduleEntry.description,
