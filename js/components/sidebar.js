@@ -108,6 +108,17 @@
     this.modules([]);
   };
 
+  SidebarContent.prototype.setModules = function(moduleEntries) {
+    this.clear();
+    moduleEntries.forEach(function(moduleEntry) {
+      this.appendModule({
+        title: moduleEntry.label,
+        content: moduleEntry.description,
+        name: moduleEntry.key(),
+      });
+    }.bind(this));
+  };
+
   SidebarContent.prototype.scrollEnabled = function(enabled) {
     if (enabled) {
       this.scrollable().enable();

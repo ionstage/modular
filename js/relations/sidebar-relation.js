@@ -17,15 +17,7 @@
   };
 
   SidebarRelation.prototype.update = function() {
-    var content = this.content;
-    content.clear();
-    this.moduleEntries().forEach(function(moduleEntry) {
-      content.appendModule({
-        title: moduleEntry.label,
-        content: moduleEntry.description,
-        name: moduleEntry.key(),
-      });
-    });
+    this.content.setModules(this.moduleEntries());
   };
 
   if (typeof module !== 'undefined' && module.exports) {
