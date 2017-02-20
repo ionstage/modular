@@ -20,7 +20,7 @@
   border: 1px solid #ccc;
   font-size: 11px;
   height: 26px;
-  line-height: 26px;
+  line-height: 24px;
   overflow: hidden;
   text-align: center;
 }
@@ -35,7 +35,7 @@
 
 .content-header > .button > span {
   display: inline-block;
-  padding-top: 1px;
+  line-height: 27px;
   pointer-events: none;
 }
 
