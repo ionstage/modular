@@ -4,6 +4,7 @@
   height: 26px;
   padding: 11px;
   position: relative;
+  z-index: 1;
 }
 
 .content-header.disabled {
