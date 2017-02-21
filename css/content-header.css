@@ -47,7 +47,6 @@
 }
 
 .sidebar-toggle-button > .icon {
-  display: none;
   height: 20px;
   width: 20px;
 }
@@ -60,12 +59,14 @@
   padding-left: 2px;
 }
 
-.sidebar-toggle-button[data-type='collapse'] > .angle-double-left {
+.sidebar-toggle-button[data-type='collapse'] > .angle-double-left,
+.sidebar-toggle-button[data-type='expand'] > .angle-double-right {
   display: inline;
 }
 
-.sidebar-toggle-button[data-type='expand'] > .angle-double-right {
-  display: inline;
+.sidebar-toggle-button[data-type='expand'] > .angle-double-left,
+.sidebar-toggle-button[data-type='collapse'] > .angle-double-right {
+  display: none;
 }
 
 .load-button,
