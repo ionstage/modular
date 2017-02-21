@@ -23,6 +23,7 @@ body > .module.clone {
   opacity: 0.6;
   position: absolute;
   top: 0;
+  z-index: 9999;
 }
 
 .sidebar-content .module > *,
