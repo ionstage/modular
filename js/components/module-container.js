@@ -380,7 +380,7 @@
     var localPoint = this.localPoint(helper.pick(props, ['x', 'y']));
 
     if (localPoint.x < 0 || localPoint.y < 0) {
-      return Promise.reject(new Error('Invalid position'));
+      return Promise.reject(new RangeError('Invalid position'));
     }
 
     return this.loadModule(helper.extend(helper.clone(props), localPoint), visiblePortNames);

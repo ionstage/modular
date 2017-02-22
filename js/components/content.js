@@ -40,7 +40,11 @@
   };
 
   Content.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
-    return this.moduleContainer.loadModuleByClientPosition(props, visiblePortNames);
+    return this.moduleContainer.loadModuleByClientPosition(props, visiblePortNames).catch(function(e) {
+      if (!(e instanceof RangeError)) {
+        throw e;
+      }
+    });
   };
 
   Content.prototype.redraw = function() {
