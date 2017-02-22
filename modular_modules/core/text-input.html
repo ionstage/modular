@@ -23,15 +23,17 @@
   <script src="js/modular-module.js"></script>
   <script>
     (function() {
+      var text = '';
       var textInputElement = document.getElementById('text-input');
 
       var props = {
         text: function(value) {
-          value = (value != null ? String(value) : '');
-          if (textInputElement.value !== value) {
+          value = (value != null ? String(value) : text);
+          if (value !== text) {
+            text = value;
             textInputElement.value = value;
           }
-          return value;
+          return text;
         },
       };
 
@@ -42,6 +44,8 @@
       textInputElement.addEventListener('input', function(event) {
         module.get('text')(event.target.value);
       });
+
+      textInputElement.value = text;
 
       modular.exports = module;
     })();
