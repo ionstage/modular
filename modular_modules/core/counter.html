@@ -28,23 +28,23 @@
   <script src="js/modular-module.js"></script>
   <script>
     (function() {
-      var countValue = 0;
+      var count = 0;
       var contentElement = document.getElementById('content');
 
       var props = {
         count: function(value) {
-          value = parseInt((!isNaN(value) ? Number(value) : countValue), 10);
-          if (value !== countValue) {
-            countValue = value;
-            contentElement.textContent = countValue;
+          value = parseInt((!isNaN(value) ? Number(value) : count), 10);
+          if (value !== count) {
+            count = value;
+            contentElement.textContent = count;
           }
-          return countValue;
+          return count;
         },
       };
 
       var events = {
         up: function() {
-          module.get('count')(countValue + 1);
+          module.get('count')(count + 1);
         },
         reset: function() {
           module.get('count')(0);
@@ -57,7 +57,7 @@
         { label: 'Reset', name: 'reset', type: 'event', arg: events.reset, plugDisabled: true },
       ]);
 
-      contentElement.textContent = countValue;
+      contentElement.textContent = count;
 
       modular.exports = module;
     })();
