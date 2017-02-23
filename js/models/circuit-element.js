@@ -19,7 +19,7 @@
 
   var CircuitElementMember = function(props) {
     this.callee = circuit[props.type](props.arg);
-    return this.wrapper(helper.extend(this.defaults(), helper.pick(props, CircuitElementMember.keys)));
+    return this.wrapper(helper.extend(this.defaults(), helper.pick(props, CircuitElementMember.KEYS)));
   };
 
   CircuitElementMember.prototype.defaults = function() {
@@ -39,7 +39,7 @@
     return wrapper;
   };
 
-  CircuitElementMember.keys = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
+  CircuitElementMember.KEYS = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
 
   var CircuitElement = function(members) {
     var memberTable = {};
