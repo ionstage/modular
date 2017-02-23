@@ -26,7 +26,7 @@
     this.optionElement = this.prop(this.renderOption());
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
 
-    // update list-item in redrawState() method
+    // update list-item in redrawToggleClass() method
     this.element = this.listItemElement;
   }, Component);
 
@@ -68,7 +68,7 @@
   ModulePort.prototype.redraw = function() {
     this.redrawVisibility();
     this.redrawPosition();
-    this.redrawStates();
+    this.redrawToggleClasses();
   };
 
   ModulePort.prototype.redrawVisibility = function() {
@@ -102,13 +102,13 @@
     cache.top = top;
   };
 
-  ModulePort.prototype.redrawStates = function() {
-    this.redrawState('socketConnected', 'module-port-socket-connected');
-    this.redrawState('labelHighlighted', 'module-port-label-highlight');
-    this.redrawState('plugHighlighted', 'module-port-plug-highlight');
-    this.redrawState('socketHighlighted', 'module-port-socket-highlight');
-    this.redrawState('isMoving', 'module-port-moving');
-    this.redrawState('hideDisabled', 'module-port-hide-disabled');
+  ModulePort.prototype.redrawToggleClasses = function() {
+    this.redrawToggleClass('socketConnected', 'module-port-socket-connected');
+    this.redrawToggleClass('labelHighlighted', 'module-port-label-highlight');
+    this.redrawToggleClass('plugHighlighted', 'module-port-plug-highlight');
+    this.redrawToggleClass('socketHighlighted', 'module-port-socket-highlight');
+    this.redrawToggleClass('isMoving', 'module-port-moving');
+    this.redrawToggleClass('hideDisabled', 'module-port-hide-disabled');
   };
 
   ModulePort.TYPE_PROP = 'prop';

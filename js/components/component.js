@@ -12,7 +12,7 @@
     this.cache = this.prop({});
   }, jCore.Component);
 
-  Component.prototype.redrawState = function(key, className) {
+  Component.prototype.redrawToggleClass = function(key, className) {
     var cache = this.cache();
     var value = this[key]();
 

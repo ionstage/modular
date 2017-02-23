@@ -85,7 +85,7 @@
 
   ContentHeader.prototype.redraw = function() {
     this.sidebarToggleButton().redraw();
-    this.redrawState('disabled', 'disabled');
+    this.redrawToggleClass('disabled', 'disabled');
   };
 
   if (typeof module !== 'undefined' && module.exports) {

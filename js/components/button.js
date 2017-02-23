@@ -35,8 +35,8 @@
   };
 
   Button.prototype.redraw = function() {
-    this.redrawState('isActive', 'active');
-    this.redrawState('disabled', 'disabled');
+    this.redrawToggleClass('isActive', 'active');
+    this.redrawToggleClass('disabled', 'disabled');
   };
 
   Button.prototype.ontap = function() {};

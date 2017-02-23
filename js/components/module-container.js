@@ -541,7 +541,7 @@
   };
 
   ModuleContainer.prototype.redraw = function() {
-    this.redrawState('disabled', 'disabled');
+    this.redrawToggleClass('disabled', 'disabled');
     this.redrawRetainer();
     this.redrawWireHandleContainer();
   };

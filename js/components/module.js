@@ -475,7 +475,7 @@
     this.redrawPortList();
     this.redrawFooter();
     this.redrawPortSelect();
-    this.redrawStates();
+    this.redrawToggleClasses();
   };
 
   Module.prototype.redrawTitle = function() {
@@ -576,11 +576,11 @@
     cache.toggledPorts = null;
   };
 
-  Module.prototype.redrawStates = function() {
-    this.redrawState('isLoading', 'module-loading');
-    this.redrawState('isError', 'module-error');
-    this.redrawState('isMoving', 'module-moving');
-    this.redrawState('isDeleting', 'module-deleting');
+  Module.prototype.redrawToggleClasses = function() {
+    this.redrawToggleClass('isLoading', 'module-loading');
+    this.redrawToggleClass('isError', 'module-error');
+    this.redrawToggleClass('isMoving', 'module-moving');
+    this.redrawToggleClass('isDeleting', 'module-deleting');
   };
 
   Module.prototype.dragType = function(target) {
