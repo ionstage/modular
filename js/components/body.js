@@ -162,30 +162,14 @@
   };
 
   Body.prototype.sidebarCollapser = function() {
-    return new Promise(function(resolve, reject) {
-      var element = this.element();
-
-      var ontransitionend = function() {
-        dom.off(element, 'transitionend', ontransitionend);
-        resolve();
-      };
-
-      dom.on(element, 'transitionend', ontransitionend);
-      dom.addClass(element, 'no-sidebar');
+    return dom.transition(this.element(), function() {
+      dom.addClass(this.element(), 'no-sidebar');
     }.bind(this));
   };
 
   Body.prototype.sidebarExpander = function() {
-    return new Promise(function(resolve, reject) {
-      var element = this.element();
-
-      var ontransitionend = function() {
-        dom.off(element, 'transitionend', ontransitionend);
-        resolve();
-      };
-
-      dom.on(element, 'transitionend', ontransitionend);
-      dom.removeClass(element, 'no-sidebar');
+    return dom.transition(this.element(), function() {
+      dom.removeClass(this.element(), 'no-sidebar');
     }.bind(this));
   };
 

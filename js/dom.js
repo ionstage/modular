@@ -242,6 +242,17 @@
     document.addEventListener('DOMContentLoaded', listener);
   };
 
+  dom.transition = function(el, callback) {
+    return new Promise(function(resolve, reject) {
+      var ontransitionend = function() {
+        dom.off(el, 'transitionend', ontransitionend);
+        resolve();
+      };
+      dom.on(el, 'transitionend', ontransitionend);
+      callback();
+    });
+  };
+
   dom.supportsTouch = function() {
     return 'createTouch' in document;
   };
