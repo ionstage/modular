@@ -12,16 +12,35 @@
     this.cache = this.prop({});
   }, jCore.Component);
 
-  Component.prototype.redrawToggleClass = function(key, className) {
-    var cache = this.cache();
-    var value = this[key]();
+  Component.prototype.redrawProp = function() {
+    var args = Array.prototype.slice.call(arguments);
+    var callback = args.pop();
 
-    if (value === cache[key]) {
+    var needsUpdate = args.some(function(arg) {
+      var cache = this.cache();
+      var value = this[arg]();
+      return (value !== cache[arg]);
+    }.bind(this));
+
+    if (!needsUpdate) {
       return;
     }
 
-    dom.toggleClass(this.element(), className, value);
-    cache[key] = value;
+    callback.apply(null, args.map(function(arg) {
+      return this[arg]();
+    }.bind(this)));
+
+    args.forEach(function(arg) {
+      var cache = this.cache();
+      var value = this[arg]();
+      cache[arg] = value;
+    }.bind(this));
+  };
+
+  Component.prototype.redrawToggleClass = function(key, className) {
+    this.redrawProp(key, function(value) {
+      dom.toggleClass(this.element(), className, value);
+    }.bind(this));
   };
 
   if (typeof module !== 'undefined' && module.exports) {
