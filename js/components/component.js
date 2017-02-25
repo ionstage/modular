@@ -12,29 +12,36 @@
     this.cache = this.prop({});
   }, jCore.Component);
 
+  Component.prototype.needsUpdate = function(keys) {
+    return keys.some(function(key) {
+      var cache = this.cache();
+      var value = this[key]();
+      return (value !== cache[key]);
+    }.bind(this));
+  };
+
+  Component.prototype.values = function(keys) {
+    return keys.map(function(key) {
+      return this[key]();
+    }.bind(this))
+  };
+
+  Component.prototype.updateCache = function(keys) {
+    keys.forEach(function(key) {
+      var cache = this.cache();
+      var value = this[key]();
+      cache[key] = value;
+    }.bind(this));
+  };
+
   Component.prototype.redrawProp = function() {
     var args = Array.prototype.slice.call(arguments);
     var callback = args.pop();
 
-    var needsUpdate = args.some(function(arg) {
-      var cache = this.cache();
-      var value = this[arg]();
-      return (value !== cache[arg]);
-    }.bind(this));
-
-    if (!needsUpdate) {
-      return;
+    if (this.needsUpdate(args)) {
+      callback.apply(null, this.values(args));
+      this.updateCache(args);
     }
-
-    callback.apply(null, args.map(function(arg) {
-      return this[arg]();
-    }.bind(this)));
-
-    args.forEach(function(arg) {
-      var cache = this.cache();
-      var value = this[arg]();
-      cache[arg] = value;
-    }.bind(this));
   };
 
   Component.prototype.redrawToggleClass = function(key, className) {
