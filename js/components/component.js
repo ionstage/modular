@@ -39,7 +39,7 @@
     var callback = args.pop();
 
     if (this.needsUpdate(args)) {
-      callback.apply(null, this.values(args));
+      callback.apply(this, this.values(args));
       this.updateCache(args);
     }
   };
@@ -47,7 +47,7 @@
   Component.prototype.redrawToggleClass = function(key, className) {
     this.redrawProp(key, function(value) {
       dom.toggleClass(this.element(), className, value);
-    }.bind(this));
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {
