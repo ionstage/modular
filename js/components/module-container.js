@@ -548,9 +548,8 @@
 
   ModuleContainer.prototype.redrawRetainer = function() {
     var point = this.diagonalPoint();
-    var padding = 80;
-    var retainerX = point.x - 1 + padding;
-    var retainerY = point.y - 1 + padding;
+    var retainerX = point.x - 1 + ModuleContainer.RETAINER_PADDING;
+    var retainerY = point.y - 1 + ModuleContainer.RETAINER_PADDING;
     var cache = this.cache();
 
     if (retainerX === cache.retainerX && retainerY === cache.retainerY) {
@@ -694,6 +693,8 @@
 
   ModuleContainer.LOCK_TYPE_PLUG = LockRelation.TYPE_PLUG;
   ModuleContainer.LOCK_TYPE_SOCKET = LockRelation.TYPE_SOCKET;
+
+  ModuleContainer.RETAINER_PADDING = 80;
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModuleContainer;
