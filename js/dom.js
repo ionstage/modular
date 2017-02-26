@@ -283,6 +283,19 @@
     }
   };
 
+  dom.Point = (function() {
+    var Point = function(props) {
+      this.x = props.x;
+      this.y = props.y;
+    };
+
+    Point.prototype.equal = function(other) {
+      return (this.x === other.x && this.y === other.y);
+    };
+
+    return Point;
+  })();
+
   dom.pagePoint = function(event, offset) {
     if (dom.supportsTouch()) {
       event = event.changedTouches[0];
