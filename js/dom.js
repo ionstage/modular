@@ -300,20 +300,20 @@
     if (dom.supportsTouch()) {
       event = event.changedTouches[0];
     }
-    return {
+    return new dom.Point({
       x: event.pageX - (offset ? offset.x : 0),
       y: event.pageY - (offset ? offset.y : 0),
-    };
+    });
   };
 
   dom.clientPoint = function(event, offset) {
     if (dom.supportsTouch()) {
       event = event.changedTouches[0];
     }
-    return {
+    return new dom.Point({
       x: event.clientX - (offset ? offset.x : 0),
       y: event.clientY - (offset ? offset.y : 0),
-    };
+    });
   };
 
   dom.identifier = function(event) {

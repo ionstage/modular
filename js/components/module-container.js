@@ -159,7 +159,7 @@
 
   ModuleContainer.prototype.clientPosition = function() {
     var rect = dom.rect(this.element());
-    return { x: rect.left, y: rect.top };
+    return new dom.Point({ x: rect.left, y: rect.top });
   };
 
   ModuleContainer.prototype.scrollLeft = function() {
@@ -172,14 +172,14 @@
 
   ModuleContainer.prototype.localPoint = function(point) {
     var clientPosition = this.clientPosition();
-    return {
+    return new dom.Point({
       x: point.x - clientPosition.x + this.scrollLeft(),
       y: point.y - clientPosition.y + this.scrollTop(),
-    };
+    });
   };
 
   ModuleContainer.prototype.diagonalPoint = function() {
-    var point = { x: 0, y: 0 };
+    var point = new dom.Point({ x: 0, y: 0 });
     this.modules().forEach(function(module) {
       var diagonalPoint = module.diagonalPoint();
       point.x = Math.max(diagonalPoint.x, point.x);

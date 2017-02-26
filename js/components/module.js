@@ -98,10 +98,10 @@
 
   Module.prototype.diagonalPoint = function() {
     var rect = dom.rect(this.element());
-    return {
+    return new dom.Point({
       x: this.x() + rect.width + (this.hasVisiblePortPlug() ? ModulePort.PLUG_WIDTH : 0),
       y: this.y() + rect.height,
-    };
+    });
   };
 
   Module.prototype.hasVisiblePortPlug = function() {
@@ -117,17 +117,17 @@
   };
 
   Module.prototype.plugPosition = function(port) {
-    return {
+    return new dom.Point({
       x: this.x() + ModulePort.PLUG_OFFSET_X,
       y: this.y() + this.portListTop() + port.middle(),
-    };
+    });
   };
 
   Module.prototype.socketPosition = function(port) {
-    return {
+    return new dom.Point({
       x: this.x() + ModulePort.SOCKET_OFFSET_X,
       y: this.y() + this.portListTop() + port.middle(),
-    };
+    });
   };
 
   Module.prototype.port = function(name) {
