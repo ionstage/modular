@@ -16,7 +16,7 @@
     return keys.some(function(key) {
       var cache = this.cache();
       var value = this[key]();
-      return (value !== cache[key]);
+      return !helper.equal(value, cache[key]);
     }.bind(this));
   };
 
