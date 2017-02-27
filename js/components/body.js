@@ -64,6 +64,10 @@
     return 'modular_modules/index.json';
   };
 
+  ModuleEntryCollection.prototype.moduleEntriesUrl = function(packageName) {
+    return 'modular_modules/' + packageName + '/index.json';
+  };
+
   ModuleEntryCollection.prototype.load = function() {
     return this.loadPackageNames().then(function(packageNames) {
       return Promise.all(packageNames.map(function(packageName) {
@@ -88,7 +92,7 @@
   ModuleEntryCollection.prototype.loadModuleEntries = function(packageName) {
     return dom.ajax({
       type: 'GET',
-      url: 'modular_modules/' + packageName + '/index.json',
+      url: this.moduleEntriesUrl(packageName),
     }).then(function(text) {
       return JSON.parse(text).map(function(props) {
         return new ModuleEntry(helper.extend(helper.clone(props), { packageName: packageName }));
