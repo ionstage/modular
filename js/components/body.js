@@ -65,7 +65,13 @@
   };
 
   ModuleEntryCollection.prototype.moduleEntriesUrl = function(packageName) {
-    return 'modular_modules/' + packageName + '/index.json';
+    return [
+      'modular_modules/',
+      packageName.split('/').map(function(s) {
+        return encodeURIComponent(s);
+      }).join('/'),
+      '/index.json',
+    ].join('');
   };
 
   ModuleEntryCollection.prototype.load = function() {
