@@ -60,6 +60,10 @@
     this.data = {};
   };
 
+  ModuleEntryCollection.prototype.packageNamesUrl = function() {
+    return 'modular_modules/index.json';
+  };
+
   ModuleEntryCollection.prototype.load = function() {
     return this.loadPackageNames().then(function(packageNames) {
       return Promise.all(packageNames.map(function(packageName) {
@@ -75,7 +79,7 @@
   ModuleEntryCollection.prototype.loadPackageNames = function() {
     return dom.ajax({
       type: 'GET',
-      url: 'modular_modules/index.json',
+      url: this.packageNamesUrl(),
     }).then(function(text) {
       return JSON.parse(text);
     });
