@@ -5,8 +5,6 @@
   var helper = app.helper || require('../helper.js');
 
   var LockRelation = helper.inherits(function(props) {
-    LockRelation.super_.call(this);
-
     this.type = this.prop(props.type);
     this.unit = this.prop(props.unit);
     this.wire = this.prop(props.wire);

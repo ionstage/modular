@@ -5,8 +5,6 @@
   var helper = app.helper || require('../helper.js');
 
   var SidebarRelation = helper.inherits(function(props) {
-    SidebarRelation.super_.call(this);
-
     this.header = props.header;
     this.content = props.content;
     this.moduleEntrySearcher = props.moduleEntrySearcher;
