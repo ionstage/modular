@@ -5,15 +5,15 @@
   var helper = app.helper || require('../helper.js');
 
   var LockRelation = helper.inherits(function(props) {
-    this.type = this.prop(props.type);
-    this.unit = this.prop(props.unit);
-    this.wire = this.prop(props.wire);
+    this.type = props.type;
+    this.unit = props.unit;
+    this.wire = props.wire;
   }, jCore.Relation);
 
   LockRelation.prototype.positionType = (function() {
     var map = { plug: 'source', socket: 'target' };
     return function() {
-      return map[this.type()];
+      return map[this.type];
     };
   })();
 
@@ -22,14 +22,14 @@
       return false;
     }
     return Object.keys(this).every(function(key) {
-      return helper.equal(this[key](), other[key]());
+      return helper.equal(this[key], other[key]);
     }.bind(this));
   };
 
   LockRelation.prototype.update = function() {
-    var wire = this.wire();
+    var wire = this.wire;
     var positionType = this.positionType();
-    var position = this.unit()[this.type() + 'Position']();
+    var position = this.unit[this.type + 'Position']();
 
     wire[positionType + 'X'](position.x);
     wire[positionType + 'Y'](position.y);

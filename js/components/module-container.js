@@ -42,7 +42,7 @@
     var relations = [];
     this.data.forEach(function(relation) {
       var matched = Object.keys(props).every(function(key) {
-        return helper.equal(relation[key](), props[key]);
+        return helper.equal(relation[key], props[key]);
       });
       if (matched) {
         relations.push(relation);
@@ -193,7 +193,7 @@
       type: type,
       unit: unit,
     }).map(function(relation) {
-      return relation.wire();
+      return relation.wire;
     });
   };
 
@@ -535,7 +535,7 @@
     var highlighted = this.lockRelationCollection().filter({
       unit: unit,
     }).some(function(relation) {
-      return (draggingWires.indexOf(relation.wire()) !== -1);
+      return (draggingWires.indexOf(relation.wire) !== -1);
     });
     unit.labelHighlighted(highlighted);
   };
