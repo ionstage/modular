@@ -122,8 +122,9 @@
   var Body = helper.inherits(function() {
     Body.super_.call(this, { element: dom.body() });
 
-    this.moduleEntryCollection = this.prop(new ModuleEntryCollection());
     this.dragCount = this.prop(0);
+
+    this.moduleEntryCollection = new ModuleEntryCollection();
 
     this.content = new Content({
       element: dom.el('.content'),
@@ -170,7 +171,7 @@
 
   Body.prototype.onready = function() {
     this.content.redraw();
-    this.moduleEntryCollection().load().then(function() {
+    this.moduleEntryCollection.load().then(function() {
       this.sidebar.searchEnabled(true);
     }.bind(this));
   };
@@ -196,7 +197,7 @@
   };
 
   Body.prototype.moduleDropper = function(name, x, y) {
-    var moduleEntry = this.moduleEntryCollection().get(name);
+    var moduleEntry = this.moduleEntryCollection.get(name);
     this.content.loadModuleByClientPosition({
       title: moduleEntry.label,
       name: name,
@@ -206,7 +207,7 @@
   };
 
   Body.prototype.moduleEntrySearcher = function(searchText) {
-    return this.moduleEntryCollection().search(searchText);
+    return this.moduleEntryCollection.search(searchText);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
