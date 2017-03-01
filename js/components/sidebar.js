@@ -66,14 +66,15 @@
     SidebarContent.super_.call(this, props);
 
     this.modules = this.prop([]);
-    this.scrollable = this.prop(new IScroll(this.element(), {
+
+    this.scrollable = new IScroll(this.element(), {
       disableMouse: true,
       disablePointer: true,
       fadeScrollbars: dom.supportsTouch(),
       interactiveScrollbars: !dom.supportsTouch(),
       mouseWheel: true,
       scrollbars: true,
-    }));
+    });
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
@@ -121,16 +122,16 @@
 
   SidebarContent.prototype.scrollEnabled = function(enabled) {
     if (enabled) {
-      this.scrollable().enable();
+      this.scrollable.enable();
     } else {
-      this.scrollable().disable();
+      this.scrollable.disable();
     }
   };
 
   SidebarContent.prototype.redraw = function() {
     // XXX: zero timeout to wait for the repaint of iScroll
     setTimeout(function() {
-      this.scrollable().refresh();
+      this.scrollable.refresh();
     }.bind(this), 0);
   };
 
