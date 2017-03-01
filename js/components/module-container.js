@@ -118,7 +118,7 @@
 
     this.modules = this.prop([]);
     this.lockRelationCollection = new LockRelationCollection();
-    this.bindingCollection = this.prop(new BindingCollection());
+    this.bindingCollection = new BindingCollection();
     this.disabled = this.prop(false);
     this.draggingWires = this.prop([]);
 
@@ -202,7 +202,7 @@
   };
 
   ModuleContainer.prototype.bindings = function() {
-    return this.bindingCollection().toArray();
+    return this.bindingCollection.toArray();
   };
 
   ModuleContainer.prototype.connectedTargetUnits = function(sourceUnit) {
@@ -403,14 +403,14 @@
   };
 
   ModuleContainer.prototype.bind = function(sourceUnit, targetUnit) {
-    this.bindingCollection().add({
+    this.bindingCollection.add({
       sourceUnit: sourceUnit,
       targetUnit: targetUnit,
     });
   };
 
   ModuleContainer.prototype.unbind = function(sourceUnit, targetUnit) {
-    this.bindingCollection().remove({
+    this.bindingCollection.remove({
       sourceUnit: sourceUnit,
       targetUnit: targetUnit,
     });
