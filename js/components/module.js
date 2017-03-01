@@ -27,8 +27,9 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
     this.parentElement = this.prop(props.parentElement);
-    this.draggable = this.prop(null);
     this.dragContext = this.prop({});
+
+    this.draggable = null;
 
     this.onmessage = null;
     this.onchange = Module.prototype.onchange.bind(this);
@@ -241,17 +242,17 @@
   };
 
   Module.prototype.registerDragListener = function() {
-    this.draggable(new dom.Draggable({
+    this.draggable = new dom.Draggable({
       element: this.element(),
       onstart: Module.prototype.onstart.bind(this),
       onmove: Module.prototype.onmove.bind(this),
       onend: Module.prototype.onend.bind(this),
-    }));
+    });
   };
 
   Module.prototype.unregisterDragListener = function() {
-    this.draggable().destroy();
-    this.draggable(null);
+    this.draggable.destroy();
+    this.draggable = null;
   };
 
   Module.prototype.registerPortSelectChangeListener = function() {

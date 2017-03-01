@@ -12,8 +12,9 @@
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
     this.parentElement = this.prop(null);
-    this.draggable = this.prop(null);
     this.dragContext = this.prop({});
+
+    this.draggable = null;
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
@@ -29,17 +30,17 @@
   };
 
   SidebarModule.prototype.registerDragListener = function() {
-    this.draggable(new dom.Draggable({
+    this.draggable = new dom.Draggable({
       element: this.element(),
       onstart: SidebarModule.prototype.onstart.bind(this),
       onmove: SidebarModule.prototype.onmove.bind(this),
       onend: SidebarModule.prototype.onend.bind(this),
-    }));
+    });
   };
 
   SidebarModule.prototype.unregisterDragListener = function() {
-    this.draggable().destroy();
-    this.draggable(null);
+    this.draggable.destroy();
+    this.draggable = null;
   };
 
   SidebarModule.prototype.makeCloneElement = function() {
