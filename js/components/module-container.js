@@ -117,7 +117,7 @@
     ModuleContainer.super_.call(this, props);
 
     this.modules = this.prop([]);
-    this.lockRelationCollection = this.prop(new LockRelationCollection());
+    this.lockRelationCollection = new LockRelationCollection();
     this.bindingCollection = this.prop(new BindingCollection());
     this.disabled = this.prop(false);
     this.draggingWires = this.prop([]);
@@ -189,7 +189,7 @@
   };
 
   ModuleContainer.prototype.lockedWires = function(type, unit) {
-    return this.lockRelationCollection().filter({
+    return this.lockRelationCollection.filter({
       type: type,
       unit: unit,
     }).map(function(relation) {
@@ -387,7 +387,7 @@
   };
 
   ModuleContainer.prototype.lock = function(type, unit, wire) {
-    this.lockRelationCollection().add({
+    this.lockRelationCollection.add({
       type: type,
       unit: unit,
       wire: wire,
@@ -395,7 +395,7 @@
   };
 
   ModuleContainer.prototype.unlock = function(type, unit, wire) {
-    this.lockRelationCollection().remove({
+    this.lockRelationCollection.remove({
       type: type,
       unit: unit,
       wire: wire,
@@ -532,7 +532,7 @@
 
   ModuleContainer.prototype.updateDragHighlight = function(unit) {
     var draggingWires = this.draggingWires();
-    var highlighted = this.lockRelationCollection().filter({
+    var highlighted = this.lockRelationCollection.filter({
       unit: unit,
     }).some(function(relation) {
       return (draggingWires.indexOf(relation.wire) !== -1);
