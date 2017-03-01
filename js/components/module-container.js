@@ -117,10 +117,11 @@
     ModuleContainer.super_.call(this, props);
 
     this.modules = this.prop([]);
-    this.lockRelationCollection = new LockRelationCollection();
-    this.bindingCollection = new BindingCollection();
     this.disabled = this.prop(false);
     this.draggingWires = this.prop([]);
+
+    this.lockRelationCollection = new LockRelationCollection();
+    this.bindingCollection = new BindingCollection();
 
     this.deleter = ModuleContainer.prototype.deleter.bind(this);
     this.fronter = ModuleContainer.prototype.fronter.bind(this);
