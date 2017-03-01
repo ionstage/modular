@@ -12,9 +12,9 @@
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
     this.parentElement = this.prop(null);
-    this.dragContext = this.prop({});
 
     this.draggable = null;
+    this.dragContext = {};
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
@@ -83,7 +83,7 @@
       dom.remove(element);
       this.element(null);
       this.cache({});
-      this.dragContext({});
+      this.dragContext = {};
       return;
     }
 
@@ -126,7 +126,7 @@
       dom.translate(cloneElement, left, top);
       dom.append(dom.body(), cloneElement);
 
-      var context = this.dragContext();
+      var context = this.dragContext;
       context.cloneElement = cloneElement;
       context.left = left;
       context.top = top;
@@ -136,7 +136,7 @@
     }.bind(this);
 
     if (dom.supportsTouch()) {
-      var context = this.dragContext();
+      var context = this.dragContext;
       context.cloneElement = null;
       context.timer = setTimeout(showCloneElement, 300);
     } else {
@@ -146,7 +146,7 @@
   };
 
   SidebarModule.prototype.onmove = function(dx, dy, event) {
-    var context = this.dragContext();
+    var context = this.dragContext;
     if (context.cloneElement) {
       dom.translate(context.cloneElement, context.left + dx, context.top + dy);
     } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
@@ -156,7 +156,7 @@
   };
 
   SidebarModule.prototype.onend = function(dx, dy, event) {
-    var context = this.dragContext();
+    var context = this.dragContext;
     var cloneElement = context.cloneElement;
     if (cloneElement) {
       var rect = dom.rect(cloneElement);

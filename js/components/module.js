@@ -27,9 +27,9 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
     this.parentElement = this.prop(props.parentElement);
-    this.dragContext = this.prop({});
 
     this.draggable = null;
+    this.dragContext = {};
 
     this.onmessage = null;
     this.onchange = Module.prototype.onchange.bind(this);
@@ -464,7 +464,7 @@
       dom.remove(element);
       this.element(null);
       this.cache({});
-      this.dragContext({});
+      this.dragContext = {};
       return;
     }
 
@@ -603,7 +603,7 @@
   };
 
   Module.prototype.onstart = function(x, y, event) {
-    var context = this.dragContext();
+    var context = this.dragContext;
     var type = context.type = this.dragType(dom.target(event));
 
     if (!type) {
@@ -616,7 +616,7 @@
   };
 
   Module.prototype.onmove = function(dx, dy, event) {
-    var context = this.dragContext();
+    var context = this.dragContext;
     var type = context.type;
 
     if (!type) {
@@ -627,7 +627,7 @@
   };
 
   Module.prototype.onend = function(dx, dy, event) {
-    var context = this.dragContext();
+    var context = this.dragContext;
     var type = context.type;
 
     if (!type) {
