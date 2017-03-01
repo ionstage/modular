@@ -50,25 +50,25 @@
 
     this.disabled = this.prop(false);
 
-    this.sidebarToggleButton = this.prop(new SidebarToggleButton({
+    this.sidebarToggleButton = new SidebarToggleButton({
       element: this.sidebarToggleButtonElement(),
       collapser: props.sidebarCollapser,
       expander: props.sidebarExpander,
-    }));
+    });
 
-    this.loadButton = this.prop(new LoadButton({
+    this.loadButton = new LoadButton({
       element: this.loadButtonElement(),
       loader: props.fileLoader,
-    }));
+    });
 
-    this.saveButton = this.prop(new SaveButton({
+    this.saveButton = new SaveButton({
       element: this.saveButtonElement(),
       saver: props.fileSaver,
-    }));
+    });
 
-    this.sidebarToggleButton().registerTapListener();
-    this.loadButton().registerListeners();
-    this.saveButton().registerTapListener();
+    this.sidebarToggleButton.registerTapListener();
+    this.loadButton.registerListeners();
+    this.saveButton.registerTapListener();
   }, Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {
@@ -84,7 +84,7 @@
   };
 
   ContentHeader.prototype.redraw = function() {
-    this.sidebarToggleButton().redraw();
+    this.sidebarToggleButton.redraw();
     this.redrawToggleClass('disabled', 'disabled');
   };
 
