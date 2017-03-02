@@ -29,7 +29,6 @@
     this.parentElement = this.prop(props.parentElement);
 
     this.draggable = null;
-    this.dragContext = {};
 
     this.onmessage = null;
     this.onchange = Module.prototype.onchange.bind(this);
@@ -464,7 +463,6 @@
       dom.remove(element);
       this.element(null);
       this.cache({});
-      this.dragContext = {};
       return;
     }
 
@@ -602,9 +600,9 @@
     }
   };
 
-  Module.prototype.onstart = function(x, y, event) {
-    var context = this.dragContext;
-    var type = context.type = this.dragType(dom.target(event));
+  Module.prototype.onstart = function(x, y, event, context) {
+    var type = this.dragType(dom.target(event));
+    context.type = type;
 
     if (!type) {
       return;
@@ -615,8 +613,7 @@
     this.dragStarter();
   };
 
-  Module.prototype.onmove = function(dx, dy, event) {
-    var context = this.dragContext;
+  Module.prototype.onmove = function(dx, dy, event, context) {
     var type = context.type;
 
     if (!type) {
@@ -626,8 +623,7 @@
     Module.DRAG_LISTENERS[type].onmove.call(this, dx, dy, event, context);
   };
 
-  Module.prototype.onend = function(dx, dy, event) {
-    var context = this.dragContext;
+  Module.prototype.onend = function(dx, dy, event, context) {
     var type = context.type;
 
     if (!type) {

@@ -335,6 +335,7 @@
       this.lock = false;
       this.identifier = null;
       this.startingPoint = null;
+      this.context = {};
 
       dom.on(this.element, dom.eventType('start'), this.start);
     };
@@ -343,6 +344,7 @@
       dom.off(this.element, dom.eventType('start'), this.start);
       dom.off(document, dom.eventType('move'), this.move);
       dom.off(document, dom.eventType('end'), this.end);
+      this.context = null;
     };
 
     var start = function(event) {
@@ -362,7 +364,7 @@
           x: rect.left - dom.scrollLeft(element),
           y: rect.top - dom.scrollTop(element),
         });
-        onstart(p.x, p.y, event);
+        onstart(p.x, p.y, event, this.context);
       }
 
       dom.on(document, dom.eventType('move'), this.move);
@@ -379,7 +381,7 @@
       var onmove = this.onmove;
       if (typeof onmove === 'function') {
         var d = dom.pagePoint(event, this.startingPoint);
-        onmove(d.x, d.y, event);
+        onmove(d.x, d.y, event, this.context);
       }
     };
 
@@ -396,7 +398,7 @@
       var onend = this.onend;
       if (typeof onend === 'function') {
         var d = dom.pagePoint(event, this.startingPoint);
-        onend(d.x, d.y, event);
+        onend(d.x, d.y, event, this.context);
       }
 
       this.lock = false;
