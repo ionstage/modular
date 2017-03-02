@@ -465,10 +465,6 @@
       this.listener = Listenable.prototype.listener.bind(this);
     };
 
-    Listenable.prototype.isRegistered = function() {
-      return (!!this.resolve && !!this.reject);
-    };
-
     Listenable.prototype.register = function(resolve, reject) {
       this.resolve = resolve;
       this.reject = reject;

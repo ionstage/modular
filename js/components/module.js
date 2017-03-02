@@ -275,22 +275,12 @@
 
   Module.prototype.registerMessageListener = function(resolve, reject) {
     var messageListenable = this.messageListenable;
-
-    if (messageListenable.isRegistered()) {
-      return;
-    }
-
     messageListenable.register(resolve, reject);
     dom.on(this.componentContentWindow(), 'message', messageListenable.listener);
   };
 
   Module.prototype.unregisterMessageListener = function() {
     var messageListenable = this.messageListenable;
-
-    if (!messageListenable.isRegistered()) {
-      return;
-    }
-
     dom.off(this.componentContentWindow(), 'message', messageListenable.listener);
     messageListenable.unregister();
   };
