@@ -28,9 +28,12 @@
     this.isDeleting = this.prop(false);
     this.parentElement = this.prop(props.parentElement);
 
+    this.messageListenable = new dom.Listenable({
+      callback: Module.prototype.onmessage.bind(this),
+    });
+
     this.draggable = null;
 
-    this.onmessage = null;
     this.onchange = Module.prototype.onchange.bind(this);
     this.onpoint = Module.prototype.onpoint.bind(this);
 
@@ -271,37 +274,25 @@
   };
 
   Module.prototype.registerMessageListener = function(resolve, reject) {
-    if (this.onmessage) {
+    var messageListenable = this.messageListenable;
+
+    if (messageListenable.isRegistered()) {
       return;
     }
 
-    this.onmessage = (function(event) {
-      try {
-        if (event.origin !== dom.origin()) {
-          throw new Error('Invalid content origin');
-        }
-        if (event.data !== this.messageData()) {
-          throw new Error('Invalid content data');
-        }
-        if (!this.circuitElement()) {
-          throw new Error('Invalid circuit element');
-        }
-        resolve();
-      } catch(e) {
-        reject(e);
-      }
-    }).bind(this);
-
-    dom.on(this.componentContentWindow(), 'message', this.onmessage);
+    messageListenable.register(resolve, reject);
+    dom.on(this.componentContentWindow(), 'message', messageListenable.listener);
   };
 
   Module.prototype.unregisterMessageListener = function() {
-    if (!this.onmessage) {
+    var messageListenable = this.messageListenable;
+
+    if (!messageListenable.isRegistered()) {
       return;
     }
 
-    dom.off(this.componentContentWindow(), 'message', this.onmessage);
-    this.onmessage = null;
+    dom.off(this.componentContentWindow(), 'message', messageListenable.listener);
+    messageListenable.unregister();
   };
 
   Module.prototype.setComponentContent = function(contentText, messageData) {
@@ -632,6 +623,18 @@
 
     Module.DRAG_LISTENERS[type].onend.call(this, dx, dy, event, context);
     this.dragEnder();
+  };
+
+  Module.prototype.onmessage = function(event) {
+    if (event.origin !== dom.origin()) {
+      throw new Error('Invalid content origin');
+    }
+    if (event.data !== this.messageData()) {
+      throw new Error('Invalid content data');
+    }
+    if (!this.circuitElement()) {
+      throw new Error('Invalid circuit element');
+    }
   };
 
   Module.prototype.onchange = function(event) {

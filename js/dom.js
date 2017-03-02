@@ -457,6 +457,40 @@
     return location.protocol + '//' + location.host;
   };
 
+  dom.Listenable = (function() {
+    var Listenable = function(props) {
+      this.callback = props.callback;
+      this.resolve = null;
+      this.reject = null;
+      this.listener = Listenable.prototype.listener.bind(this);
+    };
+
+    Listenable.prototype.isRegistered = function() {
+      return (!!this.resolve && !!this.reject);
+    };
+
+    Listenable.prototype.register = function(resolve, reject) {
+      this.resolve = resolve;
+      this.reject = reject;
+    };
+
+    Listenable.prototype.unregister = function() {
+      this.resolve = null;
+      this.reject = null;
+    };
+
+    Listenable.prototype.listener = function(event) {
+      try {
+        this.callback(event);
+        this.resolve();
+      } catch (e) {
+        this.reject(e);
+      }
+    };
+
+    return Listenable;
+  })();
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = dom;
   } else {
