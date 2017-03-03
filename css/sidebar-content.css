@@ -43,7 +43,7 @@ body > .module.clone > .module-header {
 }
 
 body > .module.clone > .module-header {
-  background-color: orange;
+  background-color: #ffa726;
 }
 
 .sidebar-content .module > .module-content,
@@ -64,8 +64,8 @@ body > .module.clone > .module-content {
 }
 
 body > .module.clone > .module-content {
-  border-bottom: 3px solid orange;
-  border-left: 3px solid orange;
-  border-right: 3px solid orange;
-  color: orange;
+  border-bottom: 3px solid #ffa726;
+  border-left: 3px solid #ffa726;
+  border-right: 3px solid #ffa726;
+  color: #ffa726;
 }
