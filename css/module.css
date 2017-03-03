@@ -47,7 +47,7 @@
 }
 
 .module-header {
-  background-color: #333;
+  background-color: #212121;
   border-radius: 3px 3px 0 0;
   color: white;
   height: 32px;
@@ -90,8 +90,8 @@
 
 .module-content {
   background-color: white;
-  border-left: 3px solid #333;
-  border-right: 3px solid #333;
+  border-left: 3px solid #212121;
+  border-right: 3px solid #212121;
 }
 
 .module-component {
@@ -103,15 +103,15 @@
 }
 
 .module-port-list {
-  background-color: #333;
-  border-top: 1px solid #333;
+  background-color: #212121;
+  border-top: 1px solid #212121;
   position: relative;
 }
 
 .module-port {
   background-color: white;
-  border-top: 1px solid #333;
-  border-bottom: 1px solid #333;
+  border-top: 1px solid #212121;
+  border-bottom: 1px solid #212121;
   height: 42px;
   position: absolute;
   width: 100%;
@@ -135,7 +135,7 @@
 }
 
 .module-port-socket {
-  border: 2px solid #333;
+  border: 2px solid #212121;
   height: 28px;
   left: -49px;
   margin: 5px;
@@ -145,7 +145,7 @@
 
 .module-port-plug,
 .module-port.module-port-socket-connected > .module-port-socket > span {
-  background-color: #333;
+  background-color: #212121;
   cursor: crosshair;
   height: 24px;
   width: 24px;
@@ -214,12 +214,12 @@
 }
 
 .module-footer {
-  background-color: #333;
+  background-color: #212121;
   border-radius: 0 0 3px 3px;
 }
 
 .module-footer.hide {
-  border-bottom: 3px solid #333;
+  border-bottom: 3px solid #212121;
 }
 
 .module-footer.hide > * {
@@ -263,7 +263,7 @@
 
 .module-wire-path {
   fill: none;
-  stroke: #333;
+  stroke: #212121;
   stroke-width: 2;
 }
 
@@ -272,7 +272,7 @@
 }
 
 .module-wire-handle {
-  background-color: #333;
+  background-color: #212121;
   cursor: crosshair;
   height: 24px;
   position: absolute;
