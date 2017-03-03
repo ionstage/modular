@@ -49,7 +49,7 @@
 .module-header {
   background-color: #212121;
   border-radius: 3px 3px 0 0;
-  color: white;
+  color: #fff;
   height: 32px;
 }
 
@@ -89,7 +89,7 @@
 }
 
 .module-content {
-  background-color: white;
+  background-color: #fff;
   border-left: 3px solid #212121;
   border-right: 3px solid #212121;
 }
@@ -109,7 +109,7 @@
 }
 
 .module-port {
-  background-color: white;
+  background-color: #fff;
   border-top: 1px solid #212121;
   border-bottom: 1px solid #212121;
   height: 42px;

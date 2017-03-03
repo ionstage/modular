@@ -1,6 +1,6 @@
 .module-container {
   -webkit-overflow-scrolling: touch;
-  background-color: white;
+  background-color: #fff;
   height: calc(100% - 49px);
   overflow: auto;
   position: relative;
