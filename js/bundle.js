@@ -93,7 +93,7 @@ process.umask = function() { return 0; };
 
 },{}],"circuit":[function(require,module,exports){
 /**
- * circuit v1.0.0
+ * circuit v1.1.0
  * (c) 2015 iOnStage
  * Released under the MIT License.
  */
@@ -150,7 +150,7 @@ process.umask = function() { return 0; };
       this.cache = initialValue;
       this.value = identity;
     } else {
-      // this.cache is undefined until initial value setting
+      this.cache = initialValue();
       this.value = initialValue;
     }
 
@@ -215,7 +215,7 @@ process.umask = function() { return 0; };
 
         targetSelf.dirty = true;
 
-        if(lastIndexOf(dirtyTargets, target) === -1)
+        if (lastIndexOf(dirtyTargets, target) === -1)
           dirtyTargets.push(target);
 
         CircuitProp.markDirtyTargets(targetSelf.targets);
@@ -225,13 +225,15 @@ process.umask = function() { return 0; };
         return;
 
       timer = setTimeout(function() {
-        for (var i = 0, len = dirtyTargets.length; i < len; i++) {
-          var target = dirtyTargets[i];
+        var updateTargets = dirtyTargets.slice();
+        dirtyTargets = [];
+
+        for (var i = 0, len = updateTargets.length; i < len; i++) {
+          var target = updateTargets[i];
           if (target._self.dirty)
             target();
         }
 
-        dirtyTargets = [];
         timer = null;
       }, 0);
     };
@@ -307,8 +309,10 @@ process.umask = function() { return 0; };
     sourceSelf.targets.push(target);
     targetSelf.sources.push(source);
 
-    if (sourceSelf.constructor === CircuitProp)
+    if (sourceSelf.constructor === CircuitProp) {
       CircuitProp.markDirtyTargets([target]);
+      source();
+    }
   };
 
   circuit.unbind = function(source, target) {
