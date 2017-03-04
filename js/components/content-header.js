@@ -9,7 +9,10 @@
 
   var LoadButton = helper.inherits(function(props) {
     LoadButton.super_.call(this, props);
+
     this.loader = props.loader;
+
+    this.registerChangeListener();
   }, Button);
 
   LoadButton.prototype.inputElement = function() {
@@ -25,11 +28,6 @@
     }.bind(this));
   };
 
-  LoadButton.prototype.registerListeners = function() {
-    this.registerTapListener();
-    this.registerChangeListener();
-  };
-
   LoadButton.prototype.ontap = function() {
     if (dom.supportsTouch()) {
       this.inputElement().click();
@@ -38,6 +36,7 @@
 
   var SaveButton = helper.inherits(function(props) {
     SaveButton.super_.call(this, props);
+
     this.saver = props.saver;
   }, Button);
 
@@ -65,10 +64,6 @@
       element: this.saveButtonElement(),
       saver: props.fileSaver,
     });
-
-    this.sidebarToggleButton.registerTapListener();
-    this.loadButton.registerListeners();
-    this.saveButton.registerTapListener();
   }, Component);
 
   ContentHeader.prototype.sidebarToggleButtonElement = function() {

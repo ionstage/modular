@@ -10,6 +10,8 @@
 
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
+
+    this.registerTapListener();
   }, Component);
 
   Button.prototype.registerTapListener = function() {
