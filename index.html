@@ -1,16 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Modular</title>
+  <meta name="description" content="Visual programming environment">
   <link rel="stylesheet" href="css/app.min.css">
 </head>
-<body class="unselectable">
-  <div id="container"></div>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <input class="search-input" type="search" placeholder="Search" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" disabled>
+    </div>
+    <div class="sidebar-content">
+      <div class="scroller"></div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content-header">
+      <div class="button sidebar-toggle-button">
+        <img class="icon angle-double-left" src="images/angle-double-left.svg">
+        <img class="icon angle-double-right" src="images/angle-double-right.svg">
+      </div>
+      <div class="button load-button">
+        <input type="file">
+        <img class="icon" src="images/file-o.svg">
+        <span>Load</span>
+      </div>
+      <div class="button save-button">
+        <img class="icon" src="images/floppy-o.svg">
+        <span>Save</span>
+      </div>
+    </div>
+    <div class="module-container">
+      <div class="module-container-retainer"></div>
+      <div class="module-wire-container"></div>
+      <div class="module-container-content"></div>
+      <div class="module-wire-handle-container"></div>
+    </div>
+  </div>
   <script src="js/bundle.min.js"></script>
-  <script src="js/lib.js"></script>
-  <script src="js/dom.js"></script>
+  <script>
+    if (typeof Promise === 'undefined') {
+      require('es6-promise').polyfill();
+    }
+  </script>
   <script src="js/app.min.js"></script>
 </body>
 </html>

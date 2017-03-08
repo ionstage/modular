@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #content {
+      box-sizing: border-box;
+      color: #212121;
+      font-family: monospace;
+      font-size: 42px;
+      height: 48px;
+      line-height: 48px;
+      overflow: hidden;
+      padding-right: 6px;
+      text-align: right;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+  <script src="js/modular-module.js"></script>
+  <script>
+    (function() {
+      var count = 0;
+      var contentElement = document.getElementById('content');
+
+      var props = {
+        count: function(value) {
+          value = parseInt((!isNaN(value) ? Number(value) : count), 10);
+          if (value !== count) {
+            count = value;
+            contentElement.textContent = count;
+          }
+          return count;
+        },
+      };
+
+      var events = {
+        up: function() {
+          module.get('count')(count + 1);
+        },
+        reset: function() {
+          module.get('count')(0);
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Count', name: 'count', type: 'prop', arg: props.count, socketDisabled: true },
+        { label: 'Up', name: 'up', type: 'event', arg: events.up, plugDisabled: true },
+        { label: 'Reset', name: 'reset', type: 'event', arg: events.reset, plugDisabled: true },
+      ]);
+
+      contentElement.textContent = count;
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
