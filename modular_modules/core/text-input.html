@@ -43,7 +43,8 @@
       ]);
 
       textInputElement.addEventListener('input', function(event) {
-        module.get('text')(event.target.value);
+        text = event.target.value;
+        module.get('text')(text);
       });
 
       textInputElement.value = text;
