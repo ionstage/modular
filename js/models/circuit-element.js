@@ -17,38 +17,14 @@
 
   Wrapper.KEY = {};
 
-  var CircuitElementMember = function(props) {
-    this.callee = circuit[props.type](props.arg);
-    return this.wrapper(helper.extend(this.defaults(), helper.pick(props, CircuitElementMember.KEYS)));
-  };
-
-  CircuitElementMember.prototype.defaults = function() {
-    return {
-      socketDisabled: false,
-      plugDisabled: false,
-    };
-  };
-
-  CircuitElementMember.prototype.call = function() {
-    return this.callee.apply(null, arguments);
-  };
-
-  CircuitElementMember.prototype.wrapper = function(props) {
-    var wrapper = new Wrapper(CircuitElementMember.prototype.call.bind(this), this);
-    wrapper.props = helper.clone.bind(null, props);
-    return wrapper;
-  };
-
-  CircuitElementMember.KEYS = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
-
-  var CircuitElement = function(members) {
+  var CircuitElement = helper.extend(function(members) {
     var memberTable = {};
     var memberNames = [];
 
     members.slice().reverse().forEach(function(props) {
       var name = props.name;
       if (!(name in memberTable)) {
-        memberTable[name] = new CircuitElementMember(props);
+        memberTable[name] = new CircuitElement.Member(props);
         memberNames.unshift(name);
       }
     });
@@ -57,7 +33,35 @@
     this.memberNames = memberNames;
 
     return this.wrapper();
-  };
+  }, {
+    Member: (function() {
+      var Member = function(props) {
+        this.callee = circuit[props.type](props.arg);
+        return this.wrapper(helper.extend(this.defaults(), helper.pick(props, Member.KEYS)));
+      };
+
+      Member.prototype.defaults = function() {
+        return {
+          socketDisabled: false,
+          plugDisabled: false,
+        };
+      };
+
+      Member.prototype.call = function() {
+        return this.callee.apply(null, arguments);
+      };
+
+      Member.prototype.wrapper = function(props) {
+        var wrapper = new Wrapper(Member.prototype.call.bind(this), this);
+        wrapper.props = helper.clone.bind(null, props);
+        return wrapper;
+      };
+
+      Member.KEYS = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
+
+      return Member;
+    })(),
+  });
 
   CircuitElement.prototype.get = function(memberName) {
     return this.memberTable[memberName];
