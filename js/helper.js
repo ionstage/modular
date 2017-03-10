@@ -205,6 +205,23 @@
     return Map;
   })();
 
+  helper.wrapper = function() {
+    var Wrapper = function(obj, self) {
+      obj.unwrap = Wrapper.unwrap.bind(self);
+      return obj;
+    };
+
+    Wrapper.unwrap = function(key) {
+      if (key === Wrapper.KEY) {
+        return this;
+      }
+    };
+
+    Wrapper.KEY = {};
+
+    return Wrapper;
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = helper;
   } else {

@@ -3,19 +3,7 @@
 
   var circuit = require('circuit');
   var helper = app.helper || require('../helper.js');
-
-  var Wrapper = function(obj, self) {
-    obj.unwrap = Wrapper.unwrap.bind(self);
-    return obj;
-  };
-
-  Wrapper.unwrap = function(key) {
-    if (key === Wrapper.KEY) {
-      return this;
-    }
-  };
-
-  Wrapper.KEY = {};
+  var Wrapper = helper.wrapper();
 
   var CircuitElement = helper.extend(function(members) {
     var memberTable = {};
