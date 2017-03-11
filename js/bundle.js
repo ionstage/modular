@@ -93,7 +93,7 @@ process.umask = function() { return 0; };
 
 },{}],"circuit":[function(require,module,exports){
 /**
- * circuit v1.1.0
+ * circuit v1.1.2
  * (c) 2015 iOnStage
  * Released under the MIT License.
  */
@@ -149,13 +149,18 @@ process.umask = function() { return 0; };
     if (typeof initialValue !== 'function') {
       this.cache = initialValue;
       this.value = identity;
+      this.dirty = false;
+      this.timer = null;
     } else {
-      this.cache = initialValue();
+      // this.cache is unset until first update
       this.value = initialValue;
+      this.dirty = true;
+      this.timer = setTimeout(function() {
+        self.timer = null;
+        self.dirty = true;
+        self.update();
+      }, 0);
     }
-
-    this.dirty = false;
-    this.timer = null;
 
     return func;
   };
@@ -224,7 +229,7 @@ process.umask = function() { return 0; };
       if (timer !== null)
         return;
 
-      timer = setTimeout(function() {
+      timer = setTimeout(function updateDirtyTargets() {
         var updateTargets = dirtyTargets.slice();
         dirtyTargets = [];
 
@@ -233,6 +238,9 @@ process.umask = function() { return 0; };
           if (target._self.dirty)
             target();
         }
+
+        if (dirtyTargets.length !== 0)
+          updateDirtyTargets();
 
         timer = null;
       }, 0);
@@ -341,6 +349,7 @@ process.umask = function() { return 0; };
   else
     global.circuit = circuit;
 })(this);
+
 },{}],"es6-promise":[function(require,module,exports){
 (function (process,global){
 /*!
