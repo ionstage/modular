@@ -1,0 +1,8 @@
+[
+  {
+    "label": "Fizz Buzz",
+    "description": "Group word game with counting",
+    "src": "fizz-buzz",
+    "visiblePortNames": ["value"]
+  }
+]
