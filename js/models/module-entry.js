@@ -29,7 +29,7 @@
     var tags = this.tags;
     for (var i = 0, len = tags.length; i < len; i++) {
       var tag = tags[i].toLowerCase();
-      if (tag.indexOf(keyword) !== -1) {
+      if (tag === keyword || (keyword.length >= 2 && tag.indexOf(keyword) !== -1)) {
         return 0.75;
       }
     }
