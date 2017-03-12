@@ -11,7 +11,7 @@ You can create your own modules and implement them locally.
 
 ## How to make your own modules
 
-#### 1. Download this repository and install the dependencies
+### 1. Download this repository and install the dependencies
 
 ```
 git clone https://github.com/ionstage/modular.git
@@ -19,7 +19,7 @@ cd modular
 npm install
 ```
 
-#### 2. Prepare a package for custom modules
+### 2. Prepare a package for custom modules
 
 Make a folder of your package under `modular_modules` folder.
 In this example, create `my-special` package to contain custom modules.
@@ -29,7 +29,7 @@ cd modular_modules
 mkdir my-special
 ```
 
-#### 3. Edit `modular_modules/index.json`
+### 3. Edit `modular_modules/index.json`
 
 Append "my-special" to `modular_modules/index.json` file.
 This file represents the list of package names.
@@ -41,7 +41,7 @@ This file represents the list of package names.
 ]
 ```
 
-#### 4. Design your custom module
+### 4. Design your custom module
 
 Creating Modular module is to design functionality of the module's `prop` ports and `event` ports.
 Each port has an input-socket and an output-plug.
@@ -60,7 +60,7 @@ In this example, create `Luckey 7` module. The function of each port is as follo
   - `Lucky`: dispatch event if the output value is changed to "Lucky"
   - `777`: dispatch event if the input value is changed to "777"
 
-#### 5. Create HTML file for the custom module
+### 5. Create HTML file for the custom module
 
 The component of the module and the functionality of the ports are implemented in a HTML file.
 
@@ -150,7 +150,7 @@ The following code is the whole HTML code with comments on the points to keep in
 
 The HTML file of other modules in `modular_modules` folder serves as a useful sample for your development.
 
-#### 6. Make `modular_modules/[your package name]/index.json`
+### 6. Make `modular_modules/[your package name]/index.json`
 
 Create and edit `modular_modules/my-special/index.json` file.
 This file represents the list of a module entry of `my-special` package.
@@ -178,7 +178,7 @@ The following example is the file content for `my-special` package with the modu
 
 Whenever you create another module, you must append the module entry to this file.
 
-#### 7. Run Modular and play with your custom module
+### 7. Run Modular and play with your custom module
 
 ```
 cd ../
