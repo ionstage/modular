@@ -52,7 +52,7 @@ You can construct a data-flow by connecting a square output-plug(■) to a squar
 An `event` port's input-socket and output-plug have a round shape.
 You can construct a event-flow by connecting a round output-plug(●) to a round input-socket(○).
 
-In this example, create `Luckey 7` module. The function of each port is as follows.
+In this example, create `Lucky 7` module. The function of each port is as follows.
 
 - **prop**
   - `Value`: output the word "Lucky" if the input value contains the word "7"
