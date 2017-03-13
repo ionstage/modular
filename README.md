@@ -8,8 +8,7 @@ Visual programming environment
 
 - Make modules and connect them to construct data-flow(■) and event-flow(●)
 - Each module has its component (like a widget) to perform and control functions
-
-The document of Modular modules is [here](./modular_modules/README.md).
+- Create custom modules and implement them locally ([How to make your own modules](./modular_modules/README.md#how-to-make-your-own-modules))
 
 ## Running locally
 
