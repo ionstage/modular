@@ -95,7 +95,7 @@ The following code is the whole HTML code with comments on the points to keep in
       var valueProp = function(input) {
         // argument `input` is an input value
         var word = String(input || '');
-        var output = word;
+        var output;
 
         if (word.indexOf('7') !== -1) {
           output = 'Lucky';
@@ -113,6 +113,7 @@ The following code is the whole HTML code with comments on the points to keep in
             module.get('777')();
           }
         } else {
+          output = '';
           isLucky = false;
         }
 
