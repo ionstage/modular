@@ -48,9 +48,9 @@
         var value = event.target.value;
         if (value !== text) {
           module.get('change')();
+          text = value;
+          module.get('text')(text);
         }
-        text = value;
-        module.get('text')(text);
       });
 
       textInputElement.value = text;
