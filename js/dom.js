@@ -453,8 +453,12 @@
     });
   };
 
-  dom.origin = function() {
-    return location.protocol + '//' + location.host;
+  dom.location = function() {
+    return document.location;
+  };
+
+  dom.origin = function(url) {
+    return url.protocol + '//' + url.host;
   };
 
   dom.Listenable = (function() {
