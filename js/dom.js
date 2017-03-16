@@ -461,6 +461,17 @@
     return url.protocol + '//' + url.host;
   };
 
+  dom.urlQuery = function(url) {
+    return url.search.substring(1).split('&').reduce(function(prev, curr) {
+      var items = curr.split('=');
+      var key = items[0];
+      if (key) {
+        prev[key] = (items[1] || '');
+      }
+      return prev;
+    }, {});
+  };
+
   dom.Listenable = (function() {
     var Listenable = function(props) {
       this.callback = props.callback;
