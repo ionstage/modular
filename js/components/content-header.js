@@ -3,20 +3,10 @@
 
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
-  var Button = app.Button || require('./button.js');
   var Component = app.Component || require('./component.js');
   var LoadButton = app.LoadButton || require('./load-button.js');
+  var SaveButton = app.SaveButton || require('./save-button.js');
   var SidebarToggleButton = app.SidebarToggleButton || require('./sidebar-toggle-button.js');
-
-  var SaveButton = helper.inherits(function(props) {
-    SaveButton.super_.call(this, props);
-
-    this.saver = props.saver;
-  }, Button);
-
-  SaveButton.prototype.ontap = function() {
-    this.saver();
-  };
 
   var ContentHeader = helper.inherits(function(props) {
     ContentHeader.super_.call(this, props);
