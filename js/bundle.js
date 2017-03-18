@@ -93,13 +93,14 @@ process.umask = function() { return 0; };
 
 },{}],"circuit":[function(require,module,exports){
 /**
- * circuit v1.1.2
+ * circuit v1.1.3
  * (c) 2015 iOnStage
  * Released under the MIT License.
  */
 
 (function(global) {
   'use strict';
+
   var lastIndexOf = function(array, item) {
     for (var i = array.length - 1; i >= 0; i--) {
       if (array[i] === item)
@@ -252,6 +253,9 @@ process.umask = function() { return 0; };
 
     var func = function(context) {
       var canceled = false;
+
+      if (typeof context === 'undefined')
+        context = null;
 
       var contextProp = function(value) {
         if (typeof value === 'undefined')
