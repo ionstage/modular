@@ -6,50 +6,10 @@
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
   var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
+  var LockRelationCollection = app.LockRelationCollection || require('../collections/lock-relation-collection.js');
   var Module = app.Module || require('./module.js');
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
-
-  var LockRelationCollection = function() {
-    this.data = new helper.Map();
-  };
-
-  LockRelationCollection.prototype.add = function(props) {
-    var data = this.data;
-    var relation = new LockRelation(props);
-
-    if (data.has(relation)) {
-      return;
-    }
-
-    props.unit.addRelation(relation);
-    data.set(relation, relation);
-  };
-
-  LockRelationCollection.prototype.remove = function(props) {
-    var data = this.data;
-    var relation = data.get(new LockRelation(props));
-
-    if (!relation) {
-      return;
-    }
-
-    props.unit.removeRelation(relation);
-    data.delete(relation);
-  };
-
-  LockRelationCollection.prototype.filter = function(props) {
-    var relations = [];
-    this.data.forEach(function(relation) {
-      var matched = Object.keys(props).every(function(key) {
-        return helper.equal(relation[key], props[key]);
-      });
-      if (matched) {
-        relations.push(relation);
-      }
-    });
-    return relations;
-  };
 
   var Binding = function(props) {
     this.sourceUnit = props.sourceUnit;
