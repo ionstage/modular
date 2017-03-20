@@ -159,7 +159,7 @@
   };
 
   ModuleContainer.prototype.attachedWire = function(targetUnit) {
-    return this.lockedWires(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit)[0];
+    return this.lockedWires(LockRelation.TYPE_SOCKET, targetUnit)[0];
   };
 
   ModuleContainer.prototype.bindings = function() {
@@ -406,8 +406,8 @@
     wire.markDirty();
     targetUnit.portSocketConnected(true);
     this.bind(sourceUnit, targetUnit);
-    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-    this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    this.lock(LockRelation.TYPE_PLUG, sourceUnit, wire);
+    this.lock(LockRelation.TYPE_SOCKET, targetUnit, wire);
     this.updateEventHighlight(sourceUnit);
   };
 
@@ -416,8 +416,8 @@
     wire.parentElement(null);
     targetUnit.portSocketConnected(false);
     this.unbind(sourceUnit, targetUnit);
-    this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
-    this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    this.unlock(LockRelation.TYPE_PLUG, sourceUnit, wire);
+    this.unlock(LockRelation.TYPE_SOCKET, targetUnit, wire);
     targetUnit.portSocketHighlighted(false);
   };
 
@@ -430,7 +430,7 @@
   };
 
   ModuleContainer.prototype.appendDraggingWire = function(sourceUnit, wire) {
-    this.lock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
+    this.lock(LockRelation.TYPE_PLUG, sourceUnit, wire);
     this.updateEventHighlight(sourceUnit);
     this.draggingWires().push(wire);
     this.updateDragHighlight(sourceUnit);
@@ -440,7 +440,7 @@
     wire.handleVisible(false);
     targetUnit.portSocketConnected(true);
     this.bind(sourceUnit, targetUnit);
-    this.lock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    this.lock(LockRelation.TYPE_SOCKET, targetUnit, wire);
     this.updateEventHighlight(sourceUnit);
     this.updateDragHighlight(targetUnit);
   };
@@ -449,7 +449,7 @@
     wire.handleVisible(true);
     targetUnit.portSocketConnected(false);
     this.unbind(sourceUnit, targetUnit);
-    this.unlock(ModuleContainer.LOCK_TYPE_SOCKET, targetUnit, wire);
+    this.unlock(LockRelation.TYPE_SOCKET, targetUnit, wire);
     targetUnit.portSocketHighlighted(false);
     this.updateDragHighlight(targetUnit);
   };
@@ -462,7 +462,7 @@
     if (targetUnit) {
       this.updateDragHighlight(targetUnit);
     } else {
-      this.unlock(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit, wire);
+      this.unlock(LockRelation.TYPE_PLUG, sourceUnit, wire);
       wire.parentElement(null);
     }
   };
@@ -486,7 +486,7 @@
     this.connectedTargetUnits(sourceUnit).forEach(function(targetUnit) {
       targetUnit.portSocketHighlighted(highlighted);
     });
-    this.lockedWires(ModuleContainer.LOCK_TYPE_PLUG, sourceUnit).forEach(function(wire) {
+    this.lockedWires(LockRelation.TYPE_PLUG, sourceUnit).forEach(function(wire) {
       wire.highlighted(highlighted);
     });
   };
@@ -651,9 +651,6 @@
   ModuleContainer.prototype.dragPortSocketEnder = function(targetUnit, context) {
     this.dragPortPlugEnder(context.sourceUnit, context);
   };
-
-  ModuleContainer.LOCK_TYPE_PLUG = LockRelation.TYPE_PLUG;
-  ModuleContainer.LOCK_TYPE_SOCKET = LockRelation.TYPE_SOCKET;
 
   ModuleContainer.RETAINER_PADDING = 80;
 
