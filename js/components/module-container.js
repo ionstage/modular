@@ -3,43 +3,13 @@
 
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
-  var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
+  var Binding = app.Binding || require('../models/binding.js');
   var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var LockRelationCollection = app.LockRelationCollection || require('../collections/lock-relation-collection.js');
   var Module = app.Module || require('./module.js');
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
-
-  var Binding = function(props) {
-    this.sourceUnit = props.sourceUnit;
-    this.targetUnit = props.targetUnit;
-  };
-
-  Binding.prototype.equal = function(other) {
-    if (!other) {
-      return false;
-    }
-    return Object.keys(this).every(function(key) {
-      return helper.equal(this[key], other[key]);
-    }.bind(this));
-  };
-
-  Binding.prototype.source = function() {
-    return this.sourceUnit.circuitElementMember();
-  };
-
-  Binding.prototype.target = function() {
-    return this.targetUnit.circuitElementMember();
-  };
-
-  Binding.prototype.bind = function() {
-    CircuitElement.bind(this.source(), this.target());
-  };
-
-  Binding.prototype.unbind = function() {
-    CircuitElement.unbind(this.source(), this.target());
-  };
 
   var BindingCollection = function() {
     this.data = new helper.Set();
