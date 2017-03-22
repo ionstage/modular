@@ -3,45 +3,13 @@
 
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
-  var Binding = app.Binding || require('../models/binding.js');
+  var BindingCollection = app.BindingCollection || require('../collections/binding-collection.js');
   var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var LockRelationCollection = app.LockRelationCollection || require('../collections/lock-relation-collection.js');
   var Module = app.Module || require('./module.js');
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
-
-  var BindingCollection = function() {
-    this.data = new helper.Set();
-  };
-
-  BindingCollection.prototype.toArray = function() {
-    return this.data.toArray();
-  };
-
-  BindingCollection.prototype.add = function(props) {
-    var data = this.data;
-    var binding = new Binding(props);
-
-    if (data.has(binding)) {
-      return;
-    }
-
-    binding.bind();
-    data.add(binding);
-  };
-
-  BindingCollection.prototype.remove = function(props) {
-    var data = this.data;
-    var binding = new Binding(props);
-
-    if (!data.has(binding)) {
-      return;
-    }
-
-    binding.unbind();
-    data.delete(binding);
-  };
 
   var ModuleContainer = helper.inherits(function(props) {
     ModuleContainer.super_.call(this, props);
