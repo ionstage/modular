@@ -32,6 +32,7 @@
       callback: Module.prototype.onmessage.bind(this),
     });
 
+    this.toggledPortSet = new helper.Set();
     this.draggable = null;
 
     this.onchange = Module.prototype.onchange.bind(this);
@@ -295,6 +296,18 @@
     this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
   };
 
+  Module.prototype.toggledPorts = function() {
+    return this.toggledPortSet.toArray();
+  };
+
+  Module.prototype.clearToggledPorts = function() {
+    this.toggledPortSet.clear();
+  };
+
+  Module.prototype.markToggled = function(port) {
+    this.toggledPortSet.add(port);
+  };
+
   Module.prototype.resetPortSelect = function() {
     this.ports().forEach(function(port) {
       this.markToggled(port);
@@ -386,16 +399,6 @@
 
     this.portListHeight(this.portListHeight() - port.height());
     this.portToggler(new ModuleUnit({ module: this, port: port }));
-  };
-
-  Module.prototype.markToggled = function(port) {
-    var cache = this.cache();
-    if (!cache.toggledPorts) {
-      cache.toggledPorts = [];
-    }
-    if (cache.toggledPorts.indexOf(port) === -1) {
-      cache.toggledPorts.push(port);
-    }
   };
 
   Module.prototype.delete = function() {
@@ -533,10 +536,9 @@
   };
 
   Module.prototype.redrawPortSelect = function() {
-    var cache = this.cache();
-    var toggledPorts = cache.toggledPorts;
+    var toggledPorts = this.toggledPorts();
 
-    if (!toggledPorts) {
+    if (toggledPorts.length === 0) {
       return;
     }
 
@@ -553,7 +555,7 @@
     // deselect option
     dom.value(this.portSelectElement(), '');
 
-    cache.toggledPorts = null;
+    this.clearToggledPorts();
   };
 
   Module.prototype.redrawToggleClasses = function() {
