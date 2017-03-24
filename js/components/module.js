@@ -297,7 +297,7 @@
 
   Module.prototype.resetPortSelect = function() {
     this.ports().forEach(function(port) {
-      this.needsUpdatePortSelect(port);
+      this.markToggled(port);
     }.bind(this));
   };
 
@@ -355,7 +355,7 @@
     this.portListHeight(portListHeight + port.height());
     port.top(portListHeight);
     port.visible(true);
-    this.needsUpdatePortSelect(port);
+    this.markToggled(port);
 
     // move right not to position the port-socket outside
     if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket()) {
@@ -377,7 +377,7 @@
     });
 
     port.visible(false);
-    this.needsUpdatePortSelect(port);
+    this.markToggled(port);
 
     // move up the ports below the hidden port
     visiblePorts.slice(visiblePorts.indexOf(port) + 1).forEach(function(visiblePort) {
@@ -388,7 +388,7 @@
     this.portToggler(new ModuleUnit({ module: this, port: port }));
   };
 
-  Module.prototype.needsUpdatePortSelect = function(port) {
+  Module.prototype.markToggled = function(port) {
     var cache = this.cache();
     if (!cache.toggledPorts) {
       cache.toggledPorts = [];
