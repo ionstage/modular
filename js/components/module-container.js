@@ -87,6 +87,14 @@
     return point;
   };
 
+  ModuleContainer.prototype.retainerPosition = function() {
+    var diagonalPoint = this.diagonalPoint();
+    return new dom.Point({
+      x: diagonalPoint.x - 1 + ModuleContainer.RETAINER_PADDING,
+      y: diagonalPoint.y - 1 + ModuleContainer.RETAINER_PADDING,
+    });
+  };
+
   ModuleContainer.prototype.lockedWires = function(type, unit) {
     return this.lockRelationCollection.filter({
       type: type,
@@ -446,18 +454,15 @@
   };
 
   ModuleContainer.prototype.redrawRetainer = function() {
-    var point = this.diagonalPoint();
-    var retainerX = point.x - 1 + ModuleContainer.RETAINER_PADDING;
-    var retainerY = point.y - 1 + ModuleContainer.RETAINER_PADDING;
+    var retainerPosition = this.retainerPosition();
     var cache = this.cache();
 
-    if (retainerX === cache.retainerX && retainerY === cache.retainerY) {
+    if (helper.equal(retainerPosition, cache.retainerPosition)) {
       return;
     }
 
-    dom.translate(this.retainerElement(), retainerX, retainerY);
-    cache.retainerX = retainerX;
-    cache.retainerY = retainerY;
+    dom.translate(this.retainerElement(), retainerPosition.x, retainerPosition.y);
+    cache.retainerPosition = retainerPosition;
   };
 
   ModuleContainer.prototype.redrawWireHandleContainer = function() {

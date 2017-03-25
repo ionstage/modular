@@ -290,7 +290,7 @@
     };
 
     Point.prototype.equal = function(other) {
-      return (this.x === other.x && this.y === other.y);
+      return (!!other && this.x === other.x && this.y === other.y);
     };
 
     return Point;
