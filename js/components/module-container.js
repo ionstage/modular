@@ -95,6 +95,10 @@
     });
   };
 
+  ModuleContainer.prototype.wireHandleContainerZIndex = function() {
+    return this.modules().length + 1;
+  };
+
   ModuleContainer.prototype.lockedWires = function(type, unit) {
     return this.lockRelationCollection.filter({
       type: type,
@@ -466,15 +470,15 @@
   };
 
   ModuleContainer.prototype.redrawWireHandleContainer = function() {
-    var zIndex = this.modules().length + 1;
+    var zIndex = this.wireHandleContainerZIndex();
     var cache = this.cache();
 
-    if (zIndex === cache.zIndex) {
+    if (zIndex === cache.wireHandleContainerZIndex) {
       return;
     }
 
     dom.css(this.wireHandleContainerElement(), { zIndex: zIndex });
-    cache.zIndex = zIndex;
+    cache.wireHandleContainerZIndex = zIndex;
   };
 
   ModuleContainer.prototype.onpoint = function(event) {
