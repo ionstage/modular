@@ -39,6 +39,12 @@
     this.moduleContainer.disabled(value);
   };
 
+  Content.prototype.loadJSON = function(text) {
+    var data = JSON.parse(text);
+    this.moduleContainer.clear();
+    return this.moduleContainer.load(data);
+  };
+
   Content.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
     return this.moduleContainer.loadModuleByClientPosition(props, visiblePortNames).catch(function(e) {
       if (!(e instanceof RangeError)) {
@@ -55,9 +61,7 @@
   Content.prototype.fileLoader = function(file) {
     this.disabled(true);
     dom.load(file).then(function(text) {
-      var data = JSON.parse(text);
-      this.moduleContainer.clear();
-      return this.moduleContainer.load(data);
+      return this.loadJSON(text);
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
