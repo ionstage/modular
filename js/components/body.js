@@ -42,6 +42,18 @@
     this.dragCount(this.dragCount() - 1);
   };
 
+  Body.prototype.currentDemoName = function() {
+    return dom.urlQuery(dom.location()).demo || '';
+  };
+
+  Body.prototype.loadDemo = function(name) {
+    return Promise.resolve().then(function() {
+      if (name) {
+        return this.content.loadUrl('./demo/' + name + '.json');
+      }
+    }.bind(this));
+  };
+
   Body.prototype.redraw = function() {
     this.redrawDragCount();
   };
@@ -61,6 +73,8 @@
   Body.prototype.onready = function() {
     this.content.redraw();
     this.moduleEntryCollection.load().then(function() {
+      return this.loadDemo(this.currentDemoName());
+    }.bind(this)).then(function() {
       this.sidebar.searchEnabled(true);
     }.bind(this));
   };
