@@ -74,7 +74,9 @@
     this.content.redraw();
     this.moduleEntryCollection.load().then(function() {
       return this.loadDemo(this.currentDemoName());
-    }.bind(this)).then(function() {
+    }.bind(this)).catch(function(e) {
+      alert(e);
+    }).then(function() {
       this.sidebar.searchEnabled(true);
     }.bind(this));
   };
