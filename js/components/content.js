@@ -45,6 +45,15 @@
     return this.moduleContainer.load(data);
   };
 
+  Content.prototype.loadUrl = function(url) {
+    return dom.ajax({
+      type: 'GET',
+      url: url,
+    }).then(function(text) {
+      return this.loadJSON(text);
+    }.bind(this));
+  };
+
   Content.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
     return this.moduleContainer.loadModuleByClientPosition(props, visiblePortNames).catch(function(e) {
       if (!(e instanceof RangeError)) {
