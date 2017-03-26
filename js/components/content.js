@@ -57,7 +57,7 @@
     dom.load(file).then(function(text) {
       var data = JSON.parse(text);
       this.moduleContainer.clear();
-      this.moduleContainer.load(data);
+      return this.moduleContainer.load(data);
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
