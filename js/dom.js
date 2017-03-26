@@ -457,7 +457,7 @@
     return document.location;
   };
 
-  dom.origin = function(url) {
+  dom.urlOrigin = function(url) {
     return url.protocol + '//' + url.host;
   };
 

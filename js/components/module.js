@@ -618,7 +618,7 @@
   };
 
   Module.prototype.onmessage = function(event) {
-    if (event.origin !== dom.origin(dom.location())) {
+    if (event.origin !== dom.urlOrigin(dom.location())) {
       throw new Error('Invalid content origin');
     }
     if (event.data !== this.messageData()) {
