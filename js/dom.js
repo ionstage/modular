@@ -466,7 +466,7 @@
       var items = curr.split('=');
       var key = items[0];
       if (key) {
-        prev[key] = (items[1] || '');
+        prev[decodeURIComponent(key)] = decodeURIComponent(items[1] || '');
       }
       return prev;
     }, {});
