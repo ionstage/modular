@@ -49,7 +49,7 @@
   Body.prototype.loadDemo = function(name) {
     return Promise.resolve().then(function() {
       if (name) {
-        return this.content.loadUrl('./demo/' + name + '.json');
+        return this.content.loadUrl('./demos/' + name + '.json');
       }
     }.bind(this));
   };
