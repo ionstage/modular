@@ -27,6 +27,12 @@
   text-align: center;
 }
 
+.content-header.disabled > .button {
+  cursor: default;
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 .content-header > .button.active {
   background-color: #e0e0e0;
 }
