@@ -7,10 +7,6 @@
   z-index: 1;
 }
 
-.content-header.disabled {
-  pointer-events: none;
-}
-
 .content-header > * {
   display: inline-block;
   position: absolute;
