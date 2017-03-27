@@ -15,20 +15,20 @@
 
     this.moduleEntryCollection = new ModuleEntryCollection();
 
-    this.content = new Content({
-      element: dom.el('.content'),
-      sidebarCollapser: Body.prototype.sidebarCollapser.bind(this),
-      sidebarExpander: Body.prototype.sidebarExpander.bind(this),
-      moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
-      moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
-    });
-
     this.sidebar = new Sidebar({
       element: dom.el('.sidebar'),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       moduleDropper: Body.prototype.moduleDropper.bind(this),
       moduleEntrySearcher: Body.prototype.moduleEntrySearcher.bind(this),
+    });
+
+    this.content = new Content({
+      element: dom.el('.content'),
+      sidebarCollapser: Body.prototype.sidebarCollapser.bind(this),
+      sidebarExpander: Body.prototype.sidebarExpander.bind(this),
+      moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
+      moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
     });
 
     dom.ready(Body.prototype.onready.bind(this));
