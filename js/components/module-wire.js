@@ -73,11 +73,11 @@
   };
 
   ModuleWire.prototype.redrawWire = function() {
-    var cache = this.cache();
     var sourceX = this.sourceX();
     var sourceY = this.sourceY();
     var targetX = this.targetX();
     var targetY = this.targetY();
+    var cache = this.cache();
 
     if (sourceX === cache.sourceX && sourceY === cache.sourceY &&
         targetX === cache.targetX && targetY === cache.targetY) {
