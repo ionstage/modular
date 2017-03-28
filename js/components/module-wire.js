@@ -69,17 +69,11 @@
     // update element
     this.redrawWire();
     this.redrawHandle();
+    this.redrawHighlight();
   };
 
   ModuleWire.prototype.redrawWire = function() {
     var cache = this.cache();
-
-    var highlighted = this.highlighted();
-    if (highlighted !== cache.highlighted) {
-      dom.toggleClass(this.element(), 'module-wire-highlight', highlighted);
-      // update cache in 'redrawHandle' method
-    }
-
     var sourceX = this.sourceX();
     var sourceY = this.sourceY();
     var targetX = this.targetX();
@@ -120,12 +114,6 @@
       cache.handleVisible = handleVisible;
     }
 
-    var highlighted = this.highlighted();
-    if (highlighted !== cache.highlighted) {
-      dom.toggleClass(this.handleElement(), 'module-wire-highlight', highlighted);
-      cache.highlighted = highlighted;
-    }
-
     var x = cache.targetX - ModuleWire.HANDLE_WIDTH / 2;
     var y = cache.targetY - ModuleWire.HANDLE_WIDTH / 2;
 
@@ -134,6 +122,19 @@
       cache.x = x;
       cache.y = y;
     }
+  };
+
+  ModuleWire.prototype.redrawHighlight = function() {
+    var highlighted = this.highlighted();
+    var cache = this.cache();
+
+    if (highlighted === cache.highlighted) {
+      return;
+    }
+
+    dom.toggleClass(this.element(), 'module-wire-highlight', highlighted);
+    dom.toggleClass(this.handleElement(), 'module-wire-highlight', highlighted);
+    cache.highlighted = highlighted;
   };
 
   ModuleWire.TEMPLATE_HTML = [
