@@ -67,12 +67,12 @@
     }
 
     // update element
-    this.redrawWire();
+    this.redrawPath();
     this.redrawHandle();
     this.redrawHighlight();
   };
 
-  ModuleWire.prototype.redrawWire = function() {
+  ModuleWire.prototype.redrawPath = function() {
     var sourceX = this.sourceX();
     var sourceY = this.sourceY();
     var targetX = this.targetX();
