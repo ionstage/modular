@@ -47,7 +47,7 @@
   };
 
   Body.prototype.demoUrl = function(name) {
-    return './demos/' + name + '.json';
+    return 'demos/' + name + '.json';
   };
 
   Body.prototype.loadDemo = function() {
