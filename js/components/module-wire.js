@@ -25,6 +25,13 @@
     return dom.childNode(this.element(), 0, 0);
   };
 
+  ModuleWire.prototype.handlePosition = function() {
+    return new dom.Point({
+      x: this.targetX() - ModuleWire.HANDLE_WIDTH / 2,
+      y: this.targetY() - ModuleWire.HANDLE_WIDTH / 2,
+    });
+  };
+
   ModuleWire.prototype.renderWire = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module-wire');
@@ -114,13 +121,10 @@
       cache.handleVisible = handleVisible;
     }
 
-    var x = cache.targetX - ModuleWire.HANDLE_WIDTH / 2;
-    var y = cache.targetY - ModuleWire.HANDLE_WIDTH / 2;
-
-    if (x !== cache.x || y !== cache.y) {
-      dom.translate(this.handleElement(), x, y);
-      cache.x = x;
-      cache.y = y;
+    var handlePosition = this.handlePosition();
+    if (!helper.equal(handlePosition, cache.handlePosition)) {
+      dom.translate(this.handleElement(), handlePosition.x, handlePosition.y);
+      cache.handlePosition = handlePosition;
     }
   };
 
