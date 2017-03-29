@@ -46,12 +46,19 @@
     return dom.urlQuery(dom.location()).demo || '';
   };
 
-  Body.prototype.loadDemo = function(name) {
-    return Promise.resolve().then(function() {
-      if (name) {
-        return this.content.loadUrl('./demos/' + name + '.json');
-      }
-    }.bind(this));
+  Body.prototype.demoUrl = function(name) {
+    return './demos/' + name + '.json';
+  };
+
+  Body.prototype.loadDemo = function() {
+    var name = this.currentDemoName();
+
+    if (!name) {
+      // no need to load demo
+      return Promise.resolve();
+    }
+
+    return this.content.loadUrl(this.demoUrl(name));
   };
 
   Body.prototype.redraw = function() {
@@ -73,7 +80,7 @@
   Body.prototype.onready = function() {
     this.content.redraw();
     this.moduleEntryCollection.load().then(function() {
-      return this.loadDemo(this.currentDemoName());
+      return this.loadDemo();
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
