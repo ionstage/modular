@@ -401,11 +401,15 @@
     this.portToggler(new ModuleUnit({ module: this, port: port }));
   };
 
-  Module.prototype.delete = function() {
-    // remove all connections of connected ports
+  Module.prototype.hideAllPorts = function() {
     this.ports().forEach(function(port) {
       this.hidePort(port.name());
     }.bind(this));
+  };
+
+  Module.prototype.delete = function() {
+    // remove all connections of connected ports
+    this.hideAllPorts();
 
     this.parentElement(null);
     this.deleter(this);
