@@ -439,7 +439,7 @@
 
       req.onload = function() {
         if (req.status >= 200 && req.status < 400) {
-          resolve(req.responseText);
+          resolve(req.response);
         } else {
           onfailed();
         }
