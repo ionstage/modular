@@ -44,44 +44,44 @@
   pointer-events: none;
 }
 
-.sidebar-toggle-button {
+.button.sidebar-toggle-button {
   left: 11px;
   width: 36px;
 }
 
-.sidebar-toggle-button > .icon {
+.button.sidebar-toggle-button > .icon {
   height: 20px;
   width: 20px;
 }
 
-.sidebar-toggle-button > .angle-double-left {
+.button.sidebar-toggle-button > .angle-double-left {
   padding-right: 2px;
 }
 
-.sidebar-toggle-button > .angle-double-right {
+.button.sidebar-toggle-button > .angle-double-right {
   padding-left: 2px;
 }
 
-.sidebar-toggle-button[data-type='collapse'] > .angle-double-left,
-.sidebar-toggle-button[data-type='expand'] > .angle-double-right {
+.button.sidebar-toggle-button[data-type='collapse'] > .angle-double-left,
+.button.sidebar-toggle-button[data-type='expand'] > .angle-double-right {
   display: inline;
 }
 
-.sidebar-toggle-button[data-type='expand'] > .angle-double-left,
-.sidebar-toggle-button[data-type='collapse'] > .angle-double-right {
+.button.sidebar-toggle-button[data-type='expand'] > .angle-double-left,
+.button.sidebar-toggle-button[data-type='collapse'] > .angle-double-right {
   display: none;
 }
 
-.load-button,
-.save-button {
+.button.load-button,
+.button.save-button {
   width: 72px;
 }
 
-.load-button {
+.button.load-button {
   right: 95px;
 }
 
-.load-button > input {
+.button.load-button > input {
   cursor: pointer;
   height: 100%;
   margin: 0;
@@ -91,17 +91,17 @@
   top: 0;
 }
 
-.load-button > .icon {
+.button.load-button > .icon {
   height: 12px;
   padding-right: 4px;
   width: 12px;
 }
 
-.save-button {
+.button.save-button {
   right: 12px;
 }
 
-.save-button > .icon {
+.button.save-button > .icon {
   height: 14px;
   padding-right: 4px;
   width: 14px;
