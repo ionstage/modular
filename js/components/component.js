@@ -9,14 +9,12 @@
     Component.super_.call(this);
 
     this.element = this.prop(props.element);
-    this.cache = this.prop({});
+    this.cache = {};
   }, jCore.Component);
 
   Component.prototype.needsUpdate = function(keys) {
     return keys.some(function(key) {
-      var cache = this.cache();
-      var value = this[key]();
-      return !helper.equal(value, cache[key]);
+      return !helper.equal(this[key](), this.cache[key]);
     }.bind(this));
   };
 
@@ -28,14 +26,12 @@
 
   Component.prototype.updateCache = function(keys) {
     keys.forEach(function(key) {
-      var cache = this.cache();
-      var value = this[key]();
-      cache[key] = value;
+      this.cache[key] = this[key]();
     }.bind(this));
   };
 
   Component.prototype.clearCache = function() {
-    this.cache({});
+    this.cache = {};
   };
 
   Component.prototype.redrawProp = function() {
