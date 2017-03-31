@@ -1,9 +1,9 @@
 .sidebar-content {
-  -webkit-transform: translateY(49px);
   background-color: #fafafa;
   height: calc(100% - 49px);
   overflow: hidden;
   position: relative;
+  -webkit-transform: translateY(49px);
   transform: translateY(49px);
 }
 

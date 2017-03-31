@@ -48,12 +48,12 @@ body {
 }
 
 .content {
-  -webkit-transition: padding-left 0.3s ease-in-out;
   box-sizing: border-box;
   height: 100%;
   padding-left: 280px;
   pointer-events: none;
   position: fixed;
+  -webkit-transition: padding-left 0.3s ease-in-out;
   transition: padding-left 0.3s ease-in-out;
   width: 100%;
 }
