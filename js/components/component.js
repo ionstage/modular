@@ -34,6 +34,10 @@
     }.bind(this));
   };
 
+  Component.prototype.clearCache = function() {
+    this.cache({});
+  };
+
   Component.prototype.redrawProp = function() {
     var args = Array.prototype.slice.call(arguments);
     var callback = args.pop();

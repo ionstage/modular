@@ -69,7 +69,7 @@
       dom.remove(this.handleElement());
       this.element(null);
       this.handleElement(null);
-      this.cache({});
+      this.clearCache();
       return;
     }
 

@@ -450,7 +450,7 @@
       this.unregisterComponentPointListener();
       dom.remove(element);
       this.element(null);
-      this.cache({});
+      this.clearCache();
       return;
     }
 
