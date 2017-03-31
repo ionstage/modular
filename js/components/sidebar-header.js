@@ -48,15 +48,9 @@
   };
 
   SidebarHeader.prototype.redrawDisabled = function() {
-    var cache = this.cache();
-    var disabled = this.disabled();
-
-    if (disabled === cache.disabled) {
-      return;
-    }
-
-    dom.disabled(this.searchInputElement(), disabled);
-    cache.disabled = disabled;
+    this.redrawProp('disabled', function(disabled) {
+      dom.disabled(this.searchInputElement(), disabled);
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {

@@ -61,15 +61,9 @@
   };
 
   Sidebar.prototype.redrawDragCount = function() {
-    var dragCount = this.dragCount();
-    var cache = this.cache();
-
-    if (dragCount === cache.dragCount) {
-      return;
-    }
-
-    this.content.scrollEnabled(dragCount === 0);
-    cache.dragCount = dragCount;
+    this.redrawProp('dragCount', function(dragCount) {
+      this.content.scrollEnabled(dragCount === 0);
+    });
   };
 
   Sidebar.prototype.dragStarter = function() {

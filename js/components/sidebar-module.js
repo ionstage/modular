@@ -91,27 +91,15 @@
   };
 
   SidebarModule.prototype.redrawTitle = function() {
-    var title = this.title();
-    var cache = this.cache();
-
-    if (title === cache.title) {
-      return;
-    }
-
-    dom.text(this.headerElement(), title);
-    cache.title = title;
+    this.redrawProp('title', function(title) {
+      dom.text(this.headerElement(), title);
+    });
   };
 
   SidebarModule.prototype.redrawContent = function() {
-    var content = this.content();
-    var cache = this.cache();
-
-    if (content === cache.content) {
-      return;
-    }
-
-    dom.text(this.contentElement(), content);
-    cache.content = content;
+    this.redrawProp('content', function(content) {
+      dom.text(this.contentElement(), content);
+    });
   };
 
   SidebarModule.prototype.onstart = function(x, y, event, context) {

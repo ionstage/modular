@@ -66,15 +66,9 @@
   };
 
   Body.prototype.redrawDragCount = function() {
-    var dragCount = this.dragCount();
-    var cache = this.cache();
-
-    if (dragCount === cache.dragCount) {
-      return;
-    }
-
-    dom.toggleClass(this.element(), 'module-dragging', dragCount > 0);
-    cache.dragCount = dragCount;
+    this.redrawProp('dragCount', function(dragCount) {
+      dom.toggleClass(this.element(), 'module-dragging', dragCount > 0);
+    });
   };
 
   Body.prototype.onready = function() {

@@ -458,27 +458,15 @@
   };
 
   ModuleContainer.prototype.redrawRetainer = function() {
-    var retainerPosition = this.retainerPosition();
-    var cache = this.cache();
-
-    if (helper.equal(retainerPosition, cache.retainerPosition)) {
-      return;
-    }
-
-    dom.translate(this.retainerElement(), retainerPosition.x, retainerPosition.y);
-    cache.retainerPosition = retainerPosition;
+    this.redrawProp('retainerPosition', function(retainerPosition) {
+      dom.translate(this.retainerElement(), retainerPosition.x, retainerPosition.y);
+    });
   };
 
   ModuleContainer.prototype.redrawWireHandleContainer = function() {
-    var zIndex = this.wireHandleContainerZIndex();
-    var cache = this.cache();
-
-    if (zIndex === cache.wireHandleContainerZIndex) {
-      return;
-    }
-
-    dom.css(this.wireHandleContainerElement(), { zIndex: zIndex });
-    cache.wireHandleContainerZIndex = zIndex;
+    this.redrawProp('wireHandleContainerZIndex', function(wireHandleContainerZIndex) {
+      dom.css(this.wireHandleContainerElement(), { zIndex: wireHandleContainerZIndex });
+    });
   };
 
   ModuleContainer.prototype.onpoint = function(event) {

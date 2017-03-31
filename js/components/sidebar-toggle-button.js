@@ -34,15 +34,9 @@
   };
 
   SidebarToggleButton.prototype.redrawType = function() {
-    var type = this.type();
-    var cache = this.cache();
-
-    if (type === cache.type) {
-      return;
-    }
-
-    dom.data(this.element(), 'type', type);
-    cache.type = type;
+    this.redrawProp('type', function(type) {
+      dom.data(this.element(), 'type', type);
+    });
   };
 
   SidebarToggleButton.prototype.ontap = function() {

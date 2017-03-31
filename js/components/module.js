@@ -466,77 +466,39 @@
   };
 
   Module.prototype.redrawTitle = function() {
-    var title = this.title();
-    var cache = this.cache();
-
-    if (title === cache.title) {
-      return;
-    }
-
-    dom.text(this.titleElement(), title);
-    cache.title = title;
+    this.redrawProp('title', function(title) {
+      dom.text(this.titleElement(), title);
+    });
   };
 
   Module.prototype.redrawPosition = function() {
-    var x = this.x();
-    var y = this.y();
-    var cache = this.cache();
-
-    if (x === cache.x && y === cache.y) {
-      return;
-    }
-
-    dom.translate(this.element(), x, y);
-    cache.x = x;
-    cache.y = y;
+    this.redrawProp('x', 'y', function(x, y) {
+      dom.translate(this.element(), x, y);
+    });
   };
 
   Module.prototype.redrawZIndex = function() {
-    var zIndex = this.zIndex();
-    var cache = this.cache();
-
-    if (zIndex === cache.zIndex) {
-      return;
-    }
-
-    dom.css(this.element(), { zIndex: zIndex });
-    cache.zIndex = zIndex;
+    this.redrawProp('zIndex', function(zIndex) {
+      dom.css(this.element(), { zIndex: zIndex });
+    });
   };
 
   Module.prototype.redrawDeletable = function() {
-    var deletable = this.deletable();
-    var cache = this.cache();
-
-    if (deletable === cache.deletable) {
-      return;
-    }
-
-    dom.toggleClass(this.element(), 'module-delete-disabled', !deletable);
-    cache.deletable = deletable;
+    this.redrawProp('deletable', function(deletable) {
+      dom.toggleClass(this.element(), 'module-delete-disabled', !deletable);
+    });
   };
 
   Module.prototype.redrawPortList = function() {
-    var portListHeight = this.portListHeight();
-    var cache = this.cache();
-
-    if (portListHeight === cache.portListHeight) {
-      return;
-    }
-
-    dom.css(this.portListElement(), { height: portListHeight + 'px' });
-    cache.portListHeight = portListHeight;
+    this.redrawProp('portListHeight', function(portListHeight) {
+      dom.css(this.portListElement(), { height: portListHeight + 'px' });
+    });
   };
 
   Module.prototype.redrawFooter = function() {
-    var isAllPortsVisible = this.isAllPortsVisible();
-    var cache = this.cache();
-
-    if (isAllPortsVisible === cache.isAllPortsVisible) {
-      return;
-    }
-
-    dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
-    cache.isAllPortsVisible = isAllPortsVisible;
+    this.redrawProp('isAllPortsVisible', function(isAllPortsVisible) {
+      dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
+    });
   };
 
   Module.prototype.redrawPortSelect = function() {

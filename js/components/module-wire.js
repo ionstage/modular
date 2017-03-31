@@ -80,65 +80,37 @@
   };
 
   ModuleWire.prototype.redrawPath = function() {
-    var sourceX = this.sourceX();
-    var sourceY = this.sourceY();
-    var targetX = this.targetX();
-    var targetY = this.targetY();
-    var cache = this.cache();
+    this.redrawProp('sourceX', 'sourceY', 'targetX', 'targetY', function(sourceX, sourceY, targetX, targetY) {
+      var x = Math.min(sourceX, targetX);
+      var y = Math.min(sourceY, targetY);
 
-    if (sourceX === cache.sourceX && sourceY === cache.sourceY &&
-        targetX === cache.targetX && targetY === cache.targetY) {
-      return;
-    }
+      dom.translate(this.element(), x, y);
 
-    var x = Math.min(sourceX, targetX);
-    var y = Math.min(sourceY, targetY);
-
-    dom.translate(this.element(), x, y);
-
-    dom.attr(this.pathElement(), {
-      d: ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' '),
+      dom.attr(this.pathElement(), {
+        d: ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' '),
+      });
     });
-
-    cache.sourceX = sourceX;
-    cache.sourceY = sourceY;
-    cache.targetX = targetX;
-    cache.targetY = targetY;
   };
 
   ModuleWire.prototype.redrawHandle = function() {
-    var cache = this.cache();
-
-    var handleType = this.handleType();
-    if (handleType !== cache.handleType) {
+    this.redrawProp('handleType', function(handleType) {
       dom.data(this.handleElement(), 'type', handleType);
-      cache.handleType = handleType;
-    }
+    });
 
-    var handleVisible = this.handleVisible();
-    if (handleVisible !== cache.handleVisible) {
+    this.redrawProp('handleVisible', function(handleVisible) {
       dom.toggleClass(this.handleElement(), 'hide', !handleVisible);
-      cache.handleVisible = handleVisible;
-    }
+    });
 
-    var handlePosition = this.handlePosition();
-    if (!helper.equal(handlePosition, cache.handlePosition)) {
+    this.redrawProp('handlePosition', function(handlePosition) {
       dom.translate(this.handleElement(), handlePosition.x, handlePosition.y);
-      cache.handlePosition = handlePosition;
-    }
+    });
   };
 
   ModuleWire.prototype.redrawHighlight = function() {
-    var highlighted = this.highlighted();
-    var cache = this.cache();
-
-    if (highlighted === cache.highlighted) {
-      return;
-    }
-
-    dom.toggleClass(this.element(), 'module-wire-highlight', highlighted);
-    dom.toggleClass(this.handleElement(), 'module-wire-highlight', highlighted);
-    cache.highlighted = highlighted;
+    this.redrawProp('highlighted', function(highlighted) {
+      dom.toggleClass(this.element(), 'module-wire-highlight', highlighted);
+      dom.toggleClass(this.handleElement(), 'module-wire-highlight', highlighted);
+    });
   };
 
   ModuleWire.TEMPLATE_HTML = [
