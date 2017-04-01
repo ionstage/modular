@@ -161,7 +161,7 @@
 
 .module-port[data-type='event'] > .module-port-plug,
 .module-port[data-type='event'].module-port-socket-connected > .module-port-socket > span {
-  border-radius: 12px;
+  border-radius: 50%;
 }
 
 .module-port[data-type='prop'] > .module-port-socket {
@@ -169,7 +169,7 @@
 }
 
 .module-port[data-type='event'] > .module-port-socket {
-  border-radius: 16px;
+  border-radius: 50%;
 }
 
 .module-port.module-port-plug-highlight > .module-port-plug {
@@ -282,7 +282,7 @@
 }
 
 .module-wire-handle[data-type='event'] {
-  border-radius: 12px;
+  border-radius: 50%;
 }
 
 .module-wire-handle.module-wire-highlight {
