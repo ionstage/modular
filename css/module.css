@@ -37,7 +37,7 @@
 }
 
 .module.module-loading.module-error > .module-content::before {
-  background-color: pink;
+  background-color: #f8bbd0;
   content: 'ERROR';
   color: #f44336;
   display: block;
