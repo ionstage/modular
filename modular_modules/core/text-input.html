@@ -31,6 +31,7 @@
         text: function(value) {
           value = (value != null ? String(value) : text);
           if (value !== text) {
+            module.get('change')();
             text = value;
             textInputElement.value = value;
           }
@@ -40,10 +41,16 @@
 
       var module = new modular.Module([
         { label: 'Text', name: 'text', type: 'prop', arg: props.text },
+        { label: 'Change', name: 'change', type: 'event', socketDisabled: true },
       ]);
 
       textInputElement.addEventListener('input', function(event) {
-        module.get('text')(event.target.value);
+        var value = event.target.value;
+        if (value !== text) {
+          module.get('change')();
+          text = value;
+          module.get('text')(text);
+        }
       });
 
       textInputElement.value = text;

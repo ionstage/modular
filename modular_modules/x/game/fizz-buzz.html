@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #content {
+      box-sizing: border-box;
+      color: #212121;
+      font-family: fantasy;
+      font-size: 36px;
+      height: 48px;
+      overflow: hidden;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+  <script src="js/modular-module.js"></script>
+  <script>
+    (function() {
+      var contentElement = document.getElementById('content');
+
+      var props = {
+        value: function(input) {
+          var n = Number(input);
+          var output;
+
+          if (isNaN(n) || n <= 0) {
+            output = '';
+          } else if (n % 15 === 0) {
+            module.get('fizz-buzz')();
+            output = 'Fizz Buzz';
+          } else if (n % 3 === 0) {
+            module.get('fizz')();
+            output = 'Fizz';
+          } else if (n % 5 === 0) {
+            module.get('buzz')();
+            output = 'Buzz';
+          } else {
+            output = String(n);
+          }
+
+          contentElement.textContent = output;
+
+          return output;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Value', name: 'value', type: 'prop', arg: props.value },
+        { label: 'Fizz', name: 'fizz', type: 'event', socketDisabled: true },
+        { label: 'Buzz', name: 'buzz', type: 'event', socketDisabled: true },
+        { label: 'Fizz Buzz', name: 'fizz-buzz', type: 'event', socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
