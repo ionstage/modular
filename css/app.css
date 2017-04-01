@@ -14,20 +14,6 @@ body {
   -webkit-user-select: none;
 }
 
-.button {
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.button .icon {
-  pointer-events: none;
-}
-
-.button.disabled {
-  opacity: 0.3;
-  pointer-events: none;
-}
-
 .sidebar {
   border-right: 1px solid #e0e0e0;
   height: 100%;

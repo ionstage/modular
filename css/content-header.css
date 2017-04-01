@@ -7,35 +7,39 @@
   z-index: 1;
 }
 
-.content-header > * {
-  position: absolute;
-}
-
-.content-header > .button {
+.button {
   background-color: #f5f5f5;
   border: 1px solid #bdbdbd;
+  border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
+  cursor: pointer;
   font-size: 11px;
   height: 26px;
   line-height: 24px;
   overflow: hidden;
+  position: absolute;
   text-align: center;
 }
 
+.button.active {
+  background-color: #e0e0e0;
+}
+
+.button.disabled,
 .content-header.disabled > .button {
   opacity: 0.3;
   pointer-events: none;
 }
 
-.content-header > .button.active {
-  background-color: #e0e0e0;
-}
-
-.content-header > .button > * {
+.button > * {
   vertical-align: middle;
 }
 
-.content-header > .button > span {
+.button > .icon {
+  pointer-events: none;
+}
+
+.button > span {
   display: inline-block;
   line-height: 27px;
   padding-top: 1px;
