@@ -17,7 +17,7 @@
   margin: 12px auto;
 }
 
-body > .module.clone {
+.module.clone {
   left: 0;
   margin: 0;
   opacity: 0.6;
@@ -27,12 +27,12 @@ body > .module.clone {
 }
 
 .sidebar-content .module > *,
-body > .module.clone > * {
+.module.clone > * {
   pointer-events: none;
 }
 
 .sidebar-content .module > .module-header,
-body > .module.clone > .module-header {
+.module.clone > .module-header {
   box-sizing: border-box;
   line-height: 29px;
   overflow: hidden;
@@ -41,12 +41,12 @@ body > .module.clone > .module-header {
   white-space: nowrap;
 }
 
-body > .module.clone > .module-header {
+.module.clone > .module-header {
   background-color: #ffa726;
 }
 
 .sidebar-content .module > .module-content,
-body > .module.clone > .module-content {
+.module.clone > .module-content {
   border-radius: 0 0 3px 3px;
   font-size: 12px;
   line-height: 29px;
@@ -61,7 +61,7 @@ body > .module.clone > .module-content {
   border-bottom: 3px solid #212121;
 }
 
-body > .module.clone > .module-content {
+.module.clone > .module-content {
   border-bottom: 3px solid #ffa726;
   border-left: 3px solid #ffa726;
   border-right: 3px solid #ffa726;
