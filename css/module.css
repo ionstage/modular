@@ -24,7 +24,6 @@
 .module.module-loading > .module-content::before {
   content: 'Loading...';
   font-size: 12px;
-  height: 29px;
   line-height: 29px;
 }
 
@@ -54,7 +53,6 @@
 }
 
 .module-header-title {
-  box-sizing: border-box;
   cursor: move;
   line-height: 29px;
   overflow: hidden;
@@ -97,7 +95,6 @@
 .module-component {
   border: none;
   height: 0;
-  overflow: hidden;
   vertical-align: bottom;
   width: 100%;
 }
@@ -188,7 +185,6 @@
 }
 
 .module-port-label {
-  box-sizing: border-box;
   line-height: 42px;
   overflow: hidden;
   padding-left: 8px;
@@ -232,14 +228,12 @@
   margin: auto;
   position: absolute;
   right: 0;
-  text-align: center;
   width: 21px;
 }
 
 .module-port-select {
   border-radius: 3px;
   height: 21px;
-  margin: 0;
   opacity: 0;
   width: 100%;
 }
