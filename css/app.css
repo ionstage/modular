@@ -21,10 +21,6 @@ body {
   width: 279px;
 }
 
-.no-sidebar .sidebar {
-  pointer-events: none;
-}
-
 .content {
   box-sizing: border-box;
   height: 100%;
@@ -40,6 +36,10 @@ body {
   pointer-events: auto;
 }
 
-.no-sidebar .content {
+.no-sidebar > .sidebar {
+  pointer-events: none;
+}
+
+.no-sidebar > .content {
   padding-left: 0;
 }
