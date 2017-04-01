@@ -14,7 +14,7 @@
   position: absolute;
 }
 
-.module-container .retainer {
+.module-container > .retainer {
   height: 1px;
   pointer-events: none;
   width: 1px;
