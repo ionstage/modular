@@ -95,7 +95,7 @@
 .module-component {
   border: none;
   height: 0;
-  vertical-align: bottom;
+  vertical-align: middle;
   width: 100%;
 }
 
