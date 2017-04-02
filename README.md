@@ -12,7 +12,7 @@ Visual programming environment
 
 ## Demo
 
-- Counter: [Try it out](http://www.ionstage.org/modular/?demo=counter) | [Video](https://youtu.be/oJhfccI5sto)
+- Counter: [Try it out](http://www.ionstage.org/modular/?demo=counter) | [Video](https://youtu.be/fnvV3ylTCN0)
 
 ## Running locally
 
