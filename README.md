@@ -10,6 +10,10 @@ Visual programming environment
 - Each module has its component (like a widget) to perform and control functions
 - Create custom modules and implement them locally ([How to make your own modules](./modular_modules/README.md#how-to-make-your-own-modules))
 
+## Demo
+
+- Counter: [Try it out](http://www.ionstage.org/modular/?demo=counter) | [Video](https://youtu.be/oJhfccI5sto)
+
 ## Running locally
 
 - Install [Node](https://nodejs.org/en/download/)
