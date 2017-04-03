@@ -1,0 +1,50 @@
+.module-wire {
+  display: inline-block;
+  overflow: visible;
+  position: absolute;
+}
+
+.module-wire > * {
+  position: absolute;
+}
+
+.module-wire-path-container {
+  height: 1px;
+  overflow: visible;
+  pointer-events: none;
+  width: 1px;
+}
+
+.module-wire-path {
+  fill: none;
+  stroke: #212121;
+  stroke-width: 2;
+}
+
+.module-wire.module-wire-highlight .module-wire-path {
+  stroke: #f44336;
+}
+
+.module-wire-handle {
+  background-color: #212121;
+  cursor: crosshair;
+  height: 24px;
+  position: absolute;
+  width: 24px;
+}
+
+.module-wire-handle.hide {
+  display: none;
+}
+
+.module-wire-handle[data-type='prop'] {
+  border-radius: 3px;
+}
+
+.module-wire-handle[data-type='event'] {
+  border-radius: 50%;
+}
+
+.module-wire-handle.module-wire-highlight {
+  background-color: #f44336;
+}
