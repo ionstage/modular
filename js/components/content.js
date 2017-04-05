@@ -11,7 +11,7 @@
   var Content = helper.inherits(function(props) {
     Content.super_.call(this, props);
 
-    this.disabled = this.prop(false);
+    this.disabled = this.prop(true);
 
     this.header = new ContentHeader({
       element: this.headerElement(),
