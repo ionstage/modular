@@ -11,6 +11,8 @@
   var Content = helper.inherits(function(props) {
     Content.super_.call(this, props);
 
+    this.disabled = this.prop(false);
+
     this.header = new ContentHeader({
       element: this.headerElement(),
       sidebarCollapser: props.sidebarCollapser,
@@ -32,11 +34,6 @@
 
   Content.prototype.moduleContainerElement = function() {
     return dom.child(this.element(), 1);
-  };
-
-  Content.prototype.disabled = function(value) {
-    this.header.disabled(value);
-    this.moduleContainer.disabled(value);
   };
 
   Content.prototype.loadJSON = function(text) {
@@ -63,6 +60,7 @@
   };
 
   Content.prototype.redraw = function() {
+    this.redrawToggleClass('disabled', 'disabled');
     this.header.redraw();
     this.moduleContainer.redraw();
   };

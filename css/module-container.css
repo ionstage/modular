@@ -6,7 +6,7 @@
   position: relative;
 }
 
-.module-container.disabled {
+.content.disabled > .module-container {
   pointer-events: none;
 }
 

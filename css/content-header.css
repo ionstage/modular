@@ -26,7 +26,7 @@
 }
 
 .button.disabled,
-.content-header.disabled > .button {
+.content.disabled > .content-header > .button {
   opacity: 0.3;
   pointer-events: none;
 }

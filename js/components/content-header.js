@@ -11,8 +11,6 @@
   var ContentHeader = helper.inherits(function(props) {
     ContentHeader.super_.call(this, props);
 
-    this.disabled = this.prop(false);
-
     this.sidebarToggleButton = new SidebarToggleButton({
       element: this.sidebarToggleButtonElement(),
       collapser: props.sidebarCollapser,
@@ -44,7 +42,6 @@
 
   ContentHeader.prototype.redraw = function() {
     this.sidebarToggleButton.redraw();
-    this.redrawToggleClass('disabled', 'disabled');
   };
 
   if (typeof module !== 'undefined' && module.exports) {

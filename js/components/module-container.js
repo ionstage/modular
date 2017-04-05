@@ -15,7 +15,6 @@
     ModuleContainer.super_.call(this, props);
 
     this.modules = this.prop([]);
-    this.disabled = this.prop(false);
     this.draggingWires = this.prop([]);
 
     this.lockRelationCollection = new LockRelationCollection();
@@ -452,7 +451,6 @@
   };
 
   ModuleContainer.prototype.redraw = function() {
-    this.redrawToggleClass('disabled', 'disabled');
     this.redrawRetainer();
     this.redrawWireHandleContainer();
   };
