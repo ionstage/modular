@@ -31,10 +31,16 @@
 
       var props = {
         value: function(input) {
-          var n = Number(input);
+          var n = parseFloat(input);
+
+          if (n !== Number(input)) {
+            contentElement.textContent = '';
+            return null;
+          }
+
           var output;
 
-          if (isNaN(n) || n <= 0) {
+          if (n <= 0) {
             output = '';
           } else if (n % 15 === 0) {
             module.get('fizz-buzz')();
