@@ -11,6 +11,7 @@
   var Sidebar = helper.inherits(function(props) {
     Sidebar.super_.call(this, props);
 
+    this.disabled = this.prop(false);
     this.dragCount = this.prop(0);
 
     this.header = new SidebarHeader({
@@ -57,6 +58,7 @@
   };
 
   Sidebar.prototype.redraw = function() {
+    this.redrawToggleClass('disabled', 'disabled');
     this.redrawDragCount();
   };
 

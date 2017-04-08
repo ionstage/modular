@@ -19,6 +19,10 @@ body {
   width: 279px;
 }
 
+.sidebar.disabled {
+  pointer-events: none;
+}
+
 .content {
   box-sizing: border-box;
   height: 100%;
