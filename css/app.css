@@ -33,7 +33,7 @@ body {
 }
 
 .content > * {
-  pointer-events: auto;
+  pointer-events: initial;
 }
 
 .no-sidebar > .sidebar {
