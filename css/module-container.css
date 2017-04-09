@@ -6,10 +6,6 @@
   position: relative;
 }
 
-.content.disabled > .module-container {
-  pointer-events: none;
-}
-
 .module-container > * {
   position: absolute;
 }

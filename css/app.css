@@ -32,9 +32,13 @@ body {
   padding-left: 280px;
   pointer-events: none;
   position: fixed;
-  -webkit-transition: padding-left 0.3s ease-in-out;
-  transition: padding-left 0.3s ease-in-out;
+  -webkit-transition: opacity 0.1s ease-in-out, padding-left 0.3s ease-in-out;
+  transition: opacity 0.1s ease-in-out, padding-left 0.3s ease-in-out;
   width: 100%;
+}
+
+.content.disabled {
+  opacity: 0.6;
 }
 
 .content.full-width {
@@ -43,4 +47,8 @@ body {
 
 .content > * {
   pointer-events: auto;
+}
+
+.content.disabled > * {
+  pointer-events: none;
 }

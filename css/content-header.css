@@ -6,8 +6,3 @@
   position: relative;
   z-index: 1;
 }
-
-.content.disabled > .content-header > .button {
-  opacity: 0.3;
-  pointer-events: none;
-}
