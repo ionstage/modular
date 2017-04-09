@@ -41,11 +41,3 @@ body {
 .content > * {
   pointer-events: auto;
 }
-
-.no-sidebar > .sidebar {
-  pointer-events: none;
-}
-
-.no-sidebar > .content {
-  padding-left: 0;
-}

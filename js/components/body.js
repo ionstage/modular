@@ -85,13 +85,15 @@
 
   Body.prototype.sidebarCollapser = function() {
     return dom.transition(this.element(), function() {
-      dom.addClass(this.element(), 'no-sidebar');
+      this.sidebar.disabled(true);
+      this.content.isFullWidth(true);
     }.bind(this));
   };
 
   Body.prototype.sidebarExpander = function() {
     return dom.transition(this.element(), function() {
-      dom.removeClass(this.element(), 'no-sidebar');
+      this.sidebar.disabled(false);
+      this.content.isFullWidth(false);
     }.bind(this));
   };
 
