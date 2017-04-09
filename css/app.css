@@ -45,10 +45,10 @@ body {
   padding-left: 0;
 }
 
-.content > * {
+.content > .content-child {
   pointer-events: auto;
 }
 
-.content.disabled > * {
+.content.disabled > .content-child {
   pointer-events: none;
 }
