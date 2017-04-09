@@ -12,6 +12,7 @@
     Content.super_.call(this, props);
 
     this.disabled = this.prop(true);
+    this.isFullWidth = this.prop(false);
 
     this.header = new ContentHeader({
       element: this.headerElement(),
@@ -61,6 +62,7 @@
 
   Content.prototype.redraw = function() {
     this.redrawToggleClass('disabled', 'disabled');
+    this.redrawToggleClass('isFullWidth', 'full-width');
     this.header.redraw();
     this.moduleContainer.redraw();
   };

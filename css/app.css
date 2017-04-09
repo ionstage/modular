@@ -34,6 +34,10 @@ body {
   width: 100%;
 }
 
+.content.full-width {
+  padding-left: 0;
+}
+
 .content > * {
   pointer-events: auto;
 }
