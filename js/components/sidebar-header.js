@@ -8,8 +8,6 @@
   var SidebarHeader = helper.inherits(function(props) {
     SidebarHeader.super_.call(this, props);
 
-    this.disabled = this.prop(true);
-
     this.registerSearchInputFocusListener();
     this.registerSearchInputInputListener();
   }, Component);
@@ -41,16 +39,6 @@
     dom.on(this.searchInputElement(), 'input', function() {
       this.markDirty();
     }.bind(this));
-  };
-
-  SidebarHeader.prototype.redraw = function() {
-    this.redrawDisabled();
-  };
-
-  SidebarHeader.prototype.redrawDisabled = function() {
-    this.redrawProp('disabled', function(disabled) {
-      dom.disabled(this.searchInputElement(), disabled);
-    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {

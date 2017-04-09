@@ -78,7 +78,7 @@
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
-      this.sidebar.searchEnabled(true);
+      this.sidebar.disabled(false);
       this.content.disabled(false);
     }.bind(this));
   };
