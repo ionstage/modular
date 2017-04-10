@@ -54,7 +54,7 @@
 
   SidebarModule.prototype.render = function() {
     var element = dom.el('<div>');
-    dom.addClass(element, 'module');
+    dom.addClass(element, 'sidebar-module');
     dom.html(element, SidebarModule.TEMPLATE_HTML);
     return element;
   };
