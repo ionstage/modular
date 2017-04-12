@@ -25,30 +25,3 @@ body {
   opacity: 0.6;
   pointer-events: none;
 }
-
-.content {
-  box-sizing: border-box;
-  height: 100%;
-  padding-left: 280px;
-  pointer-events: none;
-  position: fixed;
-  -webkit-transition: opacity 0.1s ease-in-out, padding-left 0.3s ease-in-out;
-  transition: opacity 0.1s ease-in-out, padding-left 0.3s ease-in-out;
-  width: 100%;
-}
-
-.content.disabled {
-  opacity: 0.6;
-}
-
-.content.full-width {
-  padding-left: 0;
-}
-
-.content > .content-child {
-  pointer-events: auto;
-}
-
-.content.disabled > .content-child {
-  pointer-events: none;
-}
