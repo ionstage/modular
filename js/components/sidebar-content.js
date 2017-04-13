@@ -28,7 +28,7 @@
     dom.on(this.element(), dom.eventType('start'), SidebarContent.prototype.onpoint.bind(this));
   }, Component);
 
-  SidebarContent.prototype.scrollerElement = function() {
+  SidebarContent.prototype.moduleContainerElement = function() {
     return dom.child(this.element(), 0);
   };
 
@@ -43,7 +43,7 @@
   SidebarContent.prototype.appendModule = function(props) {
     var module = this.createModule(props);
     this.modules().push(module);
-    module.parentElement(this.scrollerElement());
+    module.parentElement(this.moduleContainerElement());
     this.markDirty();
   };
 
