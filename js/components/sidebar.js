@@ -53,6 +53,10 @@
     this.dragCount(this.dragCount() - 1);
   };
 
+  Sidebar.prototype.loadContent = function() {
+    this.relation.update();
+  };
+
   Sidebar.prototype.redraw = function() {
     this.redrawToggleClass('disabled', 'disabled');
     this.redrawDragCount();

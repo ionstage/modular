@@ -74,6 +74,7 @@
   Body.prototype.onready = function() {
     this.main.redraw();
     this.moduleEntryCollection.load().then(function() {
+      this.sidebar.loadContent();
       return this.loadDemo();
     }.bind(this)).catch(function(e) {
       alert(e);
