@@ -4,7 +4,7 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
-  var Content = app.Content || require('./content.js');
+  var Main = app.Main || require('./main.js');
   var ModuleEntryCollection = app.ModuleEntryCollection || require('../collections/module-entry-collection.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
@@ -23,8 +23,8 @@
       moduleEntrySearcher: Body.prototype.moduleEntrySearcher.bind(this),
     });
 
-    this.content = new Content({
-      element: dom.el('.content'),
+    this.main = new Main({
+      element: dom.el('.main'),
       sidebarCollapser: Body.prototype.sidebarCollapser.bind(this),
       sidebarExpander: Body.prototype.sidebarExpander.bind(this),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
@@ -58,7 +58,7 @@
       return Promise.resolve();
     }
 
-    return this.content.loadUrl(this.demoUrl(name));
+    return this.main.loadUrl(this.demoUrl(name));
   };
 
   Body.prototype.redraw = function() {
@@ -72,28 +72,28 @@
   };
 
   Body.prototype.onready = function() {
-    this.content.redraw();
+    this.main.redraw();
     this.moduleEntryCollection.load().then(function() {
       return this.loadDemo();
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
       this.sidebar.disabled(false);
-      this.content.disabled(false);
+      this.main.disabled(false);
     }.bind(this));
   };
 
   Body.prototype.sidebarCollapser = function() {
     return dom.transition(this.element(), function() {
       this.sidebar.disabled(true);
-      this.content.isFullWidth(true);
+      this.main.isFullWidth(true);
     }.bind(this));
   };
 
   Body.prototype.sidebarExpander = function() {
     return dom.transition(this.element(), function() {
       this.sidebar.disabled(false);
-      this.content.isFullWidth(false);
+      this.main.isFullWidth(false);
     }.bind(this));
   };
 
@@ -107,7 +107,7 @@
 
   Body.prototype.moduleDropper = function(name, x, y) {
     var moduleEntry = this.moduleEntryCollection.get(name);
-    this.content.loadModuleByClientPosition({
+    this.main.loadModuleByClientPosition({
       title: moduleEntry.label,
       name: name,
       x: x,

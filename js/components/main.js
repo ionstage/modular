@@ -5,45 +5,45 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
-  var ContentHeader = app.ContentHeader || require('./content-header.js');
-  var ModuleContainer = app.ModuleContainer || require('./module-container.js');
+  var MainContent = app.MainContent || require('./main-content.js');
+  var MainHeader = app.MainHeader || require('./main-header.js');
 
-  var Content = helper.inherits(function(props) {
-    Content.super_.call(this, props);
+  var Main = helper.inherits(function(props) {
+    Main.super_.call(this, props);
 
     this.disabled = this.prop(true);
     this.isFullWidth = this.prop(false);
 
-    this.header = new ContentHeader({
+    this.header = new MainHeader({
       element: this.headerElement(),
       sidebarCollapser: props.sidebarCollapser,
       sidebarExpander: props.sidebarExpander,
-      fileLoader: Content.prototype.fileLoader.bind(this),
-      fileSaver: Content.prototype.fileSaver.bind(this),
+      fileLoader: Main.prototype.fileLoader.bind(this),
+      fileSaver: Main.prototype.fileSaver.bind(this),
     });
 
-    this.moduleContainer = new ModuleContainer({
-      element: this.moduleContainerElement(),
+    this.content = new MainContent({
+      element: this.contentElement(),
       moduleDragStarter: props.moduleDragStarter,
       moduleDragEnder: props.moduleDragEnder,
     });
   }, Component);
 
-  Content.prototype.headerElement = function() {
+  Main.prototype.headerElement = function() {
     return dom.child(this.element(), 0);
   };
 
-  Content.prototype.moduleContainerElement = function() {
+  Main.prototype.contentElement = function() {
     return dom.child(this.element(), 1);
   };
 
-  Content.prototype.loadJSON = function(text) {
+  Main.prototype.loadJSON = function(text) {
     var data = JSON.parse(text);
-    this.moduleContainer.clear();
-    return this.moduleContainer.load(data);
+    this.content.clear();
+    return this.content.load(data);
   };
 
-  Content.prototype.loadUrl = function(url) {
+  Main.prototype.loadUrl = function(url) {
     return dom.ajax({
       type: 'GET',
       url: url,
@@ -52,22 +52,22 @@
     }.bind(this));
   };
 
-  Content.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
-    return this.moduleContainer.loadModuleByClientPosition(props, visiblePortNames).catch(function(e) {
+  Main.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
+    return this.content.loadModuleByClientPosition(props, visiblePortNames).catch(function(e) {
       if (!(e instanceof RangeError)) {
         throw e;
       }
     });
   };
 
-  Content.prototype.redraw = function() {
+  Main.prototype.redraw = function() {
     this.redrawToggleClass('disabled', 'disabled');
     this.redrawToggleClass('isFullWidth', 'full-width');
     this.header.redraw();
-    this.moduleContainer.redraw();
+    this.content.redraw();
   };
 
-  Content.prototype.fileLoader = function(file) {
+  Main.prototype.fileLoader = function(file) {
     this.disabled(true);
     dom.load(file).then(function(text) {
       return this.loadJSON(text);
@@ -78,15 +78,15 @@
     }.bind(this));
   };
 
-  Content.prototype.fileSaver = function() {
-    var text = JSON.stringify(this.moduleContainer.toData());
+  Main.prototype.fileSaver = function() {
+    var text = JSON.stringify(this.content.toData());
     var blob = new Blob([text], { type: 'application/json' });
     FileSaver.saveAs(blob, 'download.json');
   };
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Content;
+    module.exports = Main;
   } else {
-    app.Content = Content;
+    app.Main = Main;
   }
 })(this.app || (this.app = {}));

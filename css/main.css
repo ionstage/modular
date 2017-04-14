@@ -1,4 +1,4 @@
-.content {
+.main {
   box-sizing: border-box;
   height: 100%;
   padding-left: 280px;
@@ -9,23 +9,23 @@
   width: 100%;
 }
 
-.content.disabled {
+.main.disabled {
   opacity: 0.6;
 }
 
-.content.full-width {
+.main.full-width {
   padding-left: 0;
 }
 
-.content > .content-child {
+.main > .main-child {
   pointer-events: auto;
 }
 
-.content.disabled > .content-child {
+.main.disabled > .main-child {
   pointer-events: none;
 }
 
-.content-header {
+.main-header {
   background-color: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
   height: 26px;
@@ -34,7 +34,7 @@
   z-index: 1;
 }
 
-.module-container {
+.main-content {
   -webkit-overflow-scrolling: touch;
   background-color: #fff;
   height: calc(100% - 49px);
@@ -42,11 +42,11 @@
   position: relative;
 }
 
-.module-container > * {
+.main-content > * {
   position: absolute;
 }
 
-.module-container > .retainer {
+.main-content > .retainer {
   height: 1px;
   pointer-events: none;
   width: 1px;
