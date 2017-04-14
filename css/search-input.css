@@ -6,10 +6,10 @@
   box-sizing: border-box;
   color: inherit;
   font: inherit;
-  font-size: 12px;
-  height: 26px;
+  font-size: 14px;
+  height: 30px;
   outline: 0;
-  padding: 1px 4px;
+  padding: 1px 4px 1px 6px;
   width: 100%;
 }
 
