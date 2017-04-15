@@ -4,11 +4,11 @@
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .075);
   cursor: pointer;
+  float: left;
   font-size: 11px;
   height: 28px;
   line-height: 24px;
   overflow: hidden;
-  position: absolute;
   text-align: center;
 }
 
@@ -37,7 +37,6 @@
 }
 
 .button.sidebar-toggle-button {
-  left: 9px;
   width: 36px;
 }
 
@@ -70,7 +69,8 @@
 }
 
 .button.load-button {
-  right: 92px;
+  margin-right: 9px;
+  position: relative;
 }
 
 .button.load-button > input {
@@ -87,10 +87,6 @@
   height: 12px;
   padding-right: 4px;
   width: 12px;
-}
-
-.button.save-button {
-  right: 9px;
 }
 
 .button.save-button > .icon {

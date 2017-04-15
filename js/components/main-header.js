@@ -29,15 +29,15 @@
   }, Component);
 
   MainHeader.prototype.sidebarToggleButtonElement = function() {
-    return dom.child(this.element(), 0);
+    return dom.child(this.element(), 0, 0);
   };
 
   MainHeader.prototype.loadButtonElement = function() {
-    return dom.child(this.element(), 1);
+    return dom.child(this.element(), 1, 0);
   };
 
   MainHeader.prototype.saveButtonElement = function() {
-    return dom.child(this.element(), 2);
+    return dom.child(this.element(), 1, 1);
   };
 
   MainHeader.prototype.redraw = function() {
