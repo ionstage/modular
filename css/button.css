@@ -1,3 +1,20 @@
+.button-container::after,
+.button-container-cell::after {
+  content: '.';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.button-container-cell.left {
+  float: left;
+}
+
+.button-container-cell.right {
+  float: right;
+}
+
 .button {
   background-color: #f5f5f5;
   border: 1px solid #bdbdbd;

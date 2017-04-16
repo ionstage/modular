@@ -34,23 +34,6 @@
   z-index: 1;
 }
 
-.main-header::after,
-.button-container::after {
-  content: '.';
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-.button-container.left {
-  float: left;
-}
-
-.button-container.right {
-  float: right;
-}
-
 .main-content {
   -webkit-overflow-scrolling: touch;
   background-color: #fff;
