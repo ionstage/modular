@@ -15,11 +15,7 @@
 .sidebar-header {
   background-color: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
-  box-sizing: border-box;
   padding: 9px;
-  position: absolute;
-  width: 100%;
-  z-index: 1;
 }
 
 .sidebar-content {
@@ -27,8 +23,6 @@
   height: calc(100% - 49px);
   overflow: hidden;
   position: relative;
-  -webkit-transform: translateY(49px);
-  transform: translateY(49px);
 }
 
 .sidebar-module-container {
