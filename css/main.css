@@ -44,7 +44,7 @@
   position: absolute;
 }
 
-.main-content > .retainer {
+.main-content-retainer {
   height: 1px;
   pointer-events: none;
   width: 1px;
