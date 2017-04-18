@@ -40,7 +40,7 @@
   position: relative;
 }
 
-.main-content > * {
+.main-content-item {
   position: absolute;
 }
 
