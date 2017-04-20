@@ -42,7 +42,7 @@
   vertical-align: middle;
 }
 
-.button > .icon {
+.button-icon {
   pointer-events: none;
 }
 
@@ -57,7 +57,7 @@
   width: 36px;
 }
 
-.button.sidebar-toggle-button > .icon {
+.button.sidebar-toggle-button > .button-icon {
   height: 27px;
   width: 20px;
 }
@@ -100,13 +100,13 @@
   top: 0;
 }
 
-.button.load-button > .icon {
+.button.load-button > .button-icon {
   height: 12px;
   padding-right: 4px;
   width: 12px;
 }
 
-.button.save-button > .icon {
+.button.save-button > .button-icon {
   height: 14px;
   padding-right: 4px;
   width: 14px;
