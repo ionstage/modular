@@ -93,6 +93,10 @@
     }
   };
 
+  dom.className = function(el, className) {
+    dom.attr(el, { 'class': className });
+  };
+
   dom.addClass = function(el, className) {
     el.classList.add(className);
   };

@@ -1,17 +1,9 @@
 .module-wire {
   display: inline-block;
-  overflow: visible;
-  position: absolute;
-}
-
-.module-wire > * {
-  position: absolute;
-}
-
-.module-wire-path-container {
   height: 1px;
   overflow: visible;
   pointer-events: none;
+  position: absolute;
   width: 1px;
 }
 

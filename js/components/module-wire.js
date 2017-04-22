@@ -22,7 +22,7 @@
 
   ModuleWire.prototype.pathElement = function() {
     // use 'dom.childNode' method for SVGElement
-    return dom.childNode(this.element(), 0, 0);
+    return dom.childNode(this.element(), 0);
   };
 
   ModuleWire.prototype.handlePosition = function() {
@@ -33,9 +33,11 @@
   };
 
   ModuleWire.prototype.renderWire = function() {
-    var element = dom.el('<div>');
-    dom.addClass(element, 'module-wire');
-    dom.html(element, ModuleWire.TEMPLATE_HTML);
+    var element = dom.svgEl('<svg>');
+    var pathElement = dom.svgEl('<path>');
+    dom.className(element, 'module-wire');
+    dom.className(pathElement, 'module-wire-path');
+    dom.append(element, pathElement);
     return element;
   };
 
@@ -108,16 +110,10 @@
 
   ModuleWire.prototype.redrawHighlight = function() {
     this.redrawProp('highlighted', function(highlighted) {
-      dom.toggleClass(this.element(), 'module-wire-highlight', highlighted);
+      dom.className(this.element(), 'module-wire' + (highlighted ? ' module-wire-highlight' : ''));
       dom.toggleClass(this.handleElement(), 'module-wire-highlight', highlighted);
     });
   };
-
-  ModuleWire.TEMPLATE_HTML = [
-    '<svg class="module-wire-path-container">',
-      '<path class="module-wire-path"></path>',
-    '</svg>',
-  ].join('');
 
   ModuleWire.HANDLE_WIDTH = 24;
 
