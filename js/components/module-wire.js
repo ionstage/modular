@@ -110,8 +110,8 @@
 
   ModuleWire.prototype.redrawHighlight = function() {
     this.redrawProp('highlighted', function(highlighted) {
-      dom.className(this.element(), 'module-wire' + (highlighted ? ' module-wire-highlight' : ''));
-      dom.toggleClass(this.handleElement(), 'module-wire-highlight', highlighted);
+      dom.className(this.pathElement(), 'module-wire-path' + (highlighted ? ' highlighted' : ''));
+      dom.toggleClass(this.handleElement(), 'highlighted', highlighted);
     });
   };
 

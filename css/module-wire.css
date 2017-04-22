@@ -13,7 +13,7 @@
   stroke-width: 2;
 }
 
-.module-wire.module-wire-highlight .module-wire-path {
+.module-wire-path.highlighted {
   stroke: #f44336;
 }
 
@@ -37,6 +37,6 @@
   border-radius: 50%;
 }
 
-.module-wire-handle.module-wire-highlight {
+.module-wire-handle.highlighted {
   background-color: #f44336;
 }
