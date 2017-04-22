@@ -5,10 +5,6 @@
 
   var dom = {};
 
-  dom.unsupported = function() {
-    return (typeof document === 'undefined');
-  };
-
   dom.global = function() {
     return (typeof module !== 'undefined' && module.exports) ? global : window;
   };
@@ -236,10 +232,6 @@
       transform: translate,
       webkitTransform: translate,
     });
-  };
-
-  dom.animate = function(callback) {
-    return window.requestAnimationFrame(callback);
   };
 
   dom.on = function(el, type, listener, useCapture) {

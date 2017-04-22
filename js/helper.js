@@ -32,10 +32,6 @@
     return ctor;
   };
 
-  helper.identity = function(value) {
-    return value;
-  };
-
   helper.equal = function(a, b) {
     return (a != null && typeof a.equal === 'function') ? a.equal(b) : (a === b);
   };
