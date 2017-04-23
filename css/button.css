@@ -24,7 +24,6 @@
   float: left;
   font-size: 11px;
   height: 28px;
-  line-height: 24px;
   overflow: hidden;
   text-align: center;
 }
@@ -68,11 +67,6 @@
 
 .button.sidebar-toggle-button > .angle-double-right {
   padding-left: 2px;
-}
-
-.button.sidebar-toggle-button[data-type='collapse'] > .angle-double-left,
-.button.sidebar-toggle-button[data-type='expand'] > .angle-double-right {
-  display: inline;
 }
 
 .button.sidebar-toggle-button[data-type='expand'] > .angle-double-left,
