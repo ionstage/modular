@@ -38,11 +38,8 @@
 }
 
 .button > * {
-  vertical-align: middle;
-}
-
-.button-icon {
   pointer-events: none;
+  vertical-align: middle;
 }
 
 .button > span {
@@ -81,17 +78,10 @@
 
 .button.load-button {
   margin-right: 9px;
-  position: relative;
 }
 
-.button.load-button > input {
-  cursor: pointer;
-  height: 100%;
-  margin: 0;
-  opacity: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
+.button-input {
+  visibility: hidden;
 }
 
 .button.load-button > .button-icon {

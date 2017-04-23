@@ -14,7 +14,7 @@
   }, Button);
 
   LoadButton.prototype.inputElement = function() {
-    return dom.child(this.element(), 0);
+    return dom.child(this.element(), 2);
   };
 
   LoadButton.prototype.registerChangeListener = function() {
@@ -33,9 +33,7 @@
   };
 
   LoadButton.prototype.ontap = function() {
-    if (dom.supportsTouch()) {
-      this.inputElement().click();
-    }
+    this.inputElement().click();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
