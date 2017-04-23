@@ -42,7 +42,7 @@
   vertical-align: middle;
 }
 
-.button > span {
+.button-label {
   display: inline-block;
   line-height: 27px;
   padding-top: 1px;
