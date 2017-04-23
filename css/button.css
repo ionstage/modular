@@ -50,7 +50,7 @@
 }
 
 .button.sidebar-toggle-button {
-  width: 36px;
+  padding: 0 7px;
 }
 
 .button.sidebar-toggle-button > .button-icon {
@@ -73,7 +73,7 @@
 
 .button.load-button,
 .button.save-button {
-  width: 72px;
+  padding: 0 13px;
 }
 
 .button.load-button {
@@ -81,13 +81,14 @@
 }
 
 .button-input {
+  position: absolute;
   visibility: hidden;
 }
 
 .button.load-button > .button-icon {
   height: 12px;
   padding-right: 4px;
-  width: 12px;
+  width: 14px;
 }
 
 .button.save-button > .button-icon {
