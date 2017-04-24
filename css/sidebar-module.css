@@ -19,7 +19,7 @@
   z-index: 9999;
 }
 
-.sidebar-module > .sidebar-module-child {
+.sidebar-module-item {
   pointer-events: none;
 }
 

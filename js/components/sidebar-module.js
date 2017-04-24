@@ -152,8 +152,8 @@
   };
 
   SidebarModule.TEMPLATE_HTML = [
-    '<div class="sidebar-module-header sidebar-module-child"></div>',
-    '<div class="sidebar-module-content sidebar-module-child"></div>',
+    '<div class="sidebar-module-header sidebar-module-item"></div>',
+    '<div class="sidebar-module-content sidebar-module-item"></div>',
   ].join('');
 
   if (typeof module !== 'undefined' && module.exports) {
