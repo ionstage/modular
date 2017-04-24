@@ -63,8 +63,6 @@
   Main.prototype.redraw = function() {
     this.redrawToggleClass('disabled', 'disabled');
     this.redrawToggleClass('isFullWidth', 'full-width');
-    this.header.redraw();
-    this.content.redraw();
   };
 
   Main.prototype.fileLoader = function(file) {

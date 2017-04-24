@@ -40,10 +40,6 @@
     return dom.child(this.element(), 1, 1);
   };
 
-  MainHeader.prototype.redraw = function() {
-    this.sidebarToggleButton.redraw();
-  };
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = MainHeader;
   } else {

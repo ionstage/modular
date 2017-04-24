@@ -72,7 +72,6 @@
   };
 
   Body.prototype.onready = function() {
-    this.main.redraw();
     this.moduleEntryCollection.load().then(function() {
       this.sidebar.loadContent();
       return this.loadDemo();
