@@ -21,3 +21,19 @@
 .search-input::-webkit-search-decoration {
   display: none;
 }
+
+.search-input::-webkit-input-placeholder {
+  color: #9e9e9e;
+}
+
+.search-input::-moz-placeholder {
+  color: #9e9e9e;
+}
+
+.search-input:-ms-input-placeholder {
+  color: #9e9e9e;
+}
+
+.search-input::placeholder {
+  color: #9e9e9e;
+}
