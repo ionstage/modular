@@ -37,6 +37,10 @@
   pointer-events: none;
 }
 
+.button-container-cell.right > .button:last-child {
+  margin-left: 9px;
+}
+
 .button > * {
   pointer-events: none;
   vertical-align: middle;
@@ -73,10 +77,6 @@
 .button.load-button,
 .button.save-button {
   padding: 0 13px;
-}
-
-.button.load-button {
-  margin-right: 9px;
 }
 
 .button-input {
