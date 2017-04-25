@@ -1,9 +1,9 @@
 .button-container::after,
 .button-container-cell::after {
+  clear: both;
   content: '.';
   display: block;
   height: 0;
-  clear: both;
   visibility: hidden;
 }
 
