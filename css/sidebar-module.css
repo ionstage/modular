@@ -20,20 +20,19 @@
 }
 
 .sidebar-module-item {
+  line-height: 29px;
+  overflow: hidden;
   pointer-events: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sidebar-module-header {
   background-color: inherit;
   border-radius: 3px 3px 0 0;
-  box-sizing: border-box;
   color: #fff;
-  height: 32px;
-  line-height: 29px;
-  overflow: hidden;
+  height: 29px;
   padding: 3px 8px 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .sidebar-module-content {
@@ -44,9 +43,5 @@
   border-width: 0 3px 3px 3px;
   color: inherit;
   font-size: 12px;
-  line-height: 29px;
-  overflow: hidden;
   padding: 0 8px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
