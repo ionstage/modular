@@ -17,7 +17,7 @@
   padding-left: 0;
 }
 
-.main > .main-child {
+.main-child {
   pointer-events: auto;
 }
 
