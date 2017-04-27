@@ -53,24 +53,28 @@
   pointer-events: none;
 }
 
-.button.sidebar-toggle-button {
+.button-toggle-icon-container {
   padding: 0 7px;
 }
 
-.button-icon.icon-collapse {
+.button-toggle-icon {
   height: 27px;
+  width: 20px;
+}
+
+.button-toggle-icon.icon-collapse {
   padding-right: 2px;
-  width: 20px;
 }
 
-.button-icon.icon-expand {
-  height: 27px;
+.button-toggle-icon-container[data-type='expand'] > .button-toggle-icon.icon-collapse {
+  display: none;
+}
+
+.button-toggle-icon.icon-expand {
   padding-left: 2px;
-  width: 20px;
 }
 
-.button.sidebar-toggle-button[data-type='expand'] > .icon-collapse,
-.button.sidebar-toggle-button[data-type='collapse'] > .icon-expand {
+.button-toggle-icon-container[data-type='collapse'] > .button-toggle-icon.icon-expand {
   display: none;
 }
 
