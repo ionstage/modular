@@ -94,7 +94,11 @@
   };
 
   helper.remove = function(array, item) {
-    array.splice(array.indexOf(item), 1);
+    var index = array.indexOf(item);
+    if (index === -1) {
+      return;
+    }
+    array.splice(index, 1);
   };
 
   helper.moveToBack = function(array, item) {
