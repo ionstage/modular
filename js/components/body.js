@@ -67,7 +67,7 @@
 
   Body.prototype.redrawDragCount = function() {
     this.redrawProp('dragCount', function(dragCount) {
-      dom.toggleClass(this.element(), 'module-dragging', dragCount > 0);
+      dom.toggleClass(this.element(), 'dragging', dragCount > 0);
     });
   };
 

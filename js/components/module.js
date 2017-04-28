@@ -765,7 +765,7 @@
       '<div class="module-header-delete-button"></div>',
     '</div>',
     '<div class="module-content">',
-      '<iframe class="module-component"></iframe>',
+      '<iframe class="module-component embed"></iframe>',
       '<div class="module-port-list"></div>',
     '</div>',
     '<div class="module-footer">',

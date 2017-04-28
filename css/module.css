@@ -3,10 +3,6 @@
   width: 240px;
 }
 
-.module-dragging .module > .module-content > .module-component {
-  pointer-events: none;
-}
-
 .module.module-moving > .module-header {
   background-color: #ffa726;
 }

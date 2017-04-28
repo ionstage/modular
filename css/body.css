@@ -11,3 +11,7 @@ body {
   -webkit-user-select: none;
   user-select: none;
 }
+
+body.dragging .embed {
+  pointer-events: none;
+}
