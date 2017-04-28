@@ -164,17 +164,16 @@
 
     Map.prototype.set = function(key, value) {
       var data = this.data;
-      if (!this.has(key)) {
-        data.push([key, value]);
-        return;
-      }
       for (var i = data.length - 1; i >= 0; i--) {
         var item = data[i];
         if (helper.equal(item[0], key)) {
+          // update value
           item[1] = value;
-          break;
+          return;
         }
       }
+      // store value
+      data.push([key, value]);
     };
 
     Map.prototype.get = function(key) {
