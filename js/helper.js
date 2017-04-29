@@ -119,6 +119,11 @@
     return -1;
   };
 
+  helper.find = function(array, callback) {
+    var index = helper.findIndex(array, callback);
+    return (index !== -1 ? array[index] : null);
+  };
+
   helper.Set = (function() {
     var Set = function() {
       this.data = [];
@@ -177,9 +182,9 @@
     };
 
     Map.prototype.get = function(key) {
-      var item = this.data.filter(function(item) {
+      var item = helper.find(this.data, function(item) {
         return helper.equal(item[0], key);
-      })[0];
+      });
       return (item ? item[1] : null);
     };
 

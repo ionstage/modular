@@ -125,11 +125,10 @@
 
   MainContent.prototype.connectedSourceUnit = function(targetUnit) {
     // socket of the target port can only be connected to one wire
-    return this.bindings().filter(function(binding) {
+    var binding = helper.find(this.bindings(), function(binding) {
       return helper.equal(binding.targetUnit, targetUnit);
-    }).map(function(binding) {
-      return binding.sourceUnit;
-    })[0] || null;
+    });
+    return (binding ? binding.sourceUnit : null);
   };
 
   MainContent.prototype.unitFromSocketPosition = function(x, y) {

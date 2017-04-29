@@ -135,15 +135,15 @@
   };
 
   Module.prototype.port = function(name) {
-    return this.ports().filter(function(port) {
+    return helper.find(this.ports(), function(port) {
       return (port.name() === name);
-    })[0] || null;
+    });
   };
 
   Module.prototype.targetPort = function(target) {
-    return this.ports().filter(function(port) {
+    return helper.find(this.ports(), function(port) {
       return dom.contains(port.listItemElement(), target);
-    })[0] || null;
+    });
   };
 
   Module.prototype.eventPorts = function() {
