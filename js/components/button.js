@@ -15,30 +15,35 @@
   }, Component);
 
   Button.prototype.registerTapListener = function() {
-    var target;
     new dom.Draggable({
       element: this.element(),
-      onstart: function(x, y, event) {
-        target = dom.target(event);
-        dom.cancel(event);
-        dom.removeFocus();
-        this.isActive(true);
-      }.bind(this),
-      onmove: function(dx, dy, event) {
-        this.isActive(dom.target(event) === target);
-      }.bind(this),
-      onend: function(dx, dy, event) {
-        this.isActive(false);
-        if (dom.target(event) === target) {
-          this.ontap();
-        }
-      }.bind(this),
+      onstart: Button.prototype.onstart.bind(this),
+      onmove: Button.prototype.onmove.bind(this),
+      onend: Button.prototype.onend.bind(this),
     });
   };
 
   Button.prototype.redraw = function() {
     this.redrawToggleClass('isActive', 'active');
     this.redrawToggleClass('disabled', 'disabled');
+  };
+
+  Button.prototype.onstart = function(x, y, event, context) {
+    context.target = dom.target(event);
+    dom.cancel(event);
+    dom.removeFocus();
+    this.isActive(true);
+  };
+
+  Button.prototype.onmove = function(dx, dy, event, context) {
+    this.isActive(dom.target(event) === context.target);
+  };
+
+  Button.prototype.onend = function(dx, dy, event, context) {
+    this.isActive(false);
+    if (dom.target(event) === context.target) {
+      this.ontap();
+    }
   };
 
   Button.prototype.ontap = function() {};
