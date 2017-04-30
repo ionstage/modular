@@ -29,6 +29,8 @@
       sidebarExpander: Body.prototype.sidebarExpander.bind(this),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
+      loadStarter: Body.prototype.loadStarter.bind(this),
+      loadEnder: Body.prototype.loadEnder.bind(this),
     });
 
     dom.ready(Body.prototype.onready.bind(this));
@@ -72,14 +74,14 @@
   };
 
   Body.prototype.onready = function() {
+    this.loadStarter();
     this.moduleEntryCollection.load().then(function() {
       this.sidebar.loadContent();
       return this.loadDemo();
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
-      this.sidebar.disabled(false);
-      this.main.disabled(false);
+      this.loadEnder();
     }.bind(this));
   };
 
@@ -117,6 +119,16 @@
       this.sidebar.disabled(false);
       this.main.isFullWidth(false);
     }.bind(this));
+  };
+
+  Body.prototype.loadStarter = function() {
+    this.sidebar.disabled(true);
+    this.main.disabled(true);
+  };
+
+  Body.prototype.loadEnder = function() {
+    this.sidebar.disabled(false);
+    this.main.disabled(false);
   };
 
   if (typeof module !== 'undefined' && module.exports) {

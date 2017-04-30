@@ -27,6 +27,9 @@
       moduleDragStarter: props.moduleDragStarter,
       moduleDragEnder: props.moduleDragEnder,
     });
+
+    this.loadStarter = props.loadStarter;
+    this.loadEnder = props.loadEnder;
   }, Component);
 
   Main.prototype.headerElement = function() {
@@ -66,13 +69,13 @@
   };
 
   Main.prototype.fileLoader = function(file) {
-    this.disabled(true);
+    this.loadStarter();
     dom.load(file).then(function(text) {
       return this.loadJSON(text);
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
-      this.disabled(false);
+      this.loadEnder();
     }.bind(this));
   };
 
