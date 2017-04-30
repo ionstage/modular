@@ -83,20 +83,6 @@
     }.bind(this));
   };
 
-  Body.prototype.sidebarCollapser = function() {
-    return dom.transition(this.element(), function() {
-      this.sidebar.disabled(true);
-      this.main.isFullWidth(true);
-    }.bind(this));
-  };
-
-  Body.prototype.sidebarExpander = function() {
-    return dom.transition(this.element(), function() {
-      this.sidebar.disabled(false);
-      this.main.isFullWidth(false);
-    }.bind(this));
-  };
-
   Body.prototype.moduleDragStarter = function() {
     this.incrementDragCount();
   };
@@ -117,6 +103,20 @@
 
   Body.prototype.moduleEntrySearcher = function(searchText) {
     return this.moduleEntryCollection.search(searchText);
+  };
+
+  Body.prototype.sidebarCollapser = function() {
+    return dom.transition(this.element(), function() {
+      this.sidebar.disabled(true);
+      this.main.isFullWidth(true);
+    }.bind(this));
+  };
+
+  Body.prototype.sidebarExpander = function() {
+    return dom.transition(this.element(), function() {
+      this.sidebar.disabled(false);
+      this.main.isFullWidth(false);
+    }.bind(this));
   };
 
   if (typeof module !== 'undefined' && module.exports) {
