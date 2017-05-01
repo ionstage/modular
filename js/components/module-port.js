@@ -5,9 +5,7 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
-  var ModulePort = helper.inherits(function(props) {
-    ModulePort.super_.call(this, props);
-
+  var ModulePort = Component.inherits(function(props) {
     this.label = this.prop(props.label);
     this.name = this.prop(props.name);
     this.type = this.prop(props.type);
@@ -28,7 +26,7 @@
 
     // update list-item in redrawToggleClass() method
     this.element = this.listItemElement;
-  }, Component);
+  });
 
   ModulePort.prototype.hideDisabled = function() {
     // don't hide label-highlighted port

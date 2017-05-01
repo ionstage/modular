@@ -8,9 +8,7 @@
   var MainContent = app.MainContent || require('./main-content.js');
   var MainHeader = app.MainHeader || require('./main-header.js');
 
-  var Main = helper.inherits(function(props) {
-    Main.super_.call(this, props);
-
+  var Main = Component.inherits(function(props) {
     this.disabled = this.prop(true);
     this.isFullWidth = this.prop(false);
 
@@ -30,7 +28,7 @@
 
     this.loadStarter = props.loadStarter;
     this.loadEnder = props.loadEnder;
-  }, Component);
+  });
 
   Main.prototype.headerElement = function() {
     return dom.child(this.element(), 0);

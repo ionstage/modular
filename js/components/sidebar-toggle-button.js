@@ -5,14 +5,12 @@
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
 
-  var SidebarToggleButton = helper.inherits(function(props) {
-    SidebarToggleButton.super_.call(this, props);
-
+  var SidebarToggleButton = Button.inherits(function(props) {
     this.type = this.prop(SidebarToggleButton.TYPE_COLLAPSE);
 
     this.collapser = props.collapser;
     this.expander = props.expander;
-  }, Button);
+  });
 
   SidebarToggleButton.prototype.toggler = (function() {
     var map = { collapse: 'collapser', expand: 'expander' };

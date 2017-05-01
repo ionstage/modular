@@ -8,9 +8,7 @@
   var SidebarHeader = app.SidebarHeader || require('./sidebar-header.js');
   var SidebarRelation = app.SidebarRelation || require('../relations/sidebar-relation.js');
 
-  var Sidebar = helper.inherits(function(props) {
-    Sidebar.super_.call(this, props);
-
+  var Sidebar = Component.inherits(function(props) {
     this.disabled = this.prop(true);
     this.dragCount = this.prop(0);
 
@@ -35,7 +33,7 @@
     this.moduleDragEnder = props.moduleDragEnder;
 
     this.header.relations().push(this.relation);
-  }, Component);
+  });
 
   Sidebar.prototype.headerElement = function() {
     return dom.child(this.element(), 0);

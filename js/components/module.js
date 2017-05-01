@@ -8,9 +8,7 @@
   var ModulePort = app.ModulePort || require('./module-port.js');
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
 
-  var Module = helper.inherits(function(props) {
-    Module.super_.call(this, props);
-
+  var Module = Component.inherits(function(props) {
     this.title = this.prop(props.title);
     this.name = this.prop(props.name);
     this.x = this.prop(props.x);
@@ -50,7 +48,7 @@
     this.dragPortSocketStarter = props.dragPortSocketStarter;
     this.dragPortSocketMover = props.dragPortSocketMover;
     this.dragPortSocketEnder = props.dragPortSocketEnder;
-  }, Component);
+  });
 
   Module.prototype.headerElement = function() {
     return dom.child(this.element(), 0);

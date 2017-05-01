@@ -11,9 +11,7 @@
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
 
-  var MainContent = helper.inherits(function(props) {
-    MainContent.super_.call(this, props);
-
+  var MainContent = Component.inherits(function(props) {
     this.modules = this.prop([]);
     this.draggingWires = this.prop([]);
 
@@ -37,7 +35,7 @@
     this.moduleDragEnder = props.moduleDragEnder;
 
     dom.on(this.element(), dom.eventType('start'), MainContent.prototype.onpoint.bind(this));
-  }, Component);
+  });
 
   MainContent.prototype.retainerElement = function() {
     return dom.child(this.element(), 0);

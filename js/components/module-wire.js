@@ -5,9 +5,7 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
-  var ModuleWire = helper.inherits(function(props) {
-    ModuleWire.super_.call(this, props);
-
+  var ModuleWire = Component.inherits(function(props) {
     this.sourceX = this.prop(props.sourceX);
     this.sourceY = this.prop(props.sourceY);
     this.targetX = this.prop(props.targetX);
@@ -18,7 +16,7 @@
     this.parentElement = this.prop(props.parentElement);
     this.handleElement = this.prop(null);
     this.parentHandleElement = this.prop(props.parentHandleElement);
-  }, Component);
+  });
 
   ModuleWire.prototype.pathElement = function() {
     // use 'dom.childNode' method for SVGElement

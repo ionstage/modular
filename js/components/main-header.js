@@ -8,9 +8,7 @@
   var SaveButton = app.SaveButton || require('./save-button.js');
   var SidebarToggleButton = app.SidebarToggleButton || require('./sidebar-toggle-button.js');
 
-  var MainHeader = helper.inherits(function(props) {
-    MainHeader.super_.call(this, props);
-
+  var MainHeader = Component.inherits(function(props) {
     this.sidebarToggleButton = new SidebarToggleButton({
       element: this.sidebarToggleButtonElement(),
       collapser: props.sidebarCollapser,
@@ -26,7 +24,7 @@
       element: this.saveButtonElement(),
       saver: props.fileSaver,
     });
-  }, Component);
+  });
 
   MainHeader.prototype.sidebarToggleButtonElement = function() {
     return dom.child(this.element(), 0, 0);

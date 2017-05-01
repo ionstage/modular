@@ -5,14 +5,12 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
-  var Button = helper.inherits(function(props) {
-    Button.super_.call(this, props);
-
+  var Button = Component.inherits(function(props) {
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
 
     this.registerTapListener();
-  }, Component);
+  });
 
   Button.prototype.registerTapListener = function() {
     new dom.Draggable({
@@ -50,6 +48,8 @@
   Button.prototype.ontap = function() {};
 
   Button.prototype.onredraw = function() {};
+
+  Button.inherits = Component.inherits;
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Button;

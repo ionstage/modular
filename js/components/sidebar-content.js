@@ -7,9 +7,7 @@
   var Component = app.Component || require('./component.js');
   var SidebarModule = app.SidebarModule || require('./sidebar-module.js');
 
-  var SidebarContent = helper.inherits(function(props) {
-    SidebarContent.super_.call(this, props);
-
+  var SidebarContent = Component.inherits(function(props) {
     this.modules = this.prop([]);
 
     this.scrollable = new IScroll(this.element(), {
@@ -26,7 +24,7 @@
     this.dropper = props.dropper;
 
     dom.on(this.element(), dom.eventType('start'), SidebarContent.prototype.onpoint.bind(this));
-  }, Component);
+  });
 
   SidebarContent.prototype.moduleContainerElement = function() {
     return dom.child(this.element(), 0);

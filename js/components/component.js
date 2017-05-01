@@ -50,6 +50,14 @@
     });
   };
 
+  Component.inherits = function(ctor) {
+    var superCtor = this;
+    return helper.inherits(function(props) {
+      superCtor.call(this, props);
+      ctor.call(this, props);
+    }, superCtor);
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Component;
   } else {

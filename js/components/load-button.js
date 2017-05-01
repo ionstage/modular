@@ -5,13 +5,11 @@
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
 
-  var LoadButton = helper.inherits(function(props) {
-    LoadButton.super_.call(this, props);
-
+  var LoadButton = Button.inherits(function(props) {
     this.loader = props.loader;
 
     this.registerChangeListener();
-  }, Button);
+  });
 
   LoadButton.prototype.inputElement = function() {
     return dom.child(this.element(), 2);

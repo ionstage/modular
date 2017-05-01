@@ -8,9 +8,7 @@
   var ModuleEntryCollection = app.ModuleEntryCollection || require('../collections/module-entry-collection.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
-  var Body = helper.inherits(function(props) {
-    Body.super_.call(this, props);
-
+  var Body = Component.inherits(function(props) {
     this.dragCount = this.prop(0);
 
     this.moduleEntryCollection = new ModuleEntryCollection();
@@ -34,7 +32,7 @@
     });
 
     dom.ready(Body.prototype.onready.bind(this));
-  }, Component);
+  });
 
   Body.prototype.incrementDragCount = function() {
     this.dragCount(this.dragCount() + 1);

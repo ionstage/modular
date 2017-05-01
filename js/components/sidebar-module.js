@@ -5,9 +5,7 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
-  var SidebarModule = helper.inherits(function(props) {
-    SidebarModule.super_.call(this, props);
-
+  var SidebarModule = Component.inherits(function(props) {
     this.title = this.prop(props.title);
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
@@ -18,7 +16,7 @@
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
     this.dropper = props.dropper;
-  }, Component);
+  });
 
   SidebarModule.prototype.headerElement = function() {
     return dom.child(this.element(), 0);

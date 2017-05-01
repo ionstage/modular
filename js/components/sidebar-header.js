@@ -5,12 +5,10 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
-  var SidebarHeader = helper.inherits(function(props) {
-    SidebarHeader.super_.call(this, props);
-
+  var SidebarHeader = Component.inherits(function(props) {
     this.registerSearchInputFocusListener();
     this.registerSearchInputInputListener();
-  }, Component);
+  });
 
   SidebarHeader.prototype.searchInputElement = function() {
     return dom.child(this.element(), 0);
