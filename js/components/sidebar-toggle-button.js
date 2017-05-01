@@ -28,17 +28,6 @@
     };
   })();
 
-  SidebarToggleButton.prototype.redraw = function() {
-    SidebarToggleButton.super_.prototype.redraw.call(this);
-    this.redrawType();
-  };
-
-  SidebarToggleButton.prototype.redrawType = function() {
-    this.redrawProp('type', function(type) {
-      dom.data(this.element(), 'type', type);
-    });
-  };
-
   SidebarToggleButton.prototype.ontap = function() {
     this.disabled(true);
     this.toggler().then(function() {
@@ -47,6 +36,12 @@
     }.bind(this)).catch(function() {
       this.disabled(false);
     }.bind(this));
+  };
+
+  SidebarToggleButton.prototype.onredraw = function() {
+    this.redrawProp('type', function(type) {
+      dom.data(this.element(), 'type', type);
+    });
   };
 
   SidebarToggleButton.TYPE_COLLAPSE = 'collapse';

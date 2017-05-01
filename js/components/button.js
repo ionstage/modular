@@ -26,6 +26,7 @@
   Button.prototype.redraw = function() {
     this.redrawToggleClass('isActive', 'active');
     this.redrawToggleClass('disabled', 'disabled');
+    this.onredraw();
   };
 
   Button.prototype.onstart = function(x, y, event, context) {
@@ -47,6 +48,8 @@
   };
 
   Button.prototype.ontap = function() {};
+
+  Button.prototype.onredraw = function() {};
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Button;
