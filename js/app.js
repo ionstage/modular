@@ -4,7 +4,7 @@
   var dom = app.dom || require('./dom.js');
   var Body = app.Body || require('./components/body.js');
 
-  app.body = new Body();
+  app.body = new Body({ element: dom.body() });
 
   // for modular-module
   var global = dom.global();
