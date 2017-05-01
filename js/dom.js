@@ -185,6 +185,10 @@
     return window.pageYOffset;
   };
 
+  dom.file = function(el) {
+    return el.files[0];
+  };
+
   dom.contentWindow = function(iframe) {
     return iframe.contentWindow;
   };
