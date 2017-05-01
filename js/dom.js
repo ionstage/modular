@@ -277,6 +277,14 @@
     event.preventDefault();
   };
 
+  dom.origin = function(event) {
+    return event.origin;
+  };
+
+  dom.messageData = function(event) {
+    return event.data;
+  };
+
   dom.eventType = function(name) {
     var supportsTouch = dom.supportsTouch();
     switch (name) {

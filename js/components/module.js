@@ -584,10 +584,10 @@
   };
 
   Module.prototype.onmessage = function(event) {
-    if (event.origin !== dom.urlOrigin(dom.location())) {
+    if (dom.origin(event) !== dom.urlOrigin(dom.location())) {
       throw new Error('Invalid content origin');
     }
-    if (event.data !== this.messageData()) {
+    if (dom.messageData(event) !== this.messageData()) {
       throw new Error('Invalid content data');
     }
     if (!this.circuitElement()) {
