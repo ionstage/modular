@@ -2,7 +2,6 @@
   'use strict';
 
   var FileSaver = require('file-saver');
-  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
   var MainContent = app.MainContent || require('./main-content.js');

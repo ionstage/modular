@@ -1,7 +1,6 @@
 (function(app) {
   'use strict';
 
-  var helper = app.helper || require('../helper.js');
   var Button = app.Button || require('./button.js');
 
   var SaveButton = Button.inherits(function(props) {

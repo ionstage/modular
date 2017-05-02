@@ -1,7 +1,6 @@
 (function(app) {
   'use strict';
 
-  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
 
