@@ -23,9 +23,7 @@
   cursor: pointer;
   float: left;
   height: 28px;
-  overflow: hidden;
   padding: 0 13px;
-  text-align: center;
 }
 
 .button.active {
