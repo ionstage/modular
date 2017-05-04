@@ -19,7 +19,7 @@
   position: absolute;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 86%;
+  width: 198px;
 }
 
 .module-header-delete-button {
@@ -29,7 +29,7 @@
   position: absolute;
   right: 0;
   text-align: center;
-  width: 14%;
+  width: 34px;
 }
 
 .module-header-delete-button:hover {
