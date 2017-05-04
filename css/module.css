@@ -10,7 +10,7 @@
   height: 32px;
 }
 
-.module-header-title {
+.module-title {
   cursor: move;
   line-height: 29px;
   overflow: hidden;
@@ -22,7 +22,7 @@
   width: 198px;
 }
 
-.module-header-delete-button {
+.module-delete-button {
   cursor: pointer;
   font-size: 19px;
   line-height: 32px;
@@ -32,15 +32,15 @@
   width: 34px;
 }
 
-.module-header-delete-button:hover {
+.module-delete-button:hover {
   opacity: 0.6;
 }
 
-.module-header-delete-button::before {
+.module-delete-button::before {
   content: '×';
 }
 
-.module.module-delete-disabled > .module-header > .module-header-delete-button {
+.module.module-delete-disabled > .module-header > .module-delete-button {
   pointer-events: none;
 }
 
