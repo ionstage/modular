@@ -523,10 +523,10 @@
   };
 
   Module.prototype.redrawToggleClasses = function() {
-    this.redrawToggleClass('isLoading', 'module-loading');
-    this.redrawToggleClass('isError', 'module-error');
-    this.redrawToggleClass('isMoving', 'module-moving');
-    this.redrawToggleClass('isDeleting', 'module-deleting');
+    this.redrawToggleClass('isLoading', 'loading');
+    this.redrawToggleClass('isError', 'error');
+    this.redrawToggleClass('isMoving', 'moving');
+    this.redrawToggleClass('isDeleting', 'deleting');
   };
 
   Module.prototype.dragType = function(target) {

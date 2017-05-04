@@ -3,44 +3,6 @@
   width: 240px;
 }
 
-.module.module-moving > .module-header {
-  background-color: #ffa726;
-}
-
-.module.module-deleting > .module-header {
-  background-color: #f44336;
-}
-
-.module.module-loading > .module-content {
-  height: 29px;
-  position: relative;
-  text-align: center;
-}
-
-.module.module-loading > .module-content::before {
-  content: 'Loading...';
-  font-size: 12px;
-  line-height: 29px;
-}
-
-.module.module-loading > .module-content > .module-component {
-  position: absolute;
-  visibility: hidden;
-}
-
-.module.module-loading > .module-content > .module-port-list {
-  visibility: hidden;
-}
-
-.module.module-loading.module-error > .module-content::before {
-  background-color: #f8bbd0;
-  content: 'ERROR';
-  color: #f44336;
-  display: block;
-  font-size: 16px;
-  font-weight: bold;
-}
-
 .module-header {
   background-color: #212121;
   border-radius: 3px 3px 0 0;
@@ -128,4 +90,42 @@
   height: 21px;
   opacity: 0;
   width: 100%;
+}
+
+.module.loading > .module-content {
+  height: 29px;
+  position: relative;
+  text-align: center;
+}
+
+.module.loading > .module-content::before {
+  content: 'Loading...';
+  font-size: 12px;
+  line-height: 29px;
+}
+
+.module.loading > .module-content > .module-component {
+  position: absolute;
+  visibility: hidden;
+}
+
+.module.loading > .module-content > .module-port-list {
+  visibility: hidden;
+}
+
+.module.loading.error > .module-content::before {
+  background-color: #f8bbd0;
+  content: 'ERROR';
+  color: #f44336;
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.module.moving > .module-header {
+  background-color: #ffa726;
+}
+
+.module.deleting > .module-header {
+  background-color: #f44336;
 }
