@@ -81,12 +81,15 @@
   border-bottom: 3px solid #212121;
 }
 
-.module-footer.hide > * {
+.module-footer.hide > .module-footer-item {
   display: none;
 }
 
-.module-footer-icon {
+.module-footer-item {
   height: 21px;
+}
+
+.module-footer-icon {
   left: 0;
   margin: auto;
   position: absolute;
@@ -96,7 +99,6 @@
 
 .module-port-select {
   border-radius: 3px;
-  height: 21px;
   opacity: 0;
   width: 100%;
 }
