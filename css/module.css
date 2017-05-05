@@ -57,6 +57,7 @@
   background-color: #fff;
   border-left: 3px solid #212121;
   border-right: 3px solid #212121;
+  position: relative;
 }
 
 .module-component {
@@ -103,32 +104,23 @@
   width: 100%;
 }
 
-.module.loading > .module-content {
-  height: 29px;
-  position: relative;
-  text-align: center;
-}
-
-.module.loading > .module-content::before {
-  content: 'Loading...';
-  font-size: 12px;
-  line-height: 29px;
-}
-
-.module.loading > .module-content > .module-component {
+.module.loading .module-content-item {
   position: absolute;
   visibility: hidden;
 }
 
-.module.loading > .module-content > .module-port-list {
-  visibility: hidden;
+.module.loading > .module-content::before {
+  content: 'Loading...';
+  display: block;
+  font-size: 12px;
+  line-height: 29px;
+  text-align: center;
 }
 
 .module.loading.error > .module-content::before {
   background-color: #f8bbd0;
   content: 'ERROR';
   color: #f44336;
-  display: block;
   font-size: 16px;
   font-weight: bold;
 }
