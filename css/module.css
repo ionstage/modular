@@ -60,7 +60,7 @@
 }
 
 .module-component {
-  border: none;
+  border: 0;
   height: 0;
   vertical-align: middle;
   width: 100%;
