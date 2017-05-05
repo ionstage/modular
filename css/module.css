@@ -49,7 +49,7 @@
   content: '×';
 }
 
-.module.module-delete-disabled > .module-header > .module-delete-button {
+.module-delete-button.disabled {
   pointer-events: none;
 }
 

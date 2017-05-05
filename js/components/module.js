@@ -483,7 +483,7 @@
 
   Module.prototype.redrawDeletable = function() {
     this.redrawProp('deletable', function(deletable) {
-      dom.toggleClass(this.element(), 'module-delete-disabled', !deletable);
+      dom.toggleClass(this.deleteButtonElement(), 'disabled', !deletable);
     });
   };
 
