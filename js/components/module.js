@@ -759,8 +759,8 @@
 
   Module.TEMPLATE_HTML = [
     '<div class="module-header">',
-      '<div class="module-title"></div>',
-      '<div class="module-delete-button"></div>',
+      '<div class="module-title module-header-item"></div>',
+      '<div class="module-delete-button module-header-item"></div>',
     '</div>',
     '<div class="module-content">',
       '<iframe class="module-component embed"></iframe>',

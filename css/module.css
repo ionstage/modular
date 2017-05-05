@@ -10,13 +10,24 @@
   height: 32px;
 }
 
+.module-header::after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.module-header-item {
+  float: left;
+}
+
 .module-title {
   cursor: move;
   line-height: 29px;
   overflow: hidden;
   padding-left: 8px;
   padding-top: 3px;
-  position: absolute;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 198px;
@@ -26,8 +37,6 @@
   cursor: pointer;
   font-size: 19px;
   line-height: 32px;
-  position: absolute;
-  right: 0;
   text-align: center;
   width: 34px;
 }
