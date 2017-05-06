@@ -27,16 +27,16 @@
   width: 24px;
 }
 
-.module-wire-handle.hide {
-  display: none;
-}
-
 .module-wire-handle[data-type='prop'] {
   border-radius: 3px;
 }
 
 .module-wire-handle[data-type='event'] {
   border-radius: 50%;
+}
+
+.module-wire-handle.hide {
+  display: none;
 }
 
 .module-wire-handle.highlighted {
