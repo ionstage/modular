@@ -1,7 +1,10 @@
+.module-wire-container {
+  pointer-events: none;
+}
+
 .module-wire {
   height: 1px;
   overflow: visible;
-  pointer-events: none;
   position: absolute;
   width: 1px;
 }
