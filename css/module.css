@@ -67,12 +67,6 @@
   width: 100%;
 }
 
-.module-port-list {
-  background-color: #212121;
-  border-top: 1px solid #212121;
-  position: relative;
-}
-
 .module-footer {
   background-color: #212121;
   border-radius: 0 0 3px 3px;
@@ -96,12 +90,6 @@
   position: absolute;
   right: 0;
   width: 21px;
-}
-
-.module-port-select {
-  border-radius: 3px;
-  opacity: 0;
-  width: 100%;
 }
 
 .module.loading .module-content-item {

@@ -1,3 +1,9 @@
+.module-port-list {
+  background-color: #212121;
+  border-top: 1px solid #212121;
+  position: relative;
+}
+
 .module-port {
   background-color: #fff;
   border-top: 1px solid #212121;
@@ -100,4 +106,10 @@
 
 .module-port.module-port-hide-disabled > .module-port-hide-button {
   pointer-events: none;
+}
+
+.module-port-select {
+  border-radius: 3px;
+  opacity: 0;
+  width: 100%;
 }
