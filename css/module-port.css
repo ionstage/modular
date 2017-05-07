@@ -89,7 +89,7 @@
   padding-left: 8px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 87%;
+  width: 196px;
 }
 
 .module-port-hide-button {
@@ -97,7 +97,7 @@
   height: 42px;
   right: 0;
   text-align: center;
-  width: 13%;
+  width: 30px;
 }
 
 .module-port-hide-button:hover {
