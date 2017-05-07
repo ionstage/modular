@@ -87,12 +87,12 @@
   };
 
   ModulePort.prototype.redrawToggleClasses = function() {
-    this.redrawToggleClass('socketConnected', 'module-port-socket-connected');
-    this.redrawToggleClass('labelHighlighted', 'module-port-label-highlight');
-    this.redrawToggleClass('plugHighlighted', 'module-port-plug-highlight');
-    this.redrawToggleClass('socketHighlighted', 'module-port-socket-highlight');
-    this.redrawToggleClass('isMoving', 'module-port-moving');
-    this.redrawToggleClass('hideDisabled', 'module-port-hide-disabled');
+    this.redrawToggleClass('socketConnected', 'socket-connected');
+    this.redrawToggleClass('labelHighlighted', 'label-highlighted');
+    this.redrawToggleClass('plugHighlighted', 'plug-highlighted');
+    this.redrawToggleClass('socketHighlighted', 'socket-highlighted');
+    this.redrawToggleClass('isMoving', 'moving');
+    this.redrawToggleClass('hideDisabled', 'hide-disabled');
   };
 
   ModulePort.TYPE_PROP = 'prop';
