@@ -30,18 +30,20 @@
 }
 
 .module-port-plug {
-  left: calc(100% + 3px);
   margin: 9px;
   position: absolute;
+  -webkit-transform: translateX(237px);
+  transform: translateX(237px);
 }
 
 .module-port-socket {
   border: 2px solid #212121;
   height: 28px;
-  left: -49px;
   margin: 5px;
   pointer-events: none;
   position: absolute;
+  -webkit-transform: translateX(-49px);
+  transform: translateX(-49px);
   width: 28px;
 }
 
