@@ -13,6 +13,14 @@
   width: 100%;
 }
 
+.module-port::after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
 .module-port.moving {
   z-index: 1;
 }
@@ -21,13 +29,10 @@
   background-color: #ffa726;
 }
 
-.module-port > * {
-  position: absolute;
-}
-
 .module-port-plug {
   left: calc(100% + 3px);
   margin: 9px;
+  position: absolute;
 }
 
 .module-port-socket {
@@ -36,6 +41,7 @@
   left: -49px;
   margin: 5px;
   pointer-events: none;
+  position: absolute;
   width: 28px;
 }
 
@@ -84,6 +90,7 @@
 }
 
 .module-port-label {
+  float: left;
   line-height: 42px;
   overflow: hidden;
   padding-left: 8px;
@@ -94,8 +101,8 @@
 
 .module-port-hide-button {
   cursor: pointer;
+  float: left;
   height: 42px;
-  right: 0;
   text-align: center;
   width: 30px;
 }
