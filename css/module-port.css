@@ -38,11 +38,10 @@
 .module-port-socket {
   border: 2px solid #212121;
   height: 28px;
-  margin: 5px;
   pointer-events: none;
   position: absolute;
-  -webkit-transform: translateX(-49px);
-  transform: translateX(-49px);
+  -webkit-transform: translate(-44px, 5px);
+  transform: translate(-44px, 5px);
   width: 28px;
 }
 
