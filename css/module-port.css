@@ -30,10 +30,9 @@
 }
 
 .module-port-plug {
-  margin: 9px;
   position: absolute;
-  -webkit-transform: translateX(237px);
-  transform: translateX(237px);
+  -webkit-transform: translate(246px, 9px);
+  transform: translate(246px, 9px);
 }
 
 .module-port-socket {
