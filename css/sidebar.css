@@ -24,8 +24,3 @@
   overflow: hidden;
   position: relative;
 }
-
-.sidebar-module-container {
-  position: absolute;
-  width: 100%;
-}
