@@ -295,7 +295,7 @@
       case 'end':
         return (supportsTouch ? 'touchend' : 'mouseup');
       default:
-        throw new Error('Invalid error type');
+        throw new Error('Invalid event type');
     }
   };
 
