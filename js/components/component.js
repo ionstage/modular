@@ -50,12 +50,14 @@
     });
   };
 
-  Component.inherits = function(ctor) {
+  Component.inherits = function(initializer) {
     var superCtor = this;
-    return helper.inherits(function(props) {
+    var ctor = helper.inherits(function(props) {
       superCtor.call(this, props);
-      ctor.call(this, props);
+      initializer.call(this, props);
     }, superCtor);
+    ctor.inherits = superCtor.inherits;
+    return ctor;
   };
 
   if (typeof module !== 'undefined' && module.exports) {

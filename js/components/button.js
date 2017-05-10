@@ -48,8 +48,6 @@
 
   Button.prototype.onredraw = function() {};
 
-  Button.inherits = Component.inherits;
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Button;
   } else {
