@@ -64,10 +64,6 @@
     return el;
   };
 
-  dom.children = function(el) {
-    return Array.prototype.slice.call(el.children);
-  };
-
   dom.parent = function(el) {
     return el.parentNode;
   };
@@ -213,7 +209,8 @@
   };
 
   dom.sort = function(el) {
-    helper.sortBy(dom.children(el), 'textContent').forEach(function(child) {
+    var children = Array.prototype.slice.call(el.children);
+    helper.sortBy(children, 'textContent').forEach(function(child) {
       dom.append(el, child);
     });
   };
