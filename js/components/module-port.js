@@ -44,14 +44,15 @@
     var element = dom.el('<div>');
     dom.addClass(element, 'module-port');
     dom.data(element, 'type', this.type());
+    var plugClassName = 'module-port-plug' + (this.plugDisabled() ? ' hide' : '');
+    var socketClassName = 'module-port-socket' + (this.socketDisabled() ? ' hide' : '');
     dom.html(element,
-      (!this.plugDisabled() ? '<div class="module-port-plug"></div>' : '') +
-      (!this.socketDisabled() ? '<div class="module-port-socket"><span></span></div>' : '') +
+      '<div class="' + plugClassName + '"></div>' +
+      '<div class="' + socketClassName + '"><span></span></div>' +
       '<div class="module-port-label"></div>' +
       '<img class="module-port-hide-button" src="images/minus-square-o.svg">'
     );
-    var children = dom.children(element);
-    dom.text(children[children.length - 2], this.label());
+    dom.text(dom.child(element, 2), this.label());
     return element;
   };
 

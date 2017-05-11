@@ -35,6 +35,10 @@
   transform: translate(246px, 9px);
 }
 
+.module-port-plug.hide {
+  display: none;
+}
+
 .module-port-socket {
   border: 2px solid #212121;
   height: 28px;
@@ -43,6 +47,10 @@
   -webkit-transform: translate(-44px, 5px);
   transform: translate(-44px, 5px);
   width: 28px;
+}
+
+.module-port-socket.hide {
+  display: none;
 }
 
 .module-port-plug,
