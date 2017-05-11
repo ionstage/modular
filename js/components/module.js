@@ -456,7 +456,7 @@
     this.redrawTitle();
     this.redrawPosition();
     this.redrawZIndex();
-    this.redrawDeletable();
+    this.redrawDeleteButton();
     this.redrawPortList();
     this.redrawFooter();
     this.redrawPortSelect();
@@ -481,7 +481,7 @@
     });
   };
 
-  Module.prototype.redrawDeletable = function() {
+  Module.prototype.redrawDeleteButton = function() {
     this.redrawProp('deletable', function(deletable) {
       dom.toggleClass(this.deleteButtonElement(), 'disabled', !deletable);
     });
