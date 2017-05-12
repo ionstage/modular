@@ -52,7 +52,7 @@
     var socketClassName = 'module-port-socket' + (this.socketDisabled() ? ' hide' : '');
     dom.html(element,
       '<div class="' + plugClassName + '"></div>' +
-      '<div class="' + socketClassName + '"><span></span></div>' +
+      '<div class="' + socketClassName + '"><span class="module-port-socket-handle"></span></div>' +
       '<div class="module-port-label"></div>' +
       '<img class="module-port-hide-button" src="images/minus-square-o.svg">'
     );

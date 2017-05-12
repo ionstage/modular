@@ -540,7 +540,7 @@
       return Module.DRAG_TYPE_SORT_PORT;
     } else if (dom.hasClass(target, 'module-port-plug')) {
       return Module.DRAG_TYPE_DRAG_PORT_PLAG;
-    } else if (dom.hasClass(dom.parent(target), 'module-port-socket')) {
+    } else if (dom.hasClass(target, 'module-port-socket-handle')) {
       return Module.DRAG_TYPE_DRAG_PORT_SOCKET;
     } else {
       return null;

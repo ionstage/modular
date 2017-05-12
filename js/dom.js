@@ -60,10 +60,6 @@
     return el;
   };
 
-  dom.parent = function(el) {
-    return el.parentNode;
-  };
-
   dom.contains = function(el, other) {
     return el.contains(other);
   };
