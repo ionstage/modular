@@ -118,7 +118,7 @@
   opacity: 0.6;
 }
 
-.module-port.hide-disabled > .module-port-hide-button {
+.module-port-hide-button.disabled {
   pointer-events: none;
 }
 

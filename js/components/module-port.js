@@ -70,6 +70,7 @@
   ModulePort.prototype.redraw = function() {
     this.redrawVisibility();
     this.redrawPosition();
+    this.redrawHideButton();
     this.redrawToggleClasses();
   };
 
@@ -91,13 +92,18 @@
     });
   };
 
+  ModulePort.prototype.redrawHideButton = function() {
+    this.redrawProp('hideDisabled', function(hideDisabled) {
+      dom.toggleClass(this.hideButtonElement(), 'disabled', hideDisabled);
+    });
+  };
+
   ModulePort.prototype.redrawToggleClasses = function() {
     this.redrawToggleClass('socketConnected', 'socket-connected');
     this.redrawToggleClass('labelHighlighted', 'label-highlighted');
     this.redrawToggleClass('plugHighlighted', 'plug-highlighted');
     this.redrawToggleClass('socketHighlighted', 'socket-highlighted');
     this.redrawToggleClass('isMoving', 'moving');
-    this.redrawToggleClass('hideDisabled', 'hide-disabled');
   };
 
   ModulePort.TYPE_PROP = 'prop';
