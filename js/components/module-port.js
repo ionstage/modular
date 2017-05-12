@@ -27,6 +27,10 @@
     this.element = this.listItemElement;
   });
 
+  ModulePort.prototype.hideButtonElement = function() {
+    return dom.child(this.listItemElement(), 3);
+  };
+
   ModulePort.prototype.hideDisabled = function() {
     // don't hide label-highlighted port
     return this.labelHighlighted();
