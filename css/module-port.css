@@ -66,6 +66,10 @@
   display: none;
 }
 
+.module-port-socket-handle {
+  display: none;
+}
+
 .module-port.socket-connected > .module-port-socket > .module-port-socket-handle {
   display: block;
   margin: 2px;
