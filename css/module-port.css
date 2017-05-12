@@ -27,14 +27,25 @@
   background-color: #ffa726;
 }
 
-.module-port-plug {
+.module-port-handle {
   background-color: #212121;
   cursor: crosshair;
   height: 24px;
+  width: 24px;
+}
+
+.module-port[data-type='prop'] .module-port-handle {
+  border-radius: 3px;
+}
+
+.module-port[data-type='event'] .module-port-handle {
+  border-radius: 50%;
+}
+
+.module-port-plug {
   position: absolute;
   -webkit-transform: translate(246px, 9px);
   transform: translate(246px, 9px);
-  width: 24px;
 }
 
 .module-port-plug.hide {
@@ -56,23 +67,9 @@
 }
 
 .module-port.socket-connected > .module-port-socket > .module-port-socket-handle {
-  background-color: #212121;
-  cursor: crosshair;
   display: block;
-  height: 24px;
   margin: 2px;
   pointer-events: auto;
-  width: 24px;
-}
-
-.module-port[data-type='prop'] > .module-port-plug,
-.module-port[data-type='prop'].socket-connected > .module-port-socket > .module-port-socket-handle {
-  border-radius: 3px;
-}
-
-.module-port[data-type='event'] > .module-port-plug,
-.module-port[data-type='event'].socket-connected > .module-port-socket > .module-port-socket-handle {
-  border-radius: 50%;
 }
 
 .module-port[data-type='prop'] > .module-port-socket {
