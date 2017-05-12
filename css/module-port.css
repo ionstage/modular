@@ -68,12 +68,12 @@
 
 .module-port-socket-handle {
   display: none;
+  margin: 2px;
+  pointer-events: auto;
 }
 
 .module-port.socket-connected > .module-port-socket > .module-port-socket-handle {
   display: block;
-  margin: 2px;
-  pointer-events: auto;
 }
 
 .module-port[data-type='prop'] > .module-port-socket {
