@@ -17,16 +17,12 @@
     return document.querySelector(selector);
   };
 
-  dom.svgEl = function(selector) {
-    if (selector.charAt(0) === '<') {
-      selector = selector.match(/<(.+)>/)[1];
-      return document.createElementNS('http://www.w3.org/2000/svg', selector);
-    }
-    return dom.el(selector);
-  };
-
   dom.body = function() {
     return document.body;
+  };
+
+  dom.render = function(s) {
+    return document.createRange().createContextualFragment(s).firstChild;
   };
 
   dom.append = function(parent, el) {

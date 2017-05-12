@@ -29,15 +29,6 @@
     });
   };
 
-  ModuleWire.prototype.renderWire = function() {
-    var element = dom.svgEl('<svg>');
-    var pathElement = dom.svgEl('<path>');
-    dom.className(element, 'module-wire');
-    dom.className(pathElement, 'module-wire-path');
-    dom.append(element, pathElement);
-    return element;
-  };
-
   ModuleWire.prototype.renderHandle = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module-wire-handle');
@@ -54,7 +45,7 @@
 
     // add element
     if (parentElement && !element) {
-      this.element(this.renderWire());
+      this.element(dom.render(ModuleWire.TEMPLATE_HTML));
       this.handleElement(this.renderHandle());
       this.redraw();
       dom.append(parentElement, this.element());
@@ -113,6 +104,12 @@
   };
 
   ModuleWire.HANDLE_WIDTH = 24;
+
+  ModuleWire.TEMPLATE_HTML = [
+    '<svg class="module-wire">',
+      '<path class="module-wire-path"></path>',
+    '</svg>',
+  ].join('');
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModuleWire;
