@@ -27,6 +27,10 @@
     this.element = this.listItemElement;
   });
 
+  ModulePort.prototype.socketHandleElement = function() {
+    return dom.child(this.listItemElement(), 1, 0);
+  };
+
   ModulePort.prototype.hideButtonElement = function() {
     return dom.child(this.listItemElement(), 3);
   };
