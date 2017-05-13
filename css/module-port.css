@@ -54,12 +54,13 @@
 
 .module-port-socket {
   border: 2px solid #212121;
-  height: 28px;
+  height: 24px;
+  padding: 2px;
   pointer-events: none;
   position: absolute;
   -webkit-transform: translate(-44px, 5px);
   transform: translate(-44px, 5px);
-  width: 28px;
+  width: 24px;
 }
 
 .module-port-socket.hide {
@@ -67,7 +68,6 @@
 }
 
 .module-port-socket-handle {
-  margin: 2px;
   pointer-events: auto;
 }
 
