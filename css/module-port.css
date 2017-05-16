@@ -42,18 +42,18 @@
   border-radius: 50%;
 }
 
+.module-port-handle.hide {
+  display: none;
+}
+
+.module-port-handle.highlighted {
+  background-color: #f44336;
+}
+
 .module-port-plug {
   position: absolute;
   -webkit-transform: translate(246px, 9px);
   transform: translate(246px, 9px);
-}
-
-.module-port-plug.hide {
-  display: none;
-}
-
-.module-port-plug.highlighted {
-  background-color: #f44336;
 }
 
 .module-port-socket {
@@ -85,14 +85,6 @@
 
 .module-port-socket-handle {
   pointer-events: auto;
-}
-
-.module-port-socket-handle.hide {
-  display: none;
-}
-
-.module-port-socket-handle.highlighted {
-  background-color: #f44336;
 }
 
 .module-port-label {
