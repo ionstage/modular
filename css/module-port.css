@@ -52,6 +52,10 @@
   display: none;
 }
 
+.module-port-plug.highlighted {
+  background-color: #f44336;
+}
+
 .module-port-socket {
   border: 2px solid #212121;
   height: 24px;
@@ -81,10 +85,6 @@
 
 .module-port[data-type='event'] > .module-port-socket {
   border-radius: 50%;
-}
-
-.module-port.plug-highlighted > .module-port-plug {
-  background-color: #f44336;
 }
 
 .module-port.socket-highlighted > .module-port-socket {

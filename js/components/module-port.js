@@ -60,10 +60,9 @@
     var element = dom.el('<div>');
     dom.addClass(element, 'module-port');
     dom.data(element, 'type', this.type());
-    var plugClassName = 'module-port-plug module-port-handle' + (this.plugDisabled() ? ' hide' : '');
     var socketClassName = 'module-port-socket' + (this.socketDisabled() ? ' hide' : '');
     dom.html(element,
-      '<div class="' + plugClassName + '"></div>' +
+      '<div class="module-port-plug module-port-handle"></div>' +
       '<div class="' + socketClassName + '"><div class="module-port-socket-handle module-port-handle"></div></div>' +
       '<div class="module-port-label"></div>' +
       '<img class="module-port-hide-button" src="images/minus-square-o.svg">'
@@ -82,6 +81,7 @@
   ModulePort.prototype.redraw = function() {
     this.redrawVisibility();
     this.redrawPosition();
+    this.redrawPlug();
     this.redrawSocketHandle();
     this.redrawHideButton();
     this.redrawToggleClasses();
@@ -105,6 +105,16 @@
     });
   };
 
+  ModulePort.prototype.redrawPlug = function() {
+    this.redrawProp('plugDisabled', function(plugDisabled) {
+      dom.toggleClass(this.plugElement(), 'hide', plugDisabled);
+    });
+
+    this.redrawProp('plugHighlighted', function(plugHighlighted) {
+      dom.toggleClass(this.plugElement(), 'highlighted', plugHighlighted);
+    });
+  };
+
   ModulePort.prototype.redrawSocketHandle = function() {
     this.redrawProp('socketConnected', function(socketConnected) {
       dom.toggleClass(this.socketHandleElement(), 'hide', !socketConnected);
@@ -119,7 +129,6 @@
 
   ModulePort.prototype.redrawToggleClasses = function() {
     this.redrawToggleClass('labelHighlighted', 'label-highlighted');
-    this.redrawToggleClass('plugHighlighted', 'plug-highlighted');
     this.redrawToggleClass('socketHighlighted', 'socket-highlighted');
     this.redrawToggleClass('isMoving', 'moving');
   };
