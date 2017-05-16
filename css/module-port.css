@@ -19,12 +19,12 @@
   visibility: hidden;
 }
 
-.module-port.moving {
-  z-index: 1;
-}
-
 .module-port.label-highlighted {
   background-color: #ffa726;
+}
+
+.module-port.moving {
+  z-index: 1;
 }
 
 .module-port-handle {
