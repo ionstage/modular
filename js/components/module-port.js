@@ -22,9 +22,6 @@
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
-
-    // update list-item in redrawToggleClass() method
-    this.element = this.listItemElement;
   });
 
   ModulePort.prototype.plugElement = function() {
@@ -83,11 +80,10 @@
 
   ModulePort.prototype.redraw = function() {
     this.redrawVisibility();
-    this.redrawPosition();
+    this.redrawListItem();
     this.redrawPlug();
     this.redrawSocket();
     this.redrawHideButton();
-    this.redrawToggleClasses();
   };
 
   ModulePort.prototype.redrawVisibility = function() {
@@ -102,9 +98,17 @@
     });
   };
 
-  ModulePort.prototype.redrawPosition = function() {
+  ModulePort.prototype.redrawListItem = function() {
     this.redrawProp('top', function(top) {
       dom.translateY(this.listItemElement(), top);
+    });
+
+    this.redrawProp('labelHighlighted', function(labelHighlighted) {
+      dom.toggleClass(this.listItemElement(), 'label-highlighted', labelHighlighted);
+    });
+
+    this.redrawProp('isMoving', function(isMoving) {
+      dom.toggleClass(this.listItemElement(), 'moving', isMoving);
     });
   };
 
@@ -137,11 +141,6 @@
     this.redrawProp('hideDisabled', function(hideDisabled) {
       dom.toggleClass(this.hideButtonElement(), 'disabled', hideDisabled);
     });
-  };
-
-  ModulePort.prototype.redrawToggleClasses = function() {
-    this.redrawToggleClass('labelHighlighted', 'label-highlighted');
-    this.redrawToggleClass('isMoving', 'moving');
   };
 
   ModulePort.TYPE_PROP = 'prop';
