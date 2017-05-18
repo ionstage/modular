@@ -60,7 +60,6 @@
   ModulePort.prototype.renderListItem = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module-port');
-    dom.data(element, 'type', this.type());
     dom.html(element,
       '<div class="module-port-plug module-port-handle"></div>' +
       '<div class="module-port-socket"><div class="module-port-socket-handle module-port-handle"></div></div>' +
@@ -110,6 +109,10 @@
   };
 
   ModulePort.prototype.redrawListItem = function() {
+    this.redrawProp('type', function(type) {
+      dom.data(this.listItemElement(), 'type', type);
+    });
+
     this.redrawProp('top', function(top) {
       dom.translateY(this.listItemElement(), top);
     });
