@@ -71,14 +71,13 @@
   };
 
   ModulePort.prototype.renderOption = function() {
-    var element = dom.el('<option>');
-    dom.value(element, this.name());
-    return element;
+    return dom.el('<option>');
   };
 
   ModulePort.prototype.redraw = function() {
     this.redrawVisibility();
     this.redrawLabel();
+    this.redrawName();
     this.redrawListItem();
     this.redrawPlug();
     this.redrawSocket();
@@ -101,6 +100,12 @@
     this.redrawProp('label', function(label) {
       dom.text(this.labelElement(), label);
       dom.text(this.optionElement(), label);
+    });
+  };
+
+  ModulePort.prototype.redrawName = function() {
+    this.redrawProp('name', function(name) {
+      dom.value(this.optionElement(), name);
     });
   };
 
