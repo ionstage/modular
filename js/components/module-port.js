@@ -67,19 +67,18 @@
       '<div class="module-port-label"></div>' +
       '<img class="module-port-hide-button" src="images/minus-square-o.svg">'
     );
-    dom.text(dom.child(element, 2), this.label());
     return element;
   };
 
   ModulePort.prototype.renderOption = function() {
     var element = dom.el('<option>');
-    dom.text(element, this.label());
     dom.value(element, this.name());
     return element;
   };
 
   ModulePort.prototype.redraw = function() {
     this.redrawVisibility();
+    this.redrawLabel();
     this.redrawListItem();
     this.redrawPlug();
     this.redrawSocket();
@@ -95,6 +94,13 @@
         dom.remove(this.listItemElement());
         dom.append(this.parentOptGroupElement(), this.optionElement());
       }
+    });
+  };
+
+  ModulePort.prototype.redrawLabel = function() {
+    this.redrawProp('label', function(label) {
+      dom.text(this.labelElement(), label);
+      dom.text(this.optionElement(), label);
     });
   };
 
