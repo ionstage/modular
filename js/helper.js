@@ -119,8 +119,22 @@
     return -1;
   };
 
+  helper.findLastIndex = function(array, callback) {
+    for (var i = array.length - 1; i >= 0; i--) {
+      if (callback(array[i], i, array)) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
   helper.find = function(array, callback) {
     var index = helper.findIndex(array, callback);
+    return (index !== -1 ? array[index] : null);
+  };
+
+  helper.findLast = function(array, callback) {
+    var index = helper.findLastIndex(array, callback);
     return (index !== -1 ? array[index] : null);
   };
 
