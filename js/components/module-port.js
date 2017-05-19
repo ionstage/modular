@@ -14,7 +14,7 @@
     this.top = this.prop(0);
     this.height = this.prop(44);
     this.socketConnected = this.prop(false);
-    this.labelHighlighted = this.prop(false);
+    this.highlighted = this.prop(false);
     this.plugHighlighted = this.prop(false);
     this.socketHighlighted = this.prop(false);
     this.isMoving = this.prop(false);
@@ -45,8 +45,8 @@
   };
 
   ModulePort.prototype.hideDisabled = function() {
-    // don't hide label-highlighted port
-    return this.labelHighlighted();
+    // don't hide highlighted port
+    return this.highlighted();
   };
 
   ModulePort.prototype.middle = function() {
@@ -117,8 +117,8 @@
       dom.translateY(this.listItemElement(), top);
     });
 
-    this.redrawProp('labelHighlighted', function(labelHighlighted) {
-      dom.toggleClass(this.listItemElement(), 'label-highlighted', labelHighlighted);
+    this.redrawProp('highlighted', function(highlighted) {
+      dom.toggleClass(this.listItemElement(), 'highlighted', highlighted);
     });
 
     this.redrawProp('isMoving', function(isMoving) {

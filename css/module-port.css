@@ -19,7 +19,7 @@
   visibility: hidden;
 }
 
-.module-port.label-highlighted {
+.module-port.highlighted {
   background-color: #ffa726;
 }
 

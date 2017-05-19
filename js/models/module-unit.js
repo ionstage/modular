@@ -64,12 +64,12 @@
     return this.module.socketPosition(this.port);
   };
 
-  ModuleUnit.prototype.labelHighlighted = function(value) {
-    this.port.labelHighlighted(value);
+  ModuleUnit.prototype.portHighlighted = function(value) {
+    this.port.highlighted(value);
 
     // module is deletable if all port labels are NOT highlighted
     this.module.deletable(this.module.ports().every(function(port) {
-      return !port.labelHighlighted();
+      return !port.highlighted();
     }));
   };
 

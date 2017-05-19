@@ -444,7 +444,7 @@
     }).some(function(relation) {
       return (draggingWires.indexOf(relation.wire) !== -1);
     });
-    unit.labelHighlighted(highlighted);
+    unit.portHighlighted(highlighted);
   };
 
   MainContent.prototype.redraw = function() {
