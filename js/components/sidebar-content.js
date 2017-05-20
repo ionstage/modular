@@ -38,6 +38,7 @@
 
   SidebarContent.prototype.createModule = function(props) {
     return new SidebarModule(helper.extend(helper.clone(props), {
+      parentElement: this.moduleContainerElement(),
       dragStarter: this.dragStarter,
       dragEnder: this.dragEnder,
       dropper: this.dropper,
@@ -46,8 +47,8 @@
 
   SidebarContent.prototype.appendModule = function(props) {
     var module = this.createModule(props);
+    module.markDirty();
     this.modules().push(module);
-    module.parentElement(this.moduleContainerElement());
     this.markDirty();
   };
 
