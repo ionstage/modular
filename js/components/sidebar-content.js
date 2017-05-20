@@ -23,11 +23,17 @@
     this.dragEnder = props.dragEnder;
     this.dropper = props.dropper;
 
-    dom.on(this.element(), dom.eventType('start'), SidebarContent.prototype.onpoint.bind(this));
+    this.registerPointListener();
   });
 
   SidebarContent.prototype.moduleContainerElement = function() {
     return dom.child(this.element(), 0);
+  };
+
+  SidebarContent.prototype.registerPointListener = function() {
+    dom.on(this.element(), dom.eventType('start'), function() {
+      dom.removeFocus();
+    });
   };
 
   SidebarContent.prototype.createModule = function(props) {
@@ -76,10 +82,6 @@
     setTimeout(function() {
       this.scrollable.refresh();
     }.bind(this), 0);
-  };
-
-  SidebarContent.prototype.onpoint = function() {
-    dom.removeFocus();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
