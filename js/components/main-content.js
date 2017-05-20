@@ -130,26 +130,13 @@
   };
 
   MainContent.prototype.unitFromSocketPosition = function(x, y) {
-    var modules = this.modules();
-    for (var mi = modules.length - 1; mi >= 0; mi--) {
-      var module = modules[mi];
-      var ports = module.ports();
-      for (var pi = ports.length - 1; pi >= 0; pi--) {
-        var port = ports[pi];
-        var position = module.socketPosition(port);
-        if (Math.abs(x - position.x) > 18) {
-          break;
-        }
-        if (Math.abs(y - position.y) > 18) {
-          continue;
-        }
-        if (!port.visible() || port.socketDisabled()) {
-          continue;
-        }
-        return new ModuleUnit({ module: module, port: port });
-      }
-    }
-    return null;
+    var port = null;
+    var module = helper.findLast(this.modules(), function(module) {
+      // XXX: keep the last port for creating unit
+      port = module.portFromSocketPosition(x, y);
+      return !!port;
+    });
+    return (module ? new ModuleUnit({ module: module, port: port }) : null);
   };
 
   MainContent.prototype.toData = function() {

@@ -160,6 +160,25 @@
     return (this.visiblePorts().length === this.ports().length);
   };
 
+  Module.prototype.portFromSocketPosition = function(x, y) {
+    var ports = this.ports();
+
+    if (ports.length === 0) {
+      return null;
+    }
+
+    // all ports are at the same position to the x-axis
+    var position = this.socketPosition(ports[0]);
+    if (Math.abs(x - position.x) > 18) {
+      return null;
+    }
+
+    return helper.findLast(ports, function(port) {
+      var position = this.socketPosition(port);
+      return (Math.abs(y - position.y) <= 18 && port.visible() && !port.socketDisabled());
+    }.bind(this));
+  };
+
   Module.prototype.url = function() {
     return [
       'modular_modules/',
