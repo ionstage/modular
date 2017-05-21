@@ -38,6 +38,8 @@
     }.bind(this));
   };
 
+  SidebarHeader.prototype.redraw = function() { /* ignore default */ };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = SidebarHeader;
   } else {

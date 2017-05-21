@@ -12,7 +12,7 @@
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(props.handleVisible);
     this.highlighted = this.prop(false);
-    this.handleElement = this.prop(null);
+    this.handleElement = this.prop(this.renderHandle());
     this.parentHandleElement = this.prop(props.parentHandleElement);
   });
 
@@ -36,40 +36,6 @@
     var element = dom.el('<div>');
     dom.addClass(element, 'module-wire-handle');
     return element;
-  };
-
-  ModuleWire.prototype.redraw = function() {
-    var element = this.element();
-    var parentElement = this.parentElement();
-
-    if (!parentElement && !element) {
-      return;
-    }
-
-    // add element
-    if (parentElement && !element) {
-      this.element(this.render());
-      this.handleElement(this.renderHandle());
-      this.redraw();
-      dom.append(parentElement, this.element());
-      dom.append(this.parentHandleElement(), this.handleElement());
-      return;
-    }
-
-    // remove element
-    if (!parentElement && element) {
-      dom.remove(element);
-      dom.remove(this.handleElement());
-      this.element(null);
-      this.handleElement(null);
-      this.clearCache();
-      return;
-    }
-
-    // update element
-    this.redrawPath();
-    this.redrawHandle();
-    this.redrawHighlight();
   };
 
   ModuleWire.prototype.redrawPath = function() {
@@ -104,6 +70,21 @@
       dom.className(this.pathElement(), 'module-wire-path' + (highlighted ? ' highlighted' : ''));
       dom.toggleClass(this.handleElement(), 'highlighted', highlighted);
     });
+  };
+
+  ModuleWire.prototype.onappend = function() {
+    dom.append(this.parentHandleElement(), this.handleElement());
+  };
+
+  ModuleWire.prototype.onremove = function() {
+    dom.remove(this.handleElement());
+    this.handleElement(null);
+  };
+
+  ModuleWire.prototype.onredraw = function() {
+    this.redrawPath();
+    this.redrawHandle();
+    this.redrawHighlight();
   };
 
   ModuleWire.HANDLE_WIDTH = 24;

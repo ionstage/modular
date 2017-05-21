@@ -55,37 +55,6 @@
     return element;
   };
 
-  SidebarModule.prototype.redraw = function() {
-    var element = this.element();
-    var parentElement = this.parentElement();
-
-    if (!parentElement && !element) {
-      return;
-    }
-
-    // add element
-    if (parentElement && !element) {
-      this.element(this.render());
-      this.registerDragListener();
-      this.redraw();
-      dom.append(parentElement, this.element());
-      return;
-    }
-
-    // remove element
-    if (!parentElement && element) {
-      this.unregisterDragListener();
-      dom.remove(element);
-      this.element(null);
-      this.clearCache();
-      return;
-    }
-
-    // update element
-    this.redrawTitle();
-    this.redrawContent();
-  };
-
   SidebarModule.prototype.redrawTitle = function() {
     this.redrawProp('title', function(title) {
       dom.text(this.headerElement(), title);
@@ -96,6 +65,19 @@
     this.redrawProp('content', function(content) {
       dom.text(this.contentElement(), content);
     });
+  };
+
+  SidebarModule.prototype.onappend = function() {
+    this.registerDragListener();
+  };
+
+  SidebarModule.prototype.onremove = function() {
+    this.unregisterDragListener();
+  };
+
+  SidebarModule.prototype.onredraw = function() {
+    this.redrawTitle();
+    this.redrawContent();
   };
 
   SidebarModule.prototype.onstart = function(x, y, event, context) {

@@ -438,49 +438,6 @@
     return element;
   };
 
-  Module.prototype.redraw = function() {
-    var element = this.element();
-    var parentElement = this.parentElement();
-
-    if (!parentElement && !element) {
-      return;
-    }
-
-    // add element
-    if (parentElement && !element) {
-      this.element(this.render());
-      this.registerDragListener();
-      this.registerPortSelectChangeListener();
-      this.registerPointListener();
-      this.redraw();
-      dom.append(parentElement, this.element());
-      return;
-    }
-
-    // remove element
-    if (!parentElement && element) {
-      this.unregisterDragListener();
-      this.unregisterPortSelectChangeListener();
-      this.unregisterPointListener();
-      this.unbindEventCircuitElement();
-      this.unregisterComponentPointListener();
-      dom.remove(element);
-      this.element(null);
-      this.clearCache();
-      return;
-    }
-
-    // update element
-    this.redrawTitle();
-    this.redrawPosition();
-    this.redrawZIndex();
-    this.redrawDeleteButton();
-    this.redrawPortList();
-    this.redrawFooter();
-    this.redrawPortSelect();
-    this.redrawToggleClasses();
-  };
-
   Module.prototype.redrawTitle = function() {
     this.redrawProp('title', function(title) {
       dom.text(this.titleElement(), title);
@@ -563,6 +520,31 @@
     } else {
       return null;
     }
+  };
+
+  Module.prototype.onappend = function() {
+    this.registerDragListener();
+    this.registerPortSelectChangeListener();
+    this.registerPointListener();
+  };
+
+  Module.prototype.onremove = function() {
+    this.unregisterDragListener();
+    this.unregisterPortSelectChangeListener();
+    this.unregisterPointListener();
+    this.unbindEventCircuitElement();
+    this.unregisterComponentPointListener();
+  };
+
+  Module.prototype.onredraw = function() {
+    this.redrawTitle();
+    this.redrawPosition();
+    this.redrawZIndex();
+    this.redrawDeleteButton();
+    this.redrawPortList();
+    this.redrawFooter();
+    this.redrawPortSelect();
+    this.redrawToggleClasses();
   };
 
   Module.prototype.onstart = function(x, y, event, context) {

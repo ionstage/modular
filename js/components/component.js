@@ -8,7 +8,7 @@
   var Component = helper.inherits(function(props) {
     Component.super_.call(this);
 
-    this.element = this.prop(props.element);
+    this.element = this.prop(props.element || null);
     this.parentElement = this.prop(props.parentElement || null);
     this.cache = {};
   }, jCore.Component);
@@ -50,6 +50,43 @@
       dom.toggleClass(this.element(), className, value);
     });
   };
+
+  Component.prototype.redraw = function() {
+    var element = this.element();
+    var parentElement = this.parentElement();
+
+    if (!parentElement && !element) {
+      return;
+    }
+
+    if (parentElement && !element) {
+      this.element(this.render());
+      this.redraw();
+      this.onappend();
+      dom.append(parentElement, this.element());
+      return;
+    }
+
+    if (!parentElement && element) {
+      this.onremove();
+      dom.remove(element);
+      this.element(null);
+      this.clearCache();
+      return;
+    }
+
+    this.onredraw();
+  };
+
+  Component.prototype.render = function() {
+    return dom.render('<div></div>');
+  };
+
+  Component.prototype.onappend = function() {};
+
+  Component.prototype.onremove = function() {};
+
+  Component.prototype.onredraw = function() {};
 
   Component.inherits = function(initializer) {
     var superCtor = this;
