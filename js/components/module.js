@@ -24,7 +24,6 @@
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
-    this.parentElement = this.prop(props.parentElement);
 
     this.messageListenable = new dom.Listenable({
       callback: Module.prototype.onmessage.bind(this),

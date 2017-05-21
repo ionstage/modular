@@ -8,7 +8,6 @@
     this.title = this.prop(props.title);
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
-    this.parentElement = this.prop(props.parentElement);
 
     this.draggable = null;
 

@@ -12,7 +12,6 @@
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(props.handleVisible);
     this.highlighted = this.prop(false);
-    this.parentElement = this.prop(props.parentElement);
     this.handleElement = this.prop(null);
     this.parentHandleElement = this.prop(props.parentHandleElement);
   });

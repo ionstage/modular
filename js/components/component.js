@@ -9,6 +9,7 @@
     Component.super_.call(this);
 
     this.element = this.prop(props.element);
+    this.parentElement = this.prop(props.parentElement || null);
     this.cache = {};
   }, jCore.Component);
 
