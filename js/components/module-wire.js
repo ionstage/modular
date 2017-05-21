@@ -28,6 +28,10 @@
     });
   };
 
+  ModuleWire.prototype.render = function() {
+    return dom.render(ModuleWire.TEMPLATE_HTML);
+  };
+
   ModuleWire.prototype.renderHandle = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module-wire-handle');
@@ -44,7 +48,7 @@
 
     // add element
     if (parentElement && !element) {
-      this.element(dom.render(ModuleWire.TEMPLATE_HTML));
+      this.element(this.render());
       this.handleElement(this.renderHandle());
       this.redraw();
       dom.append(parentElement, this.element());
