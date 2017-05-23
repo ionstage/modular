@@ -206,21 +206,10 @@
   };
 
   Module.prototype.dragListener = function(target) {
-    if (target === this.titleElement()) {
-      return Module.DRAG_LISTENER_POSITION;
-    } else if (target === this.deleteButtonElement()) {
-      return Module.DRAG_LISTENER_DELETE;
-    } else if (dom.hasClass(target, 'module-port-hide-button')) {
-      return Module.DRAG_LISTENER_HIDE_PORT;
-    } else if (dom.hasClass(target, 'module-port-label')) {
-      return Module.DRAG_LISTENER_SORT_PORT;
-    } else if (dom.hasClass(target, 'module-port-plug')) {
-      return Module.DRAG_LISTENER_DRAG_PORT_PLAG;
-    } else if (dom.hasClass(target, 'module-port-socket-handle')) {
-      return Module.DRAG_LISTENER_DRAG_PORT_SOCKET;
-    } else {
-      return null;
-    }
+    var entry = Module.DRAG_LISTENER_ENTRIES.find(function(entry) {
+      return dom.hasClass(target, entry.className);
+    });
+    return (entry ? entry.listener : null);
   };
 
   Module.prototype.createPorts = function() {
@@ -738,6 +727,15 @@
       this.dragPortSocketEnder(context.unit, context.context);
     },
   };
+
+  Module.DRAG_LISTENER_ENTRIES = [
+    { className: 'module-title', listener: Module.DRAG_LISTENER_POSITION },
+    { className: 'module-delete-button', listener: Module.DRAG_LISTENER_DELETE },
+    { className: 'module-port-hide-button', listener: Module.DRAG_LISTENER_HIDE_PORT },
+    { className: 'module-port-label', listener: Module.DRAG_LISTENER_SORT_PORT },
+    { className: 'module-port-plug', listener: Module.DRAG_LISTENER_DRAG_PORT_PLAG },
+    { className: 'module-port-socket-handle', listener: Module.DRAG_LISTENER_DRAG_PORT_SOCKET },
+  ];
 
   Module.TEMPLATE_HTML = [
     '<div class="module-header">',
