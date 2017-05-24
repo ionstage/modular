@@ -441,7 +441,7 @@
   Module.prototype.render = function() {
     var element = dom.el('<div>');
     dom.addClass(element, 'module');
-    dom.html(element, Module.TEMPLATE_HTML);
+    dom.html(element, Module.HTML_TEXT);
     return element;
   };
 
@@ -737,7 +737,7 @@
     { className: 'module-port-socket-handle', listener: Module.DRAG_LISTENER_DRAG_PORT_SOCKET },
   ];
 
-  Module.TEMPLATE_HTML = [
+  Module.HTML_TEXT = [
     '<div class="module-header">',
       '<div class="module-title module-header-item"></div>',
       '<div class="module-delete-button module-header-item"></div>',

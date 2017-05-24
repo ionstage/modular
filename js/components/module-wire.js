@@ -29,7 +29,7 @@
   };
 
   ModuleWire.prototype.render = function() {
-    return dom.render(ModuleWire.TEMPLATE_HTML);
+    return dom.render(ModuleWire.HTML_TEXT);
   };
 
   ModuleWire.prototype.renderHandle = function() {
@@ -89,7 +89,7 @@
 
   ModuleWire.HANDLE_WIDTH = 24;
 
-  ModuleWire.TEMPLATE_HTML = [
+  ModuleWire.HTML_TEXT = [
     '<svg class="module-wire">',
       '<path class="module-wire-path"></path>',
     '</svg>',
