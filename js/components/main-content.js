@@ -237,8 +237,8 @@
   };
 
   MainContent.prototype.createConnectingWire = function(sourceUnit, targetUnit) {
-    var sourcePosition = sourceUnit.plugPosition();
-    var targetPosition = targetUnit.socketPosition();
+    var sourcePosition = sourceUnit.portPlugPosition();
+    var targetPosition = targetUnit.portSocketPosition();
     return new ModuleWire({
       sourceX: sourcePosition.x,
       sourceY: sourcePosition.y,
@@ -252,7 +252,7 @@
   };
 
   MainContent.prototype.createDraggingWire = function(sourceUnit) {
-    var position = sourceUnit.plugPosition();
+    var position = sourceUnit.portPlugPosition();
     return new ModuleWire({
       sourceX: position.x,
       sourceY: position.y,
@@ -510,7 +510,7 @@
     wire.markDirty();
     this.appendDraggingWire(sourceUnit, wire);
 
-    var position = sourceUnit.plugPosition();
+    var position = sourceUnit.portPlugPosition();
     context.x = position.x;
     context.y = position.y;
     context.wire = wire;

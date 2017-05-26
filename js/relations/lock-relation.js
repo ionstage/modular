@@ -37,8 +37,8 @@
 
   LockRelation.TYPE_POSITION_TABLE = (function() {
     var table = {};
-    table[LockRelation.TYPE_PLUG] = { methodName: 'plugPosition', type: 'source' };
-    table[LockRelation.TYPE_SOCKET] = { methodName: 'socketPosition', type: 'target' };
+    table[LockRelation.TYPE_PLUG] = { methodName: 'portPlugPosition', type: 'source' };
+    table[LockRelation.TYPE_SOCKET] = { methodName: 'portSocketPosition', type: 'target' };
     return table;
   })();
 

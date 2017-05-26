@@ -56,11 +56,11 @@
     return this.module.circuitElementMember(this.port.name());
   };
 
-  ModuleUnit.prototype.plugPosition = function() {
+  ModuleUnit.prototype.portPlugPosition = function() {
     return this.module.plugPosition(this.port);
   };
 
-  ModuleUnit.prototype.socketPosition = function() {
+  ModuleUnit.prototype.portSocketPosition = function() {
     return this.module.socketPosition(this.port);
   };
 
