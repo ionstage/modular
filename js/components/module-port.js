@@ -58,14 +58,11 @@
   };
 
   ModulePort.prototype.renderListItem = function() {
-    var element = dom.el('<div>');
-    dom.addClass(element, 'module-port');
-    dom.html(element, ModulePort.LIST_ITEM_HTML_TEXT);
-    return element;
+    return dom.render(ModulePort.LIST_ITEM_HTML_TEXT);
   };
 
   ModulePort.prototype.renderOption = function() {
-    return dom.el('<option>');
+    return dom.render(ModulePort.OPTION_HTML_TEXT);
   };
 
   ModulePort.prototype.redraw = function() {
@@ -162,13 +159,17 @@
   ModulePort.SOCKET_WIDTH = 50;
 
   ModulePort.LIST_ITEM_HTML_TEXT = [
-    '<div class="module-port-plug module-port-handle"></div>',
-    '<div class="module-port-socket">',
-      '<div class="module-port-socket-handle module-port-handle"></div>',
+    '<div class="module-port">',
+      '<div class="module-port-plug module-port-handle"></div>',
+      '<div class="module-port-socket">',
+        '<div class="module-port-socket-handle module-port-handle"></div>',
+      '</div>',
+      '<div class="module-port-label"></div>',
+      '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
     '</div>',
-    '<div class="module-port-label"></div>',
-    '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
   ].join('');
+
+  ModulePort.OPTION_HTML_TEXT = '<option></option>';
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModulePort;

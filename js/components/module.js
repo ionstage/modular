@@ -439,10 +439,7 @@
   };
 
   Module.prototype.render = function() {
-    var element = dom.el('<div>');
-    dom.addClass(element, 'module');
-    dom.html(element, Module.HTML_TEXT);
-    return element;
+    return dom.render(Module.HTML_TEXT);
   };
 
   Module.prototype.redrawTitle = function() {
@@ -738,20 +735,22 @@
   ];
 
   Module.HTML_TEXT = [
-    '<div class="module-header">',
-      '<div class="module-title module-header-item"></div>',
-      '<div class="module-delete-button module-header-item"></div>',
-    '</div>',
-    '<div class="module-content">',
-      '<iframe class="module-component module-content-item embed"></iframe>',
-      '<div class="module-port-list module-content-item"></div>',
-    '</div>',
-    '<div class="module-footer">',
-      '<img class="module-footer-icon module-footer-item" src="images/caret-down.svg">',
-      '<select class="module-port-select module-footer-item">',
-        '<optgroup label="Property"></optgroup>',
-        '<optgroup label="Event"></optgroup>',
-      '</select>',
+    '<div class="module">',
+      '<div class="module-header">',
+        '<div class="module-title module-header-item"></div>',
+        '<div class="module-delete-button module-header-item"></div>',
+      '</div>',
+      '<div class="module-content">',
+        '<iframe class="module-component module-content-item embed"></iframe>',
+        '<div class="module-port-list module-content-item"></div>',
+      '</div>',
+      '<div class="module-footer">',
+        '<img class="module-footer-icon module-footer-item" src="images/caret-down.svg">',
+        '<select class="module-port-select module-footer-item">',
+          '<optgroup label="Property"></optgroup>',
+          '<optgroup label="Event"></optgroup>',
+        '</select>',
+      '</div>',
     '</div>',
   ].join('');
 

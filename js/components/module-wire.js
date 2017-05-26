@@ -33,9 +33,7 @@
   };
 
   ModuleWire.prototype.renderHandle = function() {
-    var element = dom.el('<div>');
-    dom.addClass(element, 'module-wire-handle');
-    return element;
+    return dom.render(ModuleWire.HANDLE_HTML_TEXT);
   };
 
   ModuleWire.prototype.redrawPath = function() {
@@ -94,6 +92,8 @@
       '<path class="module-wire-path"></path>',
     '</svg>',
   ].join('');
+
+  ModuleWire.HANDLE_HTML_TEXT = '<div class="module-wire-handle"></div>';
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = ModuleWire;

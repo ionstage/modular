@@ -49,10 +49,7 @@
   };
 
   SidebarModule.prototype.render = function() {
-    var element = dom.el('<div>');
-    dom.addClass(element, 'sidebar-module');
-    dom.html(element, SidebarModule.HTML_TEXT);
-    return element;
+    return dom.render(SidebarModule.HTML_TEXT);
   };
 
   SidebarModule.prototype.redrawTitle = function() {
@@ -130,8 +127,10 @@
   };
 
   SidebarModule.HTML_TEXT = [
-    '<div class="sidebar-module-header sidebar-module-item"></div>',
-    '<div class="sidebar-module-content sidebar-module-item"></div>',
+    '<div class="sidebar-module">',
+      '<div class="sidebar-module-header sidebar-module-item"></div>',
+      '<div class="sidebar-module-content sidebar-module-item"></div>',
+    '</div>',
   ].join('');
 
   if (typeof module !== 'undefined' && module.exports) {
