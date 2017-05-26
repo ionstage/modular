@@ -77,12 +77,9 @@
     return dom.child(this.element(), 2, 1);
   };
 
-  Module.prototype.portOptGroupElement = (function() {
-    var map = { prop: 0, event: 1 };
-    return function(type) {
-      return dom.child(this.element(), 2, 1, map[type]);
-    };
-  })();
+  Module.prototype.portOptGroupElement = function(type) {
+    return dom.child(this.element(), 2, 1, Module.PORT_OPT_GROUP_INDEX_MAP[type]);
+  };
 
   Module.prototype.componentContentWindow = function() {
     return dom.contentWindow(this.componentElement());
@@ -753,6 +750,13 @@
       '</div>',
     '</div>',
   ].join('');
+
+  Module.PORT_OPT_GROUP_INDEX_MAP = (function() {
+    var map = {};
+    map[ModulePort.TYPE_PROP] = 0;
+    map[ModulePort.TYPE_EVENT] = 1;
+    return map;
+  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Module;
