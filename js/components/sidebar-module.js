@@ -24,6 +24,14 @@
     return dom.child(this.element(), 1);
   };
 
+  SidebarModule.prototype.position = function() {
+    var rect = dom.rect(this.element());
+    return new dom.Point({
+      x: rect.left + dom.scrollX(),
+      y: rect.top + dom.scrollY(),
+    });
+  };
+
   SidebarModule.prototype.registerDragListener = function() {
     this.draggable = new dom.Draggable({
       element: this.element(),
@@ -80,16 +88,14 @@
   SidebarModule.prototype.onstart = function(x, y, event, context) {
     var showCloneElement = function() {
       var cloneElement = this.makeCloneElement();
-      var rect = dom.rect(this.element());
-      var left = rect.left + dom.scrollX();
-      var top = rect.top + dom.scrollY();
+      var position = this.position();
 
-      dom.translate(cloneElement, left, top);
+      dom.translate(cloneElement, position.x, position.y);
       dom.append(dom.body(), cloneElement);
 
       context.cloneElement = cloneElement;
-      context.left = left;
-      context.top = top;
+      context.x = position.x;
+      context.y = position.y;
       context.timer = null;
 
       this.dragStarter();
@@ -106,7 +112,7 @@
 
   SidebarModule.prototype.onmove = function(dx, dy, event, context) {
     if (context.cloneElement) {
-      dom.translate(context.cloneElement, context.left + dx, context.top + dy);
+      dom.translate(context.cloneElement, context.x + dx, context.y + dy);
     } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
       clearTimeout(context.timer);
       context.timer = null;
