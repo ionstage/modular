@@ -122,10 +122,9 @@
   SidebarModule.prototype.onend = function(dx, dy, event, context) {
     var cloneElement = context.cloneElement;
     if (cloneElement) {
-      var rect = dom.rect(cloneElement);
       dom.remove(cloneElement);
       this.dragEnder();
-      this.dropper(this.name(), rect.left, rect.top);
+      this.dropper(this.name(), context.x + dx, context.y + dy);
     } else if (context.timer) {
       clearTimeout(context.timer);
       context.timer = null;
