@@ -203,7 +203,7 @@
   };
 
   Module.prototype.dragListener = function(target) {
-    var entry = Module.DRAG_LISTENER_ENTRIES.find(function(entry) {
+    var entry = helper.find(Module.DRAG_LISTENER_ENTRIES, function(entry) {
       return dom.hasClass(target, entry.className);
     });
     return (entry ? entry.listener : null);
