@@ -68,9 +68,10 @@
 
   MainContent.prototype.localPoint = function(point) {
     var clientPosition = this.clientPosition();
+    var bodyRect = dom.rect(dom.body());
     return new dom.Point({
-      x: point.x - clientPosition.x + this.scrollLeft() - dom.scrollX(),
-      y: point.y - clientPosition.y + this.scrollTop() - dom.scrollY(),
+      x: point.x - clientPosition.x + this.scrollLeft() + bodyRect.left,
+      y: point.y - clientPosition.y + this.scrollTop() + bodyRect.top,
     });
   };
 

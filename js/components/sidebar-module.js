@@ -26,9 +26,10 @@
 
   SidebarModule.prototype.position = function() {
     var rect = dom.rect(this.element());
+    var bodyRect = dom.rect(dom.body());
     return new dom.Point({
-      x: rect.left + dom.scrollX(),
-      y: rect.top + dom.scrollY(),
+      x: rect.left - bodyRect.left,
+      y: rect.top - bodyRect.top,
     });
   };
 
