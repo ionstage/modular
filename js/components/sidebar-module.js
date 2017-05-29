@@ -94,6 +94,7 @@
       dom.translate(cloneElement, position.x, position.y);
       dom.append(dom.body(), cloneElement);
 
+      context.dragging = true;
       context.cloneElement = cloneElement;
       context.x = position.x;
       context.y = position.y;
@@ -103,7 +104,7 @@
     }.bind(this);
 
     if (dom.supportsTouch()) {
-      context.cloneElement = null;
+      context.dragging = false;
       context.timer = setTimeout(showCloneElement, 300);
     } else {
       dom.cancel(event);
@@ -112,7 +113,7 @@
   };
 
   SidebarModule.prototype.onmove = function(dx, dy, event, context) {
-    if (context.cloneElement) {
+    if (context.dragging) {
       dom.translate(context.cloneElement, context.x + dx, context.y + dy);
     } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
       clearTimeout(context.timer);
@@ -121,9 +122,9 @@
   };
 
   SidebarModule.prototype.onend = function(dx, dy, event, context) {
-    var cloneElement = context.cloneElement;
-    if (cloneElement) {
-      dom.remove(cloneElement);
+    if (context.dragging) {
+      context.dragging = false;
+      dom.remove(context.cloneElement);
       this.dragEnder();
       this.dropper(this.name(), context.x + dx, context.y + dy);
     } else if (context.timer) {
