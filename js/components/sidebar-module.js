@@ -11,6 +11,10 @@
 
     this.draggable = null;
 
+    this.ondragstart = SidebarModule.prototype.ondragstart.bind(this);
+    this.ondragmove = SidebarModule.prototype.ondragmove.bind(this);
+    this.ondragend = SidebarModule.prototype.ondragend.bind(this);
+
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
     this.dropper = props.dropper;
@@ -87,34 +91,18 @@
   };
 
   SidebarModule.prototype.onstart = function(x, y, event, context) {
-    var showCloneElement = function() {
-      var cloneElement = this.makeCloneElement();
-      var position = this.position();
-
-      dom.translate(cloneElement, position.x, position.y);
-      dom.append(dom.body(), cloneElement);
-
-      context.dragging = true;
-      context.cloneElement = cloneElement;
-      context.x = position.x;
-      context.y = position.y;
-      context.timer = null;
-
-      this.dragStarter();
-    }.bind(this);
-
     if (dom.supportsTouch()) {
       context.dragging = false;
-      context.timer = setTimeout(showCloneElement, 300);
+      context.timer = setTimeout(this.ondragstart, 300, x, y, event, context);
     } else {
       dom.cancel(event);
-      showCloneElement();
+      this.ondragstart(x, y, event, context);
     }
   };
 
   SidebarModule.prototype.onmove = function(dx, dy, event, context) {
     if (context.dragging) {
-      dom.translate(context.cloneElement, context.x + dx, context.y + dy);
+      this.ondragmove(dx, dy, event, context);
     } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
       clearTimeout(context.timer);
       context.timer = null;
@@ -123,14 +111,38 @@
 
   SidebarModule.prototype.onend = function(dx, dy, event, context) {
     if (context.dragging) {
-      context.dragging = false;
-      dom.remove(context.cloneElement);
-      this.dragEnder();
-      this.dropper(this.name(), context.x + dx, context.y + dy);
+      this.ondragend(dx, dy, event, context);
     } else if (context.timer) {
       clearTimeout(context.timer);
       context.timer = null;
     }
+  };
+
+  SidebarModule.prototype.ondragstart = function(x, y, event, context) {
+    var cloneElement = this.makeCloneElement();
+    var position = this.position();
+
+    dom.translate(cloneElement, position.x, position.y);
+    dom.append(dom.body(), cloneElement);
+
+    context.dragging = true;
+    context.timer = null;
+    context.cloneElement = cloneElement;
+    context.x = position.x;
+    context.y = position.y;
+
+    this.dragStarter();
+  };
+
+  SidebarModule.prototype.ondragmove = function(dx, dy, event, context) {
+    dom.translate(context.cloneElement, context.x + dx, context.y + dy);
+  };
+
+  SidebarModule.prototype.ondragend = function(dx, dy, event, context) {
+    context.dragging = false;
+    dom.remove(context.cloneElement);
+    this.dragEnder();
+    this.dropper(this.name(), context.x + dx, context.y + dy);
   };
 
   SidebarModule.HTML_TEXT = [
