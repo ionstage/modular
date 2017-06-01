@@ -30,7 +30,7 @@
       loadEnder: Body.prototype.loadEnder.bind(this),
     });
 
-    dom.ready(Body.prototype.onready.bind(this));
+    this.registerReadyListener();
   });
 
   Body.prototype.incrementDragCount = function() {
@@ -47,6 +47,20 @@
 
   Body.prototype.demoUrl = function(name) {
     return 'demos/' + name + '.json';
+  };
+
+  Body.prototype.registerReadyListener = function() {
+    dom.ready(function() {
+      this.loadStarter();
+      this.moduleEntryCollection.load().then(function() {
+        this.sidebar.loadContent();
+        return this.loadDemo();
+      }.bind(this)).catch(function(e) {
+        alert(e);
+      }).then(function() {
+        this.loadEnder();
+      }.bind(this));
+    }.bind(this));
   };
 
   Body.prototype.loadDemo = function() {
@@ -68,18 +82,6 @@
     this.redrawProp('dragCount', function(dragCount) {
       dom.toggleClass(this.element(), 'dragging', dragCount > 0);
     });
-  };
-
-  Body.prototype.onready = function() {
-    this.loadStarter();
-    this.moduleEntryCollection.load().then(function() {
-      this.sidebar.loadContent();
-      return this.loadDemo();
-    }.bind(this)).catch(function(e) {
-      alert(e);
-    }).then(function() {
-      this.loadEnder();
-    }.bind(this));
   };
 
   Body.prototype.moduleDragStarter = function() {
