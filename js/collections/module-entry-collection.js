@@ -50,7 +50,7 @@
       url: this.moduleEntriesUrl(packageName),
     }).then(function(text) {
       return JSON.parse(text).map(function(props) {
-        return new ModuleEntry(helper.extend(helper.clone(props), { packageName: packageName }));
+        return new ModuleEntry(helper.extend(props, { packageName: packageName }));
       });
     });
   };
