@@ -6,31 +6,17 @@
   var Wrapper = helper.wrapper();
 
   var CircuitElement = function(members) {
-    var memberTable = {};
-    var memberNames = [];
-
-    members.slice().reverse().forEach(function(props) {
-      var name = props.name;
-      if (!(name in memberTable)) {
-        memberTable[name] = new CircuitElement.Member(props);
-        memberNames.unshift(name);
-      }
-    });
-
-    this.memberTable = memberTable;
-    this.memberNames = memberNames;
+    this.memberCollection = new CircuitElement.MemberCollection(members);
 
     return this.wrapper();
   };
 
   CircuitElement.prototype.get = function(memberName) {
-    return this.memberTable[memberName];
+    return this.memberCollection.get(memberName);
   };
 
   CircuitElement.prototype.getAll = function() {
-    return this.memberNames.map(function(memberName) {
-      return this.get(memberName);
-    }.bind(this));
+    return this.memberCollection.getAll();
   };
 
   CircuitElement.prototype.wrapper = function() {
@@ -51,6 +37,36 @@
     var targetMember = targetWrapper.unwrap(Wrapper.KEY);
     circuit.unbind(sourceMember.callee, targetMember.callee);
   };
+
+  CircuitElement.MemberCollection = (function() {
+    var MemberCollection = function(members) {
+      var table = {};
+      var names = [];
+
+      members.slice().reverse().forEach(function(props) {
+        var name = props.name;
+        if (!(name in table)) {
+          table[name] = new CircuitElement.Member(props);
+          names.unshift(name);
+        }
+      });
+
+      this.table = table;
+      this.names = names;
+    };
+
+    MemberCollection.prototype.get = function(name) {
+      return this.table[name];
+    };
+
+    MemberCollection.prototype.getAll = function() {
+      return this.names.map(function(name) {
+        return this.get(name);
+      }.bind(this));
+    };
+
+    return MemberCollection;
+  })();
 
   CircuitElement.Member = (function() {
     var Member = function(props) {
