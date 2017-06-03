@@ -5,7 +5,7 @@
   var helper = app.helper || require('../helper.js');
   var Wrapper = helper.wrapper();
 
-  var CircuitElement = helper.extend(function(members) {
+  var CircuitElement = function(members) {
     var memberTable = {};
     var memberNames = [];
 
@@ -21,35 +21,7 @@
     this.memberNames = memberNames;
 
     return this.wrapper();
-  }, {
-    Member: (function() {
-      var Member = function(props) {
-        this.callee = circuit[props.type](props.arg);
-        return this.wrapper(helper.extend(this.defaults(), helper.pick(props, Member.KEYS)));
-      };
-
-      Member.prototype.defaults = function() {
-        return {
-          socketDisabled: false,
-          plugDisabled: false,
-        };
-      };
-
-      Member.prototype.call = function() {
-        return this.callee.apply(null, arguments);
-      };
-
-      Member.prototype.wrapper = function(props) {
-        var wrapper = new Wrapper(Member.prototype.call.bind(this), this);
-        wrapper.props = helper.clone.bind(null, props);
-        return wrapper;
-      };
-
-      Member.KEYS = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
-
-      return Member;
-    })(),
-  });
+  };
 
   CircuitElement.prototype.get = function(memberName) {
     return this.memberTable[memberName];
@@ -79,6 +51,34 @@
     var targetMember = targetWrapper.unwrap(Wrapper.KEY);
     circuit.unbind(sourceMember.callee, targetMember.callee);
   };
+
+  CircuitElement.Member = (function() {
+    var Member = function(props) {
+      this.callee = circuit[props.type](props.arg);
+      return this.wrapper(helper.extend(this.defaults(), helper.pick(props, Member.KEYS)));
+    };
+
+    Member.prototype.defaults = function() {
+      return {
+        socketDisabled: false,
+        plugDisabled: false,
+      };
+    };
+
+    Member.prototype.call = function() {
+      return this.callee.apply(null, arguments);
+    };
+
+    Member.prototype.wrapper = function(props) {
+      var wrapper = new Wrapper(Member.prototype.call.bind(this), this);
+      wrapper.props = helper.clone.bind(null, props);
+      return wrapper;
+    };
+
+    Member.KEYS = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
+
+    return Member;
+  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = CircuitElement;
