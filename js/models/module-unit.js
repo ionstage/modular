@@ -15,9 +15,7 @@
   };
 
   ModuleUnit.prototype.contains = function(component) {
-    return Object.keys(this).some(function(key) {
-      return helper.equal(this[key], component);
-    }.bind(this));
+    return (this.module === component || this.port === component);
   };
 
   ModuleUnit.prototype.portName = function() {
