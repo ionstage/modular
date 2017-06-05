@@ -22,7 +22,8 @@
     keyword = keyword.toLowerCase();
 
     var label = this.label.toLowerCase();
-    if (label.indexOf(keyword) === 0) {
+    var labelIndex = label.indexOf(keyword);
+    if (labelIndex === 0) {
       return 1;
     }
 
@@ -38,7 +39,7 @@
       return 0;
     }
 
-    if (label.indexOf(keyword) !== -1) {
+    if (labelIndex !== -1) {
       return 0.5;
     }
 
