@@ -14,13 +14,7 @@
   };
 
   ModuleEntryCollection.prototype.moduleEntriesUrl = function(packageName) {
-    return [
-      'modular_modules/',
-      packageName.split('/').map(function(s) {
-        return encodeURIComponent(s);
-      }).join('/'),
-      '/index.json',
-    ].join('');
+    return 'modular_modules/' + helper.encodePath(packageName) + '/index.json';
   };
 
   ModuleEntryCollection.prototype.load = function() {

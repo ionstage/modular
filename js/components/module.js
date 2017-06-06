@@ -176,13 +176,7 @@
   };
 
   Module.prototype.url = function() {
-    return [
-      'modular_modules/',
-      this.name().split('/').map(function(s) {
-        return encodeURIComponent(s);
-      }).join('/'),
-      '.html',
-    ].join('');
+    return 'modular_modules/' + helper.encodePath(this.name()) + '.html';
   };
 
   Module.prototype.props = function() {
