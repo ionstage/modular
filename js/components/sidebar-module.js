@@ -9,6 +9,10 @@
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
 
+    this.clone = new SidebarModule.Clone({
+      renderer: SidebarModule.prototype.renderClone.bind(this),
+    });
+
     this.draggable = null;
 
     this.ondragstart = SidebarModule.prototype.ondragstart.bind(this);
@@ -51,18 +55,18 @@
     this.draggable = null;
   };
 
-  SidebarModule.prototype.makeCloneElement = function() {
-    var element = dom.clone(this.element());
-    dom.addClass(element, 'clone');
-    return element;
-  };
-
   SidebarModule.prototype.delete = function() {
     this.parentElement(null);
   };
 
   SidebarModule.prototype.render = function() {
     return dom.render(SidebarModule.HTML_TEXT);
+  };
+
+  SidebarModule.prototype.renderClone = function() {
+    var element = dom.clone(this.element());
+    dom.addClass(element, 'clone');
+    return element;
   };
 
   SidebarModule.prototype.redrawTitle = function() {
@@ -119,28 +123,24 @@
   };
 
   SidebarModule.prototype.ondragstart = function(x, y, event, context) {
-    var cloneElement = this.makeCloneElement();
     var position = this.position();
-
-    dom.translate(cloneElement, position.x, position.y);
-    dom.append(dom.body(), cloneElement);
 
     context.dragging = true;
     context.timer = null;
-    context.cloneElement = cloneElement;
     context.x = position.x;
     context.y = position.y;
 
+    this.clone.show(position.x, position.y);
     this.dragStarter();
   };
 
   SidebarModule.prototype.ondragmove = function(dx, dy, event, context) {
-    dom.translate(context.cloneElement, context.x + dx, context.y + dy);
+    this.clone.move(context.x + dx, context.y + dy);
   };
 
   SidebarModule.prototype.ondragend = function(dx, dy, event, context) {
     context.dragging = false;
-    dom.remove(context.cloneElement);
+    this.clone.hide();
     this.dragEnder();
     this.dropper(this.name(), context.x + dx, context.y + dy);
   };
@@ -151,6 +151,41 @@
       '<div class="sidebar-module-content sidebar-module-item"></div>',
     '</div>',
   ].join('');
+
+  SidebarModule.Clone = (function() {
+    var Clone = Component.inherits(function(props) {
+      this.x = this.prop(0);
+      this.y = this.prop(0);
+
+      this.renderer = props.renderer;
+    });
+
+    Clone.prototype.move = function(x, y) {
+      this.x(x);
+      this.y(y);
+    };
+
+    Clone.prototype.show = function(x, y) {
+      this.move(x, y);
+      this.parentElement(dom.body());
+    };
+
+    Clone.prototype.hide = function() {
+      this.parentElement(null);
+    };
+
+    Clone.prototype.render = function() {
+      return this.renderer();
+    };
+
+    Clone.prototype.onredraw = function() {
+      this.redrawProp('x', 'y', function(x, y) {
+        dom.translate(this.element(), x, y);
+      });
+    };
+
+    return Clone;
+  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = SidebarModule;
