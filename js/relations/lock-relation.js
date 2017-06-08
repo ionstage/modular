@@ -17,13 +17,12 @@
   };
 
   LockRelation.prototype.unitPosition = function() {
-    var methodName = LockRelation.TYPE_POSITION_TABLE[this.type].methodName;
-    return this.unit[methodName]();
+    return this.unit[this.type.positionMethodName]();
   };
 
   LockRelation.prototype.wirePosition = function(position) {
     var wire = this.wire;
-    var positionType = LockRelation.TYPE_POSITION_TABLE[this.type].type;
+    var positionType = this.type.positionType;
     wire[positionType + 'X'](position.x);
     wire[positionType + 'Y'](position.y);
   };
@@ -32,15 +31,15 @@
     this.wirePosition(this.unitPosition());
   };
 
-  LockRelation.TYPE_PLUG = 'plug';
-  LockRelation.TYPE_SOCKET = 'socket';
+  LockRelation.TYPE_PLUG = {
+    positionMethodName: 'portPlugPosition',
+    positionType: 'source',
+  };
 
-  LockRelation.TYPE_POSITION_TABLE = (function() {
-    var table = {};
-    table[LockRelation.TYPE_PLUG] = { methodName: 'portPlugPosition', type: 'source' };
-    table[LockRelation.TYPE_SOCKET] = { methodName: 'portSocketPosition', type: 'target' };
-    return table;
-  })();
+  LockRelation.TYPE_SOCKET = {
+    positionMethodName: 'portSocketPosition',
+    positionType: 'target',
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = LockRelation;
