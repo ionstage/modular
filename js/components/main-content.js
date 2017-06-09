@@ -115,8 +115,8 @@
   };
 
   MainContent.prototype.connectedTargetUnits = function(sourceUnit) {
-    return this.bindings().filter(function(binding) {
-      return helper.equal(binding.sourceUnit, sourceUnit);
+    return this.bindingCollection.filter({
+      sourceUnit: sourceUnit,
     }).map(function(binding) {
       return binding.targetUnit;
     });
@@ -124,9 +124,9 @@
 
   MainContent.prototype.connectedSourceUnit = function(targetUnit) {
     // socket of the target port can only be connected to one wire
-    var binding = helper.find(this.bindings(), function(binding) {
-      return helper.equal(binding.targetUnit, targetUnit);
-    });
+    var binding = this.bindingCollection.filter({
+      targetUnit: targetUnit,
+    })[0];
     return (binding ? binding.sourceUnit : null);
   };
 

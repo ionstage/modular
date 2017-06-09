@@ -36,6 +36,20 @@
     data.delete(binding);
   };
 
+  BindingCollection.prototype.filter = function(props) {
+    var bindings = [];
+    var keys = Object.keys(props);
+    this.data.forEach(function(binding) {
+      var matched = keys.every(function(key) {
+        return helper.equal(binding[key], props[key]);
+      });
+      if (matched) {
+        bindings.push(binding);
+      }
+    });
+    return bindings;
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = BindingCollection;
   } else {

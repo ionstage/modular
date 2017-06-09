@@ -175,6 +175,12 @@
       });
     };
 
+    Set.prototype.forEach = function(callback) {
+      this.data.forEach(function(item) {
+        callback(item, item, this);
+      }.bind(this));
+    };
+
     Set.prototype.toArray = function() {
       return this.data.slice();
     };
