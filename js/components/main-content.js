@@ -365,7 +365,7 @@
   };
 
   MainContent.prototype.disconnectAll = function(unit) {
-    this.bindings().forEach(function(binding) {
+    this.bindingCollection.forEach(function(binding) {
       if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit)) {
         this.disconnect(binding.sourceUnit, binding.targetUnit);
       }

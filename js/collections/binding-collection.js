@@ -36,6 +36,13 @@
     data.delete(binding);
   };
 
+  BindingCollection.prototype.forEach = function(callback) {
+    // keep original bindings for calling remove in loop
+    this.map(helper.identity).forEach(function(binding) {
+      callback(binding);
+    });
+  };
+
   BindingCollection.prototype.map = function(callback) {
     var array = [];
     this.data.forEach(function(binding) {
