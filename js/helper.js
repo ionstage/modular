@@ -185,10 +185,6 @@
       }.bind(this));
     };
 
-    Set.prototype.toArray = function() {
-      return this.data.slice();
-    };
-
     return Set;
   })();
 
