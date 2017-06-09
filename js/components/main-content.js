@@ -157,7 +157,7 @@
   };
 
   MainContent.prototype.toConnectionsData = function(modules) {
-    return this.bindings().map(function(binding) {
+    return this.bindingCollection.map(function(binding) {
       var sourceUnit = binding.sourceUnit;
       var targetUnit = binding.targetUnit;
       var sourceModuleIndex = helper.findIndex(modules, function(module) {

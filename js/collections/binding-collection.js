@@ -36,6 +36,14 @@
     data.delete(binding);
   };
 
+  BindingCollection.prototype.map = function(callback) {
+    var array = [];
+    this.data.forEach(function(binding) {
+      array.push(callback(binding));
+    });
+    return array;
+  };
+
   BindingCollection.prototype.filter = function(props) {
     var bindings = [];
     var keys = Object.keys(props);
