@@ -16,6 +16,7 @@
     this.zIndex = this.prop('auto');
     this.deletable = this.prop(true);
     this.ports = this.prop([]);
+    this.toggledPorts = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
     this.eventCircuitElement = this.prop(null);
@@ -29,7 +30,6 @@
       callback: Module.prototype.onmessage.bind(this),
     });
 
-    this.toggledPortSet = new helper.Set();
     this.draggable = null;
 
     this.onchange = Module.prototype.onchange.bind(this);
@@ -310,16 +310,15 @@
     this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
   };
 
-  Module.prototype.toggledPorts = function() {
-    return this.toggledPortSet.toArray();
-  };
-
   Module.prototype.clearToggledPorts = function() {
-    this.toggledPortSet.clear();
+    this.toggledPorts([]);
   };
 
   Module.prototype.markToggled = function(port) {
-    this.toggledPortSet.add(port);
+    var toggledPorts = this.toggledPorts();
+    if (toggledPorts.indexOf(port) === -1) {
+      toggledPorts.push(port);
+    }
   };
 
   Module.prototype.resetPortSelect = function() {
