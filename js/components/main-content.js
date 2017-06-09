@@ -110,10 +110,6 @@
     return this.lockedWires(LockRelation.TYPE_SOCKET, targetUnit)[0];
   };
 
-  MainContent.prototype.bindings = function() {
-    return this.bindingCollection.toArray();
-  };
-
   MainContent.prototype.connectedTargetUnits = function(sourceUnit) {
     return this.bindingCollection.filter({
       sourceUnit: sourceUnit,

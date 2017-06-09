@@ -8,10 +8,6 @@
     this.data = new helper.Set();
   };
 
-  BindingCollection.prototype.toArray = function() {
-    return this.data.toArray();
-  };
-
   BindingCollection.prototype.add = function(props) {
     var data = this.data;
     var binding = new Binding(props);
