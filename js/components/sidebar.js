@@ -31,7 +31,7 @@
     this.moduleDragStarter = props.moduleDragStarter;
     this.moduleDragEnder = props.moduleDragEnder;
 
-    this.header.relations().push(this.relation);
+    this.relation.set();
   });
 
   Sidebar.prototype.headerElement = function() {

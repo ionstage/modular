@@ -16,6 +16,14 @@
     }.bind(this)));
   };
 
+  LockRelation.prototype.set = function() {
+    this.unit.addRelation(this);
+  };
+
+  LockRelation.prototype.unset = function() {
+    this.unit.removeRelation(this);
+  };
+
   LockRelation.prototype.unitPosition = function() {
     return this.unit[this.type.positionMethodName]();
   };

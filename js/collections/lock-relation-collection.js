@@ -16,7 +16,7 @@
       return;
     }
 
-    props.unit.addRelation(relation);
+    relation.set();
     data.set(relation, relation);
   };
 
@@ -28,7 +28,7 @@
       return;
     }
 
-    props.unit.removeRelation(relation);
+    relation.unset();
     data.delete(relation);
   };
 

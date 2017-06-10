@@ -10,6 +10,10 @@
     this.moduleEntrySearcher = props.moduleEntrySearcher;
   }, jCore.Relation);
 
+  SidebarRelation.prototype.set = function() {
+    this.header.relations().push(this);
+  };
+
   SidebarRelation.prototype.moduleEntries = function() {
     return this.moduleEntrySearcher(this.header.searchText());
   };
