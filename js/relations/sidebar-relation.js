@@ -11,7 +11,7 @@
   }, jCore.Relation);
 
   SidebarRelation.prototype.set = function() {
-    this.header.relations().push(this);
+    this.header.addRelation(this);
   };
 
   SidebarRelation.prototype.moduleEntries = function() {
