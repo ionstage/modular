@@ -178,10 +178,14 @@
       return this.renderer();
     };
 
-    Clone.prototype.onredraw = function() {
+    Clone.prototype.redrawPosition = function() {
       this.redrawProp('x', 'y', function(x, y) {
         dom.translate(this.element(), x, y);
       });
+    };
+
+    Clone.prototype.onredraw = function() {
+      this.redrawPosition();
     };
 
     return Clone;
