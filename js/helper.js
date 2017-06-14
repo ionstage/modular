@@ -85,8 +85,8 @@
 
   helper.dig = function() {
     var args = Array.prototype.slice.call(arguments);
-    return args.reduce(function(prev, curr) {
-      return (typeof prev === 'object') ? prev[curr] : null;
+    return args.reduce(function(obj, key) {
+      return (typeof obj === 'object') ? obj[key] : null;
     });
   };
 
