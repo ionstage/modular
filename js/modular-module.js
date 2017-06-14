@@ -3,6 +3,7 @@
 
   window.modular = {
     Module: window.parent.app.ModularModule,
+    exports: null,
   };
 
   window.addEventListener('load', function() {
