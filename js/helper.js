@@ -69,9 +69,6 @@
 
   helper.pick = function(obj, keys) {
     var ret = {};
-    if (!obj) {
-      return ret;
-    }
     keys.forEach(function(key) {
       if (key in obj) {
         ret[key] = obj[key];
