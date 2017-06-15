@@ -60,12 +60,9 @@
     return ret;
   };
 
-  helper.extend = function(obj) {
-    for (var i = 1, len = arguments.length; i < len; i++) {
-      var src = arguments[i];
-      for (var key in src) {
-        obj[key] = src[key];
-      }
+  helper.extend = function(obj, src) {
+    for (var key in src) {
+      obj[key] = src[key];
     }
     return obj;
   };
