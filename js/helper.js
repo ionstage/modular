@@ -164,10 +164,6 @@
       }
     };
 
-    Set.prototype.clear = function() {
-      this.data = [];
-    };
-
     Set.prototype.has = function(item) {
       return this.data.some(function(dataItem) {
         return helper.equal(dataItem, item);
