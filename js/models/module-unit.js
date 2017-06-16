@@ -9,9 +9,7 @@
   };
 
   ModuleUnit.prototype.equal = function(other) {
-    return (!!other && Object.keys(this).every(function(key) {
-      return helper.equal(this[key], other[key]);
-    }.bind(this)));
+    return helper.deepEqual(this, other);
   };
 
   ModuleUnit.prototype.contains = function(component) {

@@ -46,6 +46,12 @@
     return (a != null && typeof a.equal === 'function') ? a.equal(b) : (a === b);
   };
 
+  helper.deepEqual = function(a, b) {
+    return (a === b) || (a != null && b != null && Object.keys(a).every(function(key) {
+      return helper.equal(a[key], b[key]);
+    }));
+  };
+
   helper.values = function(obj) {
     return Object.keys(obj).map(function(key) {
       return obj[key];
