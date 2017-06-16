@@ -30,9 +30,8 @@
   };
 
   dom.remove = function(el) {
-    var parentNode = el.parentNode;
-    if (parentNode) {
-      parentNode.removeChild(el);
+    if (el.parentNode) {
+      el.parentNode.removeChild(el);
     }
   };
 
