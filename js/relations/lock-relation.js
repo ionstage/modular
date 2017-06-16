@@ -29,10 +29,8 @@
   };
 
   LockRelation.prototype.wirePosition = function(position) {
-    var wire = this.wire;
-    var positionType = this.type.positionType;
-    wire[positionType + 'X'](position.x);
-    wire[positionType + 'Y'](position.y);
+    this.wire[this.type.positionNameX](position.x);
+    this.wire[this.type.positionNameY](position.y);
   };
 
   LockRelation.prototype.update = function() {
@@ -41,12 +39,14 @@
 
   LockRelation.TYPE_PLUG = {
     positionMethodName: 'portPlugPosition',
-    positionType: 'source',
+    positionNameX: 'sourceX',
+    positionNameY: 'sourceY',
   };
 
   LockRelation.TYPE_SOCKET = {
     positionMethodName: 'portSocketPosition',
-    positionType: 'target',
+    positionNameX: 'targetX',
+    positionNameY: 'targetY',
   };
 
   if (typeof module !== 'undefined' && module.exports) {
