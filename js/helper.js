@@ -47,9 +47,19 @@
   };
 
   helper.deepEqual = function(a, b) {
-    return (a === b) || (a != null && b != null && Object.keys(a).every(function(key) {
+    if (a === b) {
+      return true;
+    }
+    if (a == null || b == null) {
+      return false;
+    }
+    var keys = Object.keys(a);
+    if (keys.length !== Object.keys(b).length) {
+      return false;
+    }
+    return keys.every(function(key) {
       return helper.equal(a[key], b[key]);
-    }));
+    });
   };
 
   helper.values = function(obj) {
