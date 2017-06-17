@@ -466,13 +466,13 @@
   };
 
   dom.urlQuery = function(url) {
-    return url.search.substring(1).split('&').reduce(function(prev, curr) {
-      var items = curr.split('=');
+    return url.search.substring(1).split('&').reduce(function(obj, param) {
+      var items = param.split('=');
       var key = items[0];
       if (key) {
-        prev[decodeURIComponent(key)] = decodeURIComponent(items[1] || '');
+        obj[decodeURIComponent(key)] = decodeURIComponent(items[1] || '');
       }
-      return prev;
+      return obj;
     }, {});
   };
 
