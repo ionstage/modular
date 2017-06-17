@@ -235,7 +235,7 @@
   };
 
   dom.ready = function(listener) {
-    document.addEventListener('DOMContentLoaded', listener);
+    document.addEventListener('DOMContentLoaded', listener, false);
   };
 
   dom.transition = function(el, callback) {
