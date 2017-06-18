@@ -51,10 +51,7 @@
     var bindings = [];
     var keys = Object.keys(props);
     this.data.forEach(function(binding) {
-      var matched = keys.every(function(key) {
-        return helper.equal(binding[key], props[key]);
-      });
-      if (matched) {
+      if (helper.deepEqual(helper.pick(binding, keys), props)) {
         bindings.push(binding);
       }
     });

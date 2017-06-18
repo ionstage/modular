@@ -36,10 +36,7 @@
     var relations = [];
     var keys = Object.keys(props);
     this.data.forEach(function(relation) {
-      var matched = keys.every(function(key) {
-        return helper.equal(relation[key], props[key]);
-      });
-      if (matched) {
+      if (helper.deepEqual(helper.pick(relation, keys), props)) {
         relations.push(relation);
       }
     });
