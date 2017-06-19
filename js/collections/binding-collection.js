@@ -5,57 +5,50 @@
   var Binding = app.Binding || require('../models/binding.js');
 
   var BindingCollection = function() {
-    this.data = new helper.Set();
+    this.data = [];
   };
 
   BindingCollection.prototype.add = function(props) {
-    var data = this.data;
-    var binding = new Binding(props);
-
-    if (data.has(binding)) {
+    if (this.lastIndexOf(props) !== -1) {
       return;
     }
 
+    var binding = new Binding(props);
     binding.bind();
-    data.add(binding);
+    this.data.push(binding);
   };
 
   BindingCollection.prototype.remove = function(props) {
-    var data = this.data;
-    var binding = new Binding(props);
-
-    if (!data.has(binding)) {
+    var index = this.lastIndexOf(props);
+    if (index === -1) {
       return;
     }
 
+    var binding = this.data[index];
     binding.unbind();
-    data.delete(binding);
+    this.data.splice(index, 1);
+  };
+
+  BindingCollection.prototype.lastIndexOf = function(props) {
+    return helper.findLastIndex(this.data, function(binding) {
+      return helper.deepEqual(helper.clone(binding), props);
+    });
   };
 
   BindingCollection.prototype.forEach = function(callback) {
     // keep original bindings for calling remove in loop
-    this.map(helper.identity).forEach(function(binding) {
-      callback(binding);
-    });
+    this.data.slice().forEach(callback, this);
   };
 
   BindingCollection.prototype.map = function(callback) {
-    var array = [];
-    this.data.forEach(function(binding) {
-      array.push(callback(binding));
-    });
-    return array;
+    return this.data.map(callback, this);
   };
 
   BindingCollection.prototype.filter = function(props) {
-    var bindings = [];
     var keys = Object.keys(props);
-    this.data.forEach(function(binding) {
-      if (helper.deepEqual(helper.pick(binding, keys), props)) {
-        bindings.push(binding);
-      }
+    return this.data.filter(function(binding) {
+      return helper.deepEqual(helper.pick(binding, keys), props);
     });
-    return bindings;
   };
 
   if (typeof module !== 'undefined' && module.exports) {
