@@ -38,10 +38,6 @@
     }.bind(this));
   };
 
-  SidebarHeader.prototype.addRelation = function(relation) {
-    this.relations().push(relation);
-  };
-
   SidebarHeader.prototype.redraw = function() { /* ignore default */ };
 
   if (typeof module !== 'undefined' && module.exports) {

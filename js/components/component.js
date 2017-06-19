@@ -35,6 +35,14 @@
     this.cache = {};
   };
 
+  Component.prototype.addRelation = function(relation) {
+    this.relations().push(relation);
+  };
+
+  Component.prototype.removeRelation = function(relation) {
+    helper.remove(this.relations(), relation);
+  };
+
   Component.prototype.redrawProp = function() {
     var args = Array.prototype.slice.call(arguments);
     var callback = args.pop();

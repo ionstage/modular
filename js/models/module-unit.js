@@ -70,13 +70,13 @@
   };
 
   ModuleUnit.prototype.addRelation = function(relation) {
-    this.module.relations().push(relation);
-    this.port.relations().push(relation);
+    this.module.addRelation(relation);
+    this.port.addRelation(relation);
   };
 
   ModuleUnit.prototype.removeRelation = function(relation) {
-    helper.remove(this.module.relations(), relation);
-    helper.remove(this.port.relations(), relation);
+    this.module.removeRelation(relation);
+    this.port.removeRelation(relation);
   };
 
   ModuleUnit.fromModuleAndPortName = function(module, portName) {
