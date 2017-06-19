@@ -70,9 +70,9 @@
 
   helper.clone = function(obj) {
     var ret = {};
-    for (var key in obj) {
+    Object.keys(obj).forEach(function(key) {
       ret[key] = obj[key];
-    }
+    });
     return ret;
   };
 
