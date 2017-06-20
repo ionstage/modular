@@ -9,10 +9,6 @@
     this.targetUnit = props.targetUnit;
   };
 
-  Binding.prototype.equal = function(other) {
-    return helper.deepEqual(this, other);
-  };
-
   Binding.prototype.source = function() {
     return this.sourceUnit.circuitElementMember();
   };
