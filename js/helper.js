@@ -50,8 +50,8 @@
     if (a === b) {
       return true;
     }
-    if (a == null || b == null) {
-      return false;
+    if (a == null || b == null || typeof a !== 'object' || typeof b !== 'object') {
+      return (a === b);
     }
     var keys = Object.keys(a);
     if (keys.length !== Object.keys(b).length) {
