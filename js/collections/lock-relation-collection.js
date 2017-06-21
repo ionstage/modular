@@ -5,42 +5,41 @@
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
 
   var LockRelationCollection = function() {
-    this.data = new helper.Map();
+    this.data = [];
   };
 
   LockRelationCollection.prototype.add = function(props) {
-    var data = this.data;
-    var relation = new LockRelation(props);
-
-    if (data.has(relation)) {
+    if (this.lastIndexOf(props) !== -1) {
       return;
     }
 
+    var relation = new LockRelation(props);
     relation.set();
-    data.set(relation, relation);
+    this.data.push(relation);
   };
 
   LockRelationCollection.prototype.remove = function(props) {
-    var data = this.data;
-    var relation = data.get(new LockRelation(props));
-
-    if (!relation) {
+    var index = this.lastIndexOf(props);
+    if (index === -1) {
       return;
     }
 
+    var relation = this.data[index];
     relation.unset();
-    data.delete(relation);
+    this.data.splice(index, 1);
+  };
+
+  LockRelationCollection.prototype.lastIndexOf = function(props) {
+    return helper.findLastIndex(this.data, function(relation) {
+      return helper.deepEqual(helper.clone(relation), props);
+    });
   };
 
   LockRelationCollection.prototype.filter = function(props) {
-    var relations = [];
     var keys = Object.keys(props);
-    this.data.forEach(function(relation) {
-      if (helper.deepEqual(helper.pick(relation, keys), props)) {
-        relations.push(relation);
-      }
+    return this.data.filter(function(relation) {
+      return helper.deepEqual(helper.pick(relation, keys), props);
     });
-    return relations;
   };
 
   if (typeof module !== 'undefined' && module.exports) {
