@@ -10,10 +10,6 @@
     this.wire = props.wire;
   }, jCore.Relation);
 
-  LockRelation.prototype.equal = function(other) {
-    return helper.deepEqual(this, other);
-  };
-
   LockRelation.prototype.set = function() {
     this.unit.addRelation(this);
   };
