@@ -58,7 +58,7 @@
       return false;
     }
     return keys.every(function(key) {
-      return helper.equal(a[key], b[key]);
+      return helper.deepEqual(a[key], b[key]);
     });
   };
 
