@@ -362,7 +362,7 @@
 
   MainContent.prototype.disconnectAll = function(unit) {
     this.bindingCollection.forEach(function(binding) {
-      if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit)) {
+      if (helper.deepEqual(binding.sourceUnit, unit) || helper.deepEqual(binding.targetUnit, unit)) {
         this.disconnect(binding.sourceUnit, binding.targetUnit);
       }
     }.bind(this));
@@ -520,7 +520,7 @@
     var currentTargetUnit = context.targetUnit;
     var unit = this.unitFromSocketPosition(x, y);
 
-    if (unit && helper.equal(unit, currentTargetUnit)) {
+    if (unit && helper.deepEqual(unit, currentTargetUnit)) {
       // fix the target position of the wire
       return;
     }

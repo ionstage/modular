@@ -8,10 +8,6 @@
     this.port = props.port;
   };
 
-  ModuleUnit.prototype.equal = function(other) {
-    return helper.deepEqual(this, other);
-  };
-
   ModuleUnit.prototype.contains = function(component) {
     return (this.module === component || this.port === component);
   };
