@@ -35,10 +35,10 @@
   SidebarModule.prototype.position = function() {
     var rect = dom.rect(this.element());
     var bodyRect = dom.rect(dom.body());
-    return new dom.Point({
+    return {
       x: rect.left - bodyRect.left,
       y: rect.top - bodyRect.top,
-    });
+    };
   };
 
   SidebarModule.prototype.registerDragListener = function() {

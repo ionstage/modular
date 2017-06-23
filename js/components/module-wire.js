@@ -22,10 +22,10 @@
   };
 
   ModuleWire.prototype.handlePosition = function() {
-    return new dom.Point({
+    return {
       x: this.targetX() - ModuleWire.HANDLE_WIDTH / 2,
       y: this.targetY() - ModuleWire.HANDLE_WIDTH / 2,
-    });
+    };
   };
 
   ModuleWire.prototype.render = function() {

@@ -55,7 +55,7 @@
 
   MainContent.prototype.clientPosition = function() {
     var rect = dom.rect(this.element());
-    return new dom.Point({ x: rect.left, y: rect.top });
+    return { x: rect.left, y: rect.top };
   };
 
   MainContent.prototype.scrollLeft = function() {
@@ -69,14 +69,14 @@
   MainContent.prototype.localPoint = function(point) {
     var clientPosition = this.clientPosition();
     var bodyRect = dom.rect(dom.body());
-    return new dom.Point({
+    return {
       x: point.x - clientPosition.x + this.scrollLeft() + bodyRect.left,
       y: point.y - clientPosition.y + this.scrollTop() + bodyRect.top,
-    });
+    };
   };
 
   MainContent.prototype.diagonalPoint = function() {
-    var point = new dom.Point({ x: 0, y: 0 });
+    var point = { x: 0, y: 0 };
     this.modules().forEach(function(module) {
       var diagonalPoint = module.diagonalPoint();
       point.x = Math.max(diagonalPoint.x, point.x);
@@ -87,10 +87,10 @@
 
   MainContent.prototype.retainerPosition = function() {
     var diagonalPoint = this.diagonalPoint();
-    return new dom.Point({
+    return {
       x: diagonalPoint.x - 1 + MainContent.RETAINER_PADDING,
       y: diagonalPoint.y - 1 + MainContent.RETAINER_PADDING,
-    });
+    };
   };
 
   MainContent.prototype.wireHandleContainerZIndex = function() {

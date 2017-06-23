@@ -287,37 +287,24 @@
     }
   };
 
-  dom.Point = (function() {
-    var Point = function(props) {
-      this.x = props.x;
-      this.y = props.y;
-    };
-
-    Point.prototype.equal = function(other) {
-      return helper.equal(this, other);
-    };
-
-    return Point;
-  })();
-
   dom.pagePoint = function(event, offset) {
     if (dom.supportsTouch()) {
       event = event.changedTouches[0];
     }
-    return new dom.Point({
+    return {
       x: event.pageX - (offset ? offset.x : 0),
       y: event.pageY - (offset ? offset.y : 0),
-    });
+    };
   };
 
   dom.clientPoint = function(event, offset) {
     if (dom.supportsTouch()) {
       event = event.changedTouches[0];
     }
-    return new dom.Point({
+    return {
       x: event.clientX - (offset ? offset.x : 0),
       y: event.clientY - (offset ? offset.y : 0),
-    });
+    };
   };
 
   dom.identifier = function(event) {
