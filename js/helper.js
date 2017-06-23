@@ -43,10 +43,6 @@
   };
 
   helper.equal = function(a, b) {
-    return (a != null && typeof a.equal === 'function') ? a.equal(b) : (a === b);
-  };
-
-  helper.deepEqual = function(a, b) {
     if (a === b) {
       return true;
     }
@@ -58,7 +54,7 @@
       return false;
     }
     return keys.every(function(key) {
-      return helper.deepEqual(a[key], b[key]);
+      return helper.equal(a[key], b[key]);
     });
   };
 

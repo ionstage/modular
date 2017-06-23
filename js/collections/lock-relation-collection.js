@@ -31,14 +31,14 @@
 
   LockRelationCollection.prototype.lastIndexOf = function(props) {
     return helper.findLastIndex(this.data, function(relation) {
-      return helper.deepEqual(helper.clone(relation), props);
+      return helper.equal(helper.clone(relation), props);
     });
   };
 
   LockRelationCollection.prototype.filter = function(props) {
     var keys = Object.keys(props);
     return this.data.filter(function(relation) {
-      return helper.deepEqual(helper.pick(relation, keys), props);
+      return helper.equal(helper.pick(relation, keys), props);
     });
   };
 

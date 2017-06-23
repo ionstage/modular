@@ -294,7 +294,7 @@
     };
 
     Point.prototype.equal = function(other) {
-      return helper.deepEqual(this, other);
+      return helper.equal(this, other);
     };
 
     return Point;

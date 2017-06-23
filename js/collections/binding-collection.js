@@ -31,7 +31,7 @@
 
   BindingCollection.prototype.lastIndexOf = function(props) {
     return helper.findLastIndex(this.data, function(binding) {
-      return helper.deepEqual(helper.clone(binding), props);
+      return helper.equal(helper.clone(binding), props);
     });
   };
 
@@ -47,7 +47,7 @@
   BindingCollection.prototype.filter = function(props) {
     var keys = Object.keys(props);
     return this.data.filter(function(binding) {
-      return helper.deepEqual(helper.pick(binding, keys), props);
+      return helper.equal(helper.pick(binding, keys), props);
     });
   };
 
