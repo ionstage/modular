@@ -37,8 +37,7 @@
     return dom.child(this.element(), 1);
   };
 
-  Main.prototype.loadJSON = function(text) {
-    var data = JSON.parse(text);
+  Main.prototype.loadContent = function(data) {
     this.content.clear();
     return this.content.load(data);
   };
@@ -48,7 +47,7 @@
       type: 'GET',
       url: url,
     }).then(function(text) {
-      return this.loadJSON(text);
+      return this.loadContent(JSON.parse(text));
     }.bind(this));
   };
 
@@ -68,7 +67,7 @@
   Main.prototype.fileLoader = function(file) {
     this.loadStarter();
     dom.readFile(file).then(function(text) {
-      return this.loadJSON(text);
+      return this.loadContent(JSON.parse(text));
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
