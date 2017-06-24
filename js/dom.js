@@ -398,12 +398,12 @@
     return Draggable;
   })();
 
-  dom.load = function(file) {
+  dom.readFile = function(file) {
     return new Promise(function(resolve, reject) {
       var reader = new FileReader();
 
       var onfailed = function() {
-        reject(new Error('Failed to load file: ' + file.name));
+        reject(new Error('Failed to read file: ' + file.name));
       };
 
       reader.onload = function(event) {

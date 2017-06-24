@@ -67,7 +67,7 @@
 
   Main.prototype.fileLoader = function(file) {
     this.loadStarter();
-    dom.load(file).then(function(text) {
+    dom.readFile(file).then(function(text) {
       return this.loadJSON(text);
     }.bind(this)).catch(function(e) {
       alert(e);
