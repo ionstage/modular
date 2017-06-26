@@ -444,6 +444,15 @@
     });
   };
 
+  dom.loadJSON = function(url) {
+    return dom.ajax({
+      type: 'GET',
+      url: url,
+    }).then(function(text) {
+      return JSON.parse(text);
+    });
+  };
+
   dom.location = function() {
     return document.location;
   };

@@ -30,20 +30,12 @@
   };
 
   ModuleEntryCollection.prototype.loadPackageNames = function() {
-    return dom.ajax({
-      type: 'GET',
-      url: this.packageNamesUrl(),
-    }).then(function(text) {
-      return JSON.parse(text);
-    });
+    return dom.loadJSON(this.packageNamesUrl());
   };
 
   ModuleEntryCollection.prototype.loadModuleEntries = function(packageName) {
-    return dom.ajax({
-      type: 'GET',
-      url: this.moduleEntriesUrl(packageName),
-    }).then(function(text) {
-      return JSON.parse(text).map(function(props) {
+    return dom.loadJSON(this.moduleEntriesUrl(packageName)).then(function(data) {
+      return data.map(function(props) {
         return new ModuleEntry(helper.extend(props, { packageName: packageName }));
       });
     });

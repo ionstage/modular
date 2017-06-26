@@ -43,11 +43,8 @@
   };
 
   Main.prototype.loadUrl = function(url) {
-    return dom.ajax({
-      type: 'GET',
-      url: url,
-    }).then(function(text) {
-      return this.loadContent(JSON.parse(text));
+    return dom.loadJSON(url).then(function(data) {
+      return this.loadContent(data);
     }.bind(this));
   };
 
