@@ -7,7 +7,6 @@
 
   var CircuitElement = function(members) {
     this.memberCollection = new CircuitElement.MemberCollection(members);
-
     return this.wrapper();
   };
 

@@ -226,7 +226,6 @@
 
   Module.prototype.bindEventCircuitElement = function() {
     var eventCircuitElement = this.eventCircuitElement();
-
     if (!eventCircuitElement) {
       return;
     }
@@ -239,7 +238,6 @@
 
   Module.prototype.unbindEventCircuitElement = function() {
     var eventCircuitElement = this.eventCircuitElement();
-
     if (!eventCircuitElement) {
       return;
     }
