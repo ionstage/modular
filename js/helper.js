@@ -69,9 +69,9 @@
   };
 
   helper.extend = function(obj, src) {
-    for (var key in src) {
+    Object.keys(src).forEach(function(key) {
       obj[key] = src[key];
-    }
+    });
     return obj;
   };
 
