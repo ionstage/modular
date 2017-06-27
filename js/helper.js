@@ -60,19 +60,15 @@
     });
   };
 
-  helper.clone = function(obj) {
-    var ret = {};
-    Object.keys(obj).forEach(function(key) {
-      ret[key] = obj[key];
-    });
-    return ret;
-  };
-
   helper.extend = function(obj, src) {
     Object.keys(src).forEach(function(key) {
       obj[key] = src[key];
     });
     return obj;
+  };
+
+  helper.clone = function(obj) {
+    return helper.extend({}, obj);
   };
 
   helper.pick = function(obj, keys) {
