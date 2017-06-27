@@ -5,14 +5,10 @@
 
   helper.randomString = function(len) {
     var s = [];
-    for (var i = 0, n = Math.floor(len / 7); i < n; i++) {
+    for (var i = 0, n = Math.ceil(len / 7); i < n; i++) {
       s.push(Math.random().toString(36).slice(-7));
     }
-    var rem = len % 7;
-    if (rem) {
-      s.push(Math.random().toString(36).slice(-rem));
-    }
-    return s.join('');
+    return s.join('').slice(-len);
   };
 
   helper.encodePath = function(str) {
