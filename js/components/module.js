@@ -325,25 +325,12 @@
     }.bind(this));
   };
 
-  Module.prototype.exportModularModule = (function() {
-    var ModularModule = function(member) {
-      return new CircuitElement(member);
-    };
-    return function() {
-      var globalApp = dom.global().app;
-      if (globalApp.ModularModule !== ModularModule) {
-        globalApp.ModularModule = ModularModule;
-      }
-    };
-  })();
-
   Module.prototype.loadComponent = function() {
     this.isLoading(true);
     return dom.ajax({
       type: 'GET',
       url: this.url(),
     }).then(function(text) {
-      this.exportModularModule();
       this.setComponentContent(text, this.messageData());
       return Promise.race([
         new Promise(this.registerMessageListener.bind(this)),
