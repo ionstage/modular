@@ -72,13 +72,12 @@
   };
 
   helper.pick = function(obj, keys) {
-    var ret = {};
-    keys.forEach(function(key) {
-      if (key in obj) {
+    return keys.reduce(function(ret, key) {
+      if (obj.hasOwnProperty(key)) {
         ret[key] = obj[key];
       }
-    });
-    return ret;
+      return ret;
+    }, {});
   };
 
   helper.dig = function() {
