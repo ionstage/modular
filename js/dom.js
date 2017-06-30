@@ -108,12 +108,6 @@
     if (typeof value === 'undefined') {
       return el.dataset[key];
     }
-    if (value === null) {
-      if (key in el.dataset) {
-        delete el.dataset[key];
-      }
-      return;
-    }
     el.dataset[key] = value;
   };
 
