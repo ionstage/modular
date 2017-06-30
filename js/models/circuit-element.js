@@ -85,7 +85,7 @@
     };
 
     Member.prototype.wrapper = function(props) {
-      var wrapper = new Wrapper(Member.prototype.call.bind(this), this);
+      var wrapper = new Wrapper(this, Member.prototype.call.bind(this));
       wrapper.props = helper.clone.bind(null, props);
       return wrapper;
     };
