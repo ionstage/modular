@@ -10,10 +10,6 @@
   };
 
   dom.el = function(selector) {
-    if (selector.charAt(0) === '<') {
-      selector = selector.match(/<(.+)>/)[1];
-      return document.createElement(selector);
-    }
     return document.querySelector(selector);
   };
 
