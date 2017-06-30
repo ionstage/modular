@@ -26,7 +26,7 @@
 
     var binding = this.data[index];
     binding.unbind();
-    this.data.splice(index, 1);
+    helper.removeAt(this.data, index);
   };
 
   BindingCollection.prototype.lastIndexOf = function(props) {

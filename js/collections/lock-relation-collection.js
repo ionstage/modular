@@ -26,7 +26,7 @@
 
     var relation = this.data[index];
     relation.unset();
-    this.data.splice(index, 1);
+    helper.removeAt(this.data, index);
   };
 
   LockRelationCollection.prototype.lastIndexOf = function(props) {
