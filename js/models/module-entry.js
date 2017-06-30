@@ -2,16 +2,12 @@
   'use strict';
 
   var ModuleEntry = function(props) {
-    this.packageName = props.packageName || '';
+    this.name = props.name;
     this.label = props.label || '';
     this.description = props.description || '';
     this.src = props.src || '';
     this.visiblePortNames = props.visiblePortNames || [];
     this.tags = props.tags || [];
-  };
-
-  ModuleEntry.prototype.key = function() {
-    return this.packageName + '/' + this.src;
   };
 
   ModuleEntry.prototype.keywordScore = function(keyword) {

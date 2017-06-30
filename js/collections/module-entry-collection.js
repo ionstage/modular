@@ -22,7 +22,7 @@
       return Promise.all(packageNames.map(function(packageName) {
         return this.loadModuleEntries(packageName).then(function(moduleEntries) {
           moduleEntries.forEach(function(moduleEntry) {
-            this.data[moduleEntry.key()] = moduleEntry;
+            this.data[moduleEntry.name] = moduleEntry;
           }.bind(this));
         }.bind(this));
       }.bind(this)));
@@ -36,13 +36,14 @@
   ModuleEntryCollection.prototype.loadModuleEntries = function(packageName) {
     return dom.loadJSON(this.moduleEntriesUrl(packageName)).then(function(data) {
       return data.map(function(props) {
-        return new ModuleEntry(helper.extend(props, { packageName: packageName }));
+        var name = packageName + '/' + props.src;
+        return new ModuleEntry(helper.extend(props, { name: name }));
       });
     });
   };
 
-  ModuleEntryCollection.prototype.get = function(key) {
-    return this.data[key] || null;
+  ModuleEntryCollection.prototype.get = function(name) {
+    return this.data[name] || null;
   };
 
   ModuleEntryCollection.prototype.search = function(keyword) {

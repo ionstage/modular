@@ -65,7 +65,7 @@
       this.appendModule({
         title: moduleEntry.label,
         content: moduleEntry.description,
-        name: moduleEntry.key(),
+        name: moduleEntry.name,
       });
     }.bind(this));
   };
