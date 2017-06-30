@@ -110,19 +110,11 @@
   };
 
   helper.remove = function(array, item) {
-    var index = array.indexOf(item);
-    if (index === -1) {
-      return;
-    }
-    array.splice(index, 1);
+    helper.removeAt(array, array.indexOf(item));
   };
 
   helper.moveToBack = function(array, item) {
-    var index = array.indexOf(item);
-    if (index === -1) {
-      return;
-    }
-    array.splice(index, 1);
+    helper.remove(array, item);
     array.push(item);
   };
 

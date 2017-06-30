@@ -458,13 +458,7 @@
   };
 
   MainContent.prototype.deleter = function(module) {
-    var modules = this.modules();
-
-    if (modules.indexOf(module) === -1) {
-      return;
-    }
-
-    helper.remove(modules, module);
+    helper.remove(this.modules(), module);
     this.updateZIndex();
     this.updateWireHandleContainer();
   };
