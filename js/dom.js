@@ -31,28 +31,18 @@
     }
   };
 
-  dom.child = function(el, index) {
-    var len = arguments.length;
-    if (len === 2) {
-      return el.children[index];
-    }
-    for (var i = 1; i < len; i++) {
-      index = arguments[i];
-      el = el.children[index];
-    }
-    return el;
+  dom.child = function() {
+    var args = Array.prototype.slice.call(arguments);
+    return args.reduce(function(el, index) {
+      return ('children' in el) ? el.children[index] : null;
+    });
   };
 
-  dom.childNode = function(el, index) {
-    var len = arguments.length;
-    if (len === 2) {
-      return el.childNodes[index];
-    }
-    for (var i = 1; i < len; i++) {
-      index = arguments[i];
-      el = el.childNodes[index];
-    }
-    return el;
+  dom.childNode = function() {
+    var args = Array.prototype.slice.call(arguments);
+    return args.reduce(function(el, index) {
+      return ('childNodes' in el) ? el.childNodes[index] : null;
+    });
   };
 
   dom.parent = function(el) {
