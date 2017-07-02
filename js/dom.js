@@ -32,15 +32,13 @@
   };
 
   dom.child = function() {
-    var args = Array.prototype.slice.call(arguments);
-    return args.reduce(function(el, index) {
+    return helper.toArray(arguments).reduce(function(el, index) {
       return ('children' in el) ? el.children[index] : null;
     });
   };
 
   dom.childNode = function() {
-    var args = Array.prototype.slice.call(arguments);
-    return args.reduce(function(el, index) {
+    return helper.toArray(arguments).reduce(function(el, index) {
       return ('childNodes' in el) ? el.childNodes[index] : null;
     });
   };
@@ -184,8 +182,7 @@
   };
 
   dom.sort = function(el) {
-    var children = Array.prototype.slice.call(el.children);
-    helper.sortBy(children, 'textContent').forEach(function(child) {
+    helper.sortBy(helper.toArray(el.children), 'textContent').forEach(function(child) {
       dom.append(el, child);
     });
   };

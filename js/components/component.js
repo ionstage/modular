@@ -47,7 +47,7 @@
   };
 
   Component.prototype.redrawProp = function() {
-    var args = Array.prototype.slice.call(arguments);
+    var args = helper.toArray(arguments);
     var callback = args.pop();
 
     if (this.needsUpdate(args)) {

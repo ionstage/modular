@@ -54,6 +54,10 @@
     });
   };
 
+  helper.toArray = function(value) {
+    return Array.prototype.slice.call(value);
+  };
+
   helper.values = function(obj) {
     return Object.keys(obj).map(function(key) {
       return obj[key];
@@ -81,8 +85,7 @@
   };
 
   helper.dig = function() {
-    var args = Array.prototype.slice.call(arguments);
-    return args.reduce(function(obj, key) {
+    return helper.toArray(arguments).reduce(function(obj, key) {
       return (typeof obj === 'object') ? obj[key] : null;
     });
   };
