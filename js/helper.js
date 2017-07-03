@@ -149,6 +149,10 @@
     return (index !== -1 ? array[index] : null);
   };
 
+  helper.flatten = function(array) {
+    return Array.prototype.concat.apply([], array);
+  };
+
   helper.wrapper = function() {
     var Wrapper = function(self, wrapper) {
       return Object.defineProperty(wrapper, 'unwrap', {
