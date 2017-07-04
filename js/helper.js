@@ -50,7 +50,7 @@
       return false;
     }
     return keys.every(function(key) {
-      return helper.equal(a[key], b[key]);
+      return (b.hasOwnProperty(key) && helper.equal(a[key], b[key]));
     });
   };
 
