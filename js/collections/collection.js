@@ -35,7 +35,7 @@
   };
 
   Collection.prototype.forEach = function(callback) {
-    // keep original bindings for calling remove in loop
+    // keep original items for calling remove in loop
     this.data.slice().forEach(callback, this);
   };
 
