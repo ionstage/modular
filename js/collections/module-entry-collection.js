@@ -3,11 +3,10 @@
 
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Collection = app.Collection || require('./collection.js');
   var ModuleEntry = app.ModuleEntry || require('../models/module-entry.js');
 
-  var ModuleEntryCollection = function() {
-    this.data = [];
-  };
+  var ModuleEntryCollection = Collection.inherits();
 
   ModuleEntryCollection.prototype.packageNamesUrl = function() {
     return 'modular_modules/index.json';

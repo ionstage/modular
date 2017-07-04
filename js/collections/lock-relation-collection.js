@@ -1,45 +1,21 @@
 (function(app) {
   'use strict';
 
-  var helper = app.helper || require('../helper.js');
+  var Collection = app.Collection || require('./collection.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
 
-  var LockRelationCollection = function() {
-    this.data = [];
+  var LockRelationCollection = Collection.inherits();
+
+  LockRelationCollection.prototype.builder = function(props) {
+    return new LockRelation(props);
   };
 
-  LockRelationCollection.prototype.add = function(props) {
-    if (this.lastIndexOf(props) !== -1) {
-      return;
-    }
-
-    var relation = new LockRelation(props);
+  LockRelationCollection.prototype.onadd = function(relation) {
     relation.set();
-    this.data.push(relation);
   };
 
-  LockRelationCollection.prototype.remove = function(props) {
-    var index = this.lastIndexOf(props);
-    if (index === -1) {
-      return;
-    }
-
-    var relation = this.data[index];
+  LockRelationCollection.prototype.onremove = function(relation) {
     relation.unset();
-    helper.removeAt(this.data, index);
-  };
-
-  LockRelationCollection.prototype.lastIndexOf = function(props) {
-    return helper.findLastIndex(this.data, function(relation) {
-      return helper.equal(helper.clone(relation), props);
-    });
-  };
-
-  LockRelationCollection.prototype.filter = function(props) {
-    var keys = Object.keys(props);
-    return this.data.filter(function(relation) {
-      return helper.equal(helper.pick(relation, keys), props);
-    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {
