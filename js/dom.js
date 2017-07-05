@@ -269,20 +269,18 @@
     }
   };
 
-  dom.pagePoint = function(event, offset) {
-    var p = (dom.changedTouch(event) || event);
-    return {
-      x: p.pageX - (offset ? offset.x : 0),
-      y: p.pageY - (offset ? offset.y : 0),
-    };
+  dom.diffPoints = function(p0, p1) {
+    return { dx: p0.x - p1.x, dy: p0.y - p1.y };
   };
 
-  dom.clientPoint = function(event, offset) {
+  dom.pagePoint = function(event) {
     var p = (dom.changedTouch(event) || event);
-    return {
-      x: p.clientX - (offset ? offset.x : 0),
-      y: p.clientY - (offset ? offset.y : 0),
-    };
+    return { x: p.pageX, y: p.pageY };
+  };
+
+  dom.clientPoint = function(event) {
+    var p = (dom.changedTouch(event) || event);
+    return { x: p.clientX, y: p.clientY };
   };
 
   dom.identifier = function(event) {
@@ -327,11 +325,11 @@
       if (typeof onstart === 'function') {
         var element = this.element;
         var rect = dom.rect(element);
-        var p = dom.clientPoint(event, {
+        var d = dom.diffPoints(dom.clientPoint(event), {
           x: rect.left - dom.scrollLeft(element),
           y: rect.top - dom.scrollTop(element),
         });
-        onstart(p.x, p.y, event, this.context);
+        onstart(d.dx, d.dy, event, this.context);
       }
 
       dom.on(document, dom.eventType('move'), this.move);
@@ -347,8 +345,8 @@
 
       var onmove = this.onmove;
       if (typeof onmove === 'function') {
-        var d = dom.pagePoint(event, this.startingPoint);
-        onmove(d.x, d.y, event, this.context);
+        var d = dom.diffPoints(dom.pagePoint(event), this.startingPoint);
+        onmove(d.dx, d.dy, event, this.context);
       }
     };
 
@@ -364,8 +362,8 @@
 
       var onend = this.onend;
       if (typeof onend === 'function') {
-        var d = dom.pagePoint(event, this.startingPoint);
-        onend(d.x, d.y, event, this.context);
+        var d = dom.diffPoints(dom.pagePoint(event), this.startingPoint);
+        onend(d.dx, d.dy, event, this.context);
       }
 
       this.lock = false;
