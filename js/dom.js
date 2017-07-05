@@ -234,12 +234,13 @@
     return 'createTouch' in document;
   };
 
+  dom.changedTouch = function(event) {
+    return (dom.supportsTouch() ? helper.dig(event, 'changedTouches', 0) : null);
+  };
+
   dom.target = function(event) {
-    if (dom.supportsTouch() && 'changedTouches' in event) {
-      event = event.changedTouches[0];
-      return document.elementFromPoint(event.clientX, event.clientY);
-    }
-    return event.target;
+    var touch = dom.changedTouch(event);
+    return (touch ? document.elementFromPoint(touch.clientX, touch.clientY) : event.target);
   };
 
   dom.cancel = function(event) {
@@ -269,30 +270,24 @@
   };
 
   dom.pagePoint = function(event, offset) {
-    if (dom.supportsTouch()) {
-      event = event.changedTouches[0];
-    }
+    var p = (dom.changedTouch(event) || event);
     return {
-      x: event.pageX - (offset ? offset.x : 0),
-      y: event.pageY - (offset ? offset.y : 0),
+      x: p.pageX - (offset ? offset.x : 0),
+      y: p.pageY - (offset ? offset.y : 0),
     };
   };
 
   dom.clientPoint = function(event, offset) {
-    if (dom.supportsTouch()) {
-      event = event.changedTouches[0];
-    }
+    var p = (dom.changedTouch(event) || event);
     return {
-      x: event.clientX - (offset ? offset.x : 0),
-      y: event.clientY - (offset ? offset.y : 0),
+      x: p.clientX - (offset ? offset.x : 0),
+      y: p.clientY - (offset ? offset.y : 0),
     };
   };
 
   dom.identifier = function(event) {
-    if (dom.supportsTouch()) {
-      return event.changedTouches[0].identifier;
-    }
-    return null;
+    var touch = dom.changedTouch(event);
+    return (touch ? touch.identifier : null);
   };
 
   dom.Draggable = (function() {
