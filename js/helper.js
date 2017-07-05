@@ -58,12 +58,6 @@
     return Array.prototype.slice.call(value);
   };
 
-  helper.values = function(obj) {
-    return Object.keys(obj).map(function(key) {
-      return obj[key];
-    });
-  };
-
   helper.extend = function(obj, src) {
     Object.keys(src).forEach(function(key) {
       obj[key] = src[key];
