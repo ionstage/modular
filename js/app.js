@@ -9,12 +9,5 @@
 
   // export 'ModularModule'
   var global = dom.global();
-  if (!global.app) {
-    global.app = {};
-  }
-  Object.defineProperty(global.app, 'ModularModule', {
-    value: function(members) {
-      return new CircuitElement(members);
-    },
-  });
+  CircuitElement.ModularModule.export(global.app || (global.app = {}));
 })(this.app || (this.app = {}));

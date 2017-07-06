@@ -95,6 +95,18 @@
     return Member;
   })();
 
+  CircuitElement.ModularModule = (function() {
+    var ModularModule = function(members) {
+      return new CircuitElement(members);
+    };
+
+    ModularModule.export = function(obj) {
+      Object.defineProperty(obj, 'ModularModule', { value: ModularModule });
+    };
+
+    return ModularModule;
+  })();
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = CircuitElement;
   } else {
