@@ -54,7 +54,7 @@
       this.loadStarter();
       this.moduleEntryCollection.load().then(function() {
         this.sidebar.loadContent();
-        return this.loadDemo();
+        return this.loadDemo(this.currentDemoName());
       }.bind(this)).catch(function(e) {
         alert(e);
       }).then(function() {
@@ -63,15 +63,8 @@
     }.bind(this));
   };
 
-  Body.prototype.loadDemo = function() {
-    var name = this.currentDemoName();
-
-    if (!name) {
-      // no need to load demo
-      return Promise.resolve();
-    }
-
-    return this.main.loadUrl(this.demoUrl(name));
+  Body.prototype.loadDemo = function(name) {
+    return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
   };
 
   Body.prototype.redraw = function() {
