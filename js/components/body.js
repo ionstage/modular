@@ -35,6 +35,10 @@
     this.registerReadyListener();
   });
 
+  Body.prototype.isDragging = function() {
+    return (this.dragCount() > 0);
+  };
+
   Body.prototype.incrementDragCount = function() {
     this.dragCount(this.dragCount() + 1);
   };
@@ -60,13 +64,7 @@
   };
 
   Body.prototype.redraw = function() {
-    this.redrawDragCount();
-  };
-
-  Body.prototype.redrawDragCount = function() {
-    this.redrawProp('dragCount', function(dragCount) {
-      dom.toggleClass(this.element(), 'dragging', dragCount > 0);
-    });
+    this.redrawToggleClass('isDragging', 'dragging');
   };
 
   Body.prototype.onready = function() {
