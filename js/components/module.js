@@ -205,10 +205,9 @@
 
   Module.prototype.createPorts = function() {
     return this.circuitElement().getAll().map(function(member) {
-      var props = member.props();
-      return new ModulePort(helper.extend(props, {
+      return new ModulePort(helper.extend(helper.clone(member), {
         parentListElement: this.portListElement(),
-        parentOptGroupElement: this.portOptGroupElement(props.type),
+        parentOptGroupElement: this.portOptGroupElement(member.type),
       }));
     }.bind(this));
   };
@@ -232,7 +231,7 @@
 
     var circuitElement = this.circuitElement();
     eventCircuitElement.getAll().forEach(function(member) {
-      CircuitElement.bind(circuitElement.get(member.props().name), member);
+      CircuitElement.bind(circuitElement.get(member.name), member);
     });
   };
 
@@ -244,7 +243,7 @@
 
     var circuitElement = this.circuitElement();
     eventCircuitElement.getAll().forEach(function(member) {
-      CircuitElement.unbind(circuitElement.get(member.props().name), member);
+      CircuitElement.unbind(circuitElement.get(member.name), member);
     });
   };
 

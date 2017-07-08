@@ -70,7 +70,7 @@
   CircuitElement.Member = (function() {
     var Member = function(props) {
       this.callee = circuit[props.type](props.arg);
-      return this.wrapper(helper.extend(this.defaults(), helper.pick(props, Member.KEYS)));
+      return this.wrapper(helper.extend(this.defaults(), props));
     };
 
     Member.prototype.defaults = function() {
@@ -86,7 +86,12 @@
 
     Member.prototype.wrapper = function(props) {
       var wrapper = new Wrapper(this, Member.prototype.call.bind(this));
-      wrapper.props = helper.clone.bind(null, props);
+      Member.KEYS.forEach(function(key) {
+        Object.defineProperty(wrapper, key, {
+          value: props[key],
+          enumerable: true,
+        });
+      });
       return wrapper;
     };
 
