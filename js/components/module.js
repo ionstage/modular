@@ -213,7 +213,7 @@
   };
 
   Module.prototype.createEventCircuitElement = function() {
-    return new CircuitElement(this.eventPorts().map(function(port) {
+    return new CircuitElement.ModularModule(this.eventPorts().map(function(port) {
       return {
         label: port.label(),
         name: port.name(),

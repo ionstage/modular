@@ -6,16 +6,18 @@
   var Wrapper = helper.wrapper();
 
   var CircuitElement = function(members) {
-    this.memberCollection = new CircuitElement.MemberCollection(members);
+    this.members = members;
     return this.wrapper();
   };
 
-  CircuitElement.prototype.get = function(memberName) {
-    return this.memberCollection.get(memberName);
+  CircuitElement.prototype.get = function(name) {
+    return helper.findLast(this.members, function(member) {
+      return (member.name === name);
+    });
   };
 
   CircuitElement.prototype.getAll = function() {
-    return this.memberCollection.getAll();
+    return this.members.slice();
   };
 
   CircuitElement.prototype.wrapper = function() {
@@ -36,36 +38,6 @@
     var targetMember = targetWrapper.unwrap(Wrapper.KEY);
     circuit.unbind(sourceMember.callee, targetMember.callee);
   };
-
-  CircuitElement.MemberCollection = (function() {
-    var MemberCollection = function(members) {
-      var table = {};
-      var names = [];
-
-      members.slice().reverse().forEach(function(props) {
-        var name = props.name;
-        if (!(name in table)) {
-          table[name] = new CircuitElement.Member(props);
-          names.unshift(name);
-        }
-      });
-
-      this.table = table;
-      this.names = names;
-    };
-
-    MemberCollection.prototype.get = function(name) {
-      return this.table[name];
-    };
-
-    MemberCollection.prototype.getAll = function() {
-      return this.names.map(function(name) {
-        return this.get(name);
-      }.bind(this));
-    };
-
-    return MemberCollection;
-  })();
 
   CircuitElement.Member = (function() {
     var Member = function(props) {
@@ -102,7 +74,9 @@
 
   CircuitElement.ModularModule = (function() {
     var ModularModule = function(members) {
-      return new CircuitElement(members);
+      return new CircuitElement(members.map(function(member) {
+        return new CircuitElement.Member(member);
+      }));
     };
 
     ModularModule.export = function(obj) {
