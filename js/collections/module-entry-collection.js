@@ -2,11 +2,12 @@
   'use strict';
 
   var helper = app.helper || require('../helper.js');
-  var dom = app.dom || require('../dom.js');
   var Collection = app.Collection || require('./collection.js');
   var ModuleEntry = app.ModuleEntry || require('../models/module-entry.js');
 
-  var ModuleEntryCollection = Collection.inherits();
+  var ModuleEntryCollection = Collection.inherits(function(props) {
+    this.jsonLoader = props.jsonLoader;
+  });
 
   ModuleEntryCollection.prototype.packageNamesUrl = function() {
     return 'modular_modules/index.json';
@@ -27,11 +28,11 @@
   };
 
   ModuleEntryCollection.prototype.loadPackageNames = function() {
-    return dom.loadJSON(this.packageNamesUrl());
+    return this.jsonLoader(this.packageNamesUrl());
   };
 
   ModuleEntryCollection.prototype.loadModuleEntries = function(packageName) {
-    return dom.loadJSON(this.moduleEntriesUrl(packageName)).then(function(data) {
+    return this.jsonLoader(this.moduleEntriesUrl(packageName)).then(function(data) {
       return data.map(function(props) {
         var name = packageName + '/' + props.src;
         return new ModuleEntry(helper.extend(props, { name: name }));

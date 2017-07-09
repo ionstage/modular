@@ -58,9 +58,12 @@
 
   Collection.prototype.onremove = function(item) {};
 
-  Collection.inherits = function() {
-    return helper.inherits(function() {
+  Collection.inherits = function(initializer) {
+    return helper.inherits(function(props) {
       Collection.call(this);
+      if (typeof initializer === 'function') {
+        initializer.call(this, props);
+      }
     }, Collection);
   };
 

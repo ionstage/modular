@@ -10,7 +10,7 @@
   var Body = Component.inherits(function(props) {
     this.dragCount = this.prop(0);
 
-    this.moduleEntryCollection = new ModuleEntryCollection();
+    this.moduleEntryCollection = new ModuleEntryCollection({ jsonLoader: dom.loadJSON });
 
     this.sidebar = new Sidebar({
       element: dom.el('.sidebar'),
