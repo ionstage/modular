@@ -219,6 +219,10 @@
     document.addEventListener('DOMContentLoaded', listener, false);
   };
 
+  dom.click = function(el) {
+    el.click();
+  };
+
   dom.transition = function(el, callback) {
     return new Promise(function(resolve, reject) {
       var ontransitionend = function() {

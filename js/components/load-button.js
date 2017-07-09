@@ -31,7 +31,7 @@
   };
 
   LoadButton.prototype.ontap = function() {
-    this.inputElement().click();
+    dom.click(this.inputElement());
   };
 
   if (typeof module !== 'undefined' && module.exports) {
