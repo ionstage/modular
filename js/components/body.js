@@ -30,8 +30,6 @@
       loadEnder: Body.prototype.loadEnder.bind(this),
     });
 
-    this.onready = Body.prototype.onready.bind(this);
-
     this.registerReadyListener();
   });
 
@@ -56,7 +54,7 @@
   };
 
   Body.prototype.registerReadyListener = function() {
-    dom.ready(this.onready);
+    dom.ready(Body.prototype.onready.bind(this));
   };
 
   Body.prototype.loadDemo = function(name) {
