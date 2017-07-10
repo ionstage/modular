@@ -276,16 +276,6 @@
     });
   };
 
-  MainContent.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
-    var localPoint = this.localPoint(helper.pick(props, ['x', 'y']));
-
-    if (localPoint.x < 0 || localPoint.y < 0) {
-      return Promise.reject(new RangeError('Invalid position'));
-    }
-
-    return this.loadModule(helper.extend(helper.clone(props), localPoint), visiblePortNames);
-  };
-
   MainContent.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection.add({
       type: type,

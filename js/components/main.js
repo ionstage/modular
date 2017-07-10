@@ -37,6 +37,10 @@
     return dom.child(this.element(), 1);
   };
 
+  Main.prototype.contentLocalPoint = function(point) {
+    return this.content.localPoint(point);
+  };
+
   Main.prototype.loadContent = function(data) {
     this.content.clear();
     return this.content.load(data);
@@ -48,12 +52,8 @@
     }.bind(this));
   };
 
-  Main.prototype.loadModuleByClientPosition = function(props, visiblePortNames) {
-    return this.content.loadModuleByClientPosition(props, visiblePortNames).catch(function(e) {
-      if (!(e instanceof RangeError)) {
-        throw e;
-      }
-    });
+  Main.prototype.loadModule = function(props, visiblePortNames) {
+    return this.content.loadModule(props, visiblePortNames);
   };
 
   Main.prototype.redraw = function() {

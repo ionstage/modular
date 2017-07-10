@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
   var Main = app.Main || require('./main.js');
@@ -86,13 +87,16 @@
   };
 
   Body.prototype.moduleDropper = function(name, x, y) {
+    var point = this.main.contentLocalPoint({ x: x, y: y });
+    if (point.x < 0 || point.y < 0) {
+      return;
+    }
+
     var moduleEntry = this.moduleEntryCollection.get(name);
-    this.main.loadModuleByClientPosition({
+    this.main.loadModule(helper.extend({
       title: moduleEntry.label,
       name: name,
-      x: x,
-      y: y,
-    }, moduleEntry.visiblePortNames);
+    }, point), moduleEntry.visiblePortNames);
   };
 
   Body.prototype.moduleEntrySearcher = function(searchText) {
