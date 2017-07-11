@@ -16,17 +16,10 @@
 
   LoadButton.prototype.registerChangeListener = function() {
     dom.on(this.inputElement(), 'change', function(event) {
-      var target = dom.target(event);
-      var file = dom.file(target);
-
-      if (!file) {
-        return;
+      var file = dom.file(dom.target(event));
+      if (file) {
+        this.loader(file);
       }
-
-      this.loader(file);
-
-      // reset file input
-      dom.value(target, '');
     }.bind(this));
   };
 
