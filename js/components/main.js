@@ -13,8 +13,7 @@
 
     this.header = new MainHeader({
       element: this.headerElement(),
-      sidebarCollapser: props.sidebarCollapser,
-      sidebarExpander: props.sidebarExpander,
+      sidebarToggler: props.sidebarToggler,
       fileLoader: Main.prototype.fileLoader.bind(this),
       fileSaver: Main.prototype.fileSaver.bind(this),
     });

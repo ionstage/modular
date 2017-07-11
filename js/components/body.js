@@ -23,8 +23,7 @@
 
     this.main = new Main({
       element: dom.el('.main'),
-      sidebarCollapser: Body.prototype.sidebarCollapser.bind(this),
-      sidebarExpander: Body.prototype.sidebarExpander.bind(this),
+      sidebarToggler: Body.prototype.sidebarToggler.bind(this),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       loadStarter: Body.prototype.loadStarter.bind(this),
@@ -56,6 +55,13 @@
 
   Body.prototype.registerReadyListener = function() {
     dom.ready(Body.prototype.onready.bind(this));
+  };
+
+  Body.prototype.toggleSidebar = function(visible) {
+    return dom.transition(this.element(), function() {
+      this.sidebar.disabled(!visible);
+      this.main.isFullWidth(!visible);
+    }.bind(this));
   };
 
   Body.prototype.loadDemo = function(name) {
@@ -103,18 +109,8 @@
     return this.moduleEntryCollection.search(searchText);
   };
 
-  Body.prototype.sidebarCollapser = function() {
-    return dom.transition(this.element(), function() {
-      this.sidebar.disabled(true);
-      this.main.isFullWidth(true);
-    }.bind(this));
-  };
-
-  Body.prototype.sidebarExpander = function() {
-    return dom.transition(this.element(), function() {
-      this.sidebar.disabled(false);
-      this.main.isFullWidth(false);
-    }.bind(this));
+  Body.prototype.sidebarToggler = function(visible) {
+    return this.toggleSidebar(visible);
   };
 
   Body.prototype.loadStarter = function() {

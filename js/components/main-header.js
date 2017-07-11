@@ -10,8 +10,7 @@
   var MainHeader = Component.inherits(function(props) {
     this.sidebarToggleButton = new SidebarToggleButton({
       element: this.sidebarToggleButtonElement(),
-      collapser: props.sidebarCollapser,
-      expander: props.sidebarExpander,
+      toggler: props.sidebarToggler,
     });
 
     this.loadButton = new LoadButton({
