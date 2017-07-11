@@ -15,16 +15,18 @@
   };
 
   LoadButton.prototype.registerChangeListener = function() {
-    dom.on(this.inputElement(), 'change', function(event) {
-      var file = dom.file(dom.target(event));
-      if (file) {
-        this.loader(file);
-      }
-    }.bind(this));
+    dom.on(this.inputElement(), 'change', LoadButton.prototype.onchange.bind(this));
   };
 
   LoadButton.prototype.ontap = function() {
     dom.click(this.inputElement());
+  };
+
+  LoadButton.prototype.onchange = function(event) {
+    var file = dom.file(dom.target(event));
+    if (file) {
+      this.loader(file);
+    }
   };
 
   if (typeof module !== 'undefined' && module.exports) {
