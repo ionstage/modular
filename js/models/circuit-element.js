@@ -59,10 +59,7 @@
     Member.prototype.wrapper = function(props) {
       var wrapper = new Wrapper(this, Member.prototype.call.bind(this));
       Member.KEYS.forEach(function(key) {
-        Object.defineProperty(wrapper, key, {
-          value: props[key],
-          enumerable: true,
-        });
+        helper.define(wrapper, key, props[key], { enumerable: true });
       });
       return wrapper;
     };
@@ -80,7 +77,7 @@
     };
 
     ModularModule.export = function(obj) {
-      Object.defineProperty(obj, 'ModularModule', { value: ModularModule });
+      helper.define(obj, 'ModularModule', ModularModule);
     };
 
     return ModularModule;

@@ -34,6 +34,16 @@
     return ctor;
   };
 
+  helper.define = function(obj, key, value, option) {
+    var props = helper.extend({
+      enumerable: false,
+      writable: false,
+      configurable: false,
+    }, option || {});
+    props.value = value;
+    return Object.defineProperty(obj, key, props);
+  };
+
   helper.identity = function(value) {
     return value;
   };
@@ -149,9 +159,7 @@
 
   helper.wrapper = function() {
     var Wrapper = function(self, wrapper) {
-      return Object.defineProperty(wrapper, 'unwrap', {
-        value: Wrapper.unwrap.bind(self),
-      });
+      return helper.define(wrapper, 'unwrap', Wrapper.unwrap.bind(self));
     };
 
     Wrapper.unwrap = function(key) {
