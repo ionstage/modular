@@ -44,10 +44,6 @@
     return Object.defineProperty(obj, key, props);
   };
 
-  helper.identity = function(value) {
-    return value;
-  };
-
   helper.equal = function(a, b) {
     if (a === b) {
       return true;
