@@ -13,13 +13,16 @@
     return (this.sidebarVisible() ? 'collapse' : 'expand');
   };
 
-  SidebarToggleButton.prototype.ontap = function() {
+  SidebarToggleButton.prototype.toggle = function() {
     var visible = !this.sidebarVisible();
-    this.disabled(true);
-    this.toggler(visible).then(function() {
+    return this.toggler(visible).then(function() {
       this.sidebarVisible(visible);
-      this.disabled(false);
-    }.bind(this)).catch(function() {
+    }.bind(this));
+  };
+
+  SidebarToggleButton.prototype.ontap = function() {
+    this.disabled(true);
+    this.toggle().then(function() {
       this.disabled(false);
     }.bind(this));
   };
