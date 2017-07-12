@@ -23,10 +23,7 @@
   };
 
   LoadButton.prototype.onchange = function(event) {
-    var file = dom.file(dom.target(event));
-    if (file) {
-      this.loader(file);
-    }
+    this.loader(dom.file(dom.target(event)));
   };
 
   if (typeof module !== 'undefined' && module.exports) {
