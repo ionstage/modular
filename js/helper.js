@@ -155,9 +155,7 @@
     };
 
     Wrapper.unwrap = function(key) {
-      if (key === Wrapper.KEY) {
-        return this;
-      }
+      return (key === Wrapper.KEY) ? this : null;
     };
 
     Wrapper.KEY = {};
