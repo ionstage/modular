@@ -35,12 +35,7 @@
   };
 
   helper.define = function(obj, key, value, option) {
-    var props = helper.extend({
-      enumerable: false,
-      writable: false,
-      configurable: false,
-    }, option || {});
-    props.value = value;
+    var props = helper.extend(helper.clone(option || {}), { value: value });
     return Object.defineProperty(obj, key, props);
   };
 
