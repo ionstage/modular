@@ -56,6 +56,12 @@
     }
   };
 
+  Component.prototype.redrawData = function(key, dataName) {
+    this.redrawProp(key, function(value) {
+      dom.data(this.element(), dataName, value);
+    });
+  };
+
   Component.prototype.redrawToggleClass = function(key, className) {
     this.redrawProp(key, function(value) {
       dom.toggleClass(this.element(), className, value);

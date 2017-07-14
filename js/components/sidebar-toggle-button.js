@@ -1,7 +1,6 @@
 (function(app) {
   'use strict';
 
-  var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
 
   var SidebarToggleButton = Button.inherits(function(props) {
@@ -28,9 +27,7 @@
   };
 
   SidebarToggleButton.prototype.onredraw = function() {
-    this.redrawProp('type', function(type) {
-      dom.data(this.element(), 'type', type);
-    });
+    this.redrawData('type', 'type');
   };
 
   if (typeof module !== 'undefined' && module.exports) {
