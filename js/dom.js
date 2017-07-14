@@ -452,20 +452,18 @@
 
   dom.Listenable = (function() {
     var Listenable = function(props) {
+      this.element = props.element;
+      this.type = props.type;
       this.callback = props.callback;
-      this.resolve = null;
-      this.reject = null;
+      this.resolve = props.resolve;
+      this.reject = props.reject;
       this.listener = Listenable.prototype.listener.bind(this);
+
+      dom.on(this.element, this.type, this.listener);
     };
 
-    Listenable.prototype.register = function(resolve, reject) {
-      this.resolve = resolve;
-      this.reject = reject;
-    };
-
-    Listenable.prototype.unregister = function() {
-      this.resolve = null;
-      this.reject = null;
+    Listenable.prototype.destroy = function() {
+      dom.off(this.element, this.type, this.listener);
     };
 
     Listenable.prototype.listener = function(event) {

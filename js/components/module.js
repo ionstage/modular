@@ -26,10 +26,7 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
 
-    this.messageListenable = new dom.Listenable({
-      callback: Module.prototype.onmessage.bind(this),
-    });
-
+    this.messageListenable = null;
     this.draggable = null;
 
     this.onchange = Module.prototype.onchange.bind(this);
@@ -292,15 +289,18 @@
   };
 
   Module.prototype.registerMessageListener = function(resolve, reject) {
-    var messageListenable = this.messageListenable;
-    messageListenable.register(resolve, reject);
-    dom.on(this.componentContentWindow(), 'message', messageListenable.listener);
+    this.messageListenable = new dom.Listenable({
+      element: this.componentContentWindow(),
+      type: 'message',
+      callback: Module.prototype.onmessage.bind(this),
+      resolve: resolve,
+      reject: reject,
+    });
   };
 
   Module.prototype.unregisterMessageListener = function() {
-    var messageListenable = this.messageListenable;
-    dom.off(this.componentContentWindow(), 'message', messageListenable.listener);
-    messageListenable.unregister();
+    this.messageListenable.destroy();
+    this.messageListenable = null;
   };
 
   Module.prototype.setComponentContent = function(contentText, messageData) {
