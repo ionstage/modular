@@ -81,7 +81,7 @@
 
   helper.dig = function() {
     return helper.toArray(arguments).reduce(function(obj, key) {
-      return (typeof obj === 'object') ? obj[key] : null;
+      return (typeof obj === 'object' ? obj[key] : null);
     });
   };
 
@@ -154,7 +154,7 @@
     };
 
     Wrapper.unwrap = function(key) {
-      return (key === Wrapper.KEY) ? this : null;
+      return (key === Wrapper.KEY ? this : null);
     };
 
     Wrapper.KEY = {};

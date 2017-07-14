@@ -8,8 +8,8 @@
   var Component = helper.inherits(function(props) {
     Component.super_.call(this);
 
-    var element = (props.element || null);
-    var parentElement = (props.parentElement || (element ? dom.parent(element) : null));
+    var element = props.element || null;
+    var parentElement = props.parentElement || (element ? dom.parent(element) : null);
 
     this.element = this.prop(element);
     this.parentElement = this.prop(parentElement);

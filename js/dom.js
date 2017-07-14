@@ -6,7 +6,7 @@
   var dom = {};
 
   dom.global = function() {
-    return (typeof module !== 'undefined' && module.exports) ? global : window;
+    return (typeof module !== 'undefined' && module.exports ? global : window);
   };
 
   dom.el = function(selector) {
@@ -33,13 +33,13 @@
 
   dom.child = function() {
     return helper.toArray(arguments).reduce(function(el, index) {
-      return ('children' in el) ? el.children[index] : null;
+      return ('children' in el ? el.children[index] : null);
     });
   };
 
   dom.childNode = function() {
     return helper.toArray(arguments).reduce(function(el, index) {
-      return ('childNodes' in el) ? el.childNodes[index] : null;
+      return ('childNodes' in el ? el.childNodes[index] : null);
     });
   };
 
@@ -278,12 +278,12 @@
   };
 
   dom.pagePoint = function(event) {
-    var p = (dom.changedTouch(event) || event);
+    var p = dom.changedTouch(event) || event;
     return { x: p.pageX, y: p.pageY };
   };
 
   dom.clientPoint = function(event) {
-    var p = (dom.changedTouch(event) || event);
+    var p = dom.changedTouch(event) || event;
     return { x: p.clientX, y: p.clientY };
   };
 
