@@ -52,16 +52,16 @@
   };
 
   dom.attr = function(el, props) {
-    for (var key in props) {
+    Object.keys(props).forEach(function(key) {
       el.setAttribute(key, props[key]);
-    }
+    });
   };
 
   dom.css = function(el, props) {
     var style = el.style;
-    for (var key in props) {
+    Object.keys(props).forEach(function(key) {
       style[key] = props[key];
-    }
+    });
   };
 
   dom.className = function(el, className) {
