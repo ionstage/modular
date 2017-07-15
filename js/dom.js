@@ -171,20 +171,19 @@
     return el.cloneNode(true);
   };
 
-  dom.translate = function(el, x, y) {
-    var translate = 'translate(' + x + 'px, ' + y + 'px)';
+  dom.transform = function(el, value) {
     dom.css(el, {
-      transform: translate,
-      webkitTransform: translate,
+      transform: value,
+      webkitTransform: value,
     });
   };
 
+  dom.translate = function(el, x, y) {
+    dom.transform(el, 'translate(' + x + 'px, ' + y + 'px)');
+  };
+
   dom.translateY = function(el, y) {
-    var translate = 'translateY(' + y + 'px)';
-    dom.css(el, {
-      transform: translate,
-      webkitTransform: translate,
-    });
+    dom.transform(el, 'translateY(' + y + 'px)');
   };
 
   dom.on = function(el, type, listener, useCapture) {
