@@ -72,10 +72,6 @@
     el.classList.add(className);
   };
 
-  dom.removeClass = function(el, className) {
-    el.classList.remove(className);
-  };
-
   dom.toggleClass = function(el, className, force) {
     if (typeof force === 'undefined') {
       el.classList.toggle(className);
@@ -107,10 +103,6 @@
     el.textContent = s;
   };
 
-  dom.html = function(el, s) {
-    el.innerHTML = s;
-  };
-
   dom.value = function(el, s) {
     if (typeof s === 'undefined') {
       return el.value;
@@ -124,10 +116,6 @@
 
   dom.selectAll = function(el) {
     el.setSelectionRange(0, 9999);
-  };
-
-  dom.disabled = function(el, disabled) {
-    el.disabled = disabled;
   };
 
   dom.rect = function(el) {
@@ -144,14 +132,6 @@
 
   dom.scrollTop = function(el) {
     return el.scrollTop;
-  };
-
-  dom.scrollX = function() {
-    return window.pageXOffset;
-  };
-
-  dom.scrollY = function() {
-    return window.pageYOffset;
   };
 
   dom.file = function(el) {
