@@ -215,7 +215,7 @@
   };
 
   dom.supportsTouch = function() {
-    return 'createTouch' in document;
+    return ('createTouch' in document);
   };
 
   dom.changedTouch = function(event) {
