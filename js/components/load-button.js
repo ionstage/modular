@@ -18,12 +18,20 @@
     dom.on(this.inputElement(), 'change', LoadButton.prototype.onchange.bind(this));
   };
 
+  LoadButton.prototype.resetInput = function() {
+    dom.value(this.inputElement(), '');
+  };
+
   LoadButton.prototype.ontap = function() {
     dom.click(this.inputElement());
   };
 
   LoadButton.prototype.onchange = function(event) {
-    this.loader(dom.file(dom.target(event)));
+    var file = dom.file(dom.target(event));
+    if (file) {
+      this.loader(file);
+      this.resetInput();
+    }
   };
 
   if (typeof module !== 'undefined' && module.exports) {
