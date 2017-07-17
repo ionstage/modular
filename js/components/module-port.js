@@ -12,12 +12,12 @@
     this.socketDisabled = this.prop(props.socketDisabled);
     this.visible = this.prop(false);
     this.top = this.prop(0);
-    this.height = this.prop(44);
-    this.socketConnected = this.prop(false);
     this.highlighted = this.prop(false);
+    this.isMoving = this.prop(false);
     this.plugHighlighted = this.prop(false);
     this.socketHighlighted = this.prop(false);
-    this.isMoving = this.prop(false);
+    this.socketConnected = this.prop(false);
+    this.height = this.prop(44);
     this.listItemElement = this.prop(this.renderListItem());
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
