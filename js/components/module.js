@@ -6,6 +6,7 @@
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
   var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
+  var ModulePortRelation = app.ModulePortRelation || require('../relations/module-port-relation.js');
   var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
 
   var Module = Component.inherits(function(props) {
@@ -17,6 +18,7 @@
     this.deletable = this.prop(true);
     this.ports = this.prop([]);
     this.toggledPorts = this.prop([]);
+    this.portRelations = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
     this.eventCircuitElement = this.prop(null);
@@ -330,6 +332,21 @@
     }.bind(this));
   };
 
+  Module.prototype.setPortRelation = function(port) {
+    var relation = new ModulePortRelation({ module: this, port: port });
+    relation.set();
+    this.portRelations().push(relation);
+  };
+
+  Module.prototype.unsetPortRelation = function(port) {
+    var relations = this.portRelations();
+    var index = helper.findIndex(relations, function(relation) {
+      return (relation.module === this && relation.port === port);
+    }.bind(this));
+    relations[index].unset();
+    helper.removeAt(relations, index);
+  };
+
   Module.prototype.loadComponent = function() {
     this.isLoading(true);
     return dom.ajax({
@@ -372,6 +389,7 @@
     port.top(portListHeight);
     port.visible(true);
     this.markToggled(port);
+    this.setPortRelation(port);
 
     // move right not to position the port-socket outside
     if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket()) {
@@ -394,6 +412,7 @@
 
     port.visible(false);
     this.markToggled(port);
+    this.unsetPortRelation(port);
 
     // move up the ports below the hidden port
     visiblePorts.slice(visiblePorts.indexOf(port) + 1).forEach(function(visiblePort) {

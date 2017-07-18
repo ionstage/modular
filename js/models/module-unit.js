@@ -58,9 +58,6 @@
 
   ModuleUnit.prototype.portHighlighted = function(value) {
     this.port.highlighted(value);
-
-    // module is deletable if all ports are NOT highlighted
-    this.module.deletable(!this.module.hasHighlightedPort());
   };
 
   ModuleUnit.prototype.addRelation = function(relation) {
