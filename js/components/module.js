@@ -621,12 +621,12 @@
   Module.DRAG_LISTENER_HIDE_PORT = {
     onstart: function(x, y, event, context) {
       context.target = dom.target(event);
-      context.port = this.targetPort(context.target);
     },
     onmove: function() { /* do nothing */ },
     onend: function(dx, dy, event, context) {
       if (dom.target(event) === context.target) {
-        this.hidePort(context.port.name());
+        var name = this.targetPort(context.target).name();
+        this.hidePort(name);
       }
     },
   };
