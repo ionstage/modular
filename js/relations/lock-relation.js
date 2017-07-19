@@ -32,12 +32,12 @@
   };
 
   LockRelation.TYPE_PLUG = {
-    unitPositionName: 'portPlugPosition',
+    unitPositionName: 'plugPosition',
     wirePositionNames: { x: 'sourceX', y: 'sourceY' },
   };
 
   LockRelation.TYPE_SOCKET = {
-    unitPositionName: 'portSocketPosition',
+    unitPositionName: 'socketPosition',
     wirePositionNames: { x: 'targetX', y: 'targetY' },
   };
 

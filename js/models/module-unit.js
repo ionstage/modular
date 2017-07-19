@@ -12,35 +12,35 @@
     return (this.module === component || this.port === component);
   };
 
-  ModuleUnit.prototype.portName = function() {
+  ModuleUnit.prototype.name = function() {
     return this.port.name();
   };
 
-  ModuleUnit.prototype.portType = function() {
+  ModuleUnit.prototype.type = function() {
     return this.port.type();
   };
 
-  ModuleUnit.prototype.portPlugDisabled = function() {
+  ModuleUnit.prototype.plugDisabled = function() {
     return this.port.plugDisabled();
   };
 
-  ModuleUnit.prototype.portSocketDisabled = function() {
+  ModuleUnit.prototype.socketDisabled = function() {
     return this.port.socketDisabled();
   };
 
-  ModuleUnit.prototype.portVisible = function() {
+  ModuleUnit.prototype.visible = function() {
     return this.port.visible();
   };
 
-  ModuleUnit.prototype.portSocketConnected = function(value) {
+  ModuleUnit.prototype.socketConnected = function(value) {
     return this.port.socketConnected(value);
   };
 
-  ModuleUnit.prototype.portPlugHighlighted = function(value) {
+  ModuleUnit.prototype.plugHighlighted = function(value) {
     return this.port.plugHighlighted(value);
   };
 
-  ModuleUnit.prototype.portSocketHighlighted = function(value) {
+  ModuleUnit.prototype.socketHighlighted = function(value) {
     return this.port.socketHighlighted(value);
   };
 
@@ -48,15 +48,15 @@
     return this.module.circuitElementMember(this.port.name());
   };
 
-  ModuleUnit.prototype.portPlugPosition = function() {
+  ModuleUnit.prototype.plugPosition = function() {
     return this.module.plugPosition(this.port);
   };
 
-  ModuleUnit.prototype.portSocketPosition = function() {
+  ModuleUnit.prototype.socketPosition = function() {
     return this.module.socketPosition(this.port);
   };
 
-  ModuleUnit.prototype.portHighlighted = function(value) {
+  ModuleUnit.prototype.highlighted = function(value) {
     this.port.highlighted(value);
   };
 
