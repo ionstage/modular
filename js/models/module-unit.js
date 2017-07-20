@@ -32,8 +32,8 @@
     return this.port.visible();
   };
 
-  ModuleUnit.prototype.socketConnected = function(value) {
-    return this.port.socketConnected(value);
+  ModuleUnit.prototype.highlighted = function(value) {
+    this.port.highlighted(value);
   };
 
   ModuleUnit.prototype.plugHighlighted = function(value) {
@@ -42,6 +42,10 @@
 
   ModuleUnit.prototype.socketHighlighted = function(value) {
     return this.port.socketHighlighted(value);
+  };
+
+  ModuleUnit.prototype.socketConnected = function(value) {
+    return this.port.socketConnected(value);
   };
 
   ModuleUnit.prototype.circuitElementMember = function() {
@@ -54,10 +58,6 @@
 
   ModuleUnit.prototype.socketPosition = function() {
     return this.module.socketPosition(this.port);
-  };
-
-  ModuleUnit.prototype.highlighted = function(value) {
-    this.port.highlighted(value);
   };
 
   ModuleUnit.prototype.addRelation = function(relation) {
