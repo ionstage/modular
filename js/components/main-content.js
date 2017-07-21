@@ -8,8 +8,8 @@
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var LockRelationCollection = app.LockRelationCollection || require('../collections/lock-relation-collection.js');
   var Module = app.Module || require('./module.js');
-  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
+  var Unit = app.Unit || require('../models/unit.js');
 
   var MainContent = Component.inherits(function(props) {
     this.modules = this.prop([]);
@@ -133,7 +133,7 @@
       port = module.portFromSocketPosition(x, y);
       return !!port;
     });
-    return (module ? new ModuleUnit({ module: module, port: port }) : null);
+    return (module ? new Unit({ module: module, port: port }) : null);
   };
 
   MainContent.prototype.toData = function() {
@@ -195,8 +195,8 @@
       var source = connectionData.source;
       var target = connectionData.target;
       var unitMap = {
-        source: ModuleUnit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
-        target: ModuleUnit.fromModuleAndPortName(modules[target.moduleIndex], target.portName),
+        source: Unit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
+        target: Unit.fromModuleAndPortName(modules[target.moduleIndex], target.portName),
       };
       if (!this.canConnect(unitMap.source, unitMap.target)) {
         throw new Error('Invalid connection');

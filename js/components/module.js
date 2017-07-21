@@ -7,7 +7,7 @@
   var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
   var ModulePortRelation = app.ModulePortRelation || require('../relations/module-port-relation.js');
-  var ModuleUnit = app.ModuleUnit || require('../models/module-unit.js');
+  var Unit = app.Unit || require('../models/unit.js');
 
   var Module = Component.inherits(function(props) {
     this.title = this.prop(props.title);
@@ -223,7 +223,7 @@
         label: port.label(),
         name: port.name(),
         type: port.type(),
-        arg: this.portEventer.bind(null, new ModuleUnit({ module: this, port: port })),
+        arg: this.portEventer.bind(null, new Unit({ module: this, port: port })),
       };
     }.bind(this)));
   };
@@ -396,7 +396,7 @@
       this.x(ModulePort.SOCKET_WIDTH);
     }
 
-    this.portToggler(new ModuleUnit({ module: this, port: port }));
+    this.portToggler(new Unit({ module: this, port: port }));
   };
 
   Module.prototype.hidePort = function(name) {
@@ -420,7 +420,7 @@
     });
 
     this.portListHeight(this.portListHeight() - port.height());
-    this.portToggler(new ModuleUnit({ module: this, port: port }));
+    this.portToggler(new Unit({ module: this, port: port }));
   };
 
   Module.prototype.hideAllPorts = function() {
@@ -697,7 +697,7 @@
   Module.DRAG_LISTENER_DRAG_PORT_PLAG = {
     onstart: function(x, y, event, context) {
       var port = this.targetPort(dom.target(event));
-      context.unit = new ModuleUnit({ module: this, port: port });
+      context.unit = new Unit({ module: this, port: port });
       context.context = {};
       this.dragPortPlugStarter(context.unit, context.context);
     },
@@ -712,7 +712,7 @@
   Module.DRAG_LISTENER_DRAG_PORT_SOCKET = {
     onstart: function(x, y, event, context) {
       var port = this.targetPort(dom.target(event));
-      context.unit = new ModuleUnit({ module: this, port: port });
+      context.unit = new Unit({ module: this, port: port });
       context.context = {};
       this.dragPortSocketStarter(context.unit, context.context);
     },
