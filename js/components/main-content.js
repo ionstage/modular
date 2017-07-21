@@ -307,27 +307,7 @@
   };
 
   MainContent.prototype.canConnect = function(sourceUnit, targetUnit) {
-    if (!sourceUnit || !targetUnit) {
-      return false;
-    }
-
-    if (sourceUnit.type() !== targetUnit.type()) {
-      return false;
-    }
-
-    if (sourceUnit.plugDisabled() || targetUnit.socketDisabled()) {
-      return false;
-    }
-
-    if (!sourceUnit.visible() || !targetUnit.visible()) {
-      return false;
-    }
-
-    if (targetUnit.socketConnected()) {
-      return false;
-    }
-
-    return true;
+    return (sourceUnit && targetUnit ? sourceUnit.canConnectTo(targetUnit) : false);
   };
 
   MainContent.prototype.connect = function(sourceUnit, targetUnit) {

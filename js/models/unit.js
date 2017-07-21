@@ -70,6 +70,22 @@
     this.port.removeRelation(relation);
   };
 
+  Unit.prototype.canConnectTo = function(unit) {
+    if (this.type() !== unit.type()) {
+      return false;
+    }
+    if (this.plugDisabled() || unit.socketDisabled()) {
+      return false;
+    }
+    if (!this.visible() || !unit.visible()) {
+      return false;
+    }
+    if (unit.socketConnected()) {
+      return false;
+    }
+    return true;
+  };
+
   Unit.fromModuleAndPortName = function(module, portName) {
     var port = (module ? module.port(portName) : null);
     return (port ? new Unit({ module: module, port: port }) : null);
