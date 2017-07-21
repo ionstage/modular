@@ -5,20 +5,20 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
   var Main = app.Main || require('./main.js');
-  var ModuleEntryCollection = app.ModuleEntryCollection || require('../collections/module-entry-collection.js');
+  var EntryCollection = app.EntryCollection || require('../collections/entry-collection.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
   var Body = Component.inherits(function(props) {
     this.dragCount = this.prop(0);
 
-    this.moduleEntryCollection = new ModuleEntryCollection({ jsonLoader: dom.loadJSON });
+    this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
 
     this.sidebar = new Sidebar({
       element: dom.el('.sidebar'),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       moduleDropper: Body.prototype.moduleDropper.bind(this),
-      moduleEntrySearcher: Body.prototype.moduleEntrySearcher.bind(this),
+      entrySearcher: Body.prototype.entrySearcher.bind(this),
     });
 
     this.main = new Main({
@@ -74,7 +74,7 @@
 
   Body.prototype.onready = function() {
     this.loadStarter();
-    this.moduleEntryCollection.load().then(function() {
+    this.entryCollection.load().then(function() {
       this.sidebar.loadContent();
       return this.loadDemo(this.currentDemoName());
     }.bind(this)).catch(function(e) {
@@ -98,15 +98,15 @@
       return;
     }
 
-    var moduleEntry = this.moduleEntryCollection.get(name);
+    var entry = this.entryCollection.get(name);
     this.main.loadModule(helper.extend({
-      title: moduleEntry.label,
+      title: entry.label,
       name: name,
-    }, point), moduleEntry.visiblePortNames);
+    }, point), entry.visiblePortNames);
   };
 
-  Body.prototype.moduleEntrySearcher = function(searchText) {
-    return this.moduleEntryCollection.search(searchText);
+  Body.prototype.entrySearcher = function(searchText) {
+    return this.entryCollection.search(searchText);
   };
 
   Body.prototype.sidebarToggler = function(visible) {

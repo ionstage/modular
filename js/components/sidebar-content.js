@@ -59,13 +59,13 @@
     this.modules([]);
   };
 
-  SidebarContent.prototype.setModules = function(moduleEntries) {
+  SidebarContent.prototype.setModules = function(entries) {
     this.clear();
-    moduleEntries.forEach(function(moduleEntry) {
+    entries.forEach(function(entry) {
       this.appendModule({
-        title: moduleEntry.label,
-        content: moduleEntry.description,
-        name: moduleEntry.name,
+        title: entry.label,
+        content: entry.description,
+        name: entry.name,
       });
     }.bind(this));
   };

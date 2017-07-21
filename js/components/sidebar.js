@@ -25,7 +25,7 @@
     this.relation = new SidebarRelation({
       header: this.header,
       content: this.content,
-      moduleEntrySearcher: props.moduleEntrySearcher,
+      entrySearcher: props.entrySearcher,
     });
 
     this.moduleDragStarter = props.moduleDragStarter;

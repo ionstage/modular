@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var ModuleEntry = function(props) {
+  var Entry = function(props) {
     this.name = props.name;
     this.label = props.label || '';
     this.description = props.description || '';
@@ -10,7 +10,7 @@
     this.tags = props.tags || [];
   };
 
-  ModuleEntry.prototype.keywordScore = function(keyword) {
+  Entry.prototype.keywordScore = function(keyword) {
     if (!keyword) {
       return 0;
     }
@@ -48,8 +48,8 @@
   };
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = ModuleEntry;
+    module.exports = Entry;
   } else {
-    app.ModuleEntry = ModuleEntry;
+    app.Entry = Entry;
   }
 })(this.app || (this.app = {}));

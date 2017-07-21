@@ -7,19 +7,19 @@
   var SidebarRelation = helper.inherits(function(props) {
     this.header = props.header;
     this.content = props.content;
-    this.moduleEntrySearcher = props.moduleEntrySearcher;
+    this.entrySearcher = props.entrySearcher;
   }, jCore.Relation);
 
   SidebarRelation.prototype.set = function() {
     this.header.addRelation(this);
   };
 
-  SidebarRelation.prototype.moduleEntries = function() {
-    return this.moduleEntrySearcher(this.header.searchText());
+  SidebarRelation.prototype.entries = function() {
+    return this.entrySearcher(this.header.searchText());
   };
 
   SidebarRelation.prototype.update = function() {
-    this.content.setModules(this.moduleEntries());
+    this.content.setModules(this.entries());
   };
 
   if (typeof module !== 'undefined' && module.exports) {
