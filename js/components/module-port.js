@@ -18,6 +18,8 @@
     this.socketHighlighted = this.prop(false);
     this.socketConnected = this.prop(false);
     this.height = this.prop(44);
+    this.plugOffsetX = this.prop(261);
+    this.socketOffsetX = this.prop(-25);
     this.listItemElement = this.prop(this.renderListItem());
     this.parentListElement = this.prop(props.parentListElement);
     this.optionElement = this.prop(this.renderOption());
@@ -152,10 +154,7 @@
   ModulePort.TYPE_PROP = 'prop';
   ModulePort.TYPE_EVENT = 'event';
 
-  ModulePort.PLUG_OFFSET_X = 261;
   ModulePort.PLUG_WIDTH = 50;
-
-  ModulePort.SOCKET_OFFSET_X = -25;
   ModulePort.SOCKET_WIDTH = 50;
 
   ModulePort.LIST_ITEM_HTML_TEXT = [

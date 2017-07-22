@@ -115,14 +115,14 @@
 
   Module.prototype.plugPosition = function(port) {
     return {
-      x: this.x() + ModulePort.PLUG_OFFSET_X,
+      x: this.x() + port.plugOffsetX(),
       y: this.y() + this.portListTop() + port.middle(),
     };
   };
 
   Module.prototype.socketPosition = function(port) {
     return {
-      x: this.x() + ModulePort.SOCKET_OFFSET_X,
+      x: this.x() + port.socketOffsetX(),
       y: this.y() + this.portListTop() + port.middle(),
     };
   };
