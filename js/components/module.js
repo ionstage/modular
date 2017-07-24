@@ -6,7 +6,7 @@
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
   var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
-  var ModulePortRelation = app.ModulePortRelation || require('../relations/module-port-relation.js');
+  var ModulePortRelationCollection = app.ModulePortRelationCollection || require('../collections/module-port-relation-collection.js');
   var Unit = app.Unit || require('../models/unit.js');
 
   var Module = Component.inherits(function(props) {
@@ -18,7 +18,6 @@
     this.deletable = this.prop(true);
     this.ports = this.prop([]);
     this.toggledPorts = this.prop([]);
-    this.portRelations = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
     this.eventCircuitElement = this.prop(null);
@@ -27,6 +26,8 @@
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
+
+    this.portRelationCollection = new ModulePortRelationCollection();
 
     this.messageListenable = null;
     this.draggable = null;
@@ -333,18 +334,11 @@
   };
 
   Module.prototype.setPortRelation = function(port) {
-    var relation = new ModulePortRelation({ module: this, port: port });
-    relation.set();
-    this.portRelations().push(relation);
+    this.portRelationCollection.add({ module: this, port: port });
   };
 
   Module.prototype.unsetPortRelation = function(port) {
-    var relations = this.portRelations();
-    var index = helper.findIndex(relations, function(relation) {
-      return (relation.module === this && relation.port === port);
-    }.bind(this));
-    relations[index].unset();
-    helper.removeAt(relations, index);
+    this.portRelationCollection.remove({ module: this, port: port });
   };
 
   Module.prototype.loadComponent = function() {
