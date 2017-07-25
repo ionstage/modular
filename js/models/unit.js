@@ -86,11 +86,6 @@
     return true;
   };
 
-  Unit.fromModuleAndPortName = function(module, portName) {
-    var port = (module ? module.port(portName) : null);
-    return (port ? new Unit({ module: module, port: port }) : null);
-  };
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Unit;
   } else {

@@ -126,6 +126,11 @@
     return (binding ? binding.sourceUnit : null);
   };
 
+  MainContent.prototype.unitFromModuleAndPortName = function(module, portName) {
+    var port = (module ? module.port(portName) : null);
+    return (port ? new Unit({ module: module, port: port }) : null);
+  };
+
   MainContent.prototype.unitFromSocketPosition = function(x, y) {
     var port = null;
     var module = helper.findLast(this.modules(), function(module) {
@@ -195,8 +200,8 @@
       var source = connectionData.source;
       var target = connectionData.target;
       var unitMap = {
-        source: Unit.fromModuleAndPortName(modules[source.moduleIndex], source.portName),
-        target: Unit.fromModuleAndPortName(modules[target.moduleIndex], target.portName),
+        source: this.unitFromModuleAndPortName(modules[source.moduleIndex], source.portName),
+        target: this.unitFromModuleAndPortName(modules[target.moduleIndex], target.portName),
       };
       if (!this.canConnect(unitMap.source, unitMap.target)) {
         throw new Error('Invalid connection');
