@@ -6,16 +6,16 @@
   var BindingCollection = app.BindingCollection || require('../collections/binding-collection.js');
   var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
-  var LockRelationCollection = app.LockRelationCollection || require('../collections/lock-relation-collection.js');
   var Module = app.Module || require('./module.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
+  var RelationCollection = app.RelationCollection || require('../collections/relation-collection.js');
   var Unit = app.Unit || require('../models/unit.js');
 
   var MainContent = Component.inherits(function(props) {
     this.modules = this.prop([]);
     this.draggingWires = this.prop([]);
 
-    this.lockRelationCollection = new LockRelationCollection();
+    this.lockRelationCollection = new RelationCollection({ ctor: LockRelation });
     this.bindingCollection = new BindingCollection();
 
     this.deleter = MainContent.prototype.deleter.bind(this);

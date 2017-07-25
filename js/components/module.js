@@ -6,7 +6,8 @@
   var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
   var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
-  var ModulePortRelationCollection = app.ModulePortRelationCollection || require('../collections/module-port-relation-collection.js');
+  var ModulePortRelation = app.ModulePortRelation || require('../relations/module-port-relation.js');
+  var RelationCollection = app.RelationCollection || require('../collections/relation-collection.js');
   var Unit = app.Unit || require('../models/unit.js');
 
   var Module = Component.inherits(function(props) {
@@ -27,7 +28,7 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
 
-    this.portRelationCollection = new ModulePortRelationCollection();
+    this.portRelationCollection = new RelationCollection({ ctor: ModulePortRelation });
 
     this.messageListenable = null;
     this.draggable = null;
