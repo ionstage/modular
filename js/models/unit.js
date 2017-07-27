@@ -48,8 +48,8 @@
     return this.port.socketConnected(value);
   };
 
-  Unit.prototype.circuitElementMember = function() {
-    return this.module.circuitElementMember(this.port.name());
+  Unit.prototype.circuitModuleMember = function() {
+    return this.module.circuitModuleMember(this.port.name());
   };
 
   Unit.prototype.plugPosition = function() {

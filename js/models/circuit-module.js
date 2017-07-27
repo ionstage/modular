@@ -5,41 +5,41 @@
   var helper = app.helper || require('../helper.js');
   var Wrapper = helper.wrapper();
 
-  var CircuitElement = function(members) {
+  var CircuitModule = function(members) {
     this.members = members;
     return this.wrapper();
   };
 
-  CircuitElement.prototype.get = function(name) {
+  CircuitModule.prototype.get = function(name) {
     return helper.findLast(this.members, function(member) {
       return (member.name === name);
     });
   };
 
-  CircuitElement.prototype.getAll = function() {
+  CircuitModule.prototype.getAll = function() {
     return this.members.slice();
   };
 
-  CircuitElement.prototype.wrapper = function() {
+  CircuitModule.prototype.wrapper = function() {
     return {
-      get: CircuitElement.prototype.get.bind(this),
-      getAll: CircuitElement.prototype.getAll.bind(this),
+      get: CircuitModule.prototype.get.bind(this),
+      getAll: CircuitModule.prototype.getAll.bind(this),
     };
   };
 
-  CircuitElement.bind = function(source, target) {
+  CircuitModule.bind = function(source, target) {
     var sourceCallee = source.unwrap(Wrapper.KEY).callee;
     var targetCallee = target.unwrap(Wrapper.KEY).callee;
     circuit.bind(sourceCallee, targetCallee);
   };
 
-  CircuitElement.unbind = function(source, target) {
+  CircuitModule.unbind = function(source, target) {
     var sourceCallee = source.unwrap(Wrapper.KEY).callee;
     var targetCallee = target.unwrap(Wrapper.KEY).callee;
     circuit.unbind(sourceCallee, targetCallee);
   };
 
-  CircuitElement.Member = (function() {
+  CircuitModule.Member = (function() {
     var Member = function(props) {
       this.callee = circuit[props.type](props.arg);
       return this.wrapper(helper.extend(this.defaults(), props));
@@ -69,10 +69,10 @@
     return Member;
   })();
 
-  CircuitElement.ModularModule = (function() {
+  CircuitModule.ModularModule = (function() {
     var ModularModule = function(members) {
-      return new CircuitElement(members.map(function(member) {
-        return new CircuitElement.Member(member);
+      return new CircuitModule(members.map(function(member) {
+        return new CircuitModule.Member(member);
       }));
     };
 
@@ -84,8 +84,8 @@
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CircuitElement;
+    module.exports = CircuitModule;
   } else {
-    app.CircuitElement = CircuitElement;
+    app.CircuitModule = CircuitModule;
   }
 })(this.app || (this.app = {}));

@@ -3,7 +3,7 @@
 
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
-  var CircuitElement = app.CircuitElement || require('../models/circuit-element.js');
+  var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
   var ModulePortRelation = app.ModulePortRelation || require('../relations/module-port-relation.js');
@@ -21,7 +21,7 @@
     this.toggledPorts = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
-    this.eventCircuitElement = this.prop(null);
+    this.eventCircuitModule = this.prop(null);
     this.messageData = this.prop(helper.randomString(7));
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
@@ -86,13 +86,13 @@
     return dom.contentWindow(this.componentElement());
   };
 
-  Module.prototype.circuitElement = function() {
+  Module.prototype.circuitModule = function() {
     return helper.dig(this.componentContentWindow(), 'modular', 'exports');
   };
 
-  Module.prototype.circuitElementMember = function(name) {
-    var circuitElement = this.circuitElement();
-    return (circuitElement ? circuitElement.get(name) : null);
+  Module.prototype.circuitModuleMember = function(name) {
+    var circuitModule = this.circuitModule();
+    return (circuitModule ? circuitModule.get(name) : null);
   };
 
   Module.prototype.diagonalPoint = function() {
@@ -211,7 +211,7 @@
   };
 
   Module.prototype.createPorts = function() {
-    return this.circuitElement().getAll().map(function(member) {
+    return this.circuitModule().getAll().map(function(member) {
       return new ModulePort(helper.extend(helper.clone(member), {
         parentListElement: this.portListElement(),
         parentOptGroupElement: this.portOptGroupElement(member.type),
@@ -219,8 +219,8 @@
     }.bind(this));
   };
 
-  Module.prototype.createEventCircuitElement = function() {
-    return new CircuitElement.ModularModule(this.eventPorts().map(function(port) {
+  Module.prototype.createEventCircuitModule = function() {
+    return new CircuitModule.ModularModule(this.eventPorts().map(function(port) {
       return {
         label: port.label(),
         name: port.name(),
@@ -230,27 +230,27 @@
     }.bind(this)));
   };
 
-  Module.prototype.bindEventCircuitElement = function() {
-    var eventCircuitElement = this.eventCircuitElement();
-    if (!eventCircuitElement) {
+  Module.prototype.bindEventCircuitModule = function() {
+    var eventCircuitModule = this.eventCircuitModule();
+    if (!eventCircuitModule) {
       return;
     }
 
-    var circuitElement = this.circuitElement();
-    eventCircuitElement.getAll().forEach(function(member) {
-      CircuitElement.bind(circuitElement.get(member.name), member);
+    var circuitModule = this.circuitModule();
+    eventCircuitModule.getAll().forEach(function(member) {
+      CircuitModule.bind(circuitModule.get(member.name), member);
     });
   };
 
-  Module.prototype.unbindEventCircuitElement = function() {
-    var eventCircuitElement = this.eventCircuitElement();
-    if (!eventCircuitElement) {
+  Module.prototype.unbindEventCircuitModule = function() {
+    var eventCircuitModule = this.eventCircuitModule();
+    if (!eventCircuitModule) {
       return;
     }
 
-    var circuitElement = this.circuitElement();
-    eventCircuitElement.getAll().forEach(function(member) {
-      CircuitElement.unbind(circuitElement.get(member.name), member);
+    var circuitModule = this.circuitModule();
+    eventCircuitModule.getAll().forEach(function(member) {
+      CircuitModule.unbind(circuitModule.get(member.name), member);
     });
   };
 
@@ -361,8 +361,8 @@
       this.resetComponentHeight();
       this.ports(this.createPorts());
       this.resetPortSelect();
-      this.eventCircuitElement(this.createEventCircuitElement());
-      this.bindEventCircuitElement();
+      this.eventCircuitModule(this.createEventCircuitModule());
+      this.bindEventCircuitModule();
       this.registerComponentPointListener();
     }.bind(this)).catch(function(e) {
       this.unregisterMessageListener();
@@ -512,7 +512,7 @@
     this.unregisterDragListener();
     this.unregisterPortSelectChangeListener();
     this.unregisterPointListener();
-    this.unbindEventCircuitElement();
+    this.unbindEventCircuitModule();
     this.unregisterComponentPointListener();
   };
 
@@ -568,7 +568,7 @@
     if (dom.messageData(event) !== this.messageData()) {
       throw new Error('Invalid content data');
     }
-    if (!this.circuitElement()) {
+    if (!this.circuitModule()) {
       throw new Error('Invalid circuit element');
     }
   };

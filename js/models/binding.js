@@ -2,7 +2,7 @@
   'use strict';
 
   var helper = app.helper || require('../helper.js');
-  var CircuitElement = app.CircuitElement || require('./circuit-element.js');
+  var CircuitModule = app.CircuitModule || require('./circuit-module.js');
 
   var Binding = function(props) {
     this.sourceUnit = props.sourceUnit;
@@ -10,19 +10,19 @@
   };
 
   Binding.prototype.source = function() {
-    return this.sourceUnit.circuitElementMember();
+    return this.sourceUnit.circuitModuleMember();
   };
 
   Binding.prototype.target = function() {
-    return this.targetUnit.circuitElementMember();
+    return this.targetUnit.circuitModuleMember();
   };
 
   Binding.prototype.bind = function() {
-    CircuitElement.bind(this.source(), this.target());
+    CircuitModule.bind(this.source(), this.target());
   };
 
   Binding.prototype.unbind = function() {
-    CircuitElement.unbind(this.source(), this.target());
+    CircuitModule.unbind(this.source(), this.target());
   };
 
   if (typeof module !== 'undefined' && module.exports) {
