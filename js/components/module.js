@@ -103,6 +103,10 @@
     };
   };
 
+  Module.prototype.leftPadding = function() {
+    return (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0);
+  };
+
   Module.prototype.hasVisiblePortPlug = function() {
     return this.visiblePorts().some(function(port) {
       return !port.plugDisabled();
@@ -387,9 +391,7 @@
     this.setPortRelation(port);
 
     // move right not to position the port-socket outside
-    if (this.x() < ModulePort.SOCKET_WIDTH && this.hasVisiblePortSocket()) {
-      this.x(ModulePort.SOCKET_WIDTH);
-    }
+    this.x(Math.max(this.x(), this.leftPadding()));
 
     this.portToggler(new Unit({ module: this, port: port }));
   };
@@ -589,7 +591,7 @@
       this.isMoving(true);
     },
     onmove: function(dx, dy, event, context) {
-      this.x(Math.max(context.x + dx, (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0)));
+      this.x(Math.max(context.x + dx, this.leftPadding()));
       this.y(Math.max(context.y + dy, 0));
     },
     onend: function(dx, dy, event, context) {
