@@ -46,11 +46,8 @@
     return this.listItem.label();
   };
 
-  ModulePort.prototype.name = function(value) {
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
-    return this.option.name(value);
+  ModulePort.prototype.name = function() {
+    return this.option.name();
   };
 
   ModulePort.prototype.type = function(value) {
