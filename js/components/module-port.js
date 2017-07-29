@@ -42,12 +42,8 @@
     return this.listItem.visible(value);
   };
 
-  ModulePort.prototype.label = function(value) {
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
-    this.option.label(value);
-    return this.listItem.label(value);
+  ModulePort.prototype.label = function() {
+    return this.listItem.label();
   };
 
   ModulePort.prototype.name = function(value) {
