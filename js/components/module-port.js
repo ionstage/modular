@@ -50,11 +50,8 @@
     return this.option.name();
   };
 
-  ModulePort.prototype.type = function(value) {
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
-    return this.listItem.type(value);
+  ModulePort.prototype.type = function() {
+    return this.listItem.type();
   };
 
   ModulePort.prototype.top = function(value) {
