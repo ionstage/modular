@@ -5,6 +5,8 @@
   var Component = app.Component || require('./component.js');
 
   var ModulePort = Component.inherits(function(props) {
+    this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
+
     this.listItem = new ModulePort.ListItem({
       element: this.renderListItem(),
       parentElement: props.parentListElement,
@@ -22,9 +24,7 @@
     });
 
     this.option = new ModulePort.Option({
-      element: this.renderOption(),
       parentElement: props.parentOptGroupElement,
-      visible: true,
       label: props.label,
       name: props.name,
     });
@@ -37,7 +37,7 @@
   ModulePort.prototype.visible = function(value) {
     if (typeof value !== 'undefined') {
       this.markDirty();
-      this.option.visible(!value);
+      this.option.parentElement(value ? null : this.parentOptGroupElement());
     }
     return this.listItem.visible(value);
   };
@@ -128,10 +128,6 @@
     return dom.render(ModulePort.LIST_ITEM_HTML_TEXT);
   };
 
-  ModulePort.prototype.renderOption = function() {
-    return dom.render(ModulePort.OPTION_HTML_TEXT);
-  };
-
   ModulePort.prototype.redraw = function() {
     this.listItem.redraw();
     this.option.redraw();
@@ -153,8 +149,6 @@
       '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
     '</div>',
   ].join('');
-
-  ModulePort.OPTION_HTML_TEXT = '<option></option>';
 
   ModulePort.ListItem = (function() {
     var ListItem = Component.inherits(function(props) {
@@ -278,25 +272,17 @@
 
   ModulePort.Option = (function() {
     var Option = Component.inherits(function(props) {
-      this.visible = this.prop(props.visible);
       this.label = this.prop(props.label);
       this.name = this.prop(props.name);
     });
 
-    Option.prototype.onredraw = function() {
-      this.redrawVisibility();
-      this.redrawLabel();
-      this.redrawName();
+    Option.prototype.render = function() {
+      return dom.render(Option.HTML_TEXT);
     };
 
-    Option.prototype.redrawVisibility = function() {
-      this.redrawProp('visible', function(visible) {
-        if (visible) {
-          dom.append(this.parentElement(), this.element());
-        } else {
-          dom.remove(this.element());
-        }
-      });
+    Option.prototype.onredraw = function() {
+      this.redrawLabel();
+      this.redrawName();
     };
 
     Option.prototype.redrawLabel = function() {
@@ -310,6 +296,8 @@
         dom.value(this.element(), name);
       });
     };
+
+    Option.HTML_TEXT = '<option></option>';
 
     return Option;
   })();
