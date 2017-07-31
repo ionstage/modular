@@ -86,11 +86,8 @@
     return this.listItem.plugHighlighted(value);
   };
 
-  ModulePort.prototype.socketDisabled = function(value) {
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
-    return this.listItem.socketDisabled(value);
+  ModulePort.prototype.socketDisabled = function() {
+    return this.listItem.socketDisabled();
   };
 
   ModulePort.prototype.socketHighlighted = function(value) {
