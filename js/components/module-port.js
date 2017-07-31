@@ -75,11 +75,8 @@
     return this.listItem.isMoving(value);
   };
 
-  ModulePort.prototype.plugDisabled = function(value) {
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
-    return this.listItem.plugDisabled(value);
+  ModulePort.prototype.plugDisabled = function() {
+    return this.listItem.plugDisabled();
   };
 
   ModulePort.prototype.plugHighlighted = function(value) {
