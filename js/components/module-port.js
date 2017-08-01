@@ -5,12 +5,10 @@
   var Component = app.Component || require('./component.js');
 
   var ModulePort = Component.inherits(function(props) {
+    this.parentListElement = this.prop(props.parentListElement);
     this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
 
     this.listItem = new ModulePort.ListItem({
-      element: this.renderListItem(),
-      parentElement: props.parentListElement,
-      visible: false,
       label: props.label,
       type: props.type,
       top: 0,
@@ -30,16 +28,13 @@
     });
   });
 
-  ModulePort.prototype.listItemElement = function() {
-    return this.listItem.element();
-  };
-
   ModulePort.prototype.visible = function(value) {
     if (typeof value !== 'undefined') {
       this.markDirty();
+      this.listItem.parentElement(value ? this.parentListElement() : null);
       this.option.parentElement(value ? null : this.parentOptGroupElement());
     }
-    return this.listItem.visible(value);
+    return (this.listItem.parentElement() !== null);
   };
 
   ModulePort.prototype.label = function() {
@@ -124,8 +119,9 @@
     return this.listItem.socketOffsetX();
   };
 
-  ModulePort.prototype.renderListItem = function() {
-    return dom.render(ModulePort.LIST_ITEM_HTML_TEXT);
+  ModulePort.prototype.elementContains = function(element) {
+    var listItemElement = this.listItem.element();
+    return (listItemElement ? dom.contains(listItemElement, element) : false);
   };
 
   ModulePort.prototype.redraw = function() {
@@ -139,20 +135,8 @@
   ModulePort.PLUG_WIDTH = 50;
   ModulePort.SOCKET_WIDTH = 50;
 
-  ModulePort.LIST_ITEM_HTML_TEXT = [
-    '<div class="module-port">',
-      '<div class="module-port-plug module-port-handle"></div>',
-      '<div class="module-port-socket">',
-        '<div class="module-port-socket-handle module-port-handle"></div>',
-      '</div>',
-      '<div class="module-port-label"></div>',
-      '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
-    '</div>',
-  ].join('');
-
   ModulePort.ListItem = (function() {
     var ListItem = Component.inherits(function(props) {
-      this.visible = this.prop(props.visible);
       this.label = this.prop(props.label);
       this.type = this.prop(props.type);
       this.top = this.prop(props.top);
@@ -193,23 +177,16 @@
       return this.highlighted();
     };
 
+    ListItem.prototype.render = function() {
+      return dom.render(ListItem.HTML_TEXT);
+    };
+
     ListItem.prototype.onredraw = function() {
-      this.redrawVisibility();
       this.redrawLabel();
       this.redrawContent();
       this.redrawPlug();
       this.redrawSocket();
       this.redrawHideButton();
-    };
-
-    ListItem.prototype.redrawVisibility = function() {
-      this.redrawProp('visible', function(visible) {
-        if (visible) {
-          dom.append(this.parentElement(), this.element());
-        } else {
-          dom.remove(this.element());
-        }
-      });
     };
 
     ListItem.prototype.redrawLabel = function() {
@@ -266,6 +243,17 @@
         dom.toggleClass(this.hideButtonElement(), 'disabled', hideDisabled);
       });
     };
+
+    ListItem.HTML_TEXT = [
+      '<div class="module-port">',
+        '<div class="module-port-plug module-port-handle"></div>',
+        '<div class="module-port-socket">',
+          '<div class="module-port-socket-handle module-port-handle"></div>',
+        '</div>',
+        '<div class="module-port-label"></div>',
+        '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
+      '</div>',
+    ].join('');
 
     return ListItem;
   })();
