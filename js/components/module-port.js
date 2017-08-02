@@ -176,35 +176,28 @@
     };
 
     ListItem.prototype.onredraw = function() {
-      this.redrawLabel();
-      this.redrawContent();
+      this.redrawType();
+      this.redrawPosition();
+      this.redrawToggleClasses();
       this.redrawPlug();
       this.redrawSocket();
+      this.redrawLabel();
       this.redrawHideButton();
     };
 
-    ListItem.prototype.redrawLabel = function() {
-      this.redrawProp('label', function(label) {
-        dom.text(this.labelElement(), label);
-      });
+    ListItem.prototype.redrawType = function() {
+      this.redrawData('type', 'type');
     };
 
-    ListItem.prototype.redrawContent = function() {
-      this.redrawProp('type', function(type) {
-        dom.data(this.element(), 'type', type);
-      });
-
+    ListItem.prototype.redrawPosition = function() {
       this.redrawProp('top', function(top) {
         dom.translateY(this.element(), top);
       });
+    };
 
-      this.redrawProp('highlighted', function(highlighted) {
-        dom.toggleClass(this.element(), 'highlighted', highlighted);
-      });
-
-      this.redrawProp('isMoving', function(isMoving) {
-        dom.toggleClass(this.element(), 'moving', isMoving);
-      });
+    ListItem.prototype.redrawToggleClasses = function() {
+      this.redrawToggleClass('highlighted', 'highlighted');
+      this.redrawToggleClass('isMoving', 'moving');
     };
 
     ListItem.prototype.redrawPlug = function() {
@@ -229,6 +222,12 @@
 
       this.redrawProp('socketConnected', function(socketConnected) {
         dom.toggleClass(this.socketHandleElement(), 'hide', !socketConnected);
+      });
+    };
+
+    ListItem.prototype.redrawLabel = function() {
+      this.redrawProp('label', function(label) {
+        dom.text(this.labelElement(), label);
       });
     };
 
