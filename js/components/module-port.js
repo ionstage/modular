@@ -11,14 +11,8 @@
     this.listItem = new ModulePort.ListItem({
       label: props.label,
       type: props.type,
-      top: 0,
-      highlighted: false,
-      isMoving: false,
       plugDisabled: props.plugDisabled,
-      plugHighlighted: false,
       socketDisabled: props.socketDisabled,
-      socketHighlighted: false,
-      socketConnected: false,
     });
 
     this.option = new ModulePort.Option({
@@ -139,14 +133,14 @@
     var ListItem = Component.inherits(function(props) {
       this.label = this.prop(props.label);
       this.type = this.prop(props.type);
-      this.top = this.prop(props.top);
-      this.highlighted = this.prop(props.highlighted);
-      this.isMoving = this.prop(props.isMoving);
       this.plugDisabled = this.prop(props.plugDisabled);
-      this.plugHighlighted = this.prop(props.plugHighlighted);
       this.socketDisabled = this.prop(props.socketDisabled);
-      this.socketHighlighted = this.prop(props.socketHighlighted);
-      this.socketConnected = this.prop(props.socketConnected);
+      this.top = this.prop(0);
+      this.highlighted = this.prop(false);
+      this.isMoving = this.prop(false);
+      this.plugHighlighted = this.prop(false);
+      this.socketHighlighted = this.prop(false);
+      this.socketConnected = this.prop(false);
       this.height = this.prop(44);
       this.plugOffsetX = this.prop(261);
       this.socketOffsetX = this.prop(-25);
