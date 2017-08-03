@@ -69,6 +69,9 @@
   };
 
   ModulePort.prototype.plugHighlighted = function(value) {
+    if (!this.visible()) {
+      return false;
+    }
     if (typeof value !== 'undefined') {
       this.markDirty();
     }
@@ -133,17 +136,20 @@
     var ListItem = Component.inherits(function(props) {
       this.label = this.prop(props.label);
       this.type = this.prop(props.type);
-      this.plugDisabled = this.prop(props.plugDisabled);
       this.socketDisabled = this.prop(props.socketDisabled);
       this.top = this.prop(0);
       this.highlighted = this.prop(false);
       this.isMoving = this.prop(false);
-      this.plugHighlighted = this.prop(false);
       this.socketHighlighted = this.prop(false);
       this.socketConnected = this.prop(false);
       this.height = this.prop(44);
       this.plugOffsetX = this.prop(261);
       this.socketOffsetX = this.prop(-25);
+
+      this.plug = new ListItem.Handle({
+        disabled: props.plugDisabled,
+        highlighted: false,
+      });
     });
 
     ListItem.prototype.plugElement = function() {
@@ -171,15 +177,28 @@
       return this.highlighted();
     };
 
+    ListItem.prototype.plugDisabled = function(value) {
+      return this.plug.disabled(value);
+    };
+
+    ListItem.prototype.plugHighlighted = function(value) {
+      return this.plug.highlighted(value);
+    };
+
     ListItem.prototype.render = function() {
       return dom.render(ListItem.HTML_TEXT);
+    };
+
+    ListItem.prototype.onappend = function() {
+      this.plug.element(this.plugElement());
+      this.plug.parentElement(this.element());
+      this.plug.redraw();
     };
 
     ListItem.prototype.onredraw = function() {
       this.redrawType();
       this.redrawPosition();
       this.redrawToggleClasses();
-      this.redrawPlug();
       this.redrawSocket();
       this.redrawLabel();
       this.redrawHideButton();
@@ -198,16 +217,6 @@
     ListItem.prototype.redrawToggleClasses = function() {
       this.redrawToggleClass('highlighted', 'highlighted');
       this.redrawToggleClass('isMoving', 'moving');
-    };
-
-    ListItem.prototype.redrawPlug = function() {
-      this.redrawProp('plugDisabled', function(plugDisabled) {
-        dom.toggleClass(this.plugElement(), 'hide', plugDisabled);
-      });
-
-      this.redrawProp('plugHighlighted', function(plugHighlighted) {
-        dom.toggleClass(this.plugElement(), 'highlighted', plugHighlighted);
-      });
     };
 
     ListItem.prototype.redrawSocket = function() {
@@ -247,6 +256,20 @@
         '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
       '</div>',
     ].join('');
+
+    ListItem.Handle = (function() {
+      var Handle = Component.inherits(function(props) {
+        this.disabled = this.prop(props.disabled);
+        this.highlighted = this.prop(props.highlighted);
+      });
+
+      Handle.prototype.redraw = function() {
+        this.redrawToggleClass('disabled', 'hide');
+        this.redrawToggleClass('highlighted', 'highlighted');
+      };
+
+      return Handle;
+    })();
 
     return ListItem;
   })();
