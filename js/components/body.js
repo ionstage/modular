@@ -69,7 +69,7 @@
   };
 
   Body.prototype.redraw = function() {
-    this.redrawToggleClass('isDragging', 'dragging');
+    this.redrawDOMToggleClassBy('isDragging', 'dragging');
   };
 
   Body.prototype.onready = function() {

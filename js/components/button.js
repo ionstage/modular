@@ -21,8 +21,8 @@
   };
 
   Button.prototype.redraw = function() {
-    this.redrawToggleClass('isActive', 'active');
-    this.redrawToggleClass('disabled', 'disabled');
+    this.redrawDOMToggleClassBy('isActive', 'active');
+    this.redrawDOMToggleClassBy('disabled', 'disabled');
     this.onredraw();
   };
 

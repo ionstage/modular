@@ -215,8 +215,8 @@
     };
 
     ListItem.prototype.redrawDOMToggleClasses = function() {
-      this.redrawToggleClass('highlighted', 'highlighted');
-      this.redrawToggleClass('isMoving', 'moving');
+      this.redrawDOMToggleClassBy('highlighted', 'highlighted');
+      this.redrawDOMToggleClassBy('isMoving', 'moving');
     };
 
     ListItem.prototype.redrawSocket = function() {
@@ -264,8 +264,8 @@
       });
 
       Handle.prototype.redraw = function() {
-        this.redrawToggleClass('disabled', 'hide');
-        this.redrawToggleClass('highlighted', 'highlighted');
+        this.redrawDOMToggleClassBy('disabled', 'hide');
+        this.redrawDOMToggleClassBy('highlighted', 'highlighted');
       };
 
       return Handle;

@@ -56,8 +56,8 @@
   };
 
   Main.prototype.redraw = function() {
-    this.redrawToggleClass('disabled', 'disabled');
-    this.redrawToggleClass('isFullWidth', 'full-width');
+    this.redrawDOMToggleClassBy('disabled', 'disabled');
+    this.redrawDOMToggleClassBy('isFullWidth', 'full-width');
   };
 
   Main.prototype.fileLoader = function(file) {

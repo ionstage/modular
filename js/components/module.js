@@ -498,10 +498,10 @@
   };
 
   Module.prototype.redrawDOMToggleClasses = function() {
-    this.redrawToggleClass('isLoading', 'loading');
-    this.redrawToggleClass('isError', 'error');
-    this.redrawToggleClass('isMoving', 'moving');
-    this.redrawToggleClass('isDeleting', 'deleting');
+    this.redrawDOMToggleClassBy('isLoading', 'loading');
+    this.redrawDOMToggleClassBy('isError', 'error');
+    this.redrawDOMToggleClassBy('isMoving', 'moving');
+    this.redrawDOMToggleClassBy('isDeleting', 'deleting');
   };
 
   Module.prototype.onappend = function() {
