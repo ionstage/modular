@@ -74,6 +74,12 @@
     });
   };
 
+  Component.prototype.redrawDOMValueBy = function(key) {
+    this.redrawBy(key, function(value) {
+      dom.value(this.element(), value);
+    });
+  };
+
   Component.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();

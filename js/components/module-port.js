@@ -286,13 +286,7 @@
 
     Option.prototype.onredraw = function() {
       this.redrawDOMTextBy('label');
-      this.redrawName();
-    };
-
-    Option.prototype.redrawName = function() {
-      this.redrawBy('name', function(name) {
-        dom.value(this.element(), name);
-      });
+      this.redrawDOMValueBy('name');
     };
 
     Option.HTML_TEXT = '<option></option>';
