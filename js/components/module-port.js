@@ -198,7 +198,7 @@
     ListItem.prototype.onredraw = function() {
       this.redrawType();
       this.redrawPosition();
-      this.redrawToggleClasses();
+      this.redrawDOMToggleClasses();
       this.redrawSocket();
       this.redrawLabel();
       this.redrawHideButton();
@@ -214,7 +214,7 @@
       });
     };
 
-    ListItem.prototype.redrawToggleClasses = function() {
+    ListItem.prototype.redrawDOMToggleClasses = function() {
       this.redrawToggleClass('highlighted', 'highlighted');
       this.redrawToggleClass('isMoving', 'moving');
     };

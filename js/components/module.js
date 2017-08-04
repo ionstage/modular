@@ -497,7 +497,7 @@
     this.clearToggledPorts();
   };
 
-  Module.prototype.redrawToggleClasses = function() {
+  Module.prototype.redrawDOMToggleClasses = function() {
     this.redrawToggleClass('isLoading', 'loading');
     this.redrawToggleClass('isError', 'error');
     this.redrawToggleClass('isMoving', 'moving');
@@ -526,7 +526,7 @@
     this.redrawPortList();
     this.redrawFooter();
     this.redrawPortSelect();
-    this.redrawToggleClasses();
+    this.redrawDOMToggleClasses();
   };
 
   Module.prototype.onstart = function(x, y, event, context) {
