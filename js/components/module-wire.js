@@ -37,7 +37,7 @@
   };
 
   ModuleWire.prototype.redrawPath = function() {
-    this.redrawProp('sourceX', 'sourceY', 'targetX', 'targetY', function(sourceX, sourceY, targetX, targetY) {
+    this.redrawBy('sourceX', 'sourceY', 'targetX', 'targetY', function(sourceX, sourceY, targetX, targetY) {
       var x = Math.min(sourceX, targetX);
       var y = Math.min(sourceY, targetY);
 
@@ -50,21 +50,21 @@
   };
 
   ModuleWire.prototype.redrawHandle = function() {
-    this.redrawProp('handleType', function(handleType) {
+    this.redrawBy('handleType', function(handleType) {
       dom.data(this.handleElement(), 'type', handleType);
     });
 
-    this.redrawProp('handleVisible', function(handleVisible) {
+    this.redrawBy('handleVisible', function(handleVisible) {
       dom.toggleClass(this.handleElement(), 'hide', !handleVisible);
     });
 
-    this.redrawProp('handlePosition', function(handlePosition) {
+    this.redrawBy('handlePosition', function(handlePosition) {
       dom.translate(this.handleElement(), handlePosition.x, handlePosition.y);
     });
   };
 
   ModuleWire.prototype.redrawHighlight = function() {
-    this.redrawProp('highlighted', function(highlighted) {
+    this.redrawBy('highlighted', function(highlighted) {
       dom.className(this.pathElement(), 'module-wire-path' + (highlighted ? ' highlighted' : ''));
       dom.toggleClass(this.handleElement(), 'highlighted', highlighted);
     });

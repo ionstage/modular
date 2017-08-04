@@ -70,13 +70,13 @@
   };
 
   SidebarModule.prototype.redrawTitle = function() {
-    this.redrawProp('title', function(title) {
+    this.redrawBy('title', function(title) {
       dom.text(this.headerElement(), title);
     });
   };
 
   SidebarModule.prototype.redrawContent = function() {
-    this.redrawProp('content', function(content) {
+    this.redrawBy('content', function(content) {
       dom.text(this.contentElement(), content);
     });
   };
@@ -179,7 +179,7 @@
     };
 
     Clone.prototype.redrawPosition = function() {
-      this.redrawProp('x', 'y', function(x, y) {
+      this.redrawBy('x', 'y', function(x, y) {
         dom.translate(this.element(), x, y);
       });
     };

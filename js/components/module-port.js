@@ -209,7 +209,7 @@
     };
 
     ListItem.prototype.redrawPosition = function() {
-      this.redrawProp('top', function(top) {
+      this.redrawBy('top', function(top) {
         dom.translateY(this.element(), top);
       });
     };
@@ -220,28 +220,28 @@
     };
 
     ListItem.prototype.redrawSocket = function() {
-      this.redrawProp('socketDisabled', function(socketDisabled) {
+      this.redrawBy('socketDisabled', function(socketDisabled) {
         dom.toggleClass(this.socketElement(), 'hide', socketDisabled);
       });
 
-      this.redrawProp('socketHighlighted', function(socketHighlighted) {
+      this.redrawBy('socketHighlighted', function(socketHighlighted) {
         dom.toggleClass(this.socketElement(), 'highlighted', socketHighlighted);
         dom.toggleClass(this.socketHandleElement(), 'highlighted', socketHighlighted);
       });
 
-      this.redrawProp('socketConnected', function(socketConnected) {
+      this.redrawBy('socketConnected', function(socketConnected) {
         dom.toggleClass(this.socketHandleElement(), 'hide', !socketConnected);
       });
     };
 
     ListItem.prototype.redrawLabel = function() {
-      this.redrawProp('label', function(label) {
+      this.redrawBy('label', function(label) {
         dom.text(this.labelElement(), label);
       });
     };
 
     ListItem.prototype.redrawHideButton = function() {
-      this.redrawProp('hideDisabled', function(hideDisabled) {
+      this.redrawBy('hideDisabled', function(hideDisabled) {
         dom.toggleClass(this.hideButtonElement(), 'disabled', hideDisabled);
       });
     };
@@ -290,13 +290,13 @@
     };
 
     Option.prototype.redrawLabel = function() {
-      this.redrawProp('label', function(label) {
+      this.redrawBy('label', function(label) {
         dom.text(this.element(), label);
       });
     };
 
     Option.prototype.redrawName = function() {
-      this.redrawProp('name', function(name) {
+      this.redrawBy('name', function(name) {
         dom.value(this.element(), name);
       });
     };

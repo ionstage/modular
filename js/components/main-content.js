@@ -421,13 +421,13 @@
   };
 
   MainContent.prototype.redrawRetainer = function() {
-    this.redrawProp('retainerPosition', function(retainerPosition) {
+    this.redrawBy('retainerPosition', function(retainerPosition) {
       dom.translate(this.retainerElement(), retainerPosition.x, retainerPosition.y);
     });
   };
 
   MainContent.prototype.redrawWireHandleContainer = function() {
-    this.redrawProp('wireHandleContainerZIndex', function(wireHandleContainerZIndex) {
+    this.redrawBy('wireHandleContainerZIndex', function(wireHandleContainerZIndex) {
       dom.css(this.wireHandleContainerElement(), { zIndex: wireHandleContainerZIndex });
     });
   };

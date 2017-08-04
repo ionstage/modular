@@ -53,7 +53,7 @@
   };
 
   Sidebar.prototype.redrawDragCount = function() {
-    this.redrawProp('dragCount', function(dragCount) {
+    this.redrawBy('dragCount', function(dragCount) {
       this.content.scrollEnabled(dragCount === 0);
     });
   };

@@ -439,37 +439,37 @@
   };
 
   Module.prototype.redrawTitle = function() {
-    this.redrawProp('title', function(title) {
+    this.redrawBy('title', function(title) {
       dom.text(this.titleElement(), title);
     });
   };
 
   Module.prototype.redrawPosition = function() {
-    this.redrawProp('x', 'y', function(x, y) {
+    this.redrawBy('x', 'y', function(x, y) {
       dom.translate(this.element(), x, y);
     });
   };
 
   Module.prototype.redrawZIndex = function() {
-    this.redrawProp('zIndex', function(zIndex) {
+    this.redrawBy('zIndex', function(zIndex) {
       dom.css(this.element(), { zIndex: zIndex });
     });
   };
 
   Module.prototype.redrawDeleteButton = function() {
-    this.redrawProp('deletable', function(deletable) {
+    this.redrawBy('deletable', function(deletable) {
       dom.toggleClass(this.deleteButtonElement(), 'disabled', !deletable);
     });
   };
 
   Module.prototype.redrawPortList = function() {
-    this.redrawProp('portListHeight', function(portListHeight) {
+    this.redrawBy('portListHeight', function(portListHeight) {
       dom.css(this.portListElement(), { height: portListHeight + 'px' });
     });
   };
 
   Module.prototype.redrawFooter = function() {
-    this.redrawProp('isAllPortsVisible', function(isAllPortsVisible) {
+    this.redrawBy('isAllPortsVisible', function(isAllPortsVisible) {
       dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
     });
   };

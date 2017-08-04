@@ -46,7 +46,7 @@
     helper.remove(this.relations(), relation);
   };
 
-  Component.prototype.redrawProp = function() {
+  Component.prototype.redrawBy = function() {
     var args = helper.toArray(arguments);
     var callback = args.pop();
 
@@ -57,13 +57,13 @@
   };
 
   Component.prototype.redrawData = function(key, dataName) {
-    this.redrawProp(key, function(value) {
+    this.redrawBy(key, function(value) {
       dom.data(this.element(), dataName, value);
     });
   };
 
   Component.prototype.redrawToggleClass = function(key, className) {
-    this.redrawProp(key, function(value) {
+    this.redrawBy(key, function(value) {
       dom.toggleClass(this.element(), className, value);
     });
   };
