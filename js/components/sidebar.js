@@ -5,7 +5,6 @@
   var Component = app.Component || require('./component.js');
   var SidebarContent = app.SidebarContent || require('./sidebar-content.js');
   var SidebarHeader = app.SidebarHeader || require('./sidebar-header.js');
-  var SidebarRelation = app.SidebarRelation || require('../relations/sidebar-relation.js');
 
   var Sidebar = Component.inherits(function(props) {
     this.disabled = this.prop(true);
@@ -13,6 +12,7 @@
 
     this.header = new SidebarHeader({
       element: this.headerElement(),
+      searcher: Sidebar.prototype.searcher.bind(this),
     });
 
     this.content = new SidebarContent({
@@ -22,16 +22,9 @@
       dropper: props.moduleDropper,
     });
 
-    this.relation = new SidebarRelation({
-      header: this.header,
-      content: this.content,
-      entrySearcher: props.entrySearcher,
-    });
-
+    this.entrySearcher = props.entrySearcher;
     this.moduleDragStarter = props.moduleDragStarter;
     this.moduleDragEnder = props.moduleDragEnder;
-
-    this.relation.set();
   });
 
   Sidebar.prototype.headerElement = function() {
@@ -51,7 +44,7 @@
   };
 
   Sidebar.prototype.loadContent = function() {
-    this.relation.update();
+    this.header.loadSearchText();
   };
 
   Sidebar.prototype.redraw = function() {
@@ -63,6 +56,11 @@
     this.redrawProp('dragCount', function(dragCount) {
       this.content.scrollEnabled(dragCount === 0);
     });
+  };
+
+  Sidebar.prototype.searcher = function(text) {
+    var entries = this.entrySearcher(text);
+    this.content.setModules(entries);
   };
 
   Sidebar.prototype.dragStarter = function() {

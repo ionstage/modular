@@ -5,6 +5,8 @@
   var Component = app.Component || require('./component.js');
 
   var SidebarHeader = Component.inherits(function(props) {
+    this.searcher = props.searcher;
+
     this.registerSearchInputFocusListener();
     this.registerSearchInputInputListener();
   });
@@ -34,8 +36,12 @@
 
   SidebarHeader.prototype.registerSearchInputInputListener = function() {
     dom.on(this.searchInputElement(), 'input', function() {
-      this.markDirty();
+      this.searcher(this.searchText());
     }.bind(this));
+  };
+
+  SidebarHeader.prototype.loadSearchText = function() {
+    this.searcher(this.searchText());
   };
 
   if (typeof module !== 'undefined' && module.exports) {
