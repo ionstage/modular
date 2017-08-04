@@ -205,7 +205,7 @@
     };
 
     ListItem.prototype.redrawType = function() {
-      this.redrawData('type', 'type');
+      this.redrawDOMDataBy('type', 'type');
     };
 
     ListItem.prototype.redrawPosition = function() {

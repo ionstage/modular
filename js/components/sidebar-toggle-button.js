@@ -27,7 +27,7 @@
   };
 
   SidebarToggleButton.prototype.onredraw = function() {
-    this.redrawData('type', 'type');
+    this.redrawDOMDataBy('type', 'type');
   };
 
   if (typeof module !== 'undefined' && module.exports) {

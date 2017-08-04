@@ -56,7 +56,7 @@
     }
   };
 
-  Component.prototype.redrawData = function(key, dataName) {
+  Component.prototype.redrawDOMDataBy = function(key, dataName) {
     this.redrawBy(key, function(value) {
       dom.data(this.element(), dataName, value);
     });
