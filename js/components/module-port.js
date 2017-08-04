@@ -285,14 +285,8 @@
     };
 
     Option.prototype.onredraw = function() {
-      this.redrawLabel();
+      this.redrawDOMTextBy('label');
       this.redrawName();
-    };
-
-    Option.prototype.redrawLabel = function() {
-      this.redrawBy('label', function(label) {
-        dom.text(this.element(), label);
-      });
     };
 
     Option.prototype.redrawName = function() {
