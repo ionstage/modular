@@ -146,10 +146,7 @@
       this.plugOffsetX = this.prop(261);
       this.socketOffsetX = this.prop(-25);
 
-      this.plug = new ListItem.Handle({
-        disabled: props.plugDisabled,
-        highlighted: false,
-      });
+      this.plug = new ListItem.Handle({ disabled: props.plugDisabled });
     });
 
     ListItem.prototype.plugElement = function() {
@@ -260,7 +257,7 @@
     ListItem.Handle = (function() {
       var Handle = Component.inherits(function(props) {
         this.disabled = this.prop(props.disabled);
-        this.highlighted = this.prop(props.highlighted);
+        this.highlighted = this.prop(false);
       });
 
       Handle.prototype.redraw = function() {
