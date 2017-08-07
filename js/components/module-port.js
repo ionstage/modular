@@ -53,6 +53,9 @@
   ModulePort.prototype.highlighted = function(value) {
     if (typeof value !== 'undefined') {
       this.markDirty();
+
+      // don't hide highlighted port
+      this.listItem.hideDisabled(value);
     }
     return this.listItem.highlighted(value);
   };
@@ -147,6 +150,7 @@
       this.socketOffsetX = this.prop(-25);
 
       this.plug = new ListItem.Handle({ disabled: props.plugDisabled });
+      this.hideButton = new ListItem.HideButton();
     });
 
     ListItem.prototype.plugElement = function() {
@@ -169,17 +173,16 @@
       return dom.child(this.element(), 3);
     };
 
-    ListItem.prototype.hideDisabled = function() {
-      // don't hide highlighted port
-      return this.highlighted();
-    };
-
     ListItem.prototype.plugDisabled = function(value) {
       return this.plug.disabled(value);
     };
 
     ListItem.prototype.plugHighlighted = function(value) {
       return this.plug.highlighted(value);
+    };
+
+    ListItem.prototype.hideDisabled = function(value) {
+      return this.hideButton.disabled(value);
     };
 
     ListItem.prototype.render = function() {
@@ -190,6 +193,10 @@
       this.plug.element(this.plugElement());
       this.plug.parentElement(this.element());
       this.plug.redraw();
+
+      this.hideButton.element(this.hideButtonElement());
+      this.hideButton.parentElement(this.element());
+      this.hideButton.redraw();
     };
 
     ListItem.prototype.onredraw = function() {
@@ -198,7 +205,6 @@
       this.redrawDOMToggleClasses();
       this.redrawSocket();
       this.redrawLabel();
-      this.redrawHideButton();
     };
 
     ListItem.prototype.redrawType = function() {
@@ -237,12 +243,6 @@
       });
     };
 
-    ListItem.prototype.redrawHideButton = function() {
-      this.redrawBy('hideDisabled', function(hideDisabled) {
-        dom.toggleClass(this.hideButtonElement(), 'disabled', hideDisabled);
-      });
-    };
-
     ListItem.HTML_TEXT = [
       '<div class="module-port">',
         '<div class="module-port-plug module-port-handle"></div>',
@@ -266,6 +266,18 @@
       };
 
       return Handle;
+    })();
+
+    ListItem.HideButton = (function() {
+      var HideButton = Component.inherits(function() {
+        this.disabled = this.prop(false);
+      });
+
+      HideButton.prototype.redraw = function() {
+        this.redrawDOMToggleClassBy('disabled', 'disabled');
+      };
+
+      return HideButton;
     })();
 
     return ListItem;
