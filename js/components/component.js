@@ -119,7 +119,8 @@
 
   Component.inherits = function(initializer) {
     var superCtor = this;
-    var ctor = helper.inherits(function(props) {
+    var ctor = helper.inherits(function() {
+      var props = (arguments.length !== 0 ? arguments[0] : {});
       superCtor.call(this, props);
       initializer.call(this, props);
     }, superCtor);
