@@ -137,7 +137,6 @@
 
   ModulePort.ListItem = (function() {
     var ListItem = Component.inherits(function(props) {
-      this.label = this.prop(props.label);
       this.type = this.prop(props.type);
       this.socketDisabled = this.prop(props.socketDisabled);
       this.top = this.prop(0);
@@ -150,6 +149,7 @@
       this.socketOffsetX = this.prop(-25);
 
       this.plug = new ListItem.Handle({ disabled: props.plugDisabled });
+      this.content = new ListItem.Content({ label: props.label });
       this.hideButton = new ListItem.HideButton();
     });
 
@@ -181,6 +181,10 @@
       return this.plug.highlighted(value);
     };
 
+    ListItem.prototype.label = function(value) {
+      return this.content.label(value);
+    };
+
     ListItem.prototype.hideDisabled = function(value) {
       return this.hideButton.disabled(value);
     };
@@ -194,6 +198,10 @@
       this.plug.parentElement(this.element());
       this.plug.redraw();
 
+      this.content.element(this.labelElement());
+      this.content.parentElement(this.element());
+      this.content.redraw();
+
       this.hideButton.element(this.hideButtonElement());
       this.hideButton.parentElement(this.element());
       this.hideButton.redraw();
@@ -201,6 +209,7 @@
 
     ListItem.prototype.onremove = function() {
       this.plug.clearCache();
+      this.content.clearCache();
       this.hideButton.clearCache();
     };
 
@@ -209,7 +218,6 @@
       this.redrawPosition();
       this.redrawDOMToggleClasses();
       this.redrawSocket();
-      this.redrawLabel();
     };
 
     ListItem.prototype.redrawType = function() {
@@ -242,19 +250,13 @@
       });
     };
 
-    ListItem.prototype.redrawLabel = function() {
-      this.redrawBy('label', function(label) {
-        dom.text(this.labelElement(), label);
-      });
-    };
-
     ListItem.HTML_TEXT = [
       '<div class="module-port">',
         '<div class="module-port-plug module-port-handle"></div>',
         '<div class="module-port-socket">',
           '<div class="module-port-socket-handle module-port-handle"></div>',
         '</div>',
-        '<div class="module-port-label"></div>',
+        '<div class="module-port-content"></div>',
         '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
       '</div>',
     ].join('');
@@ -271,6 +273,18 @@
       };
 
       return Handle;
+    })();
+
+    ListItem.Content = (function() {
+      var Content = Component.inherits(function(props) {
+        this.label = this.prop(props.label);
+      });
+
+      Content.prototype.redraw = function() {
+        this.redrawDOMTextBy('label');
+      };
+
+      return Content;
     })();
 
     ListItem.HideButton = (function() {

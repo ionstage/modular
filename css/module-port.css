@@ -87,7 +87,7 @@
   pointer-events: auto;
 }
 
-.module-port-label {
+.module-port-content {
   float: left;
   line-height: 42px;
   overflow: hidden;

@@ -725,7 +725,7 @@
     { className: 'module-title', listener: Module.DRAG_LISTENER_POSITION },
     { className: 'module-delete-button', listener: Module.DRAG_LISTENER_DELETE },
     { className: 'module-port-hide-button', listener: Module.DRAG_LISTENER_HIDE_PORT },
-    { className: 'module-port-label', listener: Module.DRAG_LISTENER_SORT_PORT },
+    { className: 'module-port-content', listener: Module.DRAG_LISTENER_SORT_PORT },
     { className: 'module-port-plug', listener: Module.DRAG_LISTENER_DRAG_PORT_PLAG },
     { className: 'module-port-socket-handle', listener: Module.DRAG_LISTENER_DRAG_PORT_SOCKET },
   ];
