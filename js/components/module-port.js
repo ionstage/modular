@@ -199,6 +199,11 @@
       this.hideButton.redraw();
     };
 
+    ListItem.prototype.onremove = function() {
+      this.plug.clearCache();
+      this.hideButton.clearCache();
+    };
+
     ListItem.prototype.onredraw = function() {
       this.redrawType();
       this.redrawPosition();
