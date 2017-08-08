@@ -11,6 +11,7 @@
     this.targetY = this.prop(props.targetY);
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(props.handleVisible);
+    this.handleWidth = this.prop(24);
     this.highlighted = this.prop(false);
     this.handleElement = this.prop(this.renderHandle());
     this.parentHandleElement = this.prop(props.parentHandleElement);
@@ -23,8 +24,8 @@
 
   ModuleWire.prototype.handlePosition = function() {
     return {
-      x: this.targetX() - ModuleWire.HANDLE_WIDTH / 2,
-      y: this.targetY() - ModuleWire.HANDLE_WIDTH / 2,
+      x: this.targetX() - this.handleWidth() / 2,
+      y: this.targetY() - this.handleWidth() / 2,
     };
   };
 
@@ -84,8 +85,6 @@
     this.redrawHandle();
     this.redrawHighlight();
   };
-
-  ModuleWire.HANDLE_WIDTH = 24;
 
   ModuleWire.HTML_TEXT = [
     '<svg class="module-wire">',
