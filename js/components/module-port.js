@@ -138,17 +138,15 @@
   ModulePort.ListItem = (function() {
     var ListItem = Component.inherits(function(props) {
       this.type = this.prop(props.type);
-      this.socketDisabled = this.prop(props.socketDisabled);
       this.top = this.prop(0);
       this.highlighted = this.prop(false);
       this.isMoving = this.prop(false);
-      this.socketHighlighted = this.prop(false);
-      this.socketConnected = this.prop(false);
       this.height = this.prop(44);
       this.plugOffsetX = this.prop(261);
       this.socketOffsetX = this.prop(-25);
 
       this.plug = new ListItem.Handle({ disabled: props.plugDisabled });
+      this.socket = new ListItem.Socket({ disabled: props.socketDisabled });
       this.content = new ListItem.Content({ label: props.label });
       this.hideButton = new ListItem.HideButton();
     });
@@ -181,6 +179,18 @@
       return this.plug.highlighted(value);
     };
 
+    ListItem.prototype.socketDisabled = function(value) {
+      return this.socket.disabled(value);
+    };
+
+    ListItem.prototype.socketHighlighted = function(value) {
+      return this.socket.highlighted(value);
+    };
+
+    ListItem.prototype.socketConnected = function(value) {
+      return this.socket.connected(value);
+    };
+
     ListItem.prototype.label = function(value) {
       return this.content.label(value);
     };
@@ -198,6 +208,11 @@
       this.plug.parentElement(this.element());
       this.plug.redraw();
 
+      this.socket.element(this.socketElement());
+      this.socket.parentElement(this.element());
+      this.socket.redraw();
+      this.socket.appendHandle(this.socketHandleElement());
+
       this.content.element(this.labelElement());
       this.content.parentElement(this.element());
       this.content.redraw();
@@ -209,6 +224,7 @@
 
     ListItem.prototype.onremove = function() {
       this.plug.clearCache();
+      this.socket.clearCache();
       this.content.clearCache();
       this.hideButton.clearCache();
     };
@@ -217,7 +233,6 @@
       this.redrawType();
       this.redrawPosition();
       this.redrawDOMToggleClasses();
-      this.redrawSocket();
     };
 
     ListItem.prototype.redrawType = function() {
@@ -233,21 +248,6 @@
     ListItem.prototype.redrawDOMToggleClasses = function() {
       this.redrawDOMToggleClassBy('highlighted', 'highlighted');
       this.redrawDOMToggleClassBy('isMoving', 'moving');
-    };
-
-    ListItem.prototype.redrawSocket = function() {
-      this.redrawBy('socketDisabled', function(socketDisabled) {
-        dom.toggleClass(this.socketElement(), 'hide', socketDisabled);
-      });
-
-      this.redrawBy('socketHighlighted', function(socketHighlighted) {
-        dom.toggleClass(this.socketElement(), 'highlighted', socketHighlighted);
-        dom.toggleClass(this.socketHandleElement(), 'highlighted', socketHighlighted);
-      });
-
-      this.redrawBy('socketConnected', function(socketConnected) {
-        dom.toggleClass(this.socketHandleElement(), 'hide', !socketConnected);
-      });
     };
 
     ListItem.HTML_TEXT = [
@@ -273,6 +273,41 @@
       };
 
       return Handle;
+    })();
+
+    ListItem.Socket = (function() {
+      var Socket = Component.inherits(function(props) {
+        this.disabled = this.prop(props.disabled);
+        this.handle = new ListItem.Handle({ disabled: true });
+      });
+
+      Socket.prototype.highlighted = function(value) {
+        if (typeof value !== 'undefined') {
+          this.markDirty();
+        }
+        return this.handle.highlighted(value);
+      };
+
+      Socket.prototype.connected = function(value) {
+        if (typeof value === 'undefined') {
+          return !this.handle.disabled();
+        }
+        this.handle.disabled(!value);
+      };
+
+      Socket.prototype.appendHandle = function(element) {
+        this.handle.element(element);
+        this.handle.parentElement(this.element());
+        this.handle.clearCache();
+        this.handle.redraw();
+      };
+
+      Socket.prototype.redraw = function() {
+        this.redrawDOMToggleClassBy('disabled', 'hide');
+        this.redrawDOMToggleClassBy('highlighted', 'highlighted');
+      };
+
+      return Socket;
     })();
 
     ListItem.Content = (function() {
