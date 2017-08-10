@@ -200,20 +200,8 @@
     };
 
     ListItem.prototype.onredraw = function() {
-      this.redrawType();
-      this.redrawPosition();
-      this.redrawDOMToggleClasses();
-    };
-
-    ListItem.prototype.redrawType = function() {
       this.redrawDOMDataBy('type', 'type');
-    };
-
-    ListItem.prototype.redrawPosition = function() {
       this.redrawDOMTranslateYBy('top');
-    };
-
-    ListItem.prototype.redrawDOMToggleClasses = function() {
       this.redrawDOMToggleClassBy('highlighted', 'highlighted');
       this.redrawDOMToggleClassBy('isMoving', 'moving');
     };
