@@ -185,20 +185,6 @@
       return dom.render(ListItem.HTML_TEXT);
     };
 
-    ListItem.prototype.onappend = function() {
-      this.children.forEach(function(child) {
-        child.parentElement(this.element());
-        child.redraw();
-      }.bind(this));
-    };
-
-    ListItem.prototype.onremove = function() {
-      this.children.forEach(function(child) {
-        child.parentElement(null);
-        child.redraw();
-      });
-    };
-
     ListItem.prototype.onredraw = function() {
       this.redrawDOMDataBy('type', 'type');
       this.redrawDOMTranslateYBy('top');
@@ -238,6 +224,7 @@
       var Socket = Component.inherits(function(props) {
         this.disabled = this.prop(props.disabled);
         this.handle = new ListItem.SocketHandle({ disabled: true });
+        this.children = [this.handle];
       });
 
       Socket.prototype.highlighted = function(value) {
@@ -256,16 +243,6 @@
 
       Socket.prototype.render = function() {
         return dom.render(Socket.HTML_TEXT);
-      };
-
-      Socket.prototype.onappend = function() {
-        this.handle.parentElement(this.element());
-        this.handle.redraw();
-      };
-
-      Socket.prototype.onremove = function() {
-        this.handle.parentElement(null);
-        this.handle.redraw();
       };
 
       Socket.prototype.onredraw = function() {
