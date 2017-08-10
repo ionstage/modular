@@ -122,7 +122,9 @@
     var ctor = helper.inherits(function() {
       var props = (arguments.length !== 0 ? arguments[0] : {});
       superCtor.call(this, props);
-      initializer.call(this, props);
+      if (typeof initializer === 'function') {
+        initializer.call(this, props);
+      }
     }, superCtor);
     ctor.inherits = superCtor.inherits;
     return ctor;

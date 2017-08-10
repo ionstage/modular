@@ -145,31 +145,13 @@
       this.plugOffsetX = this.prop(261);
       this.socketOffsetX = this.prop(-25);
 
-      this.plug = new ListItem.Handle({ disabled: props.plugDisabled });
+      this.plug = new ListItem.Plug({ disabled: props.plugDisabled });
       this.socket = new ListItem.Socket({ disabled: props.socketDisabled });
       this.content = new ListItem.Content({ label: props.label });
       this.hideButton = new ListItem.HideButton();
+
+      this.children = [this.plug, this.socket, this.content, this.hideButton];
     });
-
-    ListItem.prototype.plugElement = function() {
-      return dom.child(this.element(), 0);
-    };
-
-    ListItem.prototype.socketElement = function() {
-      return dom.child(this.element(), 1);
-    };
-
-    ListItem.prototype.socketHandleElement = function() {
-      return dom.child(this.element(), 1, 0);
-    };
-
-    ListItem.prototype.labelElement = function() {
-      return dom.child(this.element(), 2);
-    };
-
-    ListItem.prototype.hideButtonElement = function() {
-      return dom.child(this.element(), 3);
-    };
 
     ListItem.prototype.plugDisabled = function(value) {
       return this.plug.disabled(value);
@@ -204,29 +186,17 @@
     };
 
     ListItem.prototype.onappend = function() {
-      this.plug.element(this.plugElement());
-      this.plug.parentElement(this.element());
-      this.plug.redraw();
-
-      this.socket.element(this.socketElement());
-      this.socket.parentElement(this.element());
-      this.socket.redraw();
-      this.socket.appendHandle(this.socketHandleElement());
-
-      this.content.element(this.labelElement());
-      this.content.parentElement(this.element());
-      this.content.redraw();
-
-      this.hideButton.element(this.hideButtonElement());
-      this.hideButton.parentElement(this.element());
-      this.hideButton.redraw();
+      this.children.forEach(function(child) {
+        child.parentElement(this.element());
+        child.redraw();
+      }.bind(this));
     };
 
     ListItem.prototype.onremove = function() {
-      this.plug.clearCache();
-      this.socket.clearCache();
-      this.content.clearCache();
-      this.hideButton.clearCache();
+      this.children.forEach(function(child) {
+        child.parentElement(null);
+        child.redraw();
+      });
     };
 
     ListItem.prototype.onredraw = function() {
@@ -250,16 +220,7 @@
       this.redrawDOMToggleClassBy('isMoving', 'moving');
     };
 
-    ListItem.HTML_TEXT = [
-      '<div class="module-port">',
-        '<div class="module-port-plug module-port-handle"></div>',
-        '<div class="module-port-socket">',
-          '<div class="module-port-socket-handle module-port-handle"></div>',
-        '</div>',
-        '<div class="module-port-content"></div>',
-        '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
-      '</div>',
-    ].join('');
+    ListItem.HTML_TEXT = '<div class="module-port"></div>';
 
     ListItem.Handle = (function() {
       var Handle = Component.inherits(function(props) {
@@ -267,7 +228,7 @@
         this.highlighted = this.prop(false);
       });
 
-      Handle.prototype.redraw = function() {
+      Handle.prototype.onredraw = function() {
         this.redrawDOMToggleClassBy('disabled', 'hide');
         this.redrawDOMToggleClassBy('highlighted', 'highlighted');
       };
@@ -275,10 +236,22 @@
       return Handle;
     })();
 
+    ListItem.Plug = (function() {
+      var Plug = ListItem.Handle.inherits();
+
+      Plug.prototype.render = function() {
+        return dom.render(Plug.HTML_TEXT);
+      };
+
+      Plug.HTML_TEXT = '<div class="module-port-plug module-port-handle"></div>';
+
+      return Plug;
+    })();
+
     ListItem.Socket = (function() {
       var Socket = Component.inherits(function(props) {
         this.disabled = this.prop(props.disabled);
-        this.handle = new ListItem.Handle({ disabled: true });
+        this.handle = new ListItem.SocketHandle({ disabled: true });
       });
 
       Socket.prototype.highlighted = function(value) {
@@ -295,19 +268,40 @@
         this.handle.disabled(!value);
       };
 
-      Socket.prototype.appendHandle = function(element) {
-        this.handle.element(element);
+      Socket.prototype.render = function() {
+        return dom.render(Socket.HTML_TEXT);
+      };
+
+      Socket.prototype.onappend = function() {
         this.handle.parentElement(this.element());
-        this.handle.clearCache();
         this.handle.redraw();
       };
 
-      Socket.prototype.redraw = function() {
+      Socket.prototype.onremove = function() {
+        this.handle.parentElement(null);
+        this.handle.redraw();
+      };
+
+      Socket.prototype.onredraw = function() {
         this.redrawDOMToggleClassBy('disabled', 'hide');
         this.redrawDOMToggleClassBy('highlighted', 'highlighted');
       };
 
+      Socket.HTML_TEXT = '<div class="module-port-socket"></div>';
+
       return Socket;
+    })();
+
+    ListItem.SocketHandle = (function() {
+      var SocketHandle = ListItem.Handle.inherits();
+
+      SocketHandle.prototype.render = function() {
+        return dom.render(SocketHandle.HTML_TEXT);
+      };
+
+      SocketHandle.HTML_TEXT = '<div class="module-port-socket-handle module-port-handle"></div>';
+
+      return SocketHandle;
     })();
 
     ListItem.Content = (function() {
@@ -315,9 +309,15 @@
         this.label = this.prop(props.label);
       });
 
-      Content.prototype.redraw = function() {
+      Content.prototype.render = function() {
+        return dom.render(Content.HTML_TEXT);
+      };
+
+      Content.prototype.onredraw = function() {
         this.redrawDOMTextBy('label');
       };
+
+      Content.HTML_TEXT = '<div class="module-port-content"></div>';
 
       return Content;
     })();
@@ -327,9 +327,15 @@
         this.disabled = this.prop(false);
       });
 
-      HideButton.prototype.redraw = function() {
+      HideButton.prototype.render = function() {
+        return dom.render(HideButton.HTML_TEXT);
+      };
+
+      HideButton.prototype.onredraw = function() {
         this.redrawDOMToggleClassBy('disabled', 'disabled');
       };
+
+      HideButton.HTML_TEXT = '<img class="module-port-hide-button" src="images/minus-square-o.svg">';
 
       return HideButton;
     })();
