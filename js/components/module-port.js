@@ -210,9 +210,7 @@
     };
 
     ListItem.prototype.redrawPosition = function() {
-      this.redrawBy('top', function(top) {
-        dom.translateY(this.element(), top);
-      });
+      this.redrawDOMTranslateYBy('top');
     };
 
     ListItem.prototype.redrawDOMToggleClasses = function() {
