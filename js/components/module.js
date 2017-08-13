@@ -713,53 +713,58 @@
   ].join('');
 
   Module.PortSelect = (function() {
-    var PortSelect = Component.inherits(function(props) {
+    var PortSelect = Component.inherits(function() {
+      this.ports = [];
       this.options = [];
     });
 
     PortSelect.prototype.optGroupElement = function(type) {
-      return dom.child(this.element(), PortSelect.OPT_GROUP_INDEX_MAP[type]);
+      if (type === ModulePort.TYPE_PROP) {
+        return dom.child(this.element(), 0);
+      } else if (type === ModulePort.TYPE_EVENT) {
+        return dom.child(this.element(), 1);
+      } else {
+        throw new Error('Invalid type');
+      }
     };
 
     PortSelect.prototype.add = function(port) {
-      var option = new PortSelect.Option({
-        parentElement: this.optGroupElement(port.type()),
-        label: port.label(),
-        name: port.name(),
-      });
-      this.options.push(option);
+      this.ports.push(port);
       this.markDirty();
     };
 
     PortSelect.prototype.remove = function(port) {
-      var index = helper.findIndex(this.options, function(option) {
-        return option.name() === port.name();
-      });
-      this.options[index].parentElement(null);
-      helper.removeAt(this.options, index);
+      helper.remove(this.ports, port);
       this.markDirty();
     };
 
+    PortSelect.prototype.createOption = function(port) {
+      return new PortSelect.Option({
+        parentElement: this.optGroupElement(port.type()),
+        label: port.label(),
+        name: port.name(),
+      });
+    };
+
     PortSelect.prototype.redraw = function() {
+      // remove all options
       this.options.forEach(function(option) {
+        option.parentElement(null);
         option.redraw();
       });
 
       // sort options by name
-      [ModulePort.TYPE_PROP, ModulePort.TYPE_EVENT].forEach(function(type) {
-        dom.sort(this.optGroupElement(type));
+      this.options = helper.sortBy(this.ports, function(port) {
+        return port.name();
+      }).map(function(port) {
+        var option = this.createOption(port);
+        option.redraw();
+        return option;
       }.bind(this));
 
       // deselect option
       dom.value(this.element(), '');
     };
-
-    PortSelect.OPT_GROUP_INDEX_MAP = (function() {
-      var map = {};
-      map[ModulePort.TYPE_PROP] = 0;
-      map[ModulePort.TYPE_EVENT] = 1;
-      return map;
-    })();
 
     PortSelect.Option = (function() {
       var Option = Component.inherits(function(props) {
