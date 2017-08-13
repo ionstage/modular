@@ -18,7 +18,6 @@
     this.zIndex = this.prop('auto');
     this.deletable = this.prop(true);
     this.ports = this.prop([]);
-    this.toggledPorts = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
     this.eventCircuitModule = this.prop(null);
@@ -27,6 +26,8 @@
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
+
+    this.portSelect = new Module.PortSelect();
 
     this.portRelationCollection = new RelationCollection({ ctor: ModulePortRelation });
 
@@ -76,10 +77,6 @@
 
   Module.prototype.portSelectElement = function() {
     return dom.child(this.element(), 2, 1);
-  };
-
-  Module.prototype.portOptGroupElement = function(type) {
-    return dom.child(this.element(), 2, 1, Module.PORT_OPT_GROUP_INDEX_MAP[type]);
   };
 
   Module.prototype.componentContentWindow = function() {
@@ -218,7 +215,6 @@
     return this.circuitModule().getAll().map(function(member) {
       return new ModulePort(helper.extend(helper.clone(member), {
         parentListElement: this.portListElement(),
-        parentOptGroupElement: this.portOptGroupElement(member.type),
       }));
     }.bind(this));
   };
@@ -321,20 +317,9 @@
     this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
   };
 
-  Module.prototype.clearToggledPorts = function() {
-    this.toggledPorts([]);
-  };
-
-  Module.prototype.markToggled = function(port) {
-    var toggledPorts = this.toggledPorts();
-    if (toggledPorts.indexOf(port) === -1) {
-      toggledPorts.push(port);
-    }
-  };
-
   Module.prototype.resetPortSelect = function() {
     this.ports().forEach(function(port) {
-      this.markToggled(port);
+      this.portSelect.add(port);
     }.bind(this));
   };
 
@@ -387,7 +372,7 @@
     this.portListHeight(portListHeight + port.height());
     port.top(portListHeight);
     port.visible(true);
-    this.markToggled(port);
+    this.portSelect.remove(port);
     this.setPortRelation(port);
 
     // move right not to position the port-socket outside
@@ -408,7 +393,7 @@
     });
 
     port.visible(false);
-    this.markToggled(port);
+    this.portSelect.add(port);
     this.unsetPortRelation(port);
 
     // move up the ports below the hidden port
@@ -474,29 +459,6 @@
     });
   };
 
-  Module.prototype.redrawPortSelect = function() {
-    var toggledPorts = this.toggledPorts();
-
-    if (toggledPorts.length === 0) {
-      return;
-    }
-
-    // update select element of toggled port
-    toggledPorts.forEach(function(port) {
-      port.redraw();
-    });
-
-    // sort options by name
-    [ModulePort.TYPE_PROP, ModulePort.TYPE_EVENT].forEach(function(type) {
-      dom.sort(this.portOptGroupElement(type));
-    }.bind(this));
-
-    // deselect option
-    dom.value(this.portSelectElement(), '');
-
-    this.clearToggledPorts();
-  };
-
   Module.prototype.redrawDOMToggleClasses = function() {
     this.redrawDOMToggleClassBy('isLoading', 'loading');
     this.redrawDOMToggleClassBy('isError', 'error');
@@ -505,6 +467,7 @@
   };
 
   Module.prototype.onappend = function() {
+    this.portSelect.element(this.portSelectElement());
     this.registerDragListener();
     this.registerPortSelectChangeListener();
     this.registerPointListener();
@@ -525,7 +488,6 @@
     this.redrawDeleteButton();
     this.redrawPortList();
     this.redrawFooter();
-    this.redrawPortSelect();
     this.redrawDOMToggleClasses();
   };
 
@@ -750,11 +712,76 @@
     '</div>',
   ].join('');
 
-  Module.PORT_OPT_GROUP_INDEX_MAP = (function() {
-    var map = {};
-    map[ModulePort.TYPE_PROP] = 0;
-    map[ModulePort.TYPE_EVENT] = 1;
-    return map;
+  Module.PortSelect = (function() {
+    var PortSelect = Component.inherits(function(props) {
+      this.options = [];
+    });
+
+    PortSelect.prototype.optGroupElement = function(type) {
+      return dom.child(this.element(), PortSelect.OPT_GROUP_INDEX_MAP[type]);
+    };
+
+    PortSelect.prototype.add = function(port) {
+      var option = new PortSelect.Option({
+        parentElement: this.optGroupElement(port.type()),
+        label: port.label(),
+        name: port.name(),
+      });
+      this.options.push(option);
+      this.markDirty();
+    };
+
+    PortSelect.prototype.remove = function(port) {
+      var index = helper.findIndex(this.options, function(option) {
+        return option.name() === port.name();
+      });
+      this.options[index].parentElement(null);
+      helper.removeAt(this.options, index);
+      this.markDirty();
+    };
+
+    PortSelect.prototype.redraw = function() {
+      this.options.forEach(function(option) {
+        option.redraw();
+      });
+
+      // sort options by name
+      [ModulePort.TYPE_PROP, ModulePort.TYPE_EVENT].forEach(function(type) {
+        dom.sort(this.optGroupElement(type));
+      }.bind(this));
+
+      // deselect option
+      dom.value(this.element(), '');
+    };
+
+    PortSelect.OPT_GROUP_INDEX_MAP = (function() {
+      var map = {};
+      map[ModulePort.TYPE_PROP] = 0;
+      map[ModulePort.TYPE_EVENT] = 1;
+      return map;
+    })();
+
+    PortSelect.Option = (function() {
+      var Option = Component.inherits(function(props) {
+        this.label = this.prop(props.label);
+        this.name = this.prop(props.name);
+      });
+
+      Option.prototype.render = function() {
+        return dom.render(Option.HTML_TEXT);
+      };
+
+      Option.prototype.onredraw = function() {
+        this.redrawDOMTextBy('label');
+        this.redrawDOMValueBy('name');
+      };
+
+      Option.HTML_TEXT = '<option></option>';
+
+      return Option;
+    })();
+
+    return PortSelect;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {

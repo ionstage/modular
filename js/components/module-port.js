@@ -5,6 +5,7 @@
   var Component = app.Component || require('./component.js');
 
   var ModulePort = Component.inherits(function(props) {
+    this.name = this.prop(props.name);
     this.type = this.prop(props.type);
     this.top = this.prop(0);
     this.isMoving = this.prop(false);
@@ -12,7 +13,6 @@
     this.plugOffsetX = this.prop(261);
     this.socketOffsetX = this.prop(-25);
     this.parentListElement = this.prop(props.parentListElement);
-    this.parentOptGroupElement = this.prop(props.parentOptGroupElement);
 
     this.plug = new ModulePort.Plug({ disabled: props.plugDisabled });
     this.socket = new ModulePort.Socket({ disabled: props.socketDisabled });
@@ -20,24 +20,13 @@
     this.hideButton = new ModulePort.HideButton();
 
     this.children = [this.plug, this.socket, this.content, this.hideButton];
-
-    this.option = new ModulePort.Option({
-      parentElement: props.parentOptGroupElement,
-      label: props.label,
-      name: props.name,
-    });
   });
 
   ModulePort.prototype.visible = function(value) {
     if (typeof value !== 'undefined') {
       this.parentElement(value ? this.parentListElement() : null);
-      this.option.parentElement(value ? null : this.parentOptGroupElement());
     }
     return (this.parentElement() !== null);
-  };
-
-  ModulePort.prototype.name = function() {
-    return this.option.name();
   };
 
   ModulePort.prototype.highlighted = function(value) {
@@ -99,11 +88,6 @@
 
   ModulePort.prototype.render = function() {
     return dom.render(ModulePort.HTML_TEXT);
-  };
-
-  ModulePort.prototype.redraw = function() {
-    ModulePort.super_.prototype.redraw.call(this);
-    this.option.redraw();
   };
 
   ModulePort.prototype.onredraw = function() {
@@ -228,26 +212,6 @@
     HideButton.HTML_TEXT = '<img class="module-port-hide-button" src="images/minus-square-o.svg">';
 
     return HideButton;
-  })();
-
-  ModulePort.Option = (function() {
-    var Option = Component.inherits(function(props) {
-      this.label = this.prop(props.label);
-      this.name = this.prop(props.name);
-    });
-
-    Option.prototype.render = function() {
-      return dom.render(Option.HTML_TEXT);
-    };
-
-    Option.prototype.onredraw = function() {
-      this.redrawDOMTextBy('label');
-      this.redrawDOMValueBy('name');
-    };
-
-    Option.HTML_TEXT = '<option></option>';
-
-    return Option;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
