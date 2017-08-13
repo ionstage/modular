@@ -161,12 +161,6 @@
     document.activeElement.blur();
   };
 
-  dom.sort = function(el) {
-    helper.sortBy(helper.toArray(el.children), 'textContent').forEach(function(child) {
-      dom.append(el, child);
-    });
-  };
-
   dom.clone = function(el) {
     return el.cloneNode(true);
   };
