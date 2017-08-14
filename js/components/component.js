@@ -14,7 +14,6 @@
     this.element = this.prop(element);
     this.parentElement = this.prop(parentElement);
     this.cache = {};
-    this.children = [];
   }, jCore.Component);
 
   Component.prototype.needsUpdate = function(keys) {
@@ -37,20 +36,6 @@
 
   Component.prototype.clearCache = function() {
     this.cache = {};
-  };
-
-  Component.prototype.appendChild = function() {
-    this.children.forEach(function(child) {
-      child.parentElement(this.element());
-      child.redraw();
-    }.bind(this));
-  };
-
-  Component.prototype.removeChild = function() {
-    this.children.forEach(function(child) {
-      child.parentElement(null);
-      child.redraw();
-    });
   };
 
   Component.prototype.addRelation = function(relation) {
@@ -111,7 +96,6 @@
 
     if (parentElement && !element) {
       this.element(this.render());
-      this.appendChild();
       this.redraw();
       this.onappend();
       dom.append(parentElement, this.element());
@@ -120,7 +104,6 @@
 
     if (!parentElement && element) {
       this.onremove();
-      this.removeChild();
       dom.remove(element);
       this.element(null);
       this.clearCache();

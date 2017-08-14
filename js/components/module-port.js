@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
@@ -14,13 +15,28 @@
     this.socketOffsetX = this.prop(-25);
     this.parentListElement = this.prop(props.parentListElement);
 
-    this.plug = new ModulePort.Plug({ disabled: props.plugDisabled });
+    this.plug = new ModulePort.Handle({ disabled: props.plugDisabled });
     this.socket = new ModulePort.Socket({ disabled: props.socketDisabled });
+    this.socketHandle = new ModulePort.Handle({ disabled: true });
     this.content = new ModulePort.Content({ label: props.label });
     this.hideButton = new ModulePort.HideButton();
-
-    this.children = [this.plug, this.socket, this.content, this.hideButton];
   });
+
+  ModulePort.prototype.childElement = (function() {
+    var map = {
+      plug: [0],
+      socket: [1],
+      socketHandle: [1, 0],
+      content: [2],
+      hideButton: [3],
+    };
+    return function(child) {
+      var key = helper.find(Object.keys(map), function(key) {
+        return (this[key] === child);
+      }.bind(this));
+      return dom.child.apply(dom, [this.element()].concat(map[key]));
+    };
+  })();
 
   ModulePort.prototype.visible = function(value) {
     if (typeof value !== 'undefined') {
@@ -69,8 +85,9 @@
   ModulePort.prototype.socketConnected = function(value) {
     if (typeof value !== 'undefined') {
       this.markDirty();
+      this.socketHandle.disabled(!value);
     }
-    return this.socket.connected(value);
+    return !this.socketHandle.disabled();
   };
 
   ModulePort.prototype.middle = function() {
@@ -90,6 +107,21 @@
     return dom.render(ModulePort.HTML_TEXT);
   };
 
+  ModulePort.prototype.appendChild = function(child) {
+    child.element(this.childElement(child));
+    child.parentElement(dom.parent(child.element()));
+    child.clearCache();
+    child.redraw();
+  };
+
+  ModulePort.prototype.onappend = function() {
+    this.appendChild(this.plug);
+    this.appendChild(this.socket);
+    this.appendChild(this.socketHandle);
+    this.appendChild(this.content);
+    this.appendChild(this.hideButton);
+  };
+
   ModulePort.prototype.onredraw = function() {
     this.redrawDOMDataBy('type', 'type');
     this.redrawDOMTranslateYBy('top');
@@ -103,7 +135,16 @@
   ModulePort.PLUG_WIDTH = 50;
   ModulePort.SOCKET_WIDTH = 50;
 
-  ModulePort.HTML_TEXT = '<div class="module-port"></div>';
+  ModulePort.HTML_TEXT = [
+    '<div class="module-port">',
+      '<div class="module-port-plug module-port-handle"></div>',
+      '<div class="module-port-socket">',
+        '<div class="module-port-socket-handle module-port-handle"></div>',
+      '</div>',
+      '<div class="module-port-content"></div>',
+      '<img class="module-port-hide-button" src="images/minus-square-o.svg">',
+    '</div>',
+  ].join('');
 
   ModulePort.Handle = (function() {
     var Handle = Component.inherits(function(props) {
@@ -111,7 +152,7 @@
       this.highlighted = this.prop(false);
     });
 
-    Handle.prototype.onredraw = function() {
+    Handle.prototype.redraw = function() {
       this.redrawDOMToggleClassBy('disabled', 'hide');
       this.redrawDOMToggleClassBy('highlighted', 'highlighted');
     };
@@ -119,79 +160,17 @@
     return Handle;
   })();
 
-  ModulePort.Plug = (function() {
-    var Plug = ModulePort.Handle.inherits();
-
-    Plug.prototype.render = function() {
-      return dom.render(Plug.HTML_TEXT);
-    };
-
-    Plug.HTML_TEXT = '<div class="module-port-plug module-port-handle"></div>';
-
-    return Plug;
-  })();
-
-  ModulePort.Socket = (function() {
-    var Socket = Component.inherits(function(props) {
-      this.disabled = this.prop(props.disabled);
-      this.handle = new ModulePort.SocketHandle({ disabled: true });
-      this.children = [this.handle];
-    });
-
-    Socket.prototype.highlighted = function(value) {
-      if (typeof value !== 'undefined') {
-        this.markDirty();
-      }
-      return this.handle.highlighted(value);
-    };
-
-    Socket.prototype.connected = function(value) {
-      if (typeof value === 'undefined') {
-        return !this.handle.disabled();
-      }
-      this.handle.disabled(!value);
-    };
-
-    Socket.prototype.render = function() {
-      return dom.render(Socket.HTML_TEXT);
-    };
-
-    Socket.prototype.onredraw = function() {
-      this.redrawDOMToggleClassBy('disabled', 'hide');
-      this.redrawDOMToggleClassBy('highlighted', 'highlighted');
-    };
-
-    Socket.HTML_TEXT = '<div class="module-port-socket"></div>';
-
-    return Socket;
-  })();
-
-  ModulePort.SocketHandle = (function() {
-    var SocketHandle = ModulePort.Handle.inherits();
-
-    SocketHandle.prototype.render = function() {
-      return dom.render(SocketHandle.HTML_TEXT);
-    };
-
-    SocketHandle.HTML_TEXT = '<div class="module-port-socket-handle module-port-handle"></div>';
-
-    return SocketHandle;
-  })();
+  // socket has the same properties as handle
+  ModulePort.Socket = ModulePort.Handle.inherits();
 
   ModulePort.Content = (function() {
     var Content = Component.inherits(function(props) {
       this.label = this.prop(props.label);
     });
 
-    Content.prototype.render = function() {
-      return dom.render(Content.HTML_TEXT);
-    };
-
-    Content.prototype.onredraw = function() {
+    Content.prototype.redraw = function() {
       this.redrawDOMTextBy('label');
     };
-
-    Content.HTML_TEXT = '<div class="module-port-content"></div>';
 
     return Content;
   })();
@@ -201,15 +180,9 @@
       this.disabled = this.prop(false);
     });
 
-    HideButton.prototype.render = function() {
-      return dom.render(HideButton.HTML_TEXT);
-    };
-
-    HideButton.prototype.onredraw = function() {
+    HideButton.prototype.redraw = function() {
       this.redrawDOMToggleClassBy('disabled', 'disabled');
     };
-
-    HideButton.HTML_TEXT = '<img class="module-port-hide-button" src="images/minus-square-o.svg">';
 
     return HideButton;
   })();
