@@ -69,7 +69,6 @@
 
   ModulePort.prototype.socketConnected = function(value) {
     if (typeof value !== 'undefined') {
-      this.markDirty();
       this.socketHandle.disabled(!value);
     }
     return !this.socketHandle.disabled();
