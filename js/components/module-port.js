@@ -37,16 +37,16 @@
     return this.hideButton.disabled(value);
   };
 
-  ModulePort.prototype.plugDisabled = function(value) {
-    return this.plug.disabled(value);
+  ModulePort.prototype.plugDisabled = function() {
+    return this.plug.disabled();
   };
 
-  ModulePort.prototype.socketDisabled = function(value) {
-    return this.socket.disabled(value);
+  ModulePort.prototype.socketDisabled = function() {
+    return this.socket.disabled();
   };
 
-  ModulePort.prototype.label = function(value) {
-    return this.content.label(value);
+  ModulePort.prototype.label = function() {
+    return this.content.label();
   };
 
   ModulePort.prototype.plugHighlighted = function(value) {
