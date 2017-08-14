@@ -140,7 +140,7 @@
       this.highlighted = this.prop(false);
     });
 
-    Handle.prototype.redraw = function() {
+    Handle.prototype.onredraw = function() {
       this.redrawDOMToggleClassBy('disabled', 'hide');
       this.redrawDOMToggleClassBy('highlighted', 'highlighted');
     };
@@ -156,7 +156,7 @@
       this.label = this.prop(props.label);
     });
 
-    Content.prototype.redraw = function() {
+    Content.prototype.onredraw = function() {
       this.redrawDOMTextBy('label');
     };
 
@@ -168,7 +168,7 @@
       this.disabled = this.prop(false);
     });
 
-    HideButton.prototype.redraw = function() {
+    HideButton.prototype.onredraw = function() {
       this.redrawDOMToggleClassBy('disabled', 'disabled');
     };
 
