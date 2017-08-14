@@ -9,6 +9,7 @@
     this.name = this.prop(props.name);
     this.type = this.prop(props.type);
     this.top = this.prop(0);
+    this.highlighted = this.prop(false);
     this.isMoving = this.prop(false);
     this.height = this.prop(44);
     this.plugOffsetX = this.prop(261);
@@ -43,14 +44,6 @@
       this.parentElement(value ? this.parentListElement() : null);
     }
     return (this.parentElement() !== null);
-  };
-
-  ModulePort.prototype.highlighted = function(value) {
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
-    // don't hide highlighted port
-    return this.hideButton.disabled(value);
   };
 
   ModulePort.prototype.plugDisabled = function() {
@@ -88,6 +81,10 @@
       this.socketHandle.disabled(!value);
     }
     return !this.socketHandle.disabled();
+  };
+
+  ModulePort.prototype.hideDisabled = function(value) {
+    return this.hideButton.disabled(value);
   };
 
   ModulePort.prototype.middle = function() {
