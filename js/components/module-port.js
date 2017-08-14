@@ -59,19 +59,11 @@
   };
 
   ModulePort.prototype.plugHighlighted = function(value) {
-    if (!this.visible()) {
-      return false;
-    }
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
     return this.plug.highlighted(value);
   };
 
   ModulePort.prototype.socketHighlighted = function(value) {
-    if (typeof value !== 'undefined') {
-      this.markDirty();
-    }
+    this.socketHandle.highlighted(value);
     return this.socket.highlighted(value);
   };
 
