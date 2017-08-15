@@ -25,13 +25,14 @@
 
     this.element(this.render());
 
-    this.plug = new ModulePort.Handle({ element: this.childElement('plug') });
-    this.socket = new ModulePort.Socket({ element: this.childElement('socket') });
-    this.socketHandle = new ModulePort.Handle({ element: this.childElement('socketHandle') });
-    this.content = new ModulePort.Content({ element: this.childElement('content') });
-    this.hideButton = new ModulePort.HideButton({ element: this.childElement('hideButton') });
-
-    this.addRelation(new ModulePort.Relation({ port: this }));
+    this.addRelation(new ModulePort.Relation({
+      port: this,
+      plug: new ModulePort.Handle({ element: this.childElement('plug') }),
+      socket: new ModulePort.Socket({ element: this.childElement('socket') }),
+      socketHandle: new ModulePort.Handle({ element: this.childElement('socketHandle') }),
+      content: new ModulePort.Content({ element: this.childElement('content') }),
+      hideButton: new ModulePort.HideButton({ element: this.childElement('hideButton') }),
+    }));
   });
 
   ModulePort.prototype.childElement = (function() {
@@ -142,21 +143,43 @@
   ModulePort.Relation = (function() {
     var Relation = helper.inherits(function(props) {
       this.port = props.port;
+      this.plug = props.plug;
+      this.socket = props.socket;
+      this.socketHandle = props.socketHandle;
+      this.content = props.content;
+      this.hideButton = props.hideButton;
     }, jCore.Relation);
 
     Relation.prototype.update = function() {
-      var port = this.port;
+      this.updatePlug();
+      this.updateSocket();
+      this.updateSocketHandle();
+      this.updateContent();
+      this.updateHideButton();
+    };
 
-      port.plug.disabled(port.plugDisabled());
-      port.plug.highlighted(port.plugHighlighted());
-      port.socket.disabled(port.socketDisabled());
-      port.socket.highlighted(port.socketHighlighted());
-      port.socketHandle.disabled(!port.socketConnected());
-      port.socketHandle.highlighted(port.socketHighlighted());
-      port.content.label(port.label());
+    Relation.prototype.updatePlug = function() {
+      this.plug.disabled(this.port.plugDisabled());
+      this.plug.highlighted(this.port.plugHighlighted());
+    };
 
+    Relation.prototype.updateSocket = function() {
+      this.socket.disabled(this.port.socketDisabled());
+      this.socket.highlighted(this.port.socketHighlighted());
+    };
+
+    Relation.prototype.updateSocketHandle = function() {
+      this.socketHandle.disabled(!this.port.socketConnected());
+      this.socketHandle.highlighted(this.port.socketHighlighted());
+    };
+
+    Relation.prototype.updateContent = function() {
+      this.content.label(this.port.label());
+    };
+
+    Relation.prototype.updateHideButton = function() {
       // don't hide highlighted port
-      port.hideButton.disabled(port.highlighted());
+      this.hideButton.disabled(this.port.highlighted());
     };
 
     return Relation;
