@@ -20,9 +20,6 @@
   ModulePortRelation.prototype.update = function() {
     // module is deletable if all ports are NOT highlighted
     this.module.deletable(!this.module.hasHighlightedPort());
-
-    // don't hide highlighted port
-    this.port.hideDisabled(this.port.highlighted());
   };
 
   if (typeof module !== 'undefined' && module.exports) {

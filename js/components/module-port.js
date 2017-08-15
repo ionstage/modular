@@ -1,26 +1,35 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
   var ModulePort = Component.inherits(function(props) {
+    this.label = this.prop(props.label);
     this.name = this.prop(props.name);
     this.type = this.prop(props.type);
+    this.plugDisabled = this.prop(props.plugDisabled);
+    this.socketDisabled = this.prop(props.socketDisabled);
     this.top = this.prop(0);
     this.highlighted = this.prop(false);
+    this.plugHighlighted = this.prop(false);
+    this.socketHighlighted = this.prop(false);
+    this.socketConnected = this.prop(false);
     this.isMoving = this.prop(false);
     this.height = this.prop(44);
     this.plugOffsetX = this.prop(261);
     this.socketOffsetX = this.prop(-25);
     this.parentListElement = this.prop(props.parentListElement);
 
-    this.plug = new ModulePort.Handle({ disabled: props.plugDisabled });
-    this.socket = new ModulePort.Socket({ disabled: props.socketDisabled });
-    this.socketHandle = new ModulePort.Handle({ disabled: true });
-    this.content = new ModulePort.Content({ label: props.label });
+    this.plug = new ModulePort.Handle();
+    this.socket = new ModulePort.Socket();
+    this.socketHandle = new ModulePort.Handle();
+    this.content = new ModulePort.Content();
     this.hideButton = new ModulePort.HideButton();
+
+    this.addRelation(new ModulePort.Relation({ port: this }));
   });
 
   ModulePort.prototype.childElement = (function() {
@@ -44,38 +53,6 @@
       this.parentElement(value ? this.parentListElement() : null);
     }
     return (this.parentElement() !== null);
-  };
-
-  ModulePort.prototype.plugDisabled = function() {
-    return this.plug.disabled();
-  };
-
-  ModulePort.prototype.socketDisabled = function() {
-    return this.socket.disabled();
-  };
-
-  ModulePort.prototype.label = function() {
-    return this.content.label();
-  };
-
-  ModulePort.prototype.plugHighlighted = function(value) {
-    return this.plug.highlighted(value);
-  };
-
-  ModulePort.prototype.socketHighlighted = function(value) {
-    this.socketHandle.highlighted(value);
-    return this.socket.highlighted(value);
-  };
-
-  ModulePort.prototype.socketConnected = function(value) {
-    if (typeof value !== 'undefined') {
-      this.socketHandle.disabled(!value);
-    }
-    return !this.socketHandle.disabled();
-  };
-
-  ModulePort.prototype.hideDisabled = function(value) {
-    return this.hideButton.disabled(value);
   };
 
   ModulePort.prototype.middle = function() {
@@ -135,8 +112,8 @@
   ].join('');
 
   ModulePort.Handle = (function() {
-    var Handle = Component.inherits(function(props) {
-      this.disabled = this.prop(props.disabled);
+    var Handle = Component.inherits(function() {
+      this.disabled = this.prop(false);
       this.highlighted = this.prop(false);
     });
 
@@ -152,8 +129,8 @@
   ModulePort.Socket = ModulePort.Handle.inherits();
 
   ModulePort.Content = (function() {
-    var Content = Component.inherits(function(props) {
-      this.label = this.prop(props.label);
+    var Content = Component.inherits(function() {
+      this.label = this.prop('');
     });
 
     Content.prototype.onredraw = function() {
@@ -173,6 +150,29 @@
     };
 
     return HideButton;
+  })();
+
+  ModulePort.Relation = (function() {
+    var Relation = helper.inherits(function(props) {
+      this.port = props.port;
+    }, jCore.Relation);
+
+    Relation.prototype.update = function() {
+      var port = this.port;
+
+      port.plug.disabled(port.plugDisabled());
+      port.plug.highlighted(port.plugHighlighted());
+      port.socket.disabled(port.socketDisabled());
+      port.socket.highlighted(port.socketHighlighted());
+      port.socketHandle.disabled(!port.socketConnected());
+      port.socketHandle.highlighted(port.socketHighlighted());
+      port.content.label(port.label());
+
+      // don't hide highlighted port
+      port.hideButton.disabled(port.highlighted());
+    };
+
+    return Relation;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
