@@ -12,6 +12,7 @@
     this.type = this.prop(props.type);
     this.plugDisabled = this.prop(props.plugDisabled);
     this.socketDisabled = this.prop(props.socketDisabled);
+    this.visible = this.prop(false);
     this.top = this.prop(0);
     this.highlighted = this.prop(false);
     this.plugHighlighted = this.prop(false);
@@ -21,13 +22,14 @@
     this.height = this.prop(44);
     this.plugOffsetX = this.prop(261);
     this.socketOffsetX = this.prop(-25);
-    this.parentListElement = this.prop(props.parentListElement);
 
-    this.plug = new ModulePort.Handle();
-    this.socket = new ModulePort.Socket();
-    this.socketHandle = new ModulePort.Handle();
-    this.content = new ModulePort.Content();
-    this.hideButton = new ModulePort.HideButton();
+    this.element(this.render());
+
+    this.plug = new ModulePort.Handle({ element: this.childElement('plug') });
+    this.socket = new ModulePort.Socket({ element: this.childElement('socket') });
+    this.socketHandle = new ModulePort.Handle({ element: this.childElement('socketHandle') });
+    this.content = new ModulePort.Content({ element: this.childElement('content') });
+    this.hideButton = new ModulePort.HideButton({ element: this.childElement('hideButton') });
 
     this.addRelation(new ModulePort.Relation({ port: this }));
   });
@@ -40,20 +42,10 @@
       content: [2],
       hideButton: [3],
     };
-    return function(child) {
-      var key = helper.find(Object.keys(map), function(key) {
-        return (this[key] === child);
-      }.bind(this));
+    return function(key) {
       return dom.child.apply(dom, [this.element()].concat(map[key]));
     };
   })();
-
-  ModulePort.prototype.visible = function(value) {
-    if (typeof value !== 'undefined') {
-      this.parentElement(value ? this.parentListElement() : null);
-    }
-    return (this.parentElement() !== null);
-  };
 
   ModulePort.prototype.middle = function() {
     return this.top() + this.height() / 2;
@@ -64,34 +56,29 @@
   };
 
   ModulePort.prototype.elementContains = function(target) {
-    var element = this.element();
-    return (element ? dom.contains(element, target) : false);
+    return dom.contains(this.element(), target);
   };
 
   ModulePort.prototype.render = function() {
     return dom.render(ModulePort.HTML_TEXT);
   };
 
-  ModulePort.prototype.appendChild = function(child) {
-    child.element(this.childElement(child));
-    child.parentElement(dom.parent(child.element()));
-    child.clearCache();
-    child.redraw();
-  };
-
-  ModulePort.prototype.onappend = function() {
-    this.appendChild(this.plug);
-    this.appendChild(this.socket);
-    this.appendChild(this.socketHandle);
-    this.appendChild(this.content);
-    this.appendChild(this.hideButton);
-  };
-
-  ModulePort.prototype.onredraw = function() {
+  ModulePort.prototype.redraw = function() {
     this.redrawDOMDataBy('type', 'type');
     this.redrawDOMTranslateYBy('top');
     this.redrawDOMToggleClassBy('highlighted', 'highlighted');
     this.redrawDOMToggleClassBy('isMoving', 'moving');
+    this.redrawByVisible();
+  };
+
+  ModulePort.prototype.redrawByVisible = function() {
+    this.redrawBy('visible', function(visible) {
+      if (visible) {
+        dom.append(this.parentElement(), this.element());
+      } else {
+        dom.remove(this.element());
+      }
+    });
   };
 
   ModulePort.TYPE_PROP = 'prop';

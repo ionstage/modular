@@ -214,7 +214,7 @@
   Module.prototype.createPorts = function() {
     return this.circuitModule().getAll().map(function(member) {
       return new ModulePort(helper.extend(helper.clone(member), {
-        parentListElement: this.portListElement(),
+        parentElement: this.portListElement(),
       }));
     }.bind(this));
   };
