@@ -8,7 +8,7 @@
   var Component = helper.inherits(function(props) {
     Component.super_.call(this);
 
-    var element = props.element || null;
+    var element = props.element || this.render();
     var parentElement = props.parentElement || (element ? dom.parent(element) : null);
 
     this.element = this.prop(element);
@@ -90,27 +90,20 @@
     var element = this.element();
     var parentElement = this.parentElement();
 
-    if (!parentElement && !element) {
-      return;
-    }
+    this.onredraw();
 
-    if (parentElement && !element) {
-      this.element(this.render());
-      this.redraw();
+    if (parentElement && parentElement !== dom.parent(element)) {
       this.onappend();
-      dom.append(parentElement, this.element());
+      dom.append(parentElement, element);
       return;
     }
 
-    if (!parentElement && element) {
+    if (!parentElement && dom.parent(element)) {
       this.onremove();
       dom.remove(element);
-      this.element(null);
       this.clearCache();
       return;
     }
-
-    this.onredraw();
   };
 
   Component.prototype.render = function() {

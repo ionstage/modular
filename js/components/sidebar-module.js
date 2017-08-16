@@ -9,10 +9,6 @@
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
 
-    this.clone = new SidebarModule.Clone({
-      renderer: SidebarModule.prototype.renderClone.bind(this),
-    });
-
     this.draggable = null;
 
     this.ondragstart = SidebarModule.prototype.ondragstart.bind(this);
@@ -130,17 +126,25 @@
     context.x = position.x;
     context.y = position.y;
 
-    this.clone.show(position.x, position.y);
+    context.clone = new SidebarModule.Clone({
+      element: this.renderClone(),
+      parentElement: dom.body(),
+      x: position.x,
+      y: position.y,
+    });
+
+    context.clone.markDirty();
     this.dragStarter();
   };
 
   SidebarModule.prototype.ondragmove = function(dx, dy, event, context) {
-    this.clone.move(context.x + dx, context.y + dy);
+    context.clone.x(context.x + dx);
+    context.clone.y(context.y + dy);
   };
 
   SidebarModule.prototype.ondragend = function(dx, dy, event, context) {
     context.dragging = false;
-    this.clone.hide();
+    context.clone.parentElement(null);
     this.dragEnder();
     this.dropper(this.name(), context.x + dx, context.y + dy);
   };
@@ -154,38 +158,14 @@
 
   SidebarModule.Clone = (function() {
     var Clone = Component.inherits(function(props) {
-      this.x = this.prop(0);
-      this.y = this.prop(0);
-
-      this.renderer = props.renderer;
+      this.x = this.prop(props.x);
+      this.y = this.prop(props.y);
     });
 
-    Clone.prototype.move = function(x, y) {
-      this.x(x);
-      this.y(y);
-    };
-
-    Clone.prototype.show = function(x, y) {
-      this.move(x, y);
-      this.parentElement(dom.body());
-    };
-
-    Clone.prototype.hide = function() {
-      this.parentElement(null);
-    };
-
-    Clone.prototype.render = function() {
-      return this.renderer();
-    };
-
-    Clone.prototype.redrawPosition = function() {
+    Clone.prototype.onredraw = function() {
       this.redrawBy('x', 'y', function(x, y) {
         dom.translate(this.element(), x, y);
       });
-    };
-
-    Clone.prototype.onredraw = function() {
-      this.redrawPosition();
     };
 
     return Clone;

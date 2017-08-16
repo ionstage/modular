@@ -23,8 +23,6 @@
     this.plugOffsetX = this.prop(261);
     this.socketOffsetX = this.prop(-25);
 
-    this.element(this.render());
-
     this.addRelation(new ModulePort.Relation({
       port: this,
       plug: new ModulePort.Handle({ element: this.childElement('plug') }),
