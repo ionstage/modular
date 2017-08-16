@@ -213,9 +213,7 @@
 
   Module.prototype.createPorts = function() {
     return this.circuitModule().getAll().map(function(member) {
-      return new ModulePort(helper.extend(helper.clone(member), {
-        parentElement: this.portListElement(),
-      }));
+      return new ModulePort(helper.clone(member));
     }.bind(this));
   };
 
@@ -371,7 +369,7 @@
     var portListHeight = this.portListHeight();
     this.portListHeight(portListHeight + port.height());
     port.top(portListHeight);
-    port.visible(true);
+    port.parentElement(this.portListElement());
     this.portSelect.remove(port);
     this.setPortRelation(port);
 
@@ -392,7 +390,7 @@
       return a.top() - b.top();
     });
 
-    port.visible(false);
+    port.parentElement(null);
     this.portSelect.add(port);
     this.unsetPortRelation(port);
 

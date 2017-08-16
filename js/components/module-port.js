@@ -12,7 +12,6 @@
     this.type = this.prop(props.type);
     this.plugDisabled = this.prop(props.plugDisabled);
     this.socketDisabled = this.prop(props.socketDisabled);
-    this.visible = this.prop(false);
     this.top = this.prop(0);
     this.highlighted = this.prop(false);
     this.plugHighlighted = this.prop(false);
@@ -46,6 +45,10 @@
     };
   })();
 
+  ModulePort.prototype.visible = function() {
+    return (this.parentElement() !== null);
+  };
+
   ModulePort.prototype.middle = function() {
     return this.top() + this.height() / 2;
   };
@@ -62,22 +65,11 @@
     return dom.render(ModulePort.HTML_TEXT);
   };
 
-  ModulePort.prototype.redraw = function() {
+  ModulePort.prototype.onredraw = function() {
     this.redrawDOMDataBy('type', 'type');
     this.redrawDOMTranslateYBy('top');
     this.redrawDOMToggleClassBy('highlighted', 'highlighted');
     this.redrawDOMToggleClassBy('isMoving', 'moving');
-    this.redrawByVisible();
-  };
-
-  ModulePort.prototype.redrawByVisible = function() {
-    this.redrawBy('visible', function(visible) {
-      if (visible) {
-        dom.append(this.parentElement(), this.element());
-      } else {
-        dom.remove(this.element());
-      }
-    });
   };
 
   ModulePort.TYPE_PROP = 'prop';
