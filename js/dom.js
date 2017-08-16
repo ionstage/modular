@@ -18,7 +18,9 @@
   };
 
   dom.render = function(s) {
-    return document.createRange().createContextualFragment(s).firstChild;
+    var el = document.createRange().createContextualFragment(s).firstChild;
+    dom.remove(el);
+    return el;
   };
 
   dom.append = function(parent, el) {
