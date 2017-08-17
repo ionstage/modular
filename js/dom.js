@@ -13,6 +13,10 @@
     return document.querySelector(selector);
   };
 
+  dom.find = function(el, selector) {
+    return el.querySelector(selector);
+  };
+
   dom.body = function() {
     return document.body;
   };
