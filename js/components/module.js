@@ -138,7 +138,7 @@
 
   Module.prototype.targetPort = function(target) {
     return helper.find(this.ports(), function(port) {
-      return port.elementContains(target);
+      return dom.contains(port.element(), target);
     });
   };
 

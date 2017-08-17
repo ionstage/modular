@@ -57,10 +57,6 @@
     return this.top() + this.height();
   };
 
-  ModulePort.prototype.elementContains = function(target) {
-    return dom.contains(this.element(), target);
-  };
-
   ModulePort.prototype.render = function() {
     return dom.render(ModulePort.HTML_TEXT);
   };
