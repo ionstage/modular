@@ -27,7 +27,7 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
 
-    this.portSelect = new Module.PortSelect();
+    this.portSelect = new Module.PortSelect({ element: this.portSelectElement() });
 
     this.portRelationCollection = new RelationCollection({ ctor: ModulePortRelation });
 
@@ -465,7 +465,6 @@
   };
 
   Module.prototype.onappend = function() {
-    this.portSelect.element(this.portSelectElement());
     this.registerDragListener();
     this.registerPortSelectChangeListener();
     this.registerPointListener();
@@ -744,7 +743,7 @@
       });
     };
 
-    PortSelect.prototype.redraw = function() {
+    PortSelect.prototype.onredraw = function() {
       // remove all options
       this.options.forEach(function(option) {
         option.parentElement(null);
