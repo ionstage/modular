@@ -20,6 +20,7 @@
     this.ports = this.prop([]);
     this.portListTop = this.prop(0);
     this.portListHeight = this.prop(0);
+    this.circuitModule = this.prop(null);
     this.eventCircuitModule = this.prop(null);
     this.messageData = this.prop(helper.randomString(7));
     this.isLoading = this.prop(false);
@@ -81,10 +82,6 @@
 
   Module.prototype.componentContentWindow = function() {
     return dom.contentWindow(this.componentElement());
-  };
-
-  Module.prototype.circuitModule = function() {
-    return helper.dig(this.componentContentWindow(), 'modular', 'exports');
   };
 
   Module.prototype.circuitModuleMember = function(name) {
@@ -229,24 +226,24 @@
   };
 
   Module.prototype.bindEventCircuitModule = function() {
+    var circuitModule = this.circuitModule();
     var eventCircuitModule = this.eventCircuitModule();
-    if (!eventCircuitModule) {
+    if (!circuitModule || !eventCircuitModule) {
       return;
     }
 
-    var circuitModule = this.circuitModule();
     eventCircuitModule.getAll().forEach(function(member) {
       CircuitModule.bind(circuitModule.get(member.name), member);
     });
   };
 
   Module.prototype.unbindEventCircuitModule = function() {
+    var circuitModule = this.circuitModule();
     var eventCircuitModule = this.eventCircuitModule();
-    if (!eventCircuitModule) {
+    if (!circuitModule || !eventCircuitModule) {
       return;
     }
 
-    var circuitModule = this.circuitModule();
     eventCircuitModule.getAll().forEach(function(member) {
       CircuitModule.unbind(circuitModule.get(member.name), member);
     });
@@ -329,6 +326,14 @@
     this.portRelationCollection.remove({ module: this, port: port });
   };
 
+  Module.prototype.loadCircuitModule = function() {
+    var circuitModule = helper.dig(this.componentContentWindow(), 'modular', 'exports');
+    if (!circuitModule) {
+      throw new Error('Invalid circuit element');
+    }
+    return circuitModule;
+  };
+
   Module.prototype.loadComponent = function() {
     this.isLoading(true);
     return dom.ajax({
@@ -343,14 +348,15 @@
         }),
       ]);
     }.bind(this)).then(function() {
-      this.unregisterMessageListener();
-      this.isLoading(false);
       this.resetComponentHeight();
+      this.circuitModule(this.loadCircuitModule());
       this.ports(this.createPorts());
       this.resetPortSelect();
       this.eventCircuitModule(this.createEventCircuitModule());
       this.bindEventCircuitModule();
       this.registerComponentPointListener();
+      this.unregisterMessageListener();
+      this.isLoading(false);
     }.bind(this)).catch(function(e) {
       this.unregisterMessageListener();
       this.isError(true);
@@ -528,9 +534,6 @@
     }
     if (dom.messageData(event) !== this.messageData()) {
       throw new Error('Invalid content data');
-    }
-    if (!this.circuitModule()) {
-      throw new Error('Invalid circuit element');
     }
   };
 
