@@ -16,6 +16,10 @@
     this.cache = {};
   }, jCore.Component);
 
+  Component.prototype.childElement = function(selector) {
+    return dom.find(this.element(), selector);
+  };
+
   Component.prototype.needsUpdate = function(keys) {
     return keys.some(function(key) {
       return !helper.equal(this[key](), this.cache[key]);

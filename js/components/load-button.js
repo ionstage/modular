@@ -11,7 +11,7 @@
   });
 
   LoadButton.prototype.inputElement = function() {
-    return dom.child(this.element(), 2);
+    return this.childElement('.button-input');
   };
 
   LoadButton.prototype.registerChangeListener = function() {

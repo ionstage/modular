@@ -26,10 +26,6 @@
     this.registerPointListener();
   });
 
-  SidebarContent.prototype.moduleContainerElement = function() {
-    return dom.child(this.element(), 0);
-  };
-
   SidebarContent.prototype.registerPointListener = function() {
     dom.on(this.element(), dom.eventType('start'), function() {
       dom.removeFocus();
@@ -38,7 +34,7 @@
 
   SidebarContent.prototype.createModule = function(props) {
     return new SidebarModule(helper.extend(helper.clone(props), {
-      parentElement: this.moduleContainerElement(),
+      parentElement: this.childElement('.sidebar-module-container'),
       dragStarter: this.dragStarter,
       dragEnder: this.dragEnder,
       dropper: this.dropper,

@@ -12,14 +12,14 @@
     this.isFullWidth = this.prop(false);
 
     this.header = new MainHeader({
-      element: this.headerElement(),
+      element: this.childElement('.main-header'),
       sidebarToggler: props.sidebarToggler,
       fileLoader: Main.prototype.fileLoader.bind(this),
       fileSaver: Main.prototype.fileSaver.bind(this),
     });
 
     this.content = new MainContent({
-      element: this.contentElement(),
+      element: this.childElement('.main-content'),
       moduleDragStarter: props.moduleDragStarter,
       moduleDragEnder: props.moduleDragEnder,
     });
@@ -27,14 +27,6 @@
     this.loadStarter = props.loadStarter;
     this.loadEnder = props.loadEnder;
   });
-
-  Main.prototype.headerElement = function() {
-    return dom.child(this.element(), 0);
-  };
-
-  Main.prototype.contentElement = function() {
-    return dom.child(this.element(), 1);
-  };
 
   Main.prototype.contentLocalPoint = function(point) {
     return this.content.localPoint(point);

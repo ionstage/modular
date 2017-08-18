@@ -38,19 +38,19 @@
   });
 
   MainContent.prototype.retainerElement = function() {
-    return dom.child(this.element(), 0);
+    return this.childElement('.main-content-retainer');
   };
 
   MainContent.prototype.wireContainerElement = function() {
-    return dom.child(this.element(), 1);
+    return this.childElement('.module-wire-container');
   };
 
   MainContent.prototype.containerElement = function() {
-    return dom.child(this.element(), 2);
+    return this.childElement('.module-container');
   };
 
   MainContent.prototype.wireHandleContainerElement = function() {
-    return dom.child(this.element(), 3);
+    return this.childElement('.module-wire-handle-container');
   };
 
   MainContent.prototype.clientPosition = function() {

@@ -24,26 +24,13 @@
 
     this.addRelation(new ModulePort.Relation({
       port: this,
-      plug: new ModulePort.Handle({ element: this.childElement('plug') }),
-      socket: new ModulePort.Socket({ element: this.childElement('socket') }),
-      socketHandle: new ModulePort.Handle({ element: this.childElement('socketHandle') }),
-      content: new ModulePort.Content({ element: this.childElement('content') }),
-      hideButton: new ModulePort.HideButton({ element: this.childElement('hideButton') }),
+      plug: new ModulePort.Handle({ element: this.childElement('.module-port-plug') }),
+      socket: new ModulePort.Socket({ element: this.childElement('.module-port-socket') }),
+      socketHandle: new ModulePort.Handle({ element: this.childElement('.module-port-socket-handle') }),
+      content: new ModulePort.Content({ element: this.childElement('.module-port-content') }),
+      hideButton: new ModulePort.HideButton({ element: this.childElement('.module-port-hide-button') }),
     }));
   });
-
-  ModulePort.prototype.childElement = (function() {
-    var map = {
-      plug: [0],
-      socket: [1],
-      socketHandle: [1, 0],
-      content: [2],
-      hideButton: [3],
-    };
-    return function(key) {
-      return dom.child.apply(dom, [this.element()].concat(map[key]));
-    };
-  })();
 
   ModulePort.prototype.visible = function() {
     return (this.parentElement() !== null);

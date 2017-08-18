@@ -1,7 +1,6 @@
 (function(app) {
   'use strict';
 
-  var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
   var SidebarContent = app.SidebarContent || require('./sidebar-content.js');
   var SidebarHeader = app.SidebarHeader || require('./sidebar-header.js');
@@ -11,12 +10,12 @@
     this.dragCount = this.prop(0);
 
     this.header = new SidebarHeader({
-      element: this.headerElement(),
+      element: this.childElement('.sidebar-header'),
       searcher: Sidebar.prototype.searcher.bind(this),
     });
 
     this.content = new SidebarContent({
-      element: this.contentElement(),
+      element: this.childElement('.sidebar-content'),
       dragStarter: Sidebar.prototype.dragStarter.bind(this),
       dragEnder: Sidebar.prototype.dragEnder.bind(this),
       dropper: props.moduleDropper,
@@ -26,14 +25,6 @@
     this.moduleDragStarter = props.moduleDragStarter;
     this.moduleDragEnder = props.moduleDragEnder;
   });
-
-  Sidebar.prototype.headerElement = function() {
-    return dom.child(this.element(), 0);
-  };
-
-  Sidebar.prototype.contentElement = function() {
-    return dom.child(this.element(), 1);
-  };
 
   Sidebar.prototype.incrementDragCount = function() {
     this.dragCount(this.dragCount() + 1);

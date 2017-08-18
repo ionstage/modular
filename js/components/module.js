@@ -53,31 +53,31 @@
   });
 
   Module.prototype.headerElement = function() {
-    return dom.child(this.element(), 0);
+    return this.childElement('.module-header');
   };
 
   Module.prototype.titleElement = function() {
-    return dom.child(this.element(), 0, 0);
+    return this.childElement('.module-title');
   };
 
   Module.prototype.deleteButtonElement = function() {
-    return dom.child(this.element(), 0, 1);
+    return this.childElement('.module-delete-button');
   };
 
   Module.prototype.componentElement = function() {
-    return dom.child(this.element(), 1, 0);
+    return this.childElement('.module-component');
   };
 
   Module.prototype.portListElement = function() {
-    return dom.child(this.element(), 1, 1);
+    return this.childElement('.module-port-list');
   };
 
   Module.prototype.footerElement = function() {
-    return dom.child(this.element(), 2);
+    return this.childElement('.module-footer');
   };
 
   Module.prototype.portSelectElement = function() {
-    return dom.child(this.element(), 2, 1);
+    return this.childElement('.module-port-select');
   };
 
   Module.prototype.componentContentWindow = function() {
@@ -705,8 +705,8 @@
       '<div class="module-footer">',
         '<img class="module-footer-icon module-footer-item" src="images/caret-down.svg">',
         '<select class="module-port-select module-footer-item">',
-          '<optgroup label="Property"></optgroup>',
-          '<optgroup label="Event"></optgroup>',
+          '<optgroup class="module-port-optgroup-prop" label="Property"></optgroup>',
+          '<optgroup class="module-port-optgroup-event" label="Event"></optgroup>',
         '</select>',
       '</div>',
     '</div>',
@@ -718,14 +718,12 @@
       this.options = [];
     });
 
+    PortSelect.prototype.optGroupClassName = function(type) {
+      return 'module-port-optgroup-' + type;
+    };
+
     PortSelect.prototype.optGroupElement = function(type) {
-      if (type === ModulePort.TYPE_PROP) {
-        return dom.child(this.element(), 0);
-      } else if (type === ModulePort.TYPE_EVENT) {
-        return dom.child(this.element(), 1);
-      } else {
-        throw new Error('Invalid type');
-      }
+      return this.childElement('.' + this.optGroupClassName(type));
     };
 
     PortSelect.prototype.add = function(port) {

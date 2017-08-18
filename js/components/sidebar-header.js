@@ -12,7 +12,7 @@
   });
 
   SidebarHeader.prototype.searchInputElement = function() {
-    return dom.child(this.element(), 0);
+    return this.childElement('.search-input');
   };
 
   SidebarHeader.prototype.searchText = function() {

@@ -21,11 +21,11 @@
   });
 
   SidebarModule.prototype.headerElement = function() {
-    return dom.child(this.element(), 0);
+    return this.childElement('.sidebar-module-header');
   };
 
   SidebarModule.prototype.contentElement = function() {
-    return dom.child(this.element(), 1);
+    return this.childElement('.sidebar-module-content');
   };
 
   SidebarModule.prototype.position = function() {
