@@ -37,12 +37,6 @@
     }
   };
 
-  dom.child = function() {
-    return helper.toArray(arguments).reduce(function(el, index) {
-      return ('children' in el ? el.children[index] : null);
-    });
-  };
-
   dom.childNode = function() {
     return helper.toArray(arguments).reduce(function(el, index) {
       return ('childNodes' in el ? el.childNodes[index] : null);
