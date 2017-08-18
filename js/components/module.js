@@ -705,8 +705,8 @@
       '<div class="module-footer">',
         '<img class="module-footer-icon module-footer-item" src="images/caret-down.svg">',
         '<select class="module-port-select module-footer-item">',
-          '<optgroup class="module-port-optgroup-prop" label="Property"></optgroup>',
-          '<optgroup class="module-port-optgroup-event" label="Event"></optgroup>',
+          '<optgroup data-type="prop" label="Property"></optgroup>',
+          '<optgroup data-type="event" label="Event"></optgroup>',
         '</select>',
       '</div>',
     '</div>',
@@ -718,12 +718,8 @@
       this.options = [];
     });
 
-    PortSelect.prototype.optGroupClassName = function(type) {
-      return 'module-port-optgroup-' + type;
-    };
-
     PortSelect.prototype.optGroupElement = function(type) {
-      return this.childElement('.' + this.optGroupClassName(type));
+      return this.childElement('optgroup[data-type="' + type + '"]');
     };
 
     PortSelect.prototype.add = function(port) {
