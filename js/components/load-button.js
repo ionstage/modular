@@ -3,36 +3,47 @@
 
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
+  var Component = app.Component || require('./component.js');
 
   var LoadButton = Button.inherits(function(props) {
-    this.loader = props.loader;
-
-    this.registerChangeListener();
+    this.input = new LoadButton.Input({
+      element: this.childElement('.button-input'),
+      loader: props.loader,
+    });
   });
 
-  LoadButton.prototype.inputElement = function() {
-    return this.childElement('.button-input');
-  };
-
-  LoadButton.prototype.registerChangeListener = function() {
-    dom.on(this.inputElement(), 'change', LoadButton.prototype.onchange.bind(this));
-  };
-
-  LoadButton.prototype.resetInput = function() {
-    dom.value(this.inputElement(), '');
-  };
-
   LoadButton.prototype.ontap = function() {
-    dom.click(this.inputElement());
+    this.input.click();
   };
 
-  LoadButton.prototype.onchange = function(event) {
-    var file = dom.file(dom.target(event));
-    if (file) {
-      this.loader(file);
-      this.resetInput();
-    }
-  };
+  LoadButton.Input = (function() {
+    var Input = Component.inherits(function(props) {
+      this.loader = props.loader;
+      this.registerChangeListener();
+    });
+
+    Input.prototype.registerChangeListener = function() {
+      dom.on(this.element(), 'change', Input.prototype.onchange.bind(this));
+    };
+
+    Input.prototype.click = function() {
+      dom.click(this.element());
+    };
+
+    Input.prototype.reset = function() {
+      dom.value(this.element(), '');
+    };
+
+    Input.prototype.onchange = function(event) {
+      var file = dom.file(dom.target(event));
+      if (file) {
+        this.loader(file);
+        this.reset();
+      }
+    };
+
+    return Input;
+  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = LoadButton;
