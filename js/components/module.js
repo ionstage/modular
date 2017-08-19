@@ -98,18 +98,16 @@
   };
 
   Module.prototype.leftPadding = function() {
-    return (this.hasVisiblePortSocket() ? ModulePort.SOCKET_WIDTH : 0);
+    return this.visiblePorts().map(function(port) {
+      return (port.socketDisabled() ? 0 : port.socketWidth());
+    }).reduce(function(prev, curr) {
+      return Math.max(prev, curr);
+    }, 0);
   };
 
   Module.prototype.hasVisiblePortPlug = function() {
     return this.visiblePorts().some(function(port) {
       return !port.plugDisabled();
-    });
-  };
-
-  Module.prototype.hasVisiblePortSocket = function() {
-    return this.visiblePorts().some(function(port) {
-      return !port.socketDisabled();
     });
   };
 

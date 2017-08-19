@@ -21,6 +21,7 @@
     this.height = this.prop(44);
     this.plugOffsetX = this.prop(261);
     this.socketOffsetX = this.prop(-25);
+    this.socketWidth = this.prop(50);
 
     this.addRelation(new ModulePort.Relation({
       port: this,
@@ -59,7 +60,6 @@
   ModulePort.TYPE_EVENT = 'event';
 
   ModulePort.PLUG_WIDTH = 50;
-  ModulePort.SOCKET_WIDTH = 50;
 
   ModulePort.HTML_TEXT = [
     '<div class="module-port">',
