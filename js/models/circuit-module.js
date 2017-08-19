@@ -47,8 +47,8 @@
 
     Member.prototype.defaults = function() {
       return {
-        socketDisabled: false,
         plugDisabled: false,
+        socketDisabled: false,
       };
     };
 
@@ -64,7 +64,7 @@
       return wrapper;
     };
 
-    Member.KEYS = ['label', 'name', 'type', 'socketDisabled', 'plugDisabled'];
+    Member.KEYS = ['label', 'name', 'type', 'plugDisabled', 'socketDisabled'];
 
     return Member;
   })();
