@@ -92,9 +92,17 @@
   Module.prototype.diagonalPoint = function() {
     var rect = dom.rect(this.element());
     return {
-      x: this.x() + rect.width + (this.hasVisiblePortPlug() ? ModulePort.PLUG_WIDTH : 0),
+      x: this.x() + rect.width + this.rightPadding(),
       y: this.y() + rect.height,
     };
+  };
+
+  Module.prototype.rightPadding = function() {
+    return this.visiblePorts().map(function(port) {
+      return (port.plugDisabled() ? 0 : port.plugWidth());
+    }).reduce(function(prev, curr) {
+      return Math.max(prev, curr);
+    }, 0);
   };
 
   Module.prototype.leftPadding = function() {
@@ -103,12 +111,6 @@
     }).reduce(function(prev, curr) {
       return Math.max(prev, curr);
     }, 0);
-  };
-
-  Module.prototype.hasVisiblePortPlug = function() {
-    return this.visiblePorts().some(function(port) {
-      return !port.plugDisabled();
-    });
   };
 
   Module.prototype.plugPosition = function(port) {

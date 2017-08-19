@@ -20,6 +20,7 @@
     this.isMoving = this.prop(false);
     this.height = this.prop(44);
     this.plugOffsetX = this.prop(261);
+    this.plugWidth = this.prop(50);
     this.socketOffsetX = this.prop(-25);
     this.socketWidth = this.prop(50);
 
@@ -58,8 +59,6 @@
 
   ModulePort.TYPE_PROP = 'prop';
   ModulePort.TYPE_EVENT = 'event';
-
-  ModulePort.PLUG_WIDTH = 50;
 
   ModulePort.HTML_TEXT = [
     '<div class="module-port">',
