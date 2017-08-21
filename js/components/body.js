@@ -68,6 +68,10 @@
     return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
   };
 
+  Body.prototype.render = function() {
+    return dom.body();
+  };
+
   Body.prototype.redraw = function() {
     this.redrawDOMToggleClassBy('isDragging', 'dragging');
   };
