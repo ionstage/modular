@@ -14,7 +14,7 @@
     this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
 
     this.sidebar = new Sidebar({
-      element: dom.el('.sidebar'),
+      element: this.childElement('.sidebar'),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       moduleDropper: Body.prototype.moduleDropper.bind(this),
@@ -22,7 +22,7 @@
     });
 
     this.main = new Main({
-      element: dom.el('.main'),
+      element: this.childElement('.main'),
       sidebarToggler: Body.prototype.sidebarToggler.bind(this),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
