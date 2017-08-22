@@ -747,9 +747,9 @@
         option.redraw();
       });
 
-      // sort options by name
+      // sort options by label
       this.options = helper.sortBy(this.ports, function(port) {
-        return port.name();
+        return port.label();
       }).map(function(port) {
         var option = this.createOption(port);
         option.redraw();
