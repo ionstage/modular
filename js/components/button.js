@@ -46,8 +46,6 @@
 
   Button.prototype.ontap = function() {};
 
-  Button.prototype.onredraw = function() {};
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Button;
   } else {
