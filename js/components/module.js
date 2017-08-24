@@ -29,7 +29,7 @@
     this.isDeleting = this.prop(false);
 
     this.portSelect = new Module.PortSelect({
-      element: this.portSelectElement(),
+      element: this.childElement('.module-port-select'),
       selector: Module.prototype.portSelector.bind(this),
     });
 
@@ -76,10 +76,6 @@
 
   Module.prototype.footerElement = function() {
     return this.childElement('.module-footer');
-  };
-
-  Module.prototype.portSelectElement = function() {
-    return this.childElement('.module-port-select');
   };
 
   Module.prototype.componentContentWindow = function() {
