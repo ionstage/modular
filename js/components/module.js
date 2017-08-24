@@ -28,14 +28,16 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
 
-    this.portSelect = new Module.PortSelect({ element: this.portSelectElement() });
+    this.portSelect = new Module.PortSelect({
+      element: this.portSelectElement(),
+      selector: Module.prototype.portSelector.bind(this),
+    });
 
     this.portRelationCollection = new RelationCollection({ ctor: ModulePortRelation });
 
     this.messageListenable = null;
     this.draggable = null;
 
-    this.onchange = Module.prototype.onchange.bind(this);
     this.onpoint = Module.prototype.onpoint.bind(this);
 
     this.deleter = props.deleter;
@@ -271,14 +273,6 @@
     this.draggable = null;
   };
 
-  Module.prototype.registerPortSelectChangeListener = function() {
-    dom.on(this.portSelectElement(), 'change', this.onchange);
-  };
-
-  Module.prototype.unregisterPortSelectChangeListener = function() {
-    dom.off(this.portSelectElement(), 'change', this.onchange);
-  };
-
   Module.prototype.registerPointListener = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
   };
@@ -472,13 +466,13 @@
 
   Module.prototype.onappend = function() {
     this.registerDragListener();
-    this.registerPortSelectChangeListener();
+    this.portSelect.onappend();
     this.registerPointListener();
   };
 
   Module.prototype.onremove = function() {
     this.unregisterDragListener();
-    this.unregisterPortSelectChangeListener();
+    this.portSelect.onremove();
     this.unregisterPointListener();
     this.unbindEventCircuitModule();
     this.unregisterComponentPointListener();
@@ -537,13 +531,12 @@
     }
   };
 
-  Module.prototype.onchange = function(event) {
-    this.showPort(dom.value(dom.target(event)));
-    dom.removeFocus();
-  };
-
   Module.prototype.onpoint = function() {
     this.fronter(this);
+  };
+
+  Module.prototype.portSelector = function(name) {
+    this.showPort(name);
   };
 
   Module.DRAG_LISTENER_POSITION = {
@@ -713,9 +706,11 @@
   ].join('');
 
   Module.PortSelect = (function() {
-    var PortSelect = Component.inherits(function() {
+    var PortSelect = Component.inherits(function(props) {
       this.ports = [];
       this.options = [];
+      this.onchange = PortSelect.prototype.onchange.bind(this);
+      this.selector = props.selector;
     });
 
     PortSelect.prototype.optGroupElement = function(type) {
@@ -740,6 +735,14 @@
       });
     };
 
+    PortSelect.prototype.onappend = function() {
+      dom.on(this.element(), 'change', this.onchange);
+    };
+
+    PortSelect.prototype.onremove = function() {
+      dom.off(this.element(), 'change', this.onchange);
+    };
+
     PortSelect.prototype.onredraw = function() {
       // remove all options
       this.options.forEach(function(option) {
@@ -758,6 +761,11 @@
 
       // deselect option
       dom.value(this.element(), '');
+    };
+
+    PortSelect.prototype.onchange = function(event) {
+      dom.removeFocus();
+      this.selector(dom.value(dom.target(event)));
     };
 
     PortSelect.Option = (function() {
