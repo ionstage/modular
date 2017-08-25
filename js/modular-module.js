@@ -2,7 +2,7 @@
   'use strict';
 
   window.modular = {
-    Module: window.parent.app.ModularModule,
+    Module: window.parent.ModularModule,
     exports: null,
   };
 

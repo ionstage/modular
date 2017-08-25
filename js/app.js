@@ -5,9 +5,6 @@
   var Body = app.Body || require('./components/body.js');
   var CircuitModule = app.CircuitModule || require('./models/circuit-module.js');
 
+  dom.export('ModularModule', CircuitModule.ModularModule);
   app.body = new Body();
-
-  // export 'ModularModule'
-  var global = dom.global();
-  CircuitModule.ModularModule.export(global.app || (global.app = {}));
 })(this.app || (this.app = {}));

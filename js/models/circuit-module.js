@@ -69,19 +69,11 @@
     return Member;
   })();
 
-  CircuitModule.ModularModule = (function() {
-    var ModularModule = function(members) {
-      return new CircuitModule(members.map(function(member) {
-        return new CircuitModule.Member(member);
-      }));
-    };
-
-    ModularModule.export = function(obj) {
-      helper.define(obj, 'ModularModule', ModularModule);
-    };
-
-    return ModularModule;
-  })();
+  CircuitModule.ModularModule = function(members) {
+    return new CircuitModule(members.map(function(member) {
+      return new CircuitModule.Member(member);
+    }));
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = CircuitModule;

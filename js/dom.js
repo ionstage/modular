@@ -5,8 +5,9 @@
 
   var dom = {};
 
-  dom.global = function() {
-    return (typeof module !== 'undefined' && module.exports ? global : window);
+  dom.export = function(key, value) {
+    var g = (typeof module !== 'undefined' && module.exports ? global : window);
+    helper.define(g, key, value);
   };
 
   dom.el = function(selector) {
