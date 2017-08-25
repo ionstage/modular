@@ -8,24 +8,15 @@
   };
 
   Collection.prototype.add = function(props) {
-    if (this.lastIndexOf(props) !== -1) {
-      return;
-    }
-
     var item = this.builder(props);
-    this.onadd(item);
     this.data.push(item);
+    this.onadd(item);
   };
 
   Collection.prototype.remove = function(props) {
-    var index = this.lastIndexOf(props);
-    if (index === -1) {
-      return;
-    }
-
-    var item = this.data[index];
+    var item = this.data[this.lastIndexOf(props)];
+    helper.remove(this.data, item);
     this.onremove(item);
-    helper.removeAt(this.data, index);
   };
 
   Collection.prototype.lastIndexOf = function(props) {
