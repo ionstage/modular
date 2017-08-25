@@ -19,7 +19,6 @@
     this.deletable = this.prop(true);
     this.ports = this.prop([]);
     this.portListTop = this.prop(0);
-    this.portListHeight = this.prop(0);
     this.circuitModule = this.prop(null);
     this.eventCircuitModule = this.prop(null);
     this.messageData = this.prop(helper.randomString(7));
@@ -27,6 +26,8 @@
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
+
+    this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
 
     this.portSelect = new Module.PortSelect({
       element: this.childElement('.module-port-select'),
@@ -68,10 +69,6 @@
 
   Module.prototype.componentElement = function() {
     return this.childElement('.module-component');
-  };
-
-  Module.prototype.portListElement = function() {
-    return this.childElement('.module-port-list');
   };
 
   Module.prototype.footerElement = function() {
@@ -361,16 +358,15 @@
       return;
     }
 
-    // add the port to the end of the list
-    var portListHeight = this.portListHeight();
-    this.portListHeight(portListHeight + port.height());
-    port.top(portListHeight);
-    port.parentElement(this.portListElement());
+    this.portList.add(port);
     this.portSelect.remove(port);
     this.setPortRelation(port);
 
     // move right not to position the port-socket outside
     this.x(Math.max(this.x(), this.leftPadding()));
+
+    // update footer
+    this.markDirty();
 
     this.portToggler(new Unit({ module: this, port: port }));
   };
@@ -382,20 +378,13 @@
       return;
     }
 
-    var visiblePorts = this.visiblePorts().sort(function(a, b) {
-      return a.top() - b.top();
-    });
-
-    port.parentElement(null);
+    this.portList.remove(port);
     this.portSelect.add(port);
     this.unsetPortRelation(port);
 
-    // move up the ports below the hidden port
-    visiblePorts.slice(visiblePorts.indexOf(port) + 1).forEach(function(visiblePort) {
-      visiblePort.top(visiblePort.top() - port.height());
-    });
+    // update footer
+    this.markDirty();
 
-    this.portListHeight(this.portListHeight() - port.height());
     this.portToggler(new Unit({ module: this, port: port }));
   };
 
@@ -441,12 +430,6 @@
     });
   };
 
-  Module.prototype.redrawPortList = function() {
-    this.redrawBy('portListHeight', function(portListHeight) {
-      dom.css(this.portListElement(), { height: portListHeight + 'px' });
-    });
-  };
-
   Module.prototype.redrawFooter = function() {
     this.redrawBy('isAllPortsVisible', function(isAllPortsVisible) {
       dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
@@ -479,7 +462,6 @@
     this.redrawPosition();
     this.redrawZIndex();
     this.redrawDeleteButton();
-    this.redrawPortList();
     this.redrawFooter();
     this.redrawDOMToggleClasses();
   };
@@ -592,7 +574,7 @@
       var targetPort = context.port;
 
       // move the target port within the port list
-      targetPort.top(helper.clamp(context.top + dy, 0, this.portListHeight() - targetPort.height()));
+      targetPort.top(helper.clamp(context.top + dy, 0, this.portList.height() - targetPort.height()));
 
       if (targetPort.top() - context.placeholderTop > 0) {
         Module.DRAG_LISTENER_SORT_PORT.onmovedown.call(this, dx, dy, event, context);
@@ -700,6 +682,48 @@
       '</div>',
     '</div>',
   ].join('');
+
+  Module.PortList = (function() {
+    var PortList = Component.inherits(function() {
+      this.ports = [];
+    });
+
+    PortList.prototype.height = function() {
+      return this.ports.reduce(function(prev, curr) {
+        return prev + curr.height();
+      }, 0);
+    };
+
+    PortList.prototype.add = function(port) {
+      // add the port to the end of the list
+      port.top(this.height());
+      port.parentElement(this.element());
+      this.ports.push(port);
+      this.markDirty();
+    };
+
+    PortList.prototype.remove = function(port) {
+      helper.remove(this.ports, port);
+      port.parentElement(null);
+
+      // move up the ports below the removed port
+      this.ports.forEach(function(listedPort) {
+        if (listedPort.top() > port.top()) {
+          listedPort.top(listedPort.top() - port.height());
+        }
+      });
+
+      this.markDirty();
+    };
+
+    PortList.prototype.onredraw = function() {
+      this.redrawBy('height', function(height) {
+        dom.css(this.element(), { height: height + 'px' });
+      });
+    };
+
+    return PortList;
+  })();
 
   Module.PortSelect = (function() {
     var PortSelect = Component.inherits(function(props) {
