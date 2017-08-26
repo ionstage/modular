@@ -6,5 +6,5 @@
   var CircuitModule = app.CircuitModule || require('./models/circuit-module.js');
 
   dom.export('ModularModule', CircuitModule.ModularModule);
-  app.body = new Body();
+  app.body = Body.init();
 })(this.app || (this.app = {}));

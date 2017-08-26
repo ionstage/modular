@@ -29,8 +29,6 @@
       loadStarter: Body.prototype.loadStarter.bind(this),
       loadEnder: Body.prototype.loadEnder.bind(this),
     });
-
-    this.registerReadyListener();
   });
 
   Body.prototype.isDragging = function() {
@@ -53,10 +51,6 @@
     return 'demos/' + name + '.json';
   };
 
-  Body.prototype.registerReadyListener = function() {
-    dom.ready(Body.prototype.onready.bind(this));
-  };
-
   Body.prototype.toggleSidebar = function(visible) {
     return dom.transition(this.element(), function() {
       this.sidebar.disabled(!visible);
@@ -68,12 +62,12 @@
     return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
   };
 
-  Body.prototype.render = function() {
-    return dom.body();
+  Body.prototype.redraw = function() {
+    this.redrawDOMToggleClassBy('isDragging', 'dragging');
   };
 
-  Body.prototype.onredraw = function() {
-    this.redrawDOMToggleClassBy('isDragging', 'dragging');
+  Body.prototype.onappend = function() {
+    dom.ready(Body.prototype.onready.bind(this));
   };
 
   Body.prototype.onready = function() {
@@ -125,6 +119,12 @@
   Body.prototype.loadEnder = function() {
     this.sidebar.disabled(false);
     this.main.disabled(false);
+  };
+
+  Body.init = function() {
+    var body = new Body({ element: dom.body() });
+    body.onappend();
+    return body;
   };
 
   if (typeof module !== 'undefined' && module.exports) {
