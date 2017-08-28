@@ -6,7 +6,7 @@
   var dom = {};
 
   dom.export = function(key, value) {
-    var g = (typeof module !== 'undefined' && module.exports ? global : window);
+    var g = (typeof global !== 'undefined' ? global : window);
     helper.define(g, key, value);
   };
 
