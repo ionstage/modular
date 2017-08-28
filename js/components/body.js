@@ -66,7 +66,7 @@
     this.redrawDOMToggleClassBy('isDragging', 'dragging');
   };
 
-  Body.prototype.onappend = function() {
+  Body.prototype.oninit = function() {
     dom.ready(Body.prototype.onready.bind(this));
   };
 
@@ -119,12 +119,6 @@
   Body.prototype.loadEnder = function() {
     this.sidebar.disabled(false);
     this.main.disabled(false);
-  };
-
-  Body.init = function() {
-    var body = new Body({ element: dom.body() });
-    body.onappend();
-    return body;
   };
 
   if (typeof module !== 'undefined' && module.exports) {
