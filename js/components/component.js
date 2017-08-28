@@ -114,6 +114,8 @@
     return dom.render('<div></div>');
   };
 
+  Component.prototype.oninit = function() {};
+
   Component.prototype.onappend = function() {};
 
   Component.prototype.onremove = function() {};
@@ -127,6 +129,9 @@
       superCtor.call(this, props);
       if (typeof initializer === 'function') {
         initializer.call(this, props);
+      }
+      if (this.constructor === ctor) {
+        this.oninit();
       }
     }, superCtor);
     ctor.inherits = superCtor.inherits;
