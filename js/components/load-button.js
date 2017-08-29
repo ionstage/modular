@@ -19,12 +19,7 @@
   LoadButton.Input = (function() {
     var Input = Component.inherits(function(props) {
       this.loader = props.loader;
-      this.registerChangeListener();
     });
-
-    Input.prototype.registerChangeListener = function() {
-      dom.on(this.element(), 'change', Input.prototype.onchange.bind(this));
-    };
 
     Input.prototype.click = function() {
       dom.click(this.element());
@@ -32,6 +27,10 @@
 
     Input.prototype.reset = function() {
       dom.value(this.element(), '');
+    };
+
+    Input.prototype.oninit = function() {
+      dom.on(this.element(), 'change', Input.prototype.onchange.bind(this));
     };
 
     Input.prototype.onchange = function(event) {
