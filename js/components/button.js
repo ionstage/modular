@@ -7,23 +7,21 @@
   var Button = Component.inherits(function(props) {
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
-
-    this.registerTapListener();
   });
 
-  Button.prototype.registerTapListener = function() {
+  Button.prototype.redraw = function() {
+    this.redrawDOMToggleClassBy('isActive', 'active');
+    this.redrawDOMToggleClassBy('disabled', 'disabled');
+    this.onredraw();
+  };
+
+  Button.prototype.oninit = function() {
     new dom.Draggable({
       element: this.element(),
       onstart: Button.prototype.onstart.bind(this),
       onmove: Button.prototype.onmove.bind(this),
       onend: Button.prototype.onend.bind(this),
     });
-  };
-
-  Button.prototype.redraw = function() {
-    this.redrawDOMToggleClassBy('isActive', 'active');
-    this.redrawDOMToggleClassBy('disabled', 'disabled');
-    this.onredraw();
   };
 
   Button.prototype.onstart = function(x, y, event, context) {
