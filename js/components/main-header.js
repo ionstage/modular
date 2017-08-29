@@ -1,9 +1,9 @@
 (function(app) {
   'use strict';
 
+  var Button = app.Button || require('./button.js');
   var Component = app.Component || require('./component.js');
   var LoadButton = app.LoadButton || require('./load-button.js');
-  var SaveButton = app.SaveButton || require('./save-button.js');
   var SidebarToggleButton = app.SidebarToggleButton || require('./sidebar-toggle-button.js');
 
   var MainHeader = Component.inherits(function(props) {
@@ -17,9 +17,9 @@
       loader: props.fileLoader,
     });
 
-    this.saveButton = new SaveButton({
+    this.saveButton = new Button({
       element: this.childElement('.save-button'),
-      saver: props.fileSaver,
+      tapper: props.fileSaver,
     });
   });
 

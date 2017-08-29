@@ -7,6 +7,7 @@
   var Button = Component.inherits(function(props) {
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
+    this.tapper = props.tapper;
   });
 
   Button.prototype.redraw = function() {
@@ -42,7 +43,9 @@
     }
   };
 
-  Button.prototype.ontap = function() {};
+  Button.prototype.ontap = function() {
+    this.tapper();
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Button;
