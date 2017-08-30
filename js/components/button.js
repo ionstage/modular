@@ -13,7 +13,6 @@
   Button.prototype.redraw = function() {
     this.redrawDOMToggleClassBy('isActive', 'active');
     this.redrawDOMToggleClassBy('disabled', 'disabled');
-    this.onredraw();
   };
 
   Button.prototype.oninit = function() {
@@ -39,12 +38,8 @@
   Button.prototype.onend = function(dx, dy, event, context) {
     this.isActive(false);
     if (dom.target(event) === context.target) {
-      this.ontap();
+      this.tapper();
     }
-  };
-
-  Button.prototype.ontap = function() {
-    this.tapper();
   };
 
   if (typeof module !== 'undefined' && module.exports) {

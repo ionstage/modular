@@ -5,14 +5,19 @@
   var Button = app.Button || require('./button.js');
   var Component = app.Component || require('./component.js');
 
-  var LoadButton = Button.inherits(function(props) {
+  var LoadButton = Component.inherits(function(props) {
+    this.button = new Button({
+      element: props.element,
+      tapper: LoadButton.prototype.tapper.bind(this),
+    });
+
     this.input = new LoadButton.Input({
       element: this.childElement('.button-input'),
       loader: props.loader,
     });
   });
 
-  LoadButton.prototype.ontap = function() {
+  LoadButton.prototype.tapper = function() {
     this.input.click();
   };
 

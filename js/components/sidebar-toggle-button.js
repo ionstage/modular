@@ -2,8 +2,14 @@
   'use strict';
 
   var Button = app.Button || require('./button.js');
+  var Component = app.Component || require('./component.js');
 
-  var SidebarToggleButton = Button.inherits(function(props) {
+  var SidebarToggleButton = Component.inherits(function(props) {
+    this.button = new Button({
+      element: props.element,
+      tapper: SidebarToggleButton.prototype.tapper.bind(this),
+    });
+
     this.sidebarVisible = this.prop(true);
     this.toggler = props.toggler;
   });
@@ -19,14 +25,14 @@
     }.bind(this));
   };
 
-  SidebarToggleButton.prototype.ontap = function() {
-    this.disabled(true);
+  SidebarToggleButton.prototype.tapper = function() {
+    this.button.disabled(true);
     this.toggle().then(function() {
-      this.disabled(false);
+      this.button.disabled(false);
     }.bind(this));
   };
 
-  SidebarToggleButton.prototype.onredraw = function() {
+  SidebarToggleButton.prototype.redraw = function() {
     this.redrawDOMDataBy('type', 'type');
   };
 
