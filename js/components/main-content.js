@@ -443,7 +443,9 @@
     this.updateZIndex();
   };
 
-  MainContent.prototype.portToggler = function(unit) {
+  MainContent.prototype.portToggler = function(module, port) {
+    var unit = new Unit({ module: module, port: port });
+
     if (!unit.visible()) {
       this.disconnectAll(unit);
     }

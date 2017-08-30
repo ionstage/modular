@@ -368,7 +368,7 @@
     // update footer
     this.markDirty();
 
-    this.portToggler(new Unit({ module: this, port: port }));
+    this.portToggler(this, port);
   };
 
   Module.prototype.hidePort = function(name) {
@@ -385,7 +385,7 @@
     // update footer
     this.markDirty();
 
-    this.portToggler(new Unit({ module: this, port: port }));
+    this.portToggler(this, port);
   };
 
   Module.prototype.hideAllPorts = function() {
