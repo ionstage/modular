@@ -451,7 +451,9 @@
     this.updateRetainer();
   };
 
-  MainContent.prototype.portEventer = function(sourceUnit) {
+  MainContent.prototype.portEventer = function(sourceModule, sourcePort) {
+    var sourceUnit = new Unit({ module: sourceModule, port: sourcePort });
+
     sourceUnit.plugHighlighted(true);
     this.updateEventHighlight(sourceUnit);
 

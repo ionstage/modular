@@ -215,7 +215,7 @@
         label: port.label(),
         name: port.name(),
         type: port.type(),
-        arg: this.portEventer.bind(null, new Unit({ module: this, port: port })),
+        arg: this.portEventer.bind(null, this, port),
       };
     }.bind(this)));
   };
