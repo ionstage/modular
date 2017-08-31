@@ -33,8 +33,6 @@
 
     this.moduleDragStarter = props.moduleDragStarter;
     this.moduleDragEnder = props.moduleDragEnder;
-
-    this.registerPointListener();
   });
 
   MainContent.prototype.retainerElement = function() {
@@ -172,15 +170,6 @@
         target: { moduleIndex: targetModuleIndex, portName: targetUnit.name() },
       };
     });
-  };
-
-  MainContent.prototype.registerPointListener = function() {
-    dom.on(this.element(), dom.eventType('start'), function(event) {
-      // remove keyboard focus when pointing background
-      if (dom.target(event) === this.element()) {
-        dom.removeFocus();
-      }
-    }.bind(this));
   };
 
   MainContent.prototype.load = function(data) {
@@ -430,6 +419,15 @@
     this.redrawBy('wireHandleContainerZIndex', function(wireHandleContainerZIndex) {
       dom.css(this.wireHandleContainerElement(), { zIndex: wireHandleContainerZIndex });
     });
+  };
+
+  MainContent.prototype.oninit = function() {
+    dom.on(this.element(), dom.eventType('start'), function(event) {
+      // remove keyboard focus when pointing background
+      if (dom.target(event) === this.element()) {
+        dom.removeFocus();
+      }
+    }.bind(this));
   };
 
   MainContent.prototype.deleter = function(module) {
