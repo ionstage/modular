@@ -22,15 +22,7 @@
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
     this.dropper = props.dropper;
-
-    this.registerPointListener();
   });
-
-  SidebarContent.prototype.registerPointListener = function() {
-    dom.on(this.element(), dom.eventType('start'), function() {
-      dom.removeFocus();
-    });
-  };
 
   SidebarContent.prototype.createModule = function(props) {
     return new SidebarModule(helper.extend(helper.clone(props), {
@@ -79,6 +71,12 @@
     setTimeout(function() {
       this.scrollable.refresh();
     }.bind(this), 0);
+  };
+
+  SidebarContent.prototype.oninit = function() {
+    dom.on(this.element(), dom.eventType('start'), function() {
+      dom.removeFocus();
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {
