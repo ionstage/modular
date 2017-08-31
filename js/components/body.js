@@ -43,6 +43,11 @@
     this.dragCount(this.dragCount() - 1);
   };
 
+  Body.prototype.disabled = function(value) {
+    this.sidebar.disabled(value);
+    this.main.disabled(value);
+  };
+
   Body.prototype.currentDemoName = function() {
     return dom.urlQuery(dom.location()).demo || '';
   };
@@ -71,14 +76,14 @@
   };
 
   Body.prototype.onready = function() {
-    this.loadStarter();
+    this.disabled(true);
     this.entryCollection.load().then(function() {
       this.sidebar.loadContent();
       return this.loadDemo(this.currentDemoName());
     }.bind(this)).catch(function(e) {
       alert(e);
     }).then(function() {
-      this.loadEnder();
+      this.disabled(false);
     }.bind(this));
   };
 
@@ -112,13 +117,11 @@
   };
 
   Body.prototype.loadStarter = function() {
-    this.sidebar.disabled(true);
-    this.main.disabled(true);
+    this.disabled(true);
   };
 
   Body.prototype.loadEnder = function() {
-    this.sidebar.disabled(false);
-    this.main.disabled(false);
+    this.disabled(false);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
