@@ -23,15 +23,6 @@
     this.plugWidth = this.prop(50);
     this.socketOffsetX = this.prop(-25);
     this.socketWidth = this.prop(50);
-
-    this.addRelation(new ModulePort.Relation({
-      port: this,
-      plug: new ModulePort.Handle({ element: this.childElement('.module-port-plug') }),
-      socket: new ModulePort.Socket({ element: this.childElement('.module-port-socket') }),
-      socketHandle: new ModulePort.Handle({ element: this.childElement('.module-port-socket-handle') }),
-      content: new ModulePort.Content({ element: this.childElement('.module-port-content') }),
-      hideButton: new ModulePort.HideButton({ element: this.childElement('.module-port-hide-button') }),
-    }));
   });
 
   ModulePort.prototype.visible = function() {
@@ -48,6 +39,17 @@
 
   ModulePort.prototype.render = function() {
     return dom.render(ModulePort.HTML_TEXT);
+  };
+
+  ModulePort.prototype.oninit = function() {
+    this.addRelation(new ModulePort.Relation({
+      port: this,
+      plug: new ModulePort.Handle({ element: this.childElement('.module-port-plug') }),
+      socket: new ModulePort.Socket({ element: this.childElement('.module-port-socket') }),
+      socketHandle: new ModulePort.Handle({ element: this.childElement('.module-port-socket-handle') }),
+      content: new ModulePort.Content({ element: this.childElement('.module-port-content') }),
+      hideButton: new ModulePort.HideButton({ element: this.childElement('.module-port-hide-button') }),
+    }));
   };
 
   ModulePort.prototype.onredraw = function() {
