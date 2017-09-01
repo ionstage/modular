@@ -37,6 +37,12 @@
     return this.content.load(data);
   };
 
+  Main.prototype.loadFile = function(file) {
+    return dom.readFile(file).then(function(text) {
+      return this.loadContent(JSON.parse(text));
+    }.bind(this));
+  };
+
   Main.prototype.loadUrl = function(url) {
     return dom.loadJSON(url).then(function(data) {
       return this.loadContent(data);
@@ -54,9 +60,7 @@
 
   Main.prototype.fileLoader = function(file) {
     this.loadStarter();
-    dom.readFile(file).then(function(text) {
-      return this.loadContent(JSON.parse(text));
-    }.bind(this)).catch(function(e) {
+    this.loadFile(file).catch(function(e) {
       alert(e);
     }).then(function() {
       this.loadEnder();
