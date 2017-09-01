@@ -100,15 +100,12 @@
     });
   };
 
-  helper.removeAt = function(array, index) {
+  helper.remove = function(array, item) {
+    var index = array.indexOf(item);
     if (index < 0 || index >= array.length) {
       throw new RangeError('Invalid index');
     }
     array.splice(index, 1);
-  };
-
-  helper.remove = function(array, item) {
-    helper.removeAt(array, array.indexOf(item));
   };
 
   helper.moveToBack = function(array, item) {
