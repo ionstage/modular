@@ -8,7 +8,7 @@
   var SidebarModule = app.SidebarModule || require('./sidebar-module.js');
 
   var SidebarContent = Component.inherits(function(props) {
-    this.modules = this.prop([]);
+    this.modules = [];
 
     this.scrollable = new IScroll(this.element(), {
       disableMouse: true,
@@ -36,15 +36,15 @@
   SidebarContent.prototype.appendModule = function(props) {
     var module = this.createModule(props);
     module.markDirty();
-    this.modules().push(module);
+    this.modules.push(module);
     this.markDirty();
   };
 
   SidebarContent.prototype.clear = function() {
-    this.modules().forEach(function(module) {
+    this.modules.forEach(function(module) {
       module.delete();
     });
-    this.modules([]);
+    this.markDirty();
   };
 
   SidebarContent.prototype.setModules = function(entries) {
