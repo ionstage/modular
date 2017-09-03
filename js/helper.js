@@ -86,10 +86,9 @@
   };
 
   helper.sortBy = function(array, iteratee) {
-    var isCallback = (typeof iteratee === 'function');
     return array.sort(function(a, b) {
-      var l = (isCallback ? iteratee(a) : a[iteratee]);
-      var r = (isCallback ? iteratee(b) : b[iteratee]);
+      var l = iteratee(a);
+      var r = iteratee(b);
       if (l < r) {
         return -1;
       }
