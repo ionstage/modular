@@ -243,13 +243,12 @@
     }
   };
 
-  dom.diffPoints = function(p0, p1) {
-    return { dx: p0.x - p1.x, dy: p0.y - p1.y };
+  dom.pageX = function(event) {
+    return (dom.changedTouch(event) || event).pageX;
   };
 
-  dom.pagePoint = function(event) {
-    var p = dom.changedTouch(event) || event;
-    return { x: p.pageX, y: p.pageY };
+  dom.pageY = function(event) {
+    return (dom.changedTouch(event) || event).pageY;
   };
 
   dom.clientX = function(event) {
@@ -276,7 +275,8 @@
       this.end = end.bind(this);
       this.lock = false;
       this.identifier = null;
-      this.startingPoint = null;
+      this.startPageX = 0;
+      this.startPageY = 0;
       this.context = {};
 
       dom.on(this.element, dom.eventType('start'), this.start);
@@ -296,7 +296,8 @@
 
       this.lock = true;
       this.identifier = dom.identifier(event);
-      this.startingPoint = dom.pagePoint(event);
+      this.startPageX = dom.pageX(event);
+      this.startPageY = dom.pageY(event);
 
       var onstart = this.onstart;
       if (typeof onstart === 'function') {
@@ -319,8 +320,9 @@
 
       var onmove = this.onmove;
       if (typeof onmove === 'function') {
-        var d = dom.diffPoints(dom.pagePoint(event), this.startingPoint);
-        onmove(d.dx, d.dy, event, this.context);
+        var dx = dom.pageX(event) - this.startPageX;
+        var dy = dom.pageY(event) - this.startPageY;
+        onmove(dx, dy, event, this.context);
       }
     };
 
@@ -336,8 +338,9 @@
 
       var onend = this.onend;
       if (typeof onend === 'function') {
-        var d = dom.diffPoints(dom.pagePoint(event), this.startingPoint);
-        onend(d.dx, d.dy, event, this.context);
+        var dx = dom.pageX(event) - this.startPageX;
+        var dy = dom.pageY(event) - this.startPageY;
+        onend(dx, dy, event, this.context);
       }
 
       this.lock = false;
