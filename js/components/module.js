@@ -8,7 +8,6 @@
   var ModulePort = app.ModulePort || require('./module-port.js');
   var ModulePortRelation = app.ModulePortRelation || require('../relations/module-port-relation.js');
   var RelationCollection = app.RelationCollection || require('../collections/relation-collection.js');
-  var Unit = app.Unit || require('../models/unit.js');
 
   var Module = Component.inherits(function(props) {
     this.title = this.prop(props.title);
@@ -626,31 +625,31 @@
 
   Module.DRAG_LISTENER_DRAG_PORT_PLAG = {
     onstart: function(x, y, event, context) {
-      var port = this.targetPort(dom.target(event));
-      context.unit = new Unit({ module: this, port: port });
+      context.module = this;
+      context.port = this.targetPort(dom.target(event));
       context.context = {};
-      this.dragPortPlugStarter(context.unit, context.context);
+      this.dragPortPlugStarter(context.module, context.port, context.context);
     },
     onmove: function(dx, dy, event, context) {
-      this.dragPortPlugMover(context.unit, dx, dy, context.context);
+      this.dragPortPlugMover(context.module, context.port, dx, dy, context.context);
     },
     onend: function(dx, dy, event, context) {
-      this.dragPortPlugEnder(context.unit, context.context);
+      this.dragPortPlugEnder(context.module, context.port, context.context);
     },
   };
 
   Module.DRAG_LISTENER_DRAG_PORT_SOCKET = {
     onstart: function(x, y, event, context) {
-      var port = this.targetPort(dom.target(event));
-      context.unit = new Unit({ module: this, port: port });
+      context.module = this;
+      context.port = this.targetPort(dom.target(event));
       context.context = {};
-      this.dragPortSocketStarter(context.unit, context.context);
+      this.dragPortSocketStarter(context.module, context.port, context.context);
     },
     onmove: function(dx, dy, event, context) {
-      this.dragPortSocketMover(context.unit, dx, dy, context.context);
+      this.dragPortSocketMover(context.module, context.port, dx, dy, context.context);
     },
     onend: function(dx, dy, event, context) {
-      this.dragPortSocketEnder(context.unit, context.context);
+      this.dragPortSocketEnder(context.module, context.port, context.context);
     },
   };
 
