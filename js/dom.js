@@ -252,9 +252,12 @@
     return { x: p.pageX, y: p.pageY };
   };
 
-  dom.clientPoint = function(event) {
-    var p = dom.changedTouch(event) || event;
-    return { x: p.clientX, y: p.clientY };
+  dom.clientX = function(event) {
+    return (dom.changedTouch(event) || event).clientX;
+  };
+
+  dom.clientY = function(event) {
+    return (dom.changedTouch(event) || event).clientY;
   };
 
   dom.identifier = function(event) {
@@ -297,13 +300,10 @@
 
       var onstart = this.onstart;
       if (typeof onstart === 'function') {
-        var element = this.element;
-        var rect = dom.rect(element);
-        var d = dom.diffPoints(dom.clientPoint(event), {
-          x: rect.left - dom.scrollLeft(element),
-          y: rect.top - dom.scrollTop(element),
-        });
-        onstart(d.dx, d.dy, event, this.context);
+        var rect = dom.rect(this.element);
+        var x = dom.clientX(event) - rect.left + dom.scrollLeft(this.element);
+        var y = dom.clientY(event) - rect.top + dom.scrollTop(this.element);
+        onstart(x, y, event, this.context);
       }
 
       dom.on(document, dom.eventType('move'), this.move);
