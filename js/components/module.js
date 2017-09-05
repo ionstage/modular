@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
@@ -361,9 +362,6 @@
     this.portSelect.remove(port);
     this.setPortRelation(port);
 
-    // move right not to position the port-socket outside
-    this.x(Math.max(this.x(), this.leftPadding()));
-
     // update footer
     this.markDirty();
 
@@ -440,6 +438,10 @@
     this.redrawDOMToggleClassBy('isError', 'error');
     this.redrawDOMToggleClassBy('isMoving', 'moving');
     this.redrawDOMToggleClassBy('isDeleting', 'deleting');
+  };
+
+  Module.prototype.oninit = function() {
+    this.addRelation(new Module.Relation({ module: this }));
   };
 
   Module.prototype.onappend = function() {
@@ -523,8 +525,8 @@
       this.isMoving(true);
     },
     onmove: function(dx, dy, event, context) {
-      this.x(Math.max(context.x + dx, this.leftPadding()));
-      this.y(Math.max(context.y + dy, 0));
+      this.x(context.x + dx);
+      this.y(context.y + dy);
     },
     onend: function(dx, dy, event, context) {
       this.isMoving(false);
@@ -808,6 +810,24 @@
     })();
 
     return PortSelect;
+  })();
+
+  Module.Relation = (function() {
+    var Relation = helper.inherits(function(props) {
+      this.module = props.module;
+    }, jCore.Relation);
+
+    Relation.prototype.update = function() {
+      this.updatePosition();
+    };
+
+    Relation.prototype.updatePosition = function() {
+      // don't move outside of the container
+      this.module.x(Math.max(this.module.x(), this.module.leftPadding()));
+      this.module.y(Math.max(this.module.y(), 0));
+    };
+
+    return Relation;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
