@@ -71,10 +71,6 @@
     return this.childElement('.module-component');
   };
 
-  Module.prototype.footerElement = function() {
-    return this.childElement('.module-footer');
-  };
-
   Module.prototype.componentContentWindow = function() {
     return dom.contentWindow(this.componentElement());
   };
@@ -361,10 +357,7 @@
     this.portList.add(port);
     this.portSelect.remove(port);
     this.setPortRelation(port);
-
-    // update footer
     this.markDirty();
-
     this.portToggler(this, port);
   };
 
@@ -378,10 +371,7 @@
     this.portList.remove(port);
     this.portSelect.add(port);
     this.unsetPortRelation(port);
-
-    // update footer
     this.markDirty();
-
     this.portToggler(this, port);
   };
 
@@ -427,12 +417,6 @@
     });
   };
 
-  Module.prototype.redrawFooter = function() {
-    this.redrawBy('isAllPortsVisible', function(isAllPortsVisible) {
-      dom.toggleClass(this.footerElement(), 'hide', isAllPortsVisible);
-    });
-  };
-
   Module.prototype.redrawDOMToggleClasses = function() {
     this.redrawDOMToggleClassBy('isLoading', 'loading');
     this.redrawDOMToggleClassBy('isError', 'error');
@@ -441,7 +425,10 @@
   };
 
   Module.prototype.oninit = function() {
-    this.addRelation(new Module.Relation({ module: this }));
+    this.addRelation(new Module.Relation({
+      module: this,
+      footer: new Module.Footer({ element: this.childElement('.module-footer') }),
+    }));
   };
 
   Module.prototype.onappend = function() {
@@ -463,7 +450,6 @@
     this.redrawPosition();
     this.redrawZIndex();
     this.redrawDeleteButton();
-    this.redrawFooter();
     this.redrawDOMToggleClasses();
   };
 
@@ -726,6 +712,20 @@
     return PortList;
   })();
 
+  Module.Footer = (function() {
+    var Footer = Component.inherits(function() {
+      this.disabled = this.prop(false);
+    });
+
+    Footer.prototype.onredraw = function() {
+      this.redrawBy('disabled', function(disabled) {
+        dom.toggleClass(this.element(), 'hide', disabled);
+      });
+    };
+
+    return Footer;
+  })();
+
   Module.PortSelect = (function() {
     var PortSelect = Component.inherits(function(props) {
       this.ports = [];
@@ -815,16 +815,23 @@
   Module.Relation = (function() {
     var Relation = helper.inherits(function(props) {
       this.module = props.module;
+      this.footer = props.footer;
     }, jCore.Relation);
 
     Relation.prototype.update = function() {
       this.updatePosition();
+      this.updateFooter();
     };
 
     Relation.prototype.updatePosition = function() {
       // don't move outside of the container
       this.module.x(Math.max(this.module.x(), this.module.leftPadding()));
       this.module.y(Math.max(this.module.y(), 0));
+    };
+
+    Relation.prototype.updateFooter = function() {
+      // hide footer when all ports are visible
+      this.footer.disabled(this.module.isAllPortsVisible());
     };
 
     return Relation;
