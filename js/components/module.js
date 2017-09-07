@@ -26,6 +26,7 @@
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
+    this.headerHeight = this.prop(32);
 
     this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
 
@@ -54,10 +55,6 @@
     this.dragPortSocketMover = props.dragPortSocketMover;
     this.dragPortSocketEnder = props.dragPortSocketEnder;
   });
-
-  Module.prototype.headerElement = function() {
-    return this.childElement('.module-header');
-  };
 
   Module.prototype.titleElement = function() {
     return this.childElement('.module-title');
@@ -292,7 +289,7 @@
 
   Module.prototype.resetComponentHeight = function() {
     dom.fillContentHeight(this.componentElement());
-    this.portListTop(dom.offsetHeight(this.headerElement()) + dom.offsetHeight(this.componentElement()) + 1);
+    this.portListTop(this.headerHeight() + dom.offsetHeight(this.componentElement()) + 1);
   };
 
   Module.prototype.resetPortSelect = function() {
