@@ -9,16 +9,7 @@
 
   var SidebarContent = Component.inherits(function(props) {
     this.modules = [];
-
-    this.scrollable = new IScroll(this.element(), {
-      disableMouse: true,
-      disablePointer: true,
-      fadeScrollbars: dom.supportsTouch(),
-      interactiveScrollbars: !dom.supportsTouch(),
-      mouseWheel: true,
-      scrollbars: true,
-    });
-
+    this.scrollable = new SidebarContent.Scrollable({ element: props.element });
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
     this.dropper = props.dropper;
@@ -58,19 +49,12 @@
     }.bind(this));
   };
 
-  SidebarContent.prototype.scrollEnabled = function(enabled) {
-    if (enabled) {
-      this.scrollable.enable();
-    } else {
-      this.scrollable.disable();
-    }
+  SidebarContent.prototype.scrollEnabled = function(value) {
+    this.scrollable.enabled(value);
   };
 
   SidebarContent.prototype.redraw = function() {
-    // XXX: zero timeout to wait for the repaint of iScroll
-    setTimeout(function() {
-      this.scrollable.refresh();
-    }.bind(this), 0);
+    this.scrollable.refresh();
   };
 
   SidebarContent.prototype.oninit = function() {
@@ -78,6 +62,40 @@
       dom.removeFocus();
     });
   };
+
+  SidebarContent.Scrollable = (function() {
+    var Scrollable = function(props) {
+      this.iScroll = new IScroll(props.element, this.options());
+    };
+
+    Scrollable.prototype.options = function() {
+      return {
+        disableMouse: true,
+        disablePointer: true,
+        fadeScrollbars: dom.supportsTouch(),
+        interactiveScrollbars: !dom.supportsTouch(),
+        mouseWheel: true,
+        scrollbars: true,
+      };
+    };
+
+    Scrollable.prototype.enabled = function(value) {
+      if (value) {
+        this.iScroll.enable();
+      } else {
+        this.iScroll.disable();
+      }
+    };
+
+    Scrollable.prototype.refresh = function() {
+      // XXX: zero timeout to wait for the repaint of iScroll
+      setTimeout(function() {
+        this.iScroll.refresh();
+      }.bind(this), 0);
+    };
+
+    return Scrollable;
+  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = SidebarContent;
