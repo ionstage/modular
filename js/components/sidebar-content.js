@@ -35,6 +35,7 @@
     this.modules.forEach(function(module) {
       module.delete();
     });
+    this.modules = [];
     this.markDirty();
   };
 
