@@ -344,6 +344,14 @@
     }.bind(this));
   };
 
+  Module.prototype.moveX = function(value) {
+    this.x(Math.max(value, this.leftPadding()));
+  };
+
+  Module.prototype.moveY = function(value) {
+    this.y(Math.max(value, 0));
+  };
+
   Module.prototype.showPort = function(name) {
     var port = this.port(name);
 
@@ -354,6 +362,10 @@
     this.portList.add(port);
     this.portSelect.remove(port);
     this.setPortRelation(port);
+
+    // move right not to position the port-socket outside
+    this.moveX(this.x());
+
     this.markDirty();
     this.portToggler(this, port);
   };
@@ -508,8 +520,8 @@
       this.isMoving(true);
     },
     onmove: function(dx, dy, event, context) {
-      this.x(context.x + dx);
-      this.y(context.y + dy);
+      this.moveX(context.x + dx);
+      this.moveY(context.y + dy);
     },
     onend: function(dx, dy, event, context) {
       this.isMoving(false);
@@ -816,14 +828,7 @@
     }, jCore.Relation);
 
     Relation.prototype.update = function() {
-      this.updatePosition();
       this.updateFooter();
-    };
-
-    Relation.prototype.updatePosition = function() {
-      // don't move outside of the container
-      this.module.x(Math.max(this.module.x(), this.module.leftPadding()));
-      this.module.y(Math.max(this.module.y(), 0));
     };
 
     Relation.prototype.updateFooter = function() {
