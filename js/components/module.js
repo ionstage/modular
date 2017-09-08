@@ -56,10 +56,6 @@
     this.dragPortSocketEnder = props.dragPortSocketEnder;
   });
 
-  Module.prototype.titleElement = function() {
-    return this.childElement('.module-title');
-  };
-
   Module.prototype.deleteButtonElement = function() {
     return this.childElement('.module-delete-button');
   };
@@ -402,12 +398,6 @@
     return dom.render(Module.HTML_TEXT);
   };
 
-  Module.prototype.redrawTitle = function() {
-    this.redrawBy('title', function(title) {
-      dom.text(this.titleElement(), title);
-    });
-  };
-
   Module.prototype.redrawPosition = function() {
     this.redrawBy('x', 'y', function(x, y) {
       dom.translate(this.element(), x, y);
@@ -436,6 +426,7 @@
   Module.prototype.oninit = function() {
     this.addRelation(new Module.Relation({
       module: this,
+      title: new Module.Title({ element: this.childElement('.module-title') }),
       footer: new Module.Footer({ element: this.childElement('.module-footer') }),
     }));
   };
@@ -455,7 +446,6 @@
   };
 
   Module.prototype.onredraw = function() {
-    this.redrawTitle();
     this.redrawPosition();
     this.redrawZIndex();
     this.redrawDeleteButton();
@@ -679,6 +669,20 @@
     '</div>',
   ].join('');
 
+  Module.Title = (function() {
+    var Title = Component.inherits(function() {
+      this.text = this.prop('');
+    });
+
+    Title.prototype.onredraw = function() {
+      this.redrawBy('text', function(text) {
+        dom.text(this.element(), text);
+      });
+    };
+
+    return Title;
+  })();
+
   Module.PortList = (function() {
     var PortList = Component.inherits(function() {
       this.ports = [];
@@ -824,11 +828,17 @@
   Module.Relation = (function() {
     var Relation = helper.inherits(function(props) {
       this.module = props.module;
+      this.title = props.title;
       this.footer = props.footer;
     }, jCore.Relation);
 
     Relation.prototype.update = function() {
+      this.updateTitle();
       this.updateFooter();
+    };
+
+    Relation.prototype.updateTitle = function() {
+      this.title.text(this.module.title());
     };
 
     Relation.prototype.updateFooter = function() {
