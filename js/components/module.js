@@ -7,7 +7,6 @@
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
-  var ModulePortRelation = app.ModulePortRelation || require('../relations/module-port-relation.js');
   var RelationCollection = app.RelationCollection || require('../collections/relation-collection.js');
 
   var Module = Component.inherits(function(props) {
@@ -34,8 +33,6 @@
       element: this.childElement('.module-port-select'),
       selector: Module.prototype.portSelector.bind(this),
     });
-
-    this.portRelationCollection = new RelationCollection({ ctor: ModulePortRelation });
 
     this.messageListenable = null;
     this.draggable = null;
@@ -294,14 +291,6 @@
     }.bind(this));
   };
 
-  Module.prototype.setPortRelation = function(port) {
-    this.portRelationCollection.add({ module: this, port: port });
-  };
-
-  Module.prototype.unsetPortRelation = function(port) {
-    this.portRelationCollection.remove({ module: this, port: port });
-  };
-
   Module.prototype.loadCircuitModule = function() {
     var circuitModule = helper.dig(this.componentContentWindow(), 'modular', 'exports');
     if (!circuitModule) {
@@ -357,7 +346,6 @@
 
     this.portList.add(port);
     this.portSelect.remove(port);
-    this.setPortRelation(port);
 
     // move right not to position the port-socket outside
     this.moveX(this.x());
@@ -375,7 +363,6 @@
 
     this.portList.remove(port);
     this.portSelect.add(port);
-    this.unsetPortRelation(port);
     this.markDirty();
     this.portToggler(this, port);
   };
