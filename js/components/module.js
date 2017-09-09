@@ -127,9 +127,7 @@
   };
 
   Module.prototype.visiblePorts = function() {
-    return this.ports().filter(function(port) {
-      return port.visible();
-    });
+    return this.portList.ports.slice();
   };
 
   Module.prototype.isAllPortsVisible = function() {
