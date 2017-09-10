@@ -53,10 +53,6 @@
     this.dragPortSocketEnder = props.dragPortSocketEnder;
   });
 
-  Module.prototype.deleteButtonElement = function() {
-    return this.childElement('.module-delete-button');
-  };
-
   Module.prototype.componentElement = function() {
     return this.childElement('.module-component');
   };
@@ -395,12 +391,6 @@
     });
   };
 
-  Module.prototype.redrawDeleteButton = function() {
-    this.redrawBy('deletable', function(deletable) {
-      dom.toggleClass(this.deleteButtonElement(), 'disabled', !deletable);
-    });
-  };
-
   Module.prototype.redrawDOMToggleClasses = function() {
     this.redrawDOMToggleClassBy('isLoading', 'loading');
     this.redrawDOMToggleClassBy('isError', 'error');
@@ -412,6 +402,7 @@
     this.addRelation(new Module.Relation({
       module: this,
       title: new Module.Title({ element: this.childElement('.module-title') }),
+      deleteButton: new Module.DeleteButton({ element: this.childElement('.module-delete-button') }),
       footer: new Module.Footer({ element: this.childElement('.module-footer') }),
     }));
   };
@@ -433,7 +424,6 @@
   Module.prototype.onredraw = function() {
     this.redrawPosition();
     this.redrawZIndex();
-    this.redrawDeleteButton();
     this.redrawDOMToggleClasses();
   };
 
@@ -668,6 +658,20 @@
     return Title;
   })();
 
+  Module.DeleteButton = (function() {
+    var DeleteButton = Component.inherits(function() {
+      this.disabled = this.prop(false);
+    });
+
+    DeleteButton.prototype.onredraw = function() {
+      this.redrawBy('disabled', function(disabled) {
+        dom.toggleClass(this.element(), 'disabled', disabled);
+      });
+    };
+
+    return DeleteButton;
+  })();
+
   Module.PortList = (function() {
     var PortList = Component.inherits(function() {
       this.ports = [];
@@ -814,16 +818,22 @@
     var Relation = helper.inherits(function(props) {
       this.module = props.module;
       this.title = props.title;
+      this.deleteButton = props.deleteButton;
       this.footer = props.footer;
     }, jCore.Relation);
 
     Relation.prototype.update = function() {
       this.updateTitle();
+      this.updateDeleteButton();
       this.updateFooter();
     };
 
     Relation.prototype.updateTitle = function() {
       this.title.text(this.module.title());
+    };
+
+    Relation.prototype.updateDeleteButton = function() {
+      this.deleteButton.disabled(!this.module.deletable());
     };
 
     Relation.prototype.updateFooter = function() {
