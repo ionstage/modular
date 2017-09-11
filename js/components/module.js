@@ -803,7 +803,10 @@
 
       Option.prototype.onredraw = function() {
         this.redrawDOMTextBy('label');
-        this.redrawDOMValueBy('name');
+
+        this.redrawBy('name', function(name) {
+          dom.value(this.element(), name);
+        });
       };
 
       Option.HTML_TEXT = '<option></option>';
