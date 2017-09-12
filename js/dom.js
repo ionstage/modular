@@ -119,10 +119,6 @@
     return el.getBoundingClientRect();
   };
 
-  dom.offsetHeight = function(el) {
-    return el.offsetHeight;
-  };
-
   dom.scrollLeft = function(el) {
     return el.scrollLeft;
   };
