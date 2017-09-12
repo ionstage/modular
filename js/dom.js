@@ -70,10 +70,6 @@
   };
 
   dom.toggleClass = function(el, className, force) {
-    if (typeof force === 'undefined') {
-      el.classList.toggle(className);
-      return;
-    }
     if (force) {
       el.classList.add(className);
     } else {
