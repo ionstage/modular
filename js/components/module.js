@@ -276,7 +276,7 @@
 
   Module.prototype.resetComponentHeight = function() {
     dom.fillContentHeight(this.componentElement());
-    this.portListTop(this.headerHeight() + dom.offsetHeight(this.componentElement()) + 1);
+    this.portListTop(this.headerHeight() + dom.rect(this.componentElement()).height + 1);
   };
 
   Module.prototype.resetPortSelect = function() {
