@@ -54,7 +54,11 @@
 
   ModulePort.prototype.onredraw = function() {
     this.redrawDOMDataBy('type', 'type');
-    this.redrawDOMTranslateYBy('top');
+
+    this.redrawBy('top', function(top) {
+      dom.translateY(this.element(), top);
+    });
+
     this.redrawDOMToggleClassBy('highlighted', 'highlighted');
     this.redrawDOMToggleClassBy('isMoving', 'moving');
   };

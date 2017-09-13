@@ -78,12 +78,6 @@
     });
   };
 
-  Component.prototype.redrawDOMTranslateYBy = function(key) {
-    this.redrawBy(key, function(value) {
-      dom.translateY(this.element(), value);
-    });
-  };
-
   Component.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();
