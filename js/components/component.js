@@ -66,12 +66,6 @@
     });
   };
 
-  Component.prototype.redrawDOMTextBy = function(key) {
-    this.redrawBy(key, function(value) {
-      dom.text(this.element(), value);
-    });
-  };
-
   Component.prototype.redrawDOMToggleClassBy = function(key, className) {
     this.redrawBy(key, function(value) {
       dom.toggleClass(this.element(), className, value);

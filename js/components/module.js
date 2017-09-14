@@ -802,7 +802,9 @@
       };
 
       Option.prototype.onredraw = function() {
-        this.redrawDOMTextBy('label');
+        this.redrawBy('label', function(value) {
+          dom.text(this.element(), value);
+        });
 
         this.redrawBy('name', function(name) {
           dom.value(this.element(), name);

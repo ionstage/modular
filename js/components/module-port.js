@@ -100,7 +100,9 @@
     });
 
     Content.prototype.onredraw = function() {
-      this.redrawDOMTextBy('label');
+      this.redrawBy('label', function(value) {
+        dom.text(this.element(), value);
+      });
     };
 
     return Content;
