@@ -1,13 +1,16 @@
 (function(app) {
   'use strict';
 
+  var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
+  var EntryCollection = app.EntryCollection || require('../collections/entry-collection.js');
   var SidebarContent = app.SidebarContent || require('./sidebar-content.js');
   var SidebarHeader = app.SidebarHeader || require('./sidebar-header.js');
 
   var Sidebar = Component.inherits(function(props) {
     this.disabled = this.prop(true);
     this.dragCount = this.prop(0);
+    this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
 
     this.header = new SidebarHeader({
       element: this.childElement('.sidebar-header'),
@@ -21,7 +24,6 @@
       dropper: props.moduleDropper,
     });
 
-    this.entrySearcher = props.entrySearcher;
     this.moduleDragStarter = props.moduleDragStarter;
     this.moduleDragEnder = props.moduleDragEnder;
   });
@@ -34,8 +36,14 @@
     this.dragCount(this.dragCount() - 1);
   };
 
-  Sidebar.prototype.loadContent = function() {
-    this.header.loadSearchText();
+  Sidebar.prototype.loadEntries = function() {
+    return this.entryCollection.load().then(function() {
+      this.header.loadSearchText();
+    }.bind(this));
+  };
+
+  Sidebar.prototype.entry = function(name) {
+    return this.entryCollection.get(name);
   };
 
   Sidebar.prototype.redraw = function() {
@@ -50,7 +58,7 @@
   };
 
   Sidebar.prototype.searcher = function(text) {
-    var entries = this.entrySearcher(text);
+    var entries = this.entryCollection.search(text);
     this.content.setModules(entries);
   };
 

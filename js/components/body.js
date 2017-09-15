@@ -5,20 +5,16 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
   var Main = app.Main || require('./main.js');
-  var EntryCollection = app.EntryCollection || require('../collections/entry-collection.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
   var Body = Component.inherits(function(props) {
     this.dragCount = this.prop(0);
-
-    this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
 
     this.sidebar = new Sidebar({
       element: this.childElement('.sidebar'),
       moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
       moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       moduleDropper: Body.prototype.moduleDropper.bind(this),
-      entrySearcher: Body.prototype.entrySearcher.bind(this),
     });
 
     this.main = new Main({
@@ -77,8 +73,7 @@
 
   Body.prototype.onready = function() {
     this.disabled(true);
-    this.entryCollection.load().then(function() {
-      this.sidebar.loadContent();
+    this.sidebar.loadEntries().then(function() {
       return this.loadDemo(this.currentDemoName());
     }.bind(this)).catch(function(e) {
       alert(e);
@@ -101,15 +96,11 @@
       return;
     }
 
-    var entry = this.entryCollection.get(name);
+    var entry = this.sidebar.entry(name);
     this.main.loadModule(helper.extend({
       title: entry.label,
       name: name,
     }, point), entry.visiblePortNames);
-  };
-
-  Body.prototype.entrySearcher = function(searchText) {
-    return this.entryCollection.search(searchText);
   };
 
   Body.prototype.sidebarToggler = function(visible) {
