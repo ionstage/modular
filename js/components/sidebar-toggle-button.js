@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
   var Component = app.Component || require('./component.js');
 
@@ -33,7 +34,9 @@
   };
 
   SidebarToggleButton.prototype.redraw = function() {
-    this.redrawDOMDataBy('type', 'type');
+    this.redrawBy('type', function(value) {
+      dom.data(this.element(), 'type', value);
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {

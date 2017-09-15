@@ -53,7 +53,9 @@
   };
 
   ModulePort.prototype.onredraw = function() {
-    this.redrawDOMDataBy('type', 'type');
+    this.redrawBy('type', function(value) {
+      dom.data(this.element(), 'type', value);
+    });
 
     this.redrawBy('top', function(top) {
       dom.translateY(this.element(), top);
