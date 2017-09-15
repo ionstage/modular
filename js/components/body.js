@@ -53,7 +53,7 @@
   };
 
   Body.prototype.toggleSidebar = function(visible) {
-    return dom.transition(this.element(), function() {
+    return dom.transition(this.element(), 'padding-left', function() {
       this.sidebar.disabled(!visible);
       this.main.isFullWidth(!visible);
     }.bind(this));
