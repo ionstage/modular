@@ -126,7 +126,8 @@
     return this.portList.ports.slice();
   };
 
-  Module.prototype.isAllPortsVisible = function() {
+  Module.prototype.footerDisabled = function() {
+    // disable footer when all ports are visible
     return (this.visiblePorts().length === this.ports().length);
   };
 
@@ -842,8 +843,7 @@
     };
 
     Relation.prototype.updateFooter = function() {
-      // hide footer when all ports are visible
-      this.footer.disabled(this.module.isAllPortsVisible());
+      this.footer.disabled(this.module.footerDisabled());
     };
 
     return Relation;
