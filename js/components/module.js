@@ -380,36 +380,6 @@
     return dom.render(Module.HTML_TEXT);
   };
 
-  Module.prototype.redrawPosition = function() {
-    this.redrawBy('x', 'y', function(x, y) {
-      dom.translate(this.element(), x, y);
-    });
-  };
-
-  Module.prototype.redrawZIndex = function() {
-    this.redrawBy('zIndex', function(zIndex) {
-      dom.css(this.element(), { zIndex: zIndex });
-    });
-  };
-
-  Module.prototype.redrawDOMToggleClasses = function() {
-    this.redrawBy('isLoading', function(isLoading) {
-      dom.toggleClass(this.element(), 'loading', isLoading);
-    });
-
-    this.redrawBy('isError', function(isError) {
-      dom.toggleClass(this.element(), 'error', isError);
-    });
-
-    this.redrawBy('isMoving', function(isMoving) {
-      dom.toggleClass(this.element(), 'moving', isMoving);
-    });
-
-    this.redrawBy('isDeleting', function(isDeleting) {
-      dom.toggleClass(this.element(), 'deleting', isDeleting);
-    });
-  };
-
   Module.prototype.oninit = function() {
     this.addRelation(new Module.Relation({
       module: this,
@@ -434,9 +404,29 @@
   };
 
   Module.prototype.onredraw = function() {
-    this.redrawPosition();
-    this.redrawZIndex();
-    this.redrawDOMToggleClasses();
+    this.redrawBy('x', 'y', function(x, y) {
+      dom.translate(this.element(), x, y);
+    });
+
+    this.redrawBy('zIndex', function(zIndex) {
+      dom.css(this.element(), { zIndex: zIndex });
+    });
+
+    this.redrawBy('isLoading', function(isLoading) {
+      dom.toggleClass(this.element(), 'loading', isLoading);
+    });
+
+    this.redrawBy('isError', function(isError) {
+      dom.toggleClass(this.element(), 'error', isError);
+    });
+
+    this.redrawBy('isMoving', function(isMoving) {
+      dom.toggleClass(this.element(), 'moving', isMoving);
+    });
+
+    this.redrawBy('isDeleting', function(isDeleting) {
+      dom.toggleClass(this.element(), 'deleting', isDeleting);
+    });
   };
 
   Module.prototype.onstart = function(x, y, event, context) {
