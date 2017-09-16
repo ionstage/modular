@@ -28,6 +28,10 @@
     this.moduleDragEnder = props.moduleDragEnder;
   });
 
+  Sidebar.prototype.scrollEnabled = function() {
+    return (this.dragCount() === 0);
+  };
+
   Sidebar.prototype.incrementDragCount = function() {
     this.dragCount(this.dragCount() + 1);
   };
@@ -51,12 +55,8 @@
       dom.toggleClass(this.element(), 'disabled', disabled);
     });
 
-    this.redrawDragCount();
-  };
-
-  Sidebar.prototype.redrawDragCount = function() {
-    this.redrawBy('dragCount', function(dragCount) {
-      this.content.scrollEnabled(dragCount === 0);
+    this.redrawBy('scrollEnabled', function(scrollEnabled) {
+      this.content.scrollEnabled(scrollEnabled);
     });
   };
 
