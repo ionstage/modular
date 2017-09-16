@@ -64,7 +64,9 @@
   };
 
   Body.prototype.redraw = function() {
-    this.redrawDOMToggleClassBy('isDragging', 'dragging');
+    this.redrawBy('isDragging', function(isDragging) {
+      dom.toggleClass(this.element(), 'dragging', isDragging);
+    });
   };
 
   Body.prototype.oninit = function() {

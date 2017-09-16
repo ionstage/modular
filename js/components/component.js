@@ -60,12 +60,6 @@
     }
   };
 
-  Component.prototype.redrawDOMToggleClassBy = function(key, className) {
-    this.redrawBy(key, function(value) {
-      dom.toggleClass(this.element(), className, value);
-    });
-  };
-
   Component.prototype.redraw = function() {
     var element = this.element();
     var parentElement = this.parentElement();

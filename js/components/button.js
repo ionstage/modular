@@ -11,8 +11,13 @@
   });
 
   Button.prototype.redraw = function() {
-    this.redrawDOMToggleClassBy('isActive', 'active');
-    this.redrawDOMToggleClassBy('disabled', 'disabled');
+    this.redrawBy('isActive', function(isActive) {
+      dom.toggleClass(this.element(), 'active', isActive);
+    });
+
+    this.redrawBy('disabled', function(disabled) {
+      dom.toggleClass(this.element(), 'disabled', disabled);
+    });
   };
 
   Button.prototype.oninit = function() {

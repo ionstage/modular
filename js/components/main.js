@@ -54,8 +54,13 @@
   };
 
   Main.prototype.redraw = function() {
-    this.redrawDOMToggleClassBy('disabled', 'disabled');
-    this.redrawDOMToggleClassBy('isFullWidth', 'full-width');
+    this.redrawBy('disabled', function(disabled) {
+      dom.toggleClass(this.element(), 'disabled', disabled);
+    });
+
+    this.redrawBy('isFullWidth', function(isFullWidth) {
+      dom.toggleClass(this.element(), 'full-width', isFullWidth);
+    });
   };
 
   Main.prototype.fileLoader = function(file) {

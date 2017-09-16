@@ -393,10 +393,21 @@
   };
 
   Module.prototype.redrawDOMToggleClasses = function() {
-    this.redrawDOMToggleClassBy('isLoading', 'loading');
-    this.redrawDOMToggleClassBy('isError', 'error');
-    this.redrawDOMToggleClassBy('isMoving', 'moving');
-    this.redrawDOMToggleClassBy('isDeleting', 'deleting');
+    this.redrawBy('isLoading', function(isLoading) {
+      dom.toggleClass(this.element(), 'loading', isLoading);
+    });
+
+    this.redrawBy('isError', function(isError) {
+      dom.toggleClass(this.element(), 'error', isError);
+    });
+
+    this.redrawBy('isMoving', function(isMoving) {
+      dom.toggleClass(this.element(), 'moving', isMoving);
+    });
+
+    this.redrawBy('isDeleting', function(isDeleting) {
+      dom.toggleClass(this.element(), 'deleting', isDeleting);
+    });
   };
 
   Module.prototype.oninit = function() {

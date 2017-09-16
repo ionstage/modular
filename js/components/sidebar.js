@@ -47,7 +47,10 @@
   };
 
   Sidebar.prototype.redraw = function() {
-    this.redrawDOMToggleClassBy('disabled', 'disabled');
+    this.redrawBy('disabled', function(disabled) {
+      dom.toggleClass(this.element(), 'disabled', disabled);
+    });
+
     this.redrawDragCount();
   };
 

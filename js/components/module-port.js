@@ -61,8 +61,13 @@
       dom.translateY(this.element(), top);
     });
 
-    this.redrawDOMToggleClassBy('highlighted', 'highlighted');
-    this.redrawDOMToggleClassBy('isMoving', 'moving');
+    this.redrawBy('highlighted', function(highlighted) {
+      dom.toggleClass(this.element(), 'highlighted', highlighted);
+    });
+
+    this.redrawBy('isMoving', function(isMoving) {
+      dom.toggleClass(this.element(), 'moving', isMoving);
+    });
   };
 
   ModulePort.TYPE_PROP = 'prop';
@@ -86,8 +91,13 @@
     });
 
     Handle.prototype.onredraw = function() {
-      this.redrawDOMToggleClassBy('disabled', 'hide');
-      this.redrawDOMToggleClassBy('highlighted', 'highlighted');
+      this.redrawBy('disabled', function(disabled) {
+        dom.toggleClass(this.element(), 'hide', disabled);
+      });
+
+      this.redrawBy('highlighted', function(highlighted) {
+        dom.toggleClass(this.element(), 'highlighted', highlighted);
+      });
     };
 
     return Handle;
@@ -116,7 +126,9 @@
     });
 
     HideButton.prototype.onredraw = function() {
-      this.redrawDOMToggleClassBy('disabled', 'disabled');
+      this.redrawBy('disabled', function(disabled) {
+        dom.toggleClass(this.element(), 'disabled', disabled);
+      });
     };
 
     return HideButton;
