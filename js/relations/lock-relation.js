@@ -6,39 +6,36 @@
 
   var LockRelation = helper.inherits(function(props) {
     this.type = props.type;
-    this.unit = props.unit;
+    this.module = props.module;
+    this.port = props.port;
     this.wire = props.wire;
   }, jCore.Relation);
 
   LockRelation.prototype.set = function() {
-    this.unit.addRelation(this);
+    this.module.addRelation(this);
+    this.port.addRelation(this);
   };
 
   LockRelation.prototype.unset = function() {
-    this.unit.removeRelation(this);
-  };
-
-  LockRelation.prototype.unitPosition = function() {
-    return this.unit[this.type.unitPositionName]();
-  };
-
-  LockRelation.prototype.wirePosition = function(position) {
-    this.wire[this.type.wirePositionNames.x](position.x);
-    this.wire[this.type.wirePositionNames.y](position.y);
+    this.module.removeRelation(this);
+    this.port.removeRelation(this);
   };
 
   LockRelation.prototype.update = function() {
-    this.wirePosition(this.unitPosition());
+    var x = this.module[this.type.moduleKeys.x](this.port);
+    var y = this.module[this.type.moduleKeys.y](this.port);
+    this.wire[this.type.wireKeys.x](x);
+    this.wire[this.type.wireKeys.y](y);
   };
 
   LockRelation.TYPE_PLUG = {
-    unitPositionName: 'plugPosition',
-    wirePositionNames: { x: 'sourceX', y: 'sourceY' },
+    moduleKeys: { x: 'plugX', y: 'plugY' },
+    wireKeys: { x: 'sourceX', y: 'sourceY' },
   };
 
   LockRelation.TYPE_SOCKET = {
-    unitPositionName: 'socketPosition',
-    wirePositionNames: { x: 'targetX', y: 'targetY' },
+    moduleKeys: { x: 'socketX', y: 'socketY' },
+    wireKeys: { x: 'targetX', y: 'targetY' },
   };
 
   if (typeof module !== 'undefined' && module.exports) {

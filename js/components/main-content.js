@@ -98,7 +98,7 @@
   MainContent.prototype.lockedWires = function(type, unit) {
     return this.lockRelationCollection.filter({
       type: type,
-      unit: unit,
+      port: unit.port,
     }).map(function(relation) {
       return relation.wire;
     });
@@ -273,7 +273,8 @@
   MainContent.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection.add({
       type: type,
-      unit: unit,
+      module: unit.module,
+      port: unit.port,
       wire: wire,
     });
   };
@@ -281,7 +282,8 @@
   MainContent.prototype.unlock = function(type, unit, wire) {
     this.lockRelationCollection.remove({
       type: type,
-      unit: unit,
+      module: unit.module,
+      port: unit.port,
       wire: wire,
     });
   };
@@ -397,7 +399,7 @@
   MainContent.prototype.updateDragHighlight = function(unit) {
     var draggingWires = this.draggingWires();
     var highlighted = this.lockRelationCollection.filter({
-      unit: unit,
+      port: unit.port,
     }).some(function(relation) {
       return (draggingWires.indexOf(relation.wire) !== -1);
     });

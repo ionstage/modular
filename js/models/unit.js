@@ -69,16 +69,6 @@
     };
   };
 
-  Unit.prototype.addRelation = function(relation) {
-    this.module.addRelation(relation);
-    this.port.addRelation(relation);
-  };
-
-  Unit.prototype.removeRelation = function(relation) {
-    this.module.removeRelation(relation);
-    this.port.removeRelation(relation);
-  };
-
   Unit.prototype.canConnectTo = function(unit) {
     if (this.type() !== unit.type()) {
       return false;
