@@ -90,11 +90,12 @@
     }, 0);
   };
 
-  Module.prototype.plugPosition = function(port) {
-    return {
-      x: this.x() + port.plugOffsetX(),
-      y: this.y() + this.portListTop() + port.middle(),
-    };
+  Module.prototype.plugX = function(port) {
+    return this.x() + port.plugOffsetX();
+  };
+
+  Module.prototype.plugY = function(port) {
+    return this.y() + this.portListTop() + port.middle();
   };
 
   Module.prototype.socketPosition = function(port) {
