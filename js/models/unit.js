@@ -63,7 +63,10 @@
   };
 
   Unit.prototype.socketPosition = function() {
-    return this.module.socketPosition(this.port);
+    return {
+      x: this.module.socketX(this.port),
+      y: this.module.socketY(this.port),
+    };
   };
 
   Unit.prototype.addRelation = function(relation) {

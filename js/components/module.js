@@ -98,11 +98,12 @@
     return this.y() + this.portListTop() + port.middle();
   };
 
-  Module.prototype.socketPosition = function(port) {
-    return {
-      x: this.x() + port.socketOffsetX(),
-      y: this.y() + this.portListTop() + port.middle(),
-    };
+  Module.prototype.socketX = function(port) {
+    return this.x() + port.socketOffsetX();
+  };
+
+  Module.prototype.socketY = function(port) {
+    return this.y() + this.portListTop() + port.middle();
   };
 
   Module.prototype.port = function(name) {
@@ -146,14 +147,12 @@
     }
 
     // all ports are at the same position to the x-axis
-    var position = this.socketPosition(ports[0]);
-    if (Math.abs(x - position.x) > 18) {
+    if (Math.abs(x - this.socketX(ports[0])) > 18) {
       return null;
     }
 
     return helper.findLast(ports, function(port) {
-      var position = this.socketPosition(port);
-      return (Math.abs(y - position.y) <= 18 && port.visible() && !port.socketDisabled());
+      return (Math.abs(y - this.socketY(port)) <= 18 && port.visible() && !port.socketDisabled());
     }.bind(this));
   };
 
