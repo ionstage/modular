@@ -90,20 +90,12 @@
     }, 0);
   };
 
-  Module.prototype.plugX = function(port) {
-    return this.x() + port.plugOffsetX();
+  Module.prototype.portOffsetX = function() {
+    return this.x();
   };
 
-  Module.prototype.plugY = function(port) {
-    return this.y() + this.portListTop() + port.middle();
-  };
-
-  Module.prototype.socketX = function(port) {
-    return this.x() + port.socketOffsetX();
-  };
-
-  Module.prototype.socketY = function(port) {
-    return this.y() + this.portListTop() + port.middle();
+  Module.prototype.portOffsetY = function() {
+    return this.y() + this.portListTop();
   };
 
   Module.prototype.port = function(name) {
@@ -147,12 +139,12 @@
     }
 
     // all ports are at the same position to the x-axis
-    if (Math.abs(x - this.socketX(ports[0])) > 18) {
+    if (Math.abs(x - ports[0].socketX()) > 18) {
       return null;
     }
 
     return helper.findLast(ports, function(port) {
-      return (Math.abs(y - this.socketY(port)) <= 18 && port.visible() && !port.socketDisabled());
+      return (Math.abs(y - port.socketY()) <= 18 && port.visible() && !port.socketDisabled());
     }.bind(this));
   };
 
@@ -186,7 +178,10 @@
 
   Module.prototype.createPorts = function() {
     return this.circuitModule().getAll().map(function(member) {
-      return new ModulePort(helper.clone(member));
+      return new ModulePort(helper.extend(helper.clone(member), {
+        offsetX: this.portOffsetX(),
+        offsetY: this.portOffsetY(),
+      }));
     }.bind(this));
   };
 
@@ -326,10 +321,18 @@
 
   Module.prototype.moveX = function(value) {
     this.x(Math.max(value, this.leftPadding()));
+
+    this.visiblePorts().forEach(function(port) {
+      port.offsetX(this.portOffsetX());
+    }.bind(this));
   };
 
   Module.prototype.moveY = function(value) {
     this.y(Math.max(value, 0));
+
+    this.visiblePorts().forEach(function(port) {
+      port.offsetY(this.portOffsetY());
+    }.bind(this));
   };
 
   Module.prototype.showPort = function(name) {

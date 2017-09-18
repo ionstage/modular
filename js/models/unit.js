@@ -56,17 +56,11 @@
   };
 
   Unit.prototype.plugPosition = function() {
-    return {
-      x: this.module.plugX(this.port),
-      y: this.module.plugY(this.port),
-    };
+    return { x: this.port.plugX(), y: this.port.plugY() };
   };
 
   Unit.prototype.socketPosition = function() {
-    return {
-      x: this.module.socketX(this.port),
-      y: this.module.socketY(this.port),
-    };
+    return { x: this.port.socketX(), y: this.port.socketY() };
   };
 
   Unit.prototype.canConnectTo = function(unit) {

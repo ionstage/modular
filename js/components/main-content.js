@@ -273,7 +273,6 @@
   MainContent.prototype.lock = function(type, unit, wire) {
     this.lockRelationCollection.add({
       type: type,
-      module: unit.module,
       port: unit.port,
       wire: wire,
     });
@@ -282,7 +281,6 @@
   MainContent.prototype.unlock = function(type, unit, wire) {
     this.lockRelationCollection.remove({
       type: type,
-      module: unit.module,
       port: unit.port,
       wire: wire,
     });

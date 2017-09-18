@@ -12,6 +12,8 @@
     this.type = this.prop(props.type);
     this.plugDisabled = this.prop(props.plugDisabled);
     this.socketDisabled = this.prop(props.socketDisabled);
+    this.offsetX = this.prop(props.offsetX);
+    this.offsetY = this.prop(props.offsetY);
     this.top = this.prop(0);
     this.highlighted = this.prop(false);
     this.plugHighlighted = this.prop(false);
@@ -35,6 +37,22 @@
 
   ModulePort.prototype.bottom = function() {
     return this.top() + this.height();
+  };
+
+  ModulePort.prototype.plugX = function() {
+    return this.offsetX() + this.plugOffsetX();
+  };
+
+  ModulePort.prototype.plugY = function() {
+    return this.offsetY() + this.middle();
+  };
+
+  ModulePort.prototype.socketX = function() {
+    return this.offsetX() + this.socketOffsetX();
+  };
+
+  ModulePort.prototype.socketY = function() {
+    return this.offsetY() + this.middle();
   };
 
   ModulePort.prototype.render = function() {

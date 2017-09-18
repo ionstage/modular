@@ -6,35 +6,32 @@
 
   var LockRelation = helper.inherits(function(props) {
     this.type = props.type;
-    this.module = props.module;
     this.port = props.port;
     this.wire = props.wire;
   }, jCore.Relation);
 
   LockRelation.prototype.set = function() {
-    this.module.addRelation(this);
     this.port.addRelation(this);
   };
 
   LockRelation.prototype.unset = function() {
-    this.module.removeRelation(this);
     this.port.removeRelation(this);
   };
 
   LockRelation.prototype.update = function() {
-    var x = this.module[this.type.moduleKeys.x](this.port);
-    var y = this.module[this.type.moduleKeys.y](this.port);
+    var x = this.port[this.type.portKeys.x]();
+    var y = this.port[this.type.portKeys.y]();
     this.wire[this.type.wireKeys.x](x);
     this.wire[this.type.wireKeys.y](y);
   };
 
   LockRelation.TYPE_PLUG = {
-    moduleKeys: { x: 'plugX', y: 'plugY' },
+    portKeys: { x: 'plugX', y: 'plugY' },
     wireKeys: { x: 'sourceX', y: 'sourceY' },
   };
 
   LockRelation.TYPE_SOCKET = {
-    moduleKeys: { x: 'socketX', y: 'socketY' },
+    portKeys: { x: 'socketX', y: 'socketY' },
     wireKeys: { x: 'targetX', y: 'targetY' },
   };
 
