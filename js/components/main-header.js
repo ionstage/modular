@@ -9,6 +9,7 @@
   var MainHeader = Component.inherits(function(props) {
     this.sidebarToggleButton = new SidebarToggleButton({
       element: this.childElement('.sidebar-toggle-button'),
+      type: props.sidebarToggleType,
       toggler: props.sidebarToggler,
     });
 
@@ -22,6 +23,14 @@
       tapper: props.fileSaver,
     });
   });
+
+  MainHeader.prototype.sidebarToggleType = function(value) {
+    return this.sidebarToggleButton.type(value);
+  };
+
+  MainHeader.prototype.sidebarToggleDisabled = function(value) {
+    return this.sidebarToggleButton.disabled(value);
+  };
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = MainHeader;

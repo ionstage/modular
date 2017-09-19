@@ -52,11 +52,11 @@
     return 'demos/' + name + '.json';
   };
 
-  Body.prototype.toggleSidebar = function(visible) {
-    return dom.transition(this.element(), 'padding-left', function() {
-      this.sidebar.disabled(!visible);
-      this.main.isFullWidth(!visible);
-    }.bind(this));
+  Body.prototype.toggleSidebar = function() {
+    var isFullWidth = !this.main.isFullWidth();
+    this.sidebar.disabled(isFullWidth);
+    this.main.isFullWidth(isFullWidth);
+    this.main.sidebarToggleDisabled(true);
   };
 
   Body.prototype.loadDemo = function(name) {
@@ -105,8 +105,8 @@
     }, point), entry.visiblePortNames);
   };
 
-  Body.prototype.sidebarToggler = function(visible) {
-    return this.toggleSidebar(visible);
+  Body.prototype.sidebarToggler = function() {
+    return this.toggleSidebar();
   };
 
   Body.prototype.loadStarter = function() {

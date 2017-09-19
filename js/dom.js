@@ -185,19 +185,6 @@
     el.click();
   };
 
-  dom.transition = function(el, propertyName, callback) {
-    return new Promise(function(resolve, reject) {
-      var ontransitionend = function(event) {
-        if (event.propertyName === propertyName) {
-          dom.off(el, 'transitionend', ontransitionend);
-          resolve();
-        }
-      };
-      dom.on(el, 'transitionend', ontransitionend);
-      callback();
-    });
-  };
-
   dom.supportsTouch = function() {
     return ('createTouch' in document);
   };

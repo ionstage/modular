@@ -13,6 +13,7 @@
 
     this.header = new MainHeader({
       element: this.childElement('.main-header'),
+      sidebarToggleType: this.sidebarToggleType(),
       sidebarToggler: props.sidebarToggler,
       fileLoader: Main.prototype.fileLoader.bind(this),
       fileSaver: Main.prototype.fileSaver.bind(this),
@@ -27,6 +28,14 @@
     this.loadStarter = props.loadStarter;
     this.loadEnder = props.loadEnder;
   });
+
+  Main.prototype.sidebarToggleType = function() {
+    return (this.isFullWidth() ? 'expand' : 'collapse');
+  };
+
+  Main.prototype.sidebarToggleDisabled = function(value) {
+    return this.header.sidebarToggleDisabled(value);
+  };
 
   Main.prototype.contentLocalPoint = function(point) {
     return this.content.localPoint(point);
@@ -61,6 +70,13 @@
     this.redrawBy('isFullWidth', function(isFullWidth) {
       dom.toggleClass(this.element(), 'full-width', isFullWidth);
     });
+  };
+
+  Main.prototype.oninit = function() {
+    dom.on(this.element(), 'transitionend', function() {
+      this.header.sidebarToggleType(this.sidebarToggleType());
+      this.header.sidebarToggleDisabled(false);
+    }.bind(this));
   };
 
   Main.prototype.fileLoader = function(file) {
