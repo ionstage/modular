@@ -5,7 +5,7 @@
   var Button = app.Button || require('./button.js');
   var Component = app.Component || require('./component.js');
 
-  var SidebarToggleButton = Component.inherits(function(props) {
+  var ToggleButton = Component.inherits(function(props) {
     this.type = this.prop(props.type);
 
     this.button = new Button({
@@ -14,19 +14,19 @@
     });
   });
 
-  SidebarToggleButton.prototype.disabled = function(value) {
+  ToggleButton.prototype.disabled = function(value) {
     return this.button.disabled(value);
   };
 
-  SidebarToggleButton.prototype.redraw = function() {
+  ToggleButton.prototype.redraw = function() {
     this.redrawBy('type', function(value) {
       dom.data(this.element(), 'type', value);
     });
   };
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = SidebarToggleButton;
+    module.exports = ToggleButton;
   } else {
-    app.SidebarToggleButton = SidebarToggleButton;
+    app.ToggleButton = ToggleButton;
   }
 })(this.app || (this.app = {}));
