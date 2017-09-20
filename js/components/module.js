@@ -7,7 +7,6 @@
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
-  var RelationCollection = app.RelationCollection || require('../collections/relation-collection.js');
 
   var Module = Component.inherits(function(props) {
     this.title = this.prop(props.title);
