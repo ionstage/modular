@@ -14,6 +14,7 @@
     this.element = this.prop(element);
     this.parentElement = this.prop(parentElement);
     this.cache = {};
+    this.listeners = {};
   }, jCore.Component);
 
   Component.prototype.childElement = function(selector) {
@@ -50,6 +51,31 @@
     helper.remove(this.relations(), relation);
   };
 
+  Component.prototype.on = function(type, listener) {
+    if (!this.listeners.hasOwnProperty(type)) {
+      this.listeners[type] = [];
+    }
+    this.listeners[type].push(listener);
+  };
+
+  Component.prototype.emit = function() {
+    var args = helper.toArray(arguments);
+    var type = args.shift();
+    if (this.listeners.hasOwnProperty(type)) {
+      this.listeners[type].forEach(function(listener) {
+        listener.apply(this, args);
+      }.bind(this));
+    }
+  };
+
+  Component.prototype.removeAllListeners = function(type) {
+    if (this.listeners.hasOwnProperty(type)) {
+      delete this.listeners[type];
+    } else {
+      this.listeners = {};
+    }
+  };
+
   Component.prototype.redrawBy = function() {
     var args = helper.toArray(arguments);
     var callback = args.pop();
@@ -76,6 +102,7 @@
       this.onremove();
       dom.remove(element);
       this.clearCache();
+      this.removeAllListeners();
       return;
     }
   };
