@@ -10,22 +10,22 @@
     this.tapper = props.tapper;
   });
 
-  Button.prototype.redraw = function() {
-    this.redrawBy('isActive', function(isActive) {
-      dom.toggleClass(this.element(), 'active', isActive);
-    });
-
-    this.redrawBy('disabled', function(disabled) {
-      dom.toggleClass(this.element(), 'disabled', disabled);
-    });
-  };
-
   Button.prototype.oninit = function() {
     new dom.Draggable({
       element: this.element(),
       onstart: Button.prototype.onstart.bind(this),
       onmove: Button.prototype.onmove.bind(this),
       onend: Button.prototype.onend.bind(this),
+    });
+  };
+
+  Button.prototype.onredraw = function() {
+    this.redrawBy('isActive', function(isActive) {
+      dom.toggleClass(this.element(), 'active', isActive);
+    });
+
+    this.redrawBy('disabled', function(disabled) {
+      dom.toggleClass(this.element(), 'disabled', disabled);
     });
   };
 

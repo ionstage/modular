@@ -62,7 +62,14 @@
     return this.content.loadModule(props, visiblePortNames);
   };
 
-  Main.prototype.redraw = function() {
+  Main.prototype.oninit = function() {
+    dom.on(this.element(), 'transitionend', function() {
+      this.header.sidebarToggleType(this.sidebarToggleType());
+      this.header.sidebarToggleDisabled(false);
+    }.bind(this));
+  };
+
+  Main.prototype.onredraw = function() {
     this.redrawBy('disabled', function(disabled) {
       dom.toggleClass(this.element(), 'disabled', disabled);
     });
@@ -70,13 +77,6 @@
     this.redrawBy('isFullWidth', function(isFullWidth) {
       dom.toggleClass(this.element(), 'full-width', isFullWidth);
     });
-  };
-
-  Main.prototype.oninit = function() {
-    dom.on(this.element(), 'transitionend', function() {
-      this.header.sidebarToggleType(this.sidebarToggleType());
-      this.header.sidebarToggleDisabled(false);
-    }.bind(this));
   };
 
   Main.prototype.fileLoader = function(file) {

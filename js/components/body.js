@@ -63,14 +63,14 @@
     return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
   };
 
-  Body.prototype.redraw = function() {
+  Body.prototype.oninit = function() {
+    dom.ready(Body.prototype.onready.bind(this));
+  };
+
+  Body.prototype.onredraw = function() {
     this.redrawBy('isDragging', function(isDragging) {
       dom.toggleClass(this.element(), 'dragging', isDragging);
     });
-  };
-
-  Body.prototype.oninit = function() {
-    dom.ready(Body.prototype.onready.bind(this));
   };
 
   Body.prototype.onready = function() {

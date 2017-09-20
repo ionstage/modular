@@ -404,11 +404,6 @@
     unit.highlighted(highlighted);
   };
 
-  MainContent.prototype.redraw = function() {
-    this.redrawRetainer();
-    this.redrawWireHandleContainer();
-  };
-
   MainContent.prototype.redrawRetainer = function() {
     this.redrawBy('retainerPosition', function(retainerPosition) {
       dom.translate(this.retainerElement(), retainerPosition.x, retainerPosition.y);
@@ -428,6 +423,11 @@
         dom.removeFocus();
       }
     }.bind(this));
+  };
+
+  MainContent.prototype.onredraw = function() {
+    this.redrawRetainer();
+    this.redrawWireHandleContainer();
   };
 
   MainContent.prototype.deleter = function(module) {

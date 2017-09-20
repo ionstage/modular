@@ -54,14 +54,14 @@
     this.scrollable.enabled(value);
   };
 
-  SidebarContent.prototype.redraw = function() {
-    this.scrollable.refresh();
-  };
-
   SidebarContent.prototype.oninit = function() {
     dom.on(this.element(), dom.eventType('start'), function() {
       dom.removeFocus();
     });
+  };
+
+  SidebarContent.prototype.onredraw = function() {
+    this.scrollable.refresh();
   };
 
   SidebarContent.Scrollable = (function() {

@@ -50,7 +50,7 @@
     return this.entryCollection.get(name);
   };
 
-  Sidebar.prototype.redraw = function() {
+  Sidebar.prototype.onredraw = function() {
     this.redrawBy('disabled', function(disabled) {
       dom.toggleClass(this.element(), 'disabled', disabled);
     });
