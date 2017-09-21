@@ -95,17 +95,17 @@
     return this.modules().length + 1;
   };
 
-  MainContent.prototype.lockedWires = function(type, unit) {
+  MainContent.prototype.lockedWires = function(type, port) {
     return this.lockRelationCollection.filter({
       type: type,
-      port: unit.port,
+      port: port,
     }).map(function(relation) {
       return relation.wire;
     });
   };
 
   MainContent.prototype.attachedWire = function(targetUnit) {
-    return this.lockedWires(LockRelation.TYPE_SOCKET, targetUnit)[0];
+    return this.lockedWires(LockRelation.TYPE_SOCKET, targetUnit.port)[0];
   };
 
   MainContent.prototype.connectedTargetUnits = function(sourceUnit) {
@@ -389,7 +389,7 @@
     this.connectedTargetUnits(sourceUnit).forEach(function(targetUnit) {
       targetUnit.socketHighlighted(highlighted);
     });
-    this.lockedWires(LockRelation.TYPE_PLUG, sourceUnit).forEach(function(wire) {
+    this.lockedWires(LockRelation.TYPE_PLUG, sourceUnit.port).forEach(function(wire) {
       wire.highlighted(highlighted);
     });
   };
