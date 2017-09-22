@@ -14,8 +14,6 @@
     this.main = new Main({
       element: this.childElement('.main'),
       sidebarToggler: Body.prototype.sidebarToggler.bind(this),
-      loadStarter: Body.prototype.loadStarter.bind(this),
-      loadEnder: Body.prototype.loadEnder.bind(this),
     });
   });
 
@@ -75,6 +73,8 @@
     this.sidebar.on('drop', this.ondrop.bind(this));
     this.main.on('dragstart', this.ondragstart.bind(this));
     this.main.on('dragend', this.ondragend.bind(this));
+    this.main.on('loadstart', this.onloadstart.bind(this));
+    this.main.on('loadend', this.onloadend.bind(this));
   };
 
   Body.prototype.onredraw = function() {
@@ -106,16 +106,16 @@
     this.loadModule(name, x, y);
   };
 
-  Body.prototype.sidebarToggler = function() {
-    return this.toggleSidebar();
-  };
-
-  Body.prototype.loadStarter = function() {
+  Body.prototype.onloadstart = function() {
     this.disabled(true);
   };
 
-  Body.prototype.loadEnder = function() {
+  Body.prototype.onloadend = function() {
     this.disabled(false);
+  };
+
+  Body.prototype.sidebarToggler = function() {
+    return this.toggleSidebar();
   };
 
   if (typeof module !== 'undefined' && module.exports) {

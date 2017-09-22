@@ -20,9 +20,6 @@
     });
 
     this.content = new MainContent({ element: this.childElement('.main-content') });
-
-    this.loadStarter = props.loadStarter;
-    this.loadEnder = props.loadEnder;
   });
 
   Main.prototype.sidebarToggleType = function() {
@@ -87,11 +84,11 @@
   };
 
   Main.prototype.fileLoader = function(file) {
-    this.loadStarter();
+    this.emit('loadstart');
     this.loadFile(file).catch(function(e) {
       alert(e);
     }).then(function() {
-      this.loadEnder();
+      this.emit('loadend');
     }.bind(this));
   };
 
