@@ -267,18 +267,18 @@
     });
   };
 
-  MainContent.prototype.lock = function(type, unit, wire) {
+  MainContent.prototype.lock = function(type, port, wire) {
     this.lockRelationCollection.add({
       type: type,
-      port: unit.port,
+      port: port,
       wire: wire,
     });
   };
 
-  MainContent.prototype.unlock = function(type, unit, wire) {
+  MainContent.prototype.unlock = function(type, port, wire) {
     this.lockRelationCollection.remove({
       type: type,
-      port: unit.port,
+      port: port,
       wire: wire,
     });
   };
@@ -306,8 +306,8 @@
     wire.markDirty();
     targetUnit.socketConnected(true);
     this.bind(sourceUnit, targetUnit);
-    this.lock(LockRelation.TYPE_PLUG, sourceUnit, wire);
-    this.lock(LockRelation.TYPE_SOCKET, targetUnit, wire);
+    this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
+    this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     this.updateEventHighlight(sourceUnit);
   };
 
@@ -316,8 +316,8 @@
     wire.parentElement(null);
     targetUnit.socketConnected(false);
     this.unbind(sourceUnit, targetUnit);
-    this.unlock(LockRelation.TYPE_PLUG, sourceUnit, wire);
-    this.unlock(LockRelation.TYPE_SOCKET, targetUnit, wire);
+    this.unlock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
+    this.unlock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     targetUnit.socketHighlighted(false);
   };
 
@@ -330,7 +330,7 @@
   };
 
   MainContent.prototype.appendDraggingWire = function(sourceUnit, wire) {
-    this.lock(LockRelation.TYPE_PLUG, sourceUnit, wire);
+    this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
     this.updateEventHighlight(sourceUnit);
     this.draggingWires().push(wire);
     this.updateDragHighlight(sourceUnit);
@@ -340,7 +340,7 @@
     wire.handleVisible(false);
     targetUnit.socketConnected(true);
     this.bind(sourceUnit, targetUnit);
-    this.lock(LockRelation.TYPE_SOCKET, targetUnit, wire);
+    this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     this.updateEventHighlight(sourceUnit);
     this.updateDragHighlight(targetUnit);
   };
@@ -349,7 +349,7 @@
     wire.handleVisible(true);
     targetUnit.socketConnected(false);
     this.unbind(sourceUnit, targetUnit);
-    this.unlock(LockRelation.TYPE_SOCKET, targetUnit, wire);
+    this.unlock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     targetUnit.socketHighlighted(false);
     this.updateDragHighlight(targetUnit);
   };
@@ -362,7 +362,7 @@
     if (targetUnit) {
       this.updateDragHighlight(targetUnit);
     } else {
-      this.unlock(LockRelation.TYPE_PLUG, sourceUnit, wire);
+      this.unlock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
       wire.parentElement(null);
     }
   };
