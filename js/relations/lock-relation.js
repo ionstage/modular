@@ -10,14 +10,6 @@
     this.wire = props.wire;
   }, jCore.Relation);
 
-  LockRelation.prototype.set = function() {
-    this.port.addRelation(this);
-  };
-
-  LockRelation.prototype.unset = function() {
-    this.port.removeRelation(this);
-  };
-
   LockRelation.prototype.update = function() {
     var x = this.port[this.type.portKeys.x]();
     var y = this.port[this.type.portKeys.y]();

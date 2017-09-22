@@ -8,14 +8,13 @@
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
-  var RelationCollection = app.RelationCollection || require('../collections/relation-collection.js');
   var Unit = app.Unit || require('../models/unit.js');
 
   var MainContent = Component.inherits(function(props) {
     this.modules = this.prop([]);
     this.draggingWires = this.prop([]);
 
-    this.lockRelationCollection = new RelationCollection({ ctor: LockRelation });
+    this.lockRelations = [];
     this.bindingCollection = new BindingCollection();
 
     this.deleter = MainContent.prototype.deleter.bind(this);
@@ -93,9 +92,8 @@
   };
 
   MainContent.prototype.lockedWires = function(type, port) {
-    return this.lockRelationCollection.filter({
-      type: type,
-      port: port,
+    return this.lockRelations.filter(function(relation) {
+      return (relation.type === type && relation.port === port);
     }).map(function(relation) {
       return relation.wire;
     });
@@ -268,19 +266,21 @@
   };
 
   MainContent.prototype.lock = function(type, port, wire) {
-    this.lockRelationCollection.add({
+    var relation = new LockRelation({
       type: type,
       port: port,
       wire: wire,
     });
+    port.addRelation(relation);
+    this.lockRelations.push(relation);
   };
 
   MainContent.prototype.unlock = function(type, port, wire) {
-    this.lockRelationCollection.remove({
-      type: type,
-      port: port,
-      wire: wire,
+    var relation = helper.findLast(this.lockRelations, function(relation) {
+      return (relation.type === type && relation.port === port && relation.wire === wire);
     });
+    port.removeRelation(relation);
+    helper.remove(this.lockRelations, relation);
   };
 
   MainContent.prototype.bind = function(sourceUnit, targetUnit) {
@@ -393,8 +393,8 @@
 
   MainContent.prototype.updateDragHighlight = function(unit) {
     var draggingWires = this.draggingWires();
-    var highlighted = this.lockRelationCollection.filter({
-      port: unit.port,
+    var highlighted = this.lockRelations.filter(function(relation) {
+      return (relation.port === unit.port);
     }).some(function(relation) {
       return (draggingWires.indexOf(relation.wire) !== -1);
     });
