@@ -21,7 +21,6 @@
       element: this.childElement('.sidebar-content'),
       dragStarter: Sidebar.prototype.dragStarter.bind(this),
       dragEnder: Sidebar.prototype.dragEnder.bind(this),
-      dropper: props.moduleDropper,
     });
   });
 
@@ -47,6 +46,10 @@
     return this.entryCollection.get(name);
   };
 
+  Sidebar.prototype.oninit = function() {
+    this.content.on('drop', this.ondrop.bind(this));
+  };
+
   Sidebar.prototype.onredraw = function() {
     this.redrawBy('disabled', function(disabled) {
       dom.toggleClass(this.element(), 'disabled', disabled);
@@ -55,6 +58,10 @@
     this.redrawBy('scrollEnabled', function(scrollEnabled) {
       this.content.scrollEnabled(scrollEnabled);
     });
+  };
+
+  Sidebar.prototype.ondrop = function(name, x, y) {
+    this.emit('drop', name, x, y);
   };
 
   Sidebar.prototype.searcher = function(text) {

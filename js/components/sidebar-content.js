@@ -12,16 +12,16 @@
     this.scrollable = new SidebarContent.Scrollable({ element: props.element });
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
-    this.dropper = props.dropper;
   });
 
   SidebarContent.prototype.createModule = function(props) {
-    return new SidebarModule(helper.extend(helper.clone(props), {
+    var module = new SidebarModule(helper.extend(helper.clone(props), {
       parentElement: this.childElement('.sidebar-module-container'),
       dragStarter: this.dragStarter,
       dragEnder: this.dragEnder,
-      dropper: this.dropper,
     }));
+    module.on('drop', this.ondrop.bind(this));
+    return module;
   };
 
   SidebarContent.prototype.appendModule = function(props) {
@@ -62,6 +62,10 @@
 
   SidebarContent.prototype.onredraw = function() {
     this.scrollable.refresh();
+  };
+
+  SidebarContent.prototype.ondrop = function(name, x, y) {
+    this.emit('drop', name, x, y);
   };
 
   SidebarContent.Scrollable = (function() {

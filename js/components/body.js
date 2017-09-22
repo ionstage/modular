@@ -9,11 +9,7 @@
 
   var Body = Component.inherits(function(props) {
     this.dragCount = this.prop(0);
-
-    this.sidebar = new Sidebar({
-      element: this.childElement('.sidebar'),
-      moduleDropper: Body.prototype.moduleDropper.bind(this),
-    });
+    this.sidebar = new Sidebar({ element: this.childElement('.sidebar') });
 
     this.main = new Main({
       element: this.childElement('.main'),
@@ -55,6 +51,19 @@
     this.main.sidebarToggleDisabled(true);
   };
 
+  Body.prototype.loadModule = function(name, x, y) {
+    var point = this.main.contentLocalPoint({ x: x, y: y });
+    if (point.x < 0 || point.y < 0) {
+      return;
+    }
+
+    var entry = this.sidebar.entry(name);
+    this.main.loadModule(helper.extend({
+      title: entry.label,
+      name: name,
+    }, point), entry.visiblePortNames);
+  };
+
   Body.prototype.loadDemo = function(name) {
     return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
   };
@@ -63,6 +72,7 @@
     dom.ready(Body.prototype.onready.bind(this));
     this.sidebar.on('dragstart', this.ondragstart.bind(this));
     this.sidebar.on('dragend', this.ondragend.bind(this));
+    this.sidebar.on('drop', this.ondrop.bind(this));
     this.main.on('dragstart', this.ondragstart.bind(this));
     this.main.on('dragend', this.ondragend.bind(this));
   };
@@ -92,17 +102,8 @@
     this.decrementDragCount();
   };
 
-  Body.prototype.moduleDropper = function(name, x, y) {
-    var point = this.main.contentLocalPoint({ x: x, y: y });
-    if (point.x < 0 || point.y < 0) {
-      return;
-    }
-
-    var entry = this.sidebar.entry(name);
-    this.main.loadModule(helper.extend({
-      title: entry.label,
-      name: name,
-    }, point), entry.visiblePortNames);
+  Body.prototype.ondrop = function(name, x, y) {
+    this.loadModule(name, x, y);
   };
 
   Body.prototype.sidebarToggler = function() {

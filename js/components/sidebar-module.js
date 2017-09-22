@@ -17,7 +17,6 @@
 
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
-    this.dropper = props.dropper;
   });
 
   SidebarModule.prototype.headerElement = function() {
@@ -146,7 +145,7 @@
     context.dragging = false;
     context.clone.parentElement(null);
     this.dragEnder();
-    this.dropper(this.name(), context.x + dx, context.y + dy);
+    this.emit('drop', this.name(), context.x + dx, context.y + dy);
   };
 
   SidebarModule.HTML_TEXT = [
