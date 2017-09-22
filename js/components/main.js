@@ -19,11 +19,7 @@
       fileSaver: Main.prototype.fileSaver.bind(this),
     });
 
-    this.content = new MainContent({
-      element: this.childElement('.main-content'),
-      moduleDragStarter: props.moduleDragStarter,
-      moduleDragEnder: props.moduleDragEnder,
-    });
+    this.content = new MainContent({ element: this.childElement('.main-content') });
 
     this.loadStarter = props.loadStarter;
     this.loadEnder = props.loadEnder;
@@ -67,6 +63,9 @@
       this.header.sidebarToggleType(this.sidebarToggleType());
       this.header.sidebarToggleDisabled(false);
     }.bind(this));
+
+    this.content.on('dragstart', this.ondragstart.bind(this));
+    this.content.on('dragend', this.ondragend.bind(this));
   };
 
   Main.prototype.onredraw = function() {
@@ -77,6 +76,14 @@
     this.redrawBy('isFullWidth', function(isFullWidth) {
       dom.toggleClass(this.element(), 'full-width', isFullWidth);
     });
+  };
+
+  Main.prototype.ondragstart = function() {
+    this.emit('dragstart');
+  };
+
+  Main.prototype.ondragend = function() {
+    this.emit('dragend');
   };
 
   Main.prototype.fileLoader = function(file) {

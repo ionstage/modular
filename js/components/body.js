@@ -12,16 +12,12 @@
 
     this.sidebar = new Sidebar({
       element: this.childElement('.sidebar'),
-      moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
-      moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       moduleDropper: Body.prototype.moduleDropper.bind(this),
     });
 
     this.main = new Main({
       element: this.childElement('.main'),
       sidebarToggler: Body.prototype.sidebarToggler.bind(this),
-      moduleDragStarter: Body.prototype.moduleDragStarter.bind(this),
-      moduleDragEnder: Body.prototype.moduleDragEnder.bind(this),
       loadStarter: Body.prototype.loadStarter.bind(this),
       loadEnder: Body.prototype.loadEnder.bind(this),
     });
@@ -65,6 +61,10 @@
 
   Body.prototype.oninit = function() {
     dom.ready(Body.prototype.onready.bind(this));
+    this.sidebar.on('dragstart', this.ondragstart.bind(this));
+    this.sidebar.on('dragend', this.ondragend.bind(this));
+    this.main.on('dragstart', this.ondragstart.bind(this));
+    this.main.on('dragend', this.ondragend.bind(this));
   };
 
   Body.prototype.onredraw = function() {
@@ -84,11 +84,11 @@
     }.bind(this));
   };
 
-  Body.prototype.moduleDragStarter = function() {
+  Body.prototype.ondragstart = function() {
     this.incrementDragCount();
   };
 
-  Body.prototype.moduleDragEnder = function() {
+  Body.prototype.ondragend = function() {
     this.decrementDragCount();
   };
 

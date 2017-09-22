@@ -23,9 +23,6 @@
       dragEnder: Sidebar.prototype.dragEnder.bind(this),
       dropper: props.moduleDropper,
     });
-
-    this.moduleDragStarter = props.moduleDragStarter;
-    this.moduleDragEnder = props.moduleDragEnder;
   });
 
   Sidebar.prototype.scrollEnabled = function() {
@@ -67,12 +64,12 @@
 
   Sidebar.prototype.dragStarter = function() {
     this.incrementDragCount();
-    this.moduleDragStarter();
+    this.emit('dragstart');
   };
 
   Sidebar.prototype.dragEnder = function() {
     this.decrementDragCount();
-    this.moduleDragEnder();
+    this.emit('dragend');
   };
 
   if (typeof module !== 'undefined' && module.exports) {

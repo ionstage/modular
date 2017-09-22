@@ -30,9 +30,6 @@
     this.dragPortSocketStarter = MainContent.prototype.dragPortSocketStarter.bind(this);
     this.dragPortSocketMover = MainContent.prototype.dragPortSocketMover.bind(this);
     this.dragPortSocketEnder = MainContent.prototype.dragPortSocketEnder.bind(this);
-
-    this.moduleDragStarter = props.moduleDragStarter;
-    this.moduleDragEnder = props.moduleDragEnder;
   });
 
   MainContent.prototype.retainerElement = function() {
@@ -465,12 +462,12 @@
 
   MainContent.prototype.dragStarter = function() {
     this.updateRetainer();
-    this.moduleDragStarter();
+    this.emit('dragstart');
   };
 
   MainContent.prototype.dragEnder = function() {
     this.updateRetainer();
-    this.moduleDragEnder();
+    this.emit('dragend');
   };
 
   MainContent.prototype.dragPortPlugStarter = function(module, port, context) {
