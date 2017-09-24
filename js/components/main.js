@@ -56,11 +56,7 @@
   };
 
   Main.prototype.oninit = function() {
-    dom.on(this.element(), 'transitionend', function() {
-      this.header.sidebarToggleType(this.sidebarToggleType());
-      this.header.sidebarToggleDisabled(false);
-    }.bind(this));
-
+    dom.on(this.element(), 'transitionend', this.ontransitionend.bind(this));
     this.header.on('sidebartoggle', this.onsidebartoggle.bind(this));
     this.content.on('dragstart', this.ondragstart.bind(this));
     this.content.on('dragend', this.ondragend.bind(this));
@@ -74,6 +70,11 @@
     this.redrawBy('isFullWidth', function(isFullWidth) {
       dom.toggleClass(this.element(), 'full-width', isFullWidth);
     });
+  };
+
+  Main.prototype.ontransitionend = function() {
+    this.header.sidebarToggleType(this.sidebarToggleType());
+    this.header.sidebarToggleDisabled(false);
   };
 
   Main.prototype.onsidebartoggle = function() {
