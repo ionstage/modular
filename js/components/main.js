@@ -14,7 +14,6 @@
     this.header = new MainHeader({
       element: this.childElement('.main-header'),
       sidebarToggleType: this.sidebarToggleType(),
-      sidebarToggler: props.sidebarToggler,
       fileLoader: Main.prototype.fileLoader.bind(this),
       fileSaver: Main.prototype.fileSaver.bind(this),
     });
@@ -26,12 +25,13 @@
     return (this.isFullWidth() ? 'expand' : 'collapse');
   };
 
-  Main.prototype.sidebarToggleDisabled = function(value) {
-    return this.header.sidebarToggleDisabled(value);
-  };
-
   Main.prototype.contentLocalPoint = function(point) {
     return this.content.localPoint(point);
+  };
+
+  Main.prototype.toggleSidebar = function() {
+    this.isFullWidth(!this.isFullWidth());
+    this.header.sidebarToggleDisabled(true);
   };
 
   Main.prototype.loadContent = function(data) {
@@ -61,6 +61,7 @@
       this.header.sidebarToggleDisabled(false);
     }.bind(this));
 
+    this.header.on('sidebartoggle', this.onsidebartoggle.bind(this));
     this.content.on('dragstart', this.ondragstart.bind(this));
     this.content.on('dragend', this.ondragend.bind(this));
   };
@@ -73,6 +74,11 @@
     this.redrawBy('isFullWidth', function(isFullWidth) {
       dom.toggleClass(this.element(), 'full-width', isFullWidth);
     });
+  };
+
+  Main.prototype.onsidebartoggle = function() {
+    this.toggleSidebar();
+    this.emit('sidebartoggle');
   };
 
   Main.prototype.ondragstart = function() {

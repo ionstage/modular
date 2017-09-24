@@ -8,7 +8,6 @@
   var ToggleButton = Component.inherits(function(props) {
     this.type = this.prop(props.type);
     this.button = new Button({ element: props.element });
-    this.toggler = props.toggler;
   });
 
   ToggleButton.prototype.disabled = function(value) {
@@ -26,7 +25,7 @@
   };
 
   ToggleButton.prototype.ontap = function() {
-    this.toggler();
+    this.emit('tap');
   };
 
   if (typeof module !== 'undefined' && module.exports) {

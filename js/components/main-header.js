@@ -10,7 +10,6 @@
     this.sidebarToggleButton = new ToggleButton({
       element: this.childElement('.sidebar-toggle-button'),
       type: props.sidebarToggleType,
-      toggler: props.sidebarToggler,
     });
 
     this.loadButton = new LoadButton({
@@ -24,6 +23,7 @@
   });
 
   MainHeader.prototype.oninit = function() {
+    this.sidebarToggleButton.on('tap', this.onsidebartoggle.bind(this));
     this.saveButton.on('tap', this.fileSaver);
   };
 
@@ -33,6 +33,10 @@
 
   MainHeader.prototype.sidebarToggleDisabled = function(value) {
     return this.sidebarToggleButton.disabled(value);
+  };
+
+  MainHeader.prototype.onsidebartoggle = function() {
+    this.emit('sidebartoggle');
   };
 
   if (typeof module !== 'undefined' && module.exports) {

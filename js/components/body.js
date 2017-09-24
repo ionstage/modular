@@ -10,11 +10,7 @@
   var Body = Component.inherits(function(props) {
     this.dragCount = this.prop(0);
     this.sidebar = new Sidebar({ element: this.childElement('.sidebar') });
-
-    this.main = new Main({
-      element: this.childElement('.main'),
-      sidebarToggler: Body.prototype.sidebarToggler.bind(this),
-    });
+    this.main = new Main({ element: this.childElement('.main') });
   });
 
   Body.prototype.isDragging = function() {
@@ -42,13 +38,6 @@
     return 'demos/' + name + '.json';
   };
 
-  Body.prototype.toggleSidebar = function() {
-    var isFullWidth = !this.main.isFullWidth();
-    this.sidebar.disabled(isFullWidth);
-    this.main.isFullWidth(isFullWidth);
-    this.main.sidebarToggleDisabled(true);
-  };
-
   Body.prototype.loadModule = function(name, x, y) {
     var point = this.main.contentLocalPoint({ x: x, y: y });
     if (point.x < 0 || point.y < 0) {
@@ -71,6 +60,7 @@
     this.sidebar.on('dragstart', this.ondragstart.bind(this));
     this.sidebar.on('dragend', this.ondragend.bind(this));
     this.sidebar.on('drop', this.ondrop.bind(this));
+    this.main.on('sidebartoggle', this.onsidebartoggle.bind(this));
     this.main.on('dragstart', this.ondragstart.bind(this));
     this.main.on('dragend', this.ondragend.bind(this));
     this.main.on('loadstart', this.onloadstart.bind(this));
@@ -106,16 +96,16 @@
     this.loadModule(name, x, y);
   };
 
+  Body.prototype.onsidebartoggle = function() {
+    this.sidebar.disabled(!this.sidebar.disabled());
+  };
+
   Body.prototype.onloadstart = function() {
     this.disabled(true);
   };
 
   Body.prototype.onloadend = function() {
     this.disabled(false);
-  };
-
-  Body.prototype.sidebarToggler = function() {
-    return this.toggleSidebar();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
