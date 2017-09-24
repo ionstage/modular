@@ -7,21 +7,26 @@
 
   var ToggleButton = Component.inherits(function(props) {
     this.type = this.prop(props.type);
-
-    this.button = new Button({
-      element: props.element,
-      tapper: props.toggler,
-    });
+    this.button = new Button({ element: props.element });
+    this.toggler = props.toggler;
   });
 
   ToggleButton.prototype.disabled = function(value) {
     return this.button.disabled(value);
   };
 
+  ToggleButton.prototype.oninit = function() {
+    this.button.on('tap', this.ontap.bind(this));
+  };
+
   ToggleButton.prototype.onredraw = function() {
     this.redrawBy('type', function(value) {
       dom.data(this.element(), 'type', value);
     });
+  };
+
+  ToggleButton.prototype.ontap = function() {
+    this.toggler();
   };
 
   if (typeof module !== 'undefined' && module.exports) {

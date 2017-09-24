@@ -6,10 +6,7 @@
   var Component = app.Component || require('./component.js');
 
   var LoadButton = Component.inherits(function(props) {
-    this.button = new Button({
-      element: props.element,
-      tapper: LoadButton.prototype.tapper.bind(this),
-    });
+    this.button = new Button({ element: props.element });
 
     this.input = new LoadButton.Input({
       element: this.childElement('.button-input'),
@@ -17,7 +14,11 @@
     });
   });
 
-  LoadButton.prototype.tapper = function() {
+  LoadButton.prototype.oninit = function() {
+    this.button.on('tap', this.ontap.bind(this));
+  };
+
+  LoadButton.prototype.ontap = function() {
     this.input.click();
   };
 

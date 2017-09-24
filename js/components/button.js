@@ -7,7 +7,6 @@
   var Button = Component.inherits(function(props) {
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
-    this.tapper = props.tapper;
   });
 
   Button.prototype.oninit = function() {
@@ -43,7 +42,7 @@
   Button.prototype.onend = function(dx, dy, event, context) {
     this.isActive(false);
     if (dom.target(event) === context.target) {
-      this.tapper();
+      this.emit('tap');
     }
   };
 

@@ -18,11 +18,14 @@
       loader: props.fileLoader,
     });
 
-    this.saveButton = new Button({
-      element: this.childElement('.save-button'),
-      tapper: props.fileSaver,
-    });
+    this.saveButton = new Button({ element: this.childElement('.save-button') });
+
+    this.fileSaver = props.fileSaver;
   });
+
+  MainHeader.prototype.oninit = function() {
+    this.saveButton.on('tap', this.fileSaver);
+  };
 
   MainHeader.prototype.sidebarToggleType = function(value) {
     return this.sidebarToggleButton.type(value);
