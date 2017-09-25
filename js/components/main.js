@@ -14,7 +14,6 @@
     this.header = new MainHeader({
       element: this.childElement('.main-header'),
       sidebarToggleType: this.sidebarToggleType(),
-      fileSaver: Main.prototype.fileSaver.bind(this),
     });
 
     this.content = new MainContent({ element: this.childElement('.main-content') });
@@ -58,6 +57,7 @@
     dom.on(this.element(), 'transitionend', this.ontransitionend.bind(this));
     this.header.on('sidebartoggle', this.onsidebartoggle.bind(this));
     this.header.on('load', this.onload.bind(this));
+    this.header.on('save', this.onsave.bind(this));
     this.content.on('dragstart', this.ondragstart.bind(this));
     this.content.on('dragend', this.ondragend.bind(this));
   };
@@ -99,7 +99,7 @@
     }.bind(this));
   };
 
-  Main.prototype.fileSaver = function() {
+  Main.prototype.onsave = function() {
     var text = JSON.stringify(this.content.toData());
     var blob = new Blob([text], { type: 'application/json' });
     FileSaver.saveAs(blob, 'download.json');

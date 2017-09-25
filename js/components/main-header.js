@@ -14,14 +14,12 @@
 
     this.loadButton = new LoadButton({ element: this.childElement('.load-button') });
     this.saveButton = new Button({ element: this.childElement('.save-button') });
-
-    this.fileSaver = props.fileSaver;
   });
 
   MainHeader.prototype.oninit = function() {
     this.sidebarToggleButton.on('tap', this.onsidebartoggle.bind(this));
     this.loadButton.on('load', this.onload.bind(this));
-    this.saveButton.on('tap', this.fileSaver);
+    this.saveButton.on('tap', this.onsave.bind(this));
   };
 
   MainHeader.prototype.sidebarToggleType = function(value) {
@@ -38,6 +36,10 @@
 
   MainHeader.prototype.onload = function(file) {
     this.emit('load', file);
+  };
+
+  MainHeader.prototype.onsave = function() {
+    this.emit('save');
   };
 
   if (typeof module !== 'undefined' && module.exports) {
