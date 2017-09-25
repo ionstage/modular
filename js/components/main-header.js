@@ -12,11 +12,7 @@
       type: props.sidebarToggleType,
     });
 
-    this.loadButton = new LoadButton({
-      element: this.childElement('.load-button'),
-      loader: props.fileLoader,
-    });
-
+    this.loadButton = new LoadButton({ element: this.childElement('.load-button') });
     this.saveButton = new Button({ element: this.childElement('.save-button') });
 
     this.fileSaver = props.fileSaver;
@@ -24,6 +20,7 @@
 
   MainHeader.prototype.oninit = function() {
     this.sidebarToggleButton.on('tap', this.onsidebartoggle.bind(this));
+    this.loadButton.on('load', this.onload.bind(this));
     this.saveButton.on('tap', this.fileSaver);
   };
 
@@ -37,6 +34,10 @@
 
   MainHeader.prototype.onsidebartoggle = function() {
     this.emit('sidebartoggle');
+  };
+
+  MainHeader.prototype.onload = function(file) {
+    this.emit('load', file);
   };
 
   if (typeof module !== 'undefined' && module.exports) {

@@ -14,7 +14,6 @@
     this.header = new MainHeader({
       element: this.childElement('.main-header'),
       sidebarToggleType: this.sidebarToggleType(),
-      fileLoader: Main.prototype.fileLoader.bind(this),
       fileSaver: Main.prototype.fileSaver.bind(this),
     });
 
@@ -58,6 +57,7 @@
   Main.prototype.oninit = function() {
     dom.on(this.element(), 'transitionend', this.ontransitionend.bind(this));
     this.header.on('sidebartoggle', this.onsidebartoggle.bind(this));
+    this.header.on('load', this.onload.bind(this));
     this.content.on('dragstart', this.ondragstart.bind(this));
     this.content.on('dragend', this.ondragend.bind(this));
   };
@@ -90,7 +90,7 @@
     this.emit('dragend');
   };
 
-  Main.prototype.fileLoader = function(file) {
+  Main.prototype.onload = function(file) {
     this.emit('loadstart');
     this.loadFile(file).catch(function(e) {
       alert(e);

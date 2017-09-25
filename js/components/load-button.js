@@ -7,25 +7,24 @@
 
   var LoadButton = Component.inherits(function(props) {
     this.button = new Button({ element: props.element });
-
-    this.input = new LoadButton.Input({
-      element: this.childElement('.button-input'),
-      loader: props.loader,
-    });
+    this.input = new LoadButton.Input({ element: this.childElement('.button-input') });
   });
 
   LoadButton.prototype.oninit = function() {
     this.button.on('tap', this.ontap.bind(this));
+    this.input.on('load', this.onload.bind(this));
   };
 
   LoadButton.prototype.ontap = function() {
     this.input.click();
   };
 
+  LoadButton.prototype.onload = function(file) {
+    this.emit('load', file);
+  };
+
   LoadButton.Input = (function() {
-    var Input = Component.inherits(function(props) {
-      this.loader = props.loader;
-    });
+    var Input = Component.inherits();
 
     Input.prototype.click = function() {
       dom.click(this.element());
@@ -42,7 +41,7 @@
     Input.prototype.onchange = function(event) {
       var file = dom.file(dom.target(event));
       if (file) {
-        this.loader(file);
+        this.emit('load', file);
         this.reset();
       }
     };
