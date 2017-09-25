@@ -30,6 +30,10 @@
     this.main.disabled(value);
   };
 
+  Body.prototype.toggleSidebar = function() {
+    this.sidebar.disabled(!this.sidebar.disabled());
+  };
+
   Body.prototype.currentDemoName = function() {
     return dom.urlQuery(dom.location()).demo || '';
   };
@@ -101,7 +105,7 @@
   };
 
   Body.prototype.onsidebartoggle = function() {
-    this.sidebar.disabled(!this.sidebar.disabled());
+    this.toggleSidebar();
   };
 
   Body.prototype.onloadstart = function() {
