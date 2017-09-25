@@ -38,6 +38,12 @@
     return 'demos/' + name + '.json';
   };
 
+  Body.prototype.load = function() {
+    return this.sidebar.loadEntries().then(function() {
+      return this.loadDemo(this.currentDemoName());
+    }.bind(this));
+  };
+
   Body.prototype.loadModule = function(name, x, y) {
     var point = this.main.contentLocalPoint({ x: x, y: y });
     if (point.x < 0 || point.y < 0) {
@@ -75,9 +81,7 @@
 
   Body.prototype.onready = function() {
     this.disabled(true);
-    this.sidebar.loadEntries().then(function() {
-      return this.loadDemo(this.currentDemoName());
-    }.bind(this)).catch(function(e) {
+    this.load().catch(function(e) {
       alert(e);
     }).then(function() {
       this.disabled(false);
