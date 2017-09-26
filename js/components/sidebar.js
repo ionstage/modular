@@ -11,11 +11,7 @@
     this.disabled = this.prop(true);
     this.dragCount = this.prop(0);
     this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
-
-    this.header = new SidebarHeader({
-      element: this.childElement('.sidebar-header'),
-      searcher: Sidebar.prototype.searcher.bind(this),
-    });
+    this.header = new SidebarHeader({ element: this.childElement('.sidebar-header') });
 
     this.content = new SidebarContent({
       element: this.childElement('.sidebar-content'),
@@ -46,7 +42,13 @@
     return this.entryCollection.get(name);
   };
 
+  Sidebar.prototype.search = function(text) {
+    var entries = this.entryCollection.search(text);
+    this.content.setModules(entries);
+  };
+
   Sidebar.prototype.oninit = function() {
+    this.header.on('search', this.onsearch.bind(this));
     this.content.on('drop', this.ondrop.bind(this));
   };
 
@@ -60,13 +62,12 @@
     });
   };
 
-  Sidebar.prototype.ondrop = function(name, x, y) {
-    this.emit('drop', name, x, y);
+  Sidebar.prototype.onsearch = function(text) {
+    this.search(text);
   };
 
-  Sidebar.prototype.searcher = function(text) {
-    var entries = this.entryCollection.search(text);
-    this.content.setModules(entries);
+  Sidebar.prototype.ondrop = function(name, x, y) {
+    this.emit('drop', name, x, y);
   };
 
   Sidebar.prototype.dragStarter = function() {

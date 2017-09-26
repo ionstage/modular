@@ -4,11 +4,8 @@
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
 
-  var SidebarHeader = Component.inherits(function(props) {
-    this.searchInput = new SidebarHeader.SearchInput({
-      element: this.childElement('.search-input'),
-      inputter: props.searcher,
-    });
+  var SidebarHeader = Component.inherits(function() {
+    this.searchInput = new SidebarHeader.SearchInput({ element: this.childElement('.search-input') });
   });
 
   SidebarHeader.prototype.loadSearchText = function() {
@@ -16,10 +13,17 @@
     this.searchInput.oninput();
   };
 
+  SidebarHeader.prototype.oninit = function() {
+    this.searchInput.on('input', this.onsearch.bind(this));
+  };
+
+  SidebarHeader.prototype.onsearch = function(text) {
+    this.emit('search', text);
+  };
+
   SidebarHeader.SearchInput = (function() {
-    var SearchInput = Component.inherits(function(props) {
+    var SearchInput = Component.inherits(function() {
       this.isFocused = this.prop(false);
-      this.inputter = props.inputter;
     });
 
     SearchInput.prototype.oninit = function() {
@@ -40,7 +44,7 @@
     };
 
     SearchInput.prototype.oninput = function() {
-      this.inputter(dom.value(this.element()));
+      this.emit('input', dom.value(this.element()));
     };
 
     return SearchInput;
