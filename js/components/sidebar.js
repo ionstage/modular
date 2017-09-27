@@ -12,12 +12,7 @@
     this.dragCount = this.prop(0);
     this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
     this.header = new SidebarHeader({ element: this.childElement('.sidebar-header') });
-
-    this.content = new SidebarContent({
-      element: this.childElement('.sidebar-content'),
-      dragStarter: Sidebar.prototype.dragStarter.bind(this),
-      dragEnder: Sidebar.prototype.dragEnder.bind(this),
-    });
+    this.content = new SidebarContent({ element: this.childElement('.sidebar-content') });
   });
 
   Sidebar.prototype.scrollEnabled = function() {
@@ -49,6 +44,8 @@
 
   Sidebar.prototype.oninit = function() {
     this.header.on('search', this.onsearch.bind(this));
+    this.content.on('dragstart', this.ondragstart.bind(this));
+    this.content.on('dragend', this.ondragend.bind(this));
     this.content.on('drop', this.ondrop.bind(this));
   };
 
@@ -66,18 +63,18 @@
     this.search(text);
   };
 
-  Sidebar.prototype.ondrop = function(name, x, y) {
-    this.emit('drop', name, x, y);
-  };
-
-  Sidebar.prototype.dragStarter = function() {
+  Sidebar.prototype.ondragstart = function() {
     this.incrementDragCount();
     this.emit('dragstart');
   };
 
-  Sidebar.prototype.dragEnder = function() {
+  Sidebar.prototype.ondragend = function() {
     this.decrementDragCount();
     this.emit('dragend');
+  };
+
+  Sidebar.prototype.ondrop = function(name, x, y) {
+    this.emit('drop', name, x, y);
   };
 
   if (typeof module !== 'undefined' && module.exports) {

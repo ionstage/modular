@@ -10,16 +10,14 @@
   var SidebarContent = Component.inherits(function(props) {
     this.modules = [];
     this.scrollable = new SidebarContent.Scrollable({ element: props.element });
-    this.dragStarter = props.dragStarter;
-    this.dragEnder = props.dragEnder;
   });
 
   SidebarContent.prototype.createModule = function(props) {
     var module = new SidebarModule(helper.extend(helper.clone(props), {
       parentElement: this.childElement('.sidebar-module-container'),
-      dragStarter: this.dragStarter,
-      dragEnder: this.dragEnder,
     }));
+    module.on('dragstart', this.ondragstart.bind(this));
+    module.on('dragend', this.ondragend.bind(this));
     module.on('drop', this.ondrop.bind(this));
     return module;
   };
@@ -62,6 +60,14 @@
 
   SidebarContent.prototype.onredraw = function() {
     this.scrollable.refresh();
+  };
+
+  SidebarContent.prototype.ondragstart = function() {
+    this.emit('dragstart');
+  };
+
+  SidebarContent.prototype.ondragend = function() {
+    this.emit('dragend');
   };
 
   SidebarContent.prototype.ondrop = function(name, x, y) {

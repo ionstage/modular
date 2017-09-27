@@ -14,9 +14,6 @@
     this.ondragstart = SidebarModule.prototype.ondragstart.bind(this);
     this.ondragmove = SidebarModule.prototype.ondragmove.bind(this);
     this.ondragend = SidebarModule.prototype.ondragend.bind(this);
-
-    this.dragStarter = props.dragStarter;
-    this.dragEnder = props.dragEnder;
   });
 
   SidebarModule.prototype.headerElement = function() {
@@ -133,7 +130,7 @@
     });
 
     context.clone.markDirty();
-    this.dragStarter();
+    this.emit('dragstart');
   };
 
   SidebarModule.prototype.ondragmove = function(dx, dy, event, context) {
@@ -144,7 +141,7 @@
   SidebarModule.prototype.ondragend = function(dx, dy, event, context) {
     context.dragging = false;
     context.clone.parentElement(null);
-    this.dragEnder();
+    this.emit('dragend');
     this.emit('drop', this.name(), context.x + dx, context.y + dy);
   };
 
