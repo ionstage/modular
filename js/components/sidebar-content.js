@@ -13,9 +13,7 @@
   });
 
   SidebarContent.prototype.createModule = function(props) {
-    var module = new SidebarModule(helper.extend(helper.clone(props), {
-      parentElement: this.childElement('.sidebar-module-container'),
-    }));
+    var module = new SidebarModule(props);
     module.on('dragstart', this.ondragstart.bind(this));
     module.on('dragend', this.ondragend.bind(this));
     module.on('drop', this.ondrop.bind(this));
@@ -24,7 +22,7 @@
 
   SidebarContent.prototype.appendModule = function(props) {
     var module = this.createModule(props);
-    module.markDirty();
+    module.parentElement(this.childElement('.sidebar-module-container'));
     this.modules.push(module);
     this.markDirty();
   };
