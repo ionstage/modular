@@ -47,10 +47,6 @@
     this.draggable = null;
   };
 
-  SidebarModule.prototype.delete = function() {
-    this.parentElement(null);
-  };
-
   SidebarModule.prototype.render = function() {
     return dom.render(SidebarModule.HTML_TEXT);
   };

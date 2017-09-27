@@ -29,7 +29,7 @@
 
   SidebarContent.prototype.clear = function() {
     this.modules.forEach(function(module) {
-      module.delete();
+      module.parentElement(null);
     });
     this.modules = [];
     this.markDirty();
