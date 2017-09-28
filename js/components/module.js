@@ -27,11 +27,7 @@
     this.headerHeight = this.prop(32);
 
     this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
-
-    this.portSelect = new Module.PortSelect({
-      element: this.childElement('.module-port-select'),
-      selector: Module.prototype.portSelector.bind(this),
-    });
+    this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
 
     this.messageListenable = null;
     this.draggable = null;
@@ -383,6 +379,7 @@
   };
 
   Module.prototype.oninit = function() {
+    this.portSelect.on('select', this.onselect.bind(this));
     this.addRelation(new Module.Relation({
       module: this,
       title: new Module.Title({ element: this.childElement('.module-title') }),
@@ -431,6 +428,10 @@
     });
   };
 
+  Module.prototype.onselect = function(name) {
+    this.showPort(name);
+  };
+
   Module.prototype.onstart = function(x, y, event, context) {
     var listener = this.dragListener(dom.target(event));
     context.listener = listener;
@@ -476,10 +477,6 @@
 
   Module.prototype.onpoint = function() {
     this.fronter(this);
-  };
-
-  Module.prototype.portSelector = function(name) {
-    this.showPort(name);
   };
 
   Module.DRAG_LISTENER_POSITION = {
@@ -737,7 +734,6 @@
       this.ports = [];
       this.options = [];
       this.onchange = PortSelect.prototype.onchange.bind(this);
-      this.selector = props.selector;
     });
 
     PortSelect.prototype.optGroupElement = function(type) {
@@ -792,7 +788,7 @@
 
     PortSelect.prototype.onchange = function(event) {
       dom.removeFocus();
-      this.selector(dom.value(dom.target(event)));
+      this.emit('select', dom.value(dom.target(event)));
     };
 
     PortSelect.Option = (function() {
