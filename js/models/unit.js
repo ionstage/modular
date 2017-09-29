@@ -55,14 +55,6 @@
     return this.module.circuitModuleMember(this.port.name());
   };
 
-  Unit.prototype.plugPosition = function() {
-    return { x: this.port.plugX(), y: this.port.plugY() };
-  };
-
-  Unit.prototype.socketPosition = function() {
-    return { x: this.port.socketX(), y: this.port.socketY() };
-  };
-
   Unit.prototype.canConnectTo = function(unit) {
     if (this.type() !== unit.type()) {
       return false;

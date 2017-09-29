@@ -223,13 +223,11 @@
   };
 
   MainContent.prototype.createConnectingWire = function(sourceUnit, targetUnit) {
-    var sourcePosition = sourceUnit.plugPosition();
-    var targetPosition = targetUnit.socketPosition();
     return new ModuleWire({
-      sourceX: sourcePosition.x,
-      sourceY: sourcePosition.y,
-      targetX: targetPosition.x,
-      targetY: targetPosition.y,
+      sourceX: sourceUnit.port.plugX(),
+      sourceY: sourceUnit.port.plugY(),
+      targetX: targetUnit.port.socketX(),
+      targetY: targetUnit.port.socketY(),
       handleType: sourceUnit.type(),
       handleVisible: false,
       parentElement: this.wireContainerElement(),
@@ -238,12 +236,11 @@
   };
 
   MainContent.prototype.createDraggingWire = function(sourceUnit) {
-    var position = sourceUnit.plugPosition();
     return new ModuleWire({
-      sourceX: position.x,
-      sourceY: position.y,
-      targetX: position.x,
-      targetY: position.y,
+      sourceX: sourceUnit.port.plugX(),
+      sourceY: sourceUnit.port.plugY(),
+      targetX: sourceUnit.port.plugX(),
+      targetY: sourceUnit.port.plugY(),
       handleType: sourceUnit.type(),
       handleVisible: true,
       parentElement: this.wireContainerElement(),
@@ -476,9 +473,8 @@
     wire.markDirty();
     this.appendDraggingWire(sourceUnit, wire);
 
-    var position = sourceUnit.plugPosition();
-    context.x = position.x;
-    context.y = position.y;
+    context.x = sourceUnit.port.plugX();
+    context.y = sourceUnit.port.plugY();
     context.wire = wire;
     context.targetUnit = null;
   };
