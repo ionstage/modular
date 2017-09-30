@@ -235,13 +235,13 @@
     });
   };
 
-  MainContent.prototype.createDraggingWire = function(sourceUnit) {
+  MainContent.prototype.createDraggingWire = function(sourcePort) {
     return new ModuleWire({
-      sourceX: sourceUnit.port.plugX(),
-      sourceY: sourceUnit.port.plugY(),
-      targetX: sourceUnit.port.plugX(),
-      targetY: sourceUnit.port.plugY(),
-      handleType: sourceUnit.type(),
+      sourceX: sourcePort.plugX(),
+      sourceY: sourcePort.plugY(),
+      targetX: sourcePort.plugX(),
+      targetY: sourcePort.plugY(),
+      handleType: sourcePort.type(),
       handleVisible: true,
       parentElement: this.wireContainerElement(),
       parentHandleElement: this.wireHandleContainerElement(),
@@ -469,7 +469,7 @@
 
   MainContent.prototype.dragPortPlugStarter = function(module, port, context) {
     var sourceUnit = new Unit({ module: module, port: port });
-    var wire = this.createDraggingWire(sourceUnit);
+    var wire = this.createDraggingWire(sourceUnit.port);
     wire.markDirty();
     this.appendDraggingWire(sourceUnit, wire);
 
