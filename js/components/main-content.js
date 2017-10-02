@@ -3,7 +3,7 @@
 
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
-  var BindingCollection = app.BindingCollection || require('../collections/binding-collection.js');
+  var Binding = app.Binding || require('../models/binding.js');
   var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
@@ -15,7 +15,7 @@
     this.draggingWires = this.prop([]);
 
     this.lockRelations = [];
-    this.bindingCollection = new BindingCollection();
+    this.bindings = [];
 
     this.deleter = MainContent.prototype.deleter.bind(this);
     this.fronter = MainContent.prototype.fronter.bind(this);
@@ -104,8 +104,8 @@
   };
 
   MainContent.prototype.connectedTargetUnits = function(sourceUnit) {
-    return this.bindingCollection.filter({
-      sourceUnit: sourceUnit,
+    return this.bindings.filter(function(binding) {
+      return helper.equal(binding.sourceUnit, sourceUnit);
     }).map(function(binding) {
       return binding.targetUnit;
     });
@@ -113,8 +113,8 @@
 
   MainContent.prototype.connectedSourceUnit = function(targetUnit) {
     // socket of the target port can only be connected to one wire
-    var binding = this.bindingCollection.filter({
-      targetUnit: targetUnit,
+    var binding = this.bindings.filter(function(binding) {
+      return helper.equal(binding.targetUnit, targetUnit);
     })[0];
     return (binding ? binding.sourceUnit : null);
   };
@@ -151,7 +151,7 @@
   };
 
   MainContent.prototype.toConnectionsData = function(modules) {
-    return this.bindingCollection.map(function(binding) {
+    return this.bindings.map(function(binding) {
       var sourceUnit = binding.sourceUnit;
       var targetUnit = binding.targetUnit;
       var sourceModuleIndex = helper.findIndex(modules, function(module) {
@@ -281,17 +281,20 @@
   };
 
   MainContent.prototype.bind = function(sourceUnit, targetUnit) {
-    this.bindingCollection.add({
+    var binding = new Binding({
       sourceUnit: sourceUnit,
       targetUnit: targetUnit,
     });
+    binding.bind();
+    this.bindings.push(binding);
   };
 
   MainContent.prototype.unbind = function(sourceUnit, targetUnit) {
-    this.bindingCollection.remove({
-      sourceUnit: sourceUnit,
-      targetUnit: targetUnit,
+    var binding = helper.findLast(this.bindings, function(binding) {
+      return helper.equal(binding.sourceUnit, sourceUnit) && helper.equal(binding.targetUnit, targetUnit);
     });
+    binding.unbind();
+    helper.remove(this.bindings, binding);
   };
 
   MainContent.prototype.canConnect = function(sourceUnit, targetUnit) {
@@ -319,7 +322,7 @@
   };
 
   MainContent.prototype.disconnectAll = function(unit) {
-    this.bindingCollection.forEach(function(binding) {
+    this.bindings.slice().forEach(function(binding) {
       if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit)) {
         this.disconnect(binding.sourceUnit, binding.targetUnit);
       }
