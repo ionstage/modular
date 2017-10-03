@@ -2,12 +2,12 @@
   'use strict';
 
   var helper = app.helper || require('../helper.js');
-  var Collection = app.Collection || require('./collection.js');
-  var Entry = app.Entry || require('../models/entry.js');
+  var Entry = app.Entry || require('./entry.js');
 
-  var EntryCollection = Collection.inherits(function(props) {
+  var EntryCollection = function(props) {
+    this.entries = [];
     this.jsonLoader = props.jsonLoader;
-  });
+  };
 
   EntryCollection.prototype.packageNamesUrl = function() {
     return 'modular_modules/index.json';
@@ -22,7 +22,7 @@
       return Promise.all(packageNames.map(function(packageName) {
         return this.loadEntries(packageName);
       }.bind(this))).then(function(results) {
-        this.data = helper.flatten(results);
+        this.entries = helper.flatten(results);
       }.bind(this));
     }.bind(this));
   };
@@ -41,13 +41,13 @@
   };
 
   EntryCollection.prototype.get = function(name) {
-    return helper.findLast(this.data, function(entry) {
+    return helper.findLast(this.entries, function(entry) {
       return (entry.name === name);
     });
   };
 
   EntryCollection.prototype.search = function(keyword) {
-    return helper.sortBy(this.data.filter(function(entry) {
+    return helper.sortBy(this.entries.filter(function(entry) {
       return (entry.keywordScore(keyword) !== 0);
     }), function(entry) {
       // sort in descending order
