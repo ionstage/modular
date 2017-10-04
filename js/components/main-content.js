@@ -12,8 +12,7 @@
 
   var MainContent = Component.inherits(function(props) {
     this.modules = [];
-    this.draggingWires = this.prop([]);
-
+    this.draggingWires = [];
     this.lockRelations = [];
     this.bindings = [];
 
@@ -332,7 +331,7 @@
   MainContent.prototype.appendDraggingWire = function(sourceUnit, wire) {
     this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
     this.updateEventHighlight(sourceUnit);
-    this.draggingWires().push(wire);
+    this.draggingWires.push(wire);
     this.updateDragHighlight(sourceUnit);
   };
 
@@ -355,7 +354,7 @@
   };
 
   MainContent.prototype.removeDraggingWire = function(sourceUnit, targetUnit, wire) {
-    helper.remove(this.draggingWires(), wire);
+    helper.remove(this.draggingWires, wire);
     this.updateDragHighlight(sourceUnit);
 
     // keep the element of wire if the target unit is connected with the wire
@@ -392,12 +391,11 @@
   };
 
   MainContent.prototype.updateDragHighlight = function(unit) {
-    var draggingWires = this.draggingWires();
     var highlighted = this.lockRelations.filter(function(relation) {
       return (relation.port === unit.port);
     }).some(function(relation) {
-      return (draggingWires.indexOf(relation.wire) !== -1);
-    });
+      return (this.draggingWires.indexOf(relation.wire) !== -1);
+    }.bind(this));
     unit.highlighted(highlighted);
   };
 
@@ -520,7 +518,7 @@
     var wire = this.attachedWire(targetUnit.port);
     var sourceUnit = this.connectedSourceUnit(targetUnit);
 
-    this.draggingWires().push(wire);
+    this.draggingWires.push(wire);
     this.updateDragHighlight(sourceUnit);
     this.updateDragHighlight(targetUnit);
 
