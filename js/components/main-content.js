@@ -11,7 +11,7 @@
   var Unit = app.Unit || require('../models/unit.js');
 
   var MainContent = Component.inherits(function(props) {
-    this.modules = this.prop([]);
+    this.modules = [];
     this.draggingWires = this.prop([]);
 
     this.lockRelations = [];
@@ -71,7 +71,7 @@
 
   MainContent.prototype.diagonalPoint = function() {
     var point = { x: 0, y: 0 };
-    this.modules().forEach(function(module) {
+    this.modules.forEach(function(module) {
       var diagonalPoint = module.diagonalPoint();
       point.x = Math.max(diagonalPoint.x, point.x);
       point.y = Math.max(diagonalPoint.y, point.y);
@@ -88,7 +88,7 @@
   };
 
   MainContent.prototype.wireHandleContainerZIndex = function() {
-    return this.modules().length + 1;
+    return this.modules.length + 1;
   };
 
   MainContent.prototype.lockedWires = function(type, port) {
@@ -126,7 +126,7 @@
 
   MainContent.prototype.unitFromSocketPosition = function(x, y) {
     var port = null;
-    var module = helper.findLast(this.modules(), function(module) {
+    var module = helper.findLast(this.modules, function(module) {
       // XXX: keep the last port for creating unit
       port = module.portFromSocketPosition(x, y);
       return !!port;
@@ -137,12 +137,12 @@
   MainContent.prototype.toData = function() {
     return {
       modules: this.toModulesData(),
-      connections: this.toConnectionsData(this.modules()),
+      connections: this.toConnectionsData(this.modules),
     };
   };
 
   MainContent.prototype.toModulesData = function() {
-    return this.modules().map(function(module) {
+    return this.modules.map(function(module) {
       return {
         props: module.props(),
         visiblePortNames: module.visiblePortNames(),
@@ -199,7 +199,7 @@
   };
 
   MainContent.prototype.clear = function() {
-    this.modules().slice().forEach(function(module) {
+    this.modules.slice().forEach(function(module) {
       module.delete();
     });
   };
@@ -250,7 +250,7 @@
 
   MainContent.prototype.loadModule = function(props, visiblePortNames) {
     var module = this.createModule(props);
-    this.modules().push(module);
+    this.modules.push(module);
     this.updateZIndex();
     this.updateWireHandleContainer();
     module.redraw();
@@ -376,7 +376,7 @@
   };
 
   MainContent.prototype.updateZIndex = function() {
-    this.modules().forEach(function(module, index) {
+    this.modules.forEach(function(module, index) {
       module.zIndex(index);
     });
   };
@@ -428,13 +428,13 @@
   };
 
   MainContent.prototype.deleter = function(module) {
-    helper.remove(this.modules(), module);
+    helper.remove(this.modules, module);
     this.updateZIndex();
     this.updateWireHandleContainer();
   };
 
   MainContent.prototype.fronter = function(module) {
-    helper.moveToBack(this.modules(), module);
+    helper.moveToBack(this.modules, module);
     this.updateZIndex();
   };
 
