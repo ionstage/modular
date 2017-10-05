@@ -297,7 +297,22 @@
   };
 
   MainContent.prototype.canConnect = function(sourceUnit, targetUnit) {
-    return (sourceUnit && targetUnit ? sourceUnit.canConnectTo(targetUnit) : false);
+    if (!sourceUnit || !targetUnit) {
+      return false;
+    }
+    if (sourceUnit.port.type() !== targetUnit.port.type()) {
+      return false;
+    }
+    if (sourceUnit.port.plugDisabled() || targetUnit.port.socketDisabled()) {
+      return false;
+    }
+    if (!sourceUnit.port.visible() || !targetUnit.port.visible()) {
+      return false;
+    }
+    if (targetUnit.port.socketConnected()) {
+      return false;
+    }
+    return true;
   };
 
   MainContent.prototype.connect = function(sourceUnit, targetUnit) {

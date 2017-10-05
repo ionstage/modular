@@ -55,22 +55,6 @@
     return this.module.circuitModuleMember(this.port.name());
   };
 
-  Unit.prototype.canConnectTo = function(unit) {
-    if (this.type() !== unit.type()) {
-      return false;
-    }
-    if (this.plugDisabled() || unit.socketDisabled()) {
-      return false;
-    }
-    if (!this.visible() || !unit.visible()) {
-      return false;
-    }
-    if (unit.socketConnected()) {
-      return false;
-    }
-    return true;
-  };
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Unit;
   } else {
