@@ -417,7 +417,11 @@
     }).some(function(relation) {
       return (this.draggingWires.indexOf(relation.wire) !== -1);
     }.bind(this));
-    unit.highlighted(highlighted);
+    unit.port.highlighted(highlighted);
+
+    // module is deletable if all ports are NOT highlighted
+    var module = this.moduleFromPort(unit.port);
+    module.deletable(!module.hasHighlightedPort());
   };
 
   MainContent.prototype.redrawRetainer = function() {
