@@ -90,6 +90,12 @@
     return this.modules.length + 1;
   };
 
+  MainContent.prototype.moduleFromPort = function(port) {
+    return helper.find(this.modules, function(module) {
+      return (module.ports().indexOf(port) !== -1);
+    });
+  };
+
   MainContent.prototype.lockedWires = function(type, port) {
     return this.lockRelations.filter(function(relation) {
       return (relation.type === type && relation.port === port);
