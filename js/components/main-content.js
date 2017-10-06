@@ -353,7 +353,7 @@
     this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
     this.updateEventHighlight(sourceUnit);
     this.draggingWires.push(wire);
-    this.updateDragHighlight(sourceUnit);
+    this.updateDragHighlight(sourceUnit.port);
   };
 
   MainContent.prototype.attachDraggingWire = function(sourceUnit, targetUnit, wire) {
@@ -362,7 +362,7 @@
     this.bind(sourceUnit, targetUnit);
     this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     this.updateEventHighlight(sourceUnit);
-    this.updateDragHighlight(targetUnit);
+    this.updateDragHighlight(targetUnit.port);
   };
 
   MainContent.prototype.detachDraggingWire = function(sourceUnit, targetUnit, wire) {
@@ -371,16 +371,16 @@
     this.unbind(sourceUnit, targetUnit);
     this.unlock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     targetUnit.socketHighlighted(false);
-    this.updateDragHighlight(targetUnit);
+    this.updateDragHighlight(targetUnit.port);
   };
 
   MainContent.prototype.removeDraggingWire = function(sourceUnit, targetUnit, wire) {
     helper.remove(this.draggingWires, wire);
-    this.updateDragHighlight(sourceUnit);
+    this.updateDragHighlight(sourceUnit.port);
 
     // keep the element of wire if the target unit is connected with the wire
     if (targetUnit) {
-      this.updateDragHighlight(targetUnit);
+      this.updateDragHighlight(targetUnit.port);
     } else {
       this.unlock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
       wire.parentElement(null);
@@ -411,16 +411,16 @@
     });
   };
 
-  MainContent.prototype.updateDragHighlight = function(unit) {
+  MainContent.prototype.updateDragHighlight = function(port) {
     var highlighted = this.lockRelations.filter(function(relation) {
-      return (relation.port === unit.port);
+      return (relation.port === port);
     }).some(function(relation) {
       return (this.draggingWires.indexOf(relation.wire) !== -1);
     }.bind(this));
-    unit.port.highlighted(highlighted);
+    port.highlighted(highlighted);
 
     // module is deletable if all ports are NOT highlighted
-    var module = this.moduleFromPort(unit.port);
+    var module = this.moduleFromPort(port);
     module.deletable(!module.hasHighlightedPort());
   };
 
@@ -544,8 +544,8 @@
     var sourceUnit = this.connectedSourceUnit(targetUnit);
 
     this.draggingWires.push(wire);
-    this.updateDragHighlight(sourceUnit);
-    this.updateDragHighlight(targetUnit);
+    this.updateDragHighlight(sourceUnit.port);
+    this.updateDragHighlight(targetUnit.port);
 
     context.x = wire.targetX();
     context.y = wire.targetY();
