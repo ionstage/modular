@@ -16,7 +16,6 @@
     this.lockRelations = [];
     this.bindings = [];
 
-    this.fronter = MainContent.prototype.fronter.bind(this);
     this.portToggler = MainContent.prototype.portToggler.bind(this);
     this.portEventer = MainContent.prototype.portEventer.bind(this);
     this.dragStarter = MainContent.prototype.dragStarter.bind(this);
@@ -211,7 +210,6 @@
   MainContent.prototype.createModule = function(props) {
     var module = new Module(helper.extend(helper.clone(props), {
       parentElement: this.containerElement(),
-      fronter: this.fronter,
       portToggler: this.portToggler,
       portEventer: this.portEventer,
       dragStarter: this.dragStarter,
@@ -224,6 +222,7 @@
       dragPortSocketEnder: this.dragPortSocketEnder,
     }));
     module.on('delete', this.ondelete.bind(this));
+    module.on('point', this.onpoint.bind(this));
     return module;
   };
 
@@ -456,7 +455,7 @@
     this.updateWireHandleContainer();
   };
 
-  MainContent.prototype.fronter = function(module) {
+  MainContent.prototype.onpoint = function(module) {
     helper.moveToBack(this.modules, module);
     this.updateZIndex();
   };

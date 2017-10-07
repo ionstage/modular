@@ -34,7 +34,6 @@
 
     this.onpoint = Module.prototype.onpoint.bind(this);
 
-    this.fronter = props.fronter;
     this.portToggler = props.portToggler;
     this.portEventer = props.portEventer;
     this.dragStarter = props.dragStarter;
@@ -475,7 +474,7 @@
   };
 
   Module.prototype.onpoint = function() {
-    this.fronter(this);
+    this.emit('point', this);
   };
 
   Module.DRAG_LISTENER_POSITION = {
