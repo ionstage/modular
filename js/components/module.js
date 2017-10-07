@@ -34,7 +34,6 @@
 
     this.onpoint = Module.prototype.onpoint.bind(this);
 
-    this.deleter = props.deleter;
     this.fronter = props.fronter;
     this.portToggler = props.portToggler;
     this.portEventer = props.portEventer;
@@ -371,7 +370,7 @@
     this.hideAllPorts();
 
     this.parentElement(null);
-    this.deleter(this);
+    this.emit('delete', this);
   };
 
   Module.prototype.render = function() {
