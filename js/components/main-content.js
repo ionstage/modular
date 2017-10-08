@@ -492,20 +492,22 @@
     this.emit('dragend');
   };
 
-  MainContent.prototype.dragPortPlugStarter = function(module, port, context) {
+  MainContent.prototype.dragPortPlugStarter = function(port, context) {
+    var module = this.moduleFromPort(port);
     var sourceUnit = new Unit({ module: module, port: port });
     var wire = this.createDraggingWire(sourceUnit.port);
     wire.markDirty();
     this.appendDraggingWire(sourceUnit, wire);
 
+    context.module = module;
     context.x = sourceUnit.port.plugX();
     context.y = sourceUnit.port.plugY();
     context.wire = wire;
     context.targetUnit = null;
   };
 
-  MainContent.prototype.dragPortPlugMover = function(module, port, dx, dy, context) {
-    var sourceUnit = new Unit({ module: module, port: port });
+  MainContent.prototype.dragPortPlugMover = function(port, dx, dy, context) {
+    var sourceUnit = new Unit({ module: context.module, port: port });
     var x = context.x + dx;
     var y = context.y + dy;
     var currentTargetUnit = context.targetUnit;
@@ -532,13 +534,13 @@
     context.targetUnit = targetUnit;
   };
 
-  MainContent.prototype.dragPortPlugEnder = function(module, port, context) {
-    var sourceUnit = new Unit({ module: module, port: port });
+  MainContent.prototype.dragPortPlugEnder = function(port, context) {
+    var sourceUnit = new Unit({ module: context.module, port: port });
     this.removeDraggingWire(sourceUnit, context.targetUnit, context.wire);
   };
 
-  MainContent.prototype.dragPortSocketStarter = function(module, port, context) {
-    var targetUnit = new Unit({ module: module, port: port });
+  MainContent.prototype.dragPortSocketStarter = function(port, context) {
+    var targetUnit = new Unit({ module: this.moduleFromPort(port), port: port });
     var wire = this.attachedWire(targetUnit.port);
     var sourceUnit = this.connectedSourceUnit(targetUnit);
 
@@ -546,19 +548,20 @@
     this.updateDragHighlight(sourceUnit.port);
     this.updateDragHighlight(targetUnit.port);
 
+    context.module = sourceUnit.module;
+    context.port = sourceUnit.port;
     context.x = wire.targetX();
     context.y = wire.targetY();
     context.wire = wire;
-    context.sourceUnit = sourceUnit;
     context.targetUnit = targetUnit;
   };
 
-  MainContent.prototype.dragPortSocketMover = function(module, port, dx, dy, context) {
-    this.dragPortPlugMover(context.sourceUnit.module, context.sourceUnit.port, dx, dy, context);
+  MainContent.prototype.dragPortSocketMover = function(port, dx, dy, context) {
+    this.dragPortPlugMover(context.port, dx, dy, context);
   };
 
-  MainContent.prototype.dragPortSocketEnder = function(module, port, context) {
-    this.dragPortPlugEnder(context.sourceUnit.module, context.sourceUnit.port, context);
+  MainContent.prototype.dragPortSocketEnder = function(port, context) {
+    this.dragPortPlugEnder(context.port, context);
   };
 
   MainContent.RETAINER_PADDING = 80;
