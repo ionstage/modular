@@ -115,12 +115,14 @@
     });
   };
 
-  MainContent.prototype.connectedSourceUnit = function(targetUnit) {
+  MainContent.prototype.connectedSourcePort = function(targetPort) {
+    var targetUnit = new Unit({ module: this.moduleFromPort(targetPort), port: targetPort });
+
     // socket of the target port can only be connected to one wire
     var binding = this.bindings.filter(function(binding) {
       return helper.equal(binding.targetUnit, targetUnit);
     })[0];
-    return (binding ? binding.sourceUnit : null);
+    return (binding ? binding.sourceUnit.port : null);
   };
 
   MainContent.prototype.unitFromModuleAndPortName = function(module, portName) {
@@ -543,14 +545,14 @@
   MainContent.prototype.dragPortSocketStarter = function(port, context) {
     var targetUnit = new Unit({ module: this.moduleFromPort(port), port: port });
     var wire = this.attachedWire(targetUnit.port);
-    var sourceUnit = this.connectedSourceUnit(targetUnit);
+    var sourcePort = this.connectedSourcePort(targetUnit.port);
 
     this.draggingWires.push(wire);
-    this.updateDragHighlight(sourceUnit.port);
+    this.updateDragHighlight(sourcePort);
     this.updateDragHighlight(targetUnit.port);
 
-    context.module = sourceUnit.module;
-    context.port = sourceUnit.port;
+    context.module = this.moduleFromPort(sourcePort);
+    context.port = sourcePort;
     context.x = wire.targetX();
     context.y = wire.targetY();
     context.wire = wire;
