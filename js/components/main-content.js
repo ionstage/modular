@@ -106,11 +106,12 @@
     return this.lockedWires(LockRelation.TYPE_SOCKET, targetPort)[0];
   };
 
-  MainContent.prototype.connectedTargetUnits = function(sourceUnit) {
+  MainContent.prototype.connectedTargetPorts = function(sourcePort) {
+    var sourceUnit = new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort });
     return this.bindings.filter(function(binding) {
       return helper.equal(binding.sourceUnit, sourceUnit);
     }).map(function(binding) {
-      return binding.targetUnit;
+      return binding.targetUnit.port;
     });
   };
 
@@ -402,8 +403,8 @@
 
   MainContent.prototype.updateEventHighlight = function(sourceUnit) {
     var highlighted = sourceUnit.plugHighlighted();
-    this.connectedTargetUnits(sourceUnit).forEach(function(targetUnit) {
-      targetUnit.socketHighlighted(highlighted);
+    this.connectedTargetPorts(sourceUnit.port).forEach(function(targetPort) {
+      targetPort.socketHighlighted(highlighted);
     });
     this.lockedWires(LockRelation.TYPE_PLUG, sourceUnit.port).forEach(function(wire) {
       wire.highlighted(highlighted);
