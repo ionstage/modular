@@ -16,7 +16,6 @@
     this.lockRelations = [];
     this.bindings = [];
 
-    this.portEventer = MainContent.prototype.portEventer.bind(this);
     this.dragStarter = MainContent.prototype.dragStarter.bind(this);
     this.dragEnder = MainContent.prototype.dragEnder.bind(this);
     this.dragPortPlugStarter = MainContent.prototype.dragPortPlugStarter.bind(this);
@@ -212,7 +211,6 @@
   MainContent.prototype.createModule = function(props) {
     var module = new Module(helper.extend(helper.clone(props), {
       parentElement: this.containerElement(),
-      portEventer: this.portEventer,
       dragStarter: this.dragStarter,
       dragEnder: this.dragEnder,
       dragPortPlugStarter: this.dragPortPlugStarter,
@@ -225,6 +223,7 @@
     module.on('delete', this.ondelete.bind(this));
     module.on('point', this.onpoint.bind(this));
     module.on('porttoggle', this.onporttoggle.bind(this));
+    module.on('portevent', this.onportevent.bind(this));
     return module;
   };
 
@@ -472,8 +471,8 @@
     this.updateRetainer();
   };
 
-  MainContent.prototype.portEventer = function(sourceModule, sourcePort) {
-    var sourceUnit = new Unit({ module: sourceModule, port: sourcePort });
+  MainContent.prototype.onportevent = function(sourcePort) {
+    var sourceUnit = new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort });
 
     sourceUnit.plugHighlighted(true);
     this.updateEventHighlight(sourceUnit);

@@ -34,7 +34,6 @@
 
     this.onpoint = Module.prototype.onpoint.bind(this);
 
-    this.portEventer = props.portEventer;
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
     this.dragPortPlugStarter = props.dragPortPlugStarter;
@@ -183,7 +182,7 @@
         label: port.label(),
         name: port.name(),
         type: port.type(),
-        arg: this.portEventer.bind(null, this, port),
+        arg: this.onportevent.bind(this, port),
       };
     }.bind(this)));
   };
@@ -474,6 +473,10 @@
 
   Module.prototype.onpoint = function() {
     this.emit('point', this);
+  };
+
+  Module.prototype.onportevent = function(port) {
+    this.emit('portevent', port);
   };
 
   Module.DRAG_LISTENER_POSITION = {
