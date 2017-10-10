@@ -34,7 +34,6 @@
 
     this.onpoint = Module.prototype.onpoint.bind(this);
 
-    this.portToggler = props.portToggler;
     this.portEventer = props.portEventer;
     this.dragStarter = props.dragStarter;
     this.dragEnder = props.dragEnder;
@@ -342,7 +341,7 @@
     this.moveX(this.x());
 
     this.markDirty();
-    this.portToggler(this, port);
+    this.emit('porttoggle', port);
   };
 
   Module.prototype.hidePort = function(name) {
@@ -355,7 +354,7 @@
     this.portList.remove(port);
     this.portSelect.add(port);
     this.markDirty();
-    this.portToggler(this, port);
+    this.emit('porttoggle', port);
   };
 
   Module.prototype.hideAllPorts = function() {

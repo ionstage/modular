@@ -16,7 +16,6 @@
     this.lockRelations = [];
     this.bindings = [];
 
-    this.portToggler = MainContent.prototype.portToggler.bind(this);
     this.portEventer = MainContent.prototype.portEventer.bind(this);
     this.dragStarter = MainContent.prototype.dragStarter.bind(this);
     this.dragEnder = MainContent.prototype.dragEnder.bind(this);
@@ -213,7 +212,6 @@
   MainContent.prototype.createModule = function(props) {
     var module = new Module(helper.extend(helper.clone(props), {
       parentElement: this.containerElement(),
-      portToggler: this.portToggler,
       portEventer: this.portEventer,
       dragStarter: this.dragStarter,
       dragEnder: this.dragEnder,
@@ -226,6 +224,7 @@
     }));
     module.on('delete', this.ondelete.bind(this));
     module.on('point', this.onpoint.bind(this));
+    module.on('porttoggle', this.onporttoggle.bind(this));
     return module;
   };
 
@@ -463,8 +462,8 @@
     this.updateZIndex();
   };
 
-  MainContent.prototype.portToggler = function(module, port) {
-    var unit = new Unit({ module: module, port: port });
+  MainContent.prototype.onporttoggle = function(port) {
+    var unit = new Unit({ module: this.moduleFromPort(port), port: port });
 
     if (!unit.visible()) {
       this.disconnectAll(unit);
