@@ -328,7 +328,7 @@
     this.bind(sourceUnit, targetUnit);
     this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
     this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
-    this.updateEventHighlight(sourceUnit);
+    this.updateEventHighlight(sourceUnit.port);
   };
 
   MainContent.prototype.disconnect = function(sourceUnit, targetUnit) {
@@ -351,7 +351,7 @@
 
   MainContent.prototype.appendDraggingWire = function(sourceUnit, wire) {
     this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
-    this.updateEventHighlight(sourceUnit);
+    this.updateEventHighlight(sourceUnit.port);
     this.draggingWires.push(wire);
     this.updateDragHighlight(sourceUnit.port);
   };
@@ -361,7 +361,7 @@
     targetUnit.socketConnected(true);
     this.bind(sourceUnit, targetUnit);
     this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
-    this.updateEventHighlight(sourceUnit);
+    this.updateEventHighlight(sourceUnit.port);
     this.updateDragHighlight(targetUnit.port);
   };
 
@@ -401,12 +401,12 @@
     });
   };
 
-  MainContent.prototype.updateEventHighlight = function(sourceUnit) {
-    var highlighted = sourceUnit.plugHighlighted();
-    this.connectedTargetPorts(sourceUnit.port).forEach(function(targetPort) {
+  MainContent.prototype.updateEventHighlight = function(sourcePort) {
+    var highlighted = sourcePort.plugHighlighted();
+    this.connectedTargetPorts(sourcePort).forEach(function(targetPort) {
       targetPort.socketHighlighted(highlighted);
     });
-    this.lockedWires(LockRelation.TYPE_PLUG, sourceUnit.port).forEach(function(wire) {
+    this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
       wire.highlighted(highlighted);
     });
   };
@@ -475,11 +475,11 @@
     var sourceUnit = new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort });
 
     sourceUnit.plugHighlighted(true);
-    this.updateEventHighlight(sourceUnit);
+    this.updateEventHighlight(sourceUnit.port);
 
     setTimeout(function() {
       sourceUnit.plugHighlighted(false);
-      this.updateEventHighlight(sourceUnit);
+      this.updateEventHighlight(sourceUnit.port);
     }.bind(this), 100);
   };
 
