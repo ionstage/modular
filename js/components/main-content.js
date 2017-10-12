@@ -472,14 +472,11 @@
   };
 
   MainContent.prototype.onportevent = function(sourcePort) {
-    var sourceUnit = new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort });
-
-    sourceUnit.plugHighlighted(true);
-    this.updateEventHighlight(sourceUnit.port);
-
+    sourcePort.plugHighlighted(true);
+    this.updateEventHighlight(sourcePort);
     setTimeout(function() {
-      sourceUnit.plugHighlighted(false);
-      this.updateEventHighlight(sourceUnit.port);
+      sourcePort.plugHighlighted(false);
+      this.updateEventHighlight(sourcePort);
     }.bind(this), 100);
   };
 
