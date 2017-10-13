@@ -191,7 +191,7 @@
         source: this.unitFromModuleAndPortName(modules[source.moduleIndex], source.portName),
         target: this.unitFromModuleAndPortName(modules[target.moduleIndex], target.portName),
       };
-      if (!this.canConnect(unitMap.source, unitMap.target)) {
+      if (!unitMap.source || !unitMap.target || !this.canConnect(unitMap.source, unitMap.target)) {
         throw new Error('Invalid connection');
       }
       return unitMap;
@@ -302,20 +302,17 @@
     helper.remove(this.bindings, binding);
   };
 
-  MainContent.prototype.canConnect = function(sourceUnit, targetUnit) {
-    if (!sourceUnit || !targetUnit) {
+  MainContent.prototype.canConnect = function(sourcePort, targetPort) {
+    if (sourcePort.type() !== targetPort.type()) {
       return false;
     }
-    if (sourceUnit.port.type() !== targetUnit.port.type()) {
+    if (sourcePort.plugDisabled() || targetPort.socketDisabled()) {
       return false;
     }
-    if (sourceUnit.port.plugDisabled() || targetUnit.port.socketDisabled()) {
+    if (!sourcePort.visible() || !targetPort.visible()) {
       return false;
     }
-    if (!sourceUnit.port.visible() || !targetUnit.port.visible()) {
-      return false;
-    }
-    if (targetUnit.port.socketConnected()) {
+    if (targetPort.socketConnected()) {
       return false;
     }
     return true;
@@ -524,7 +521,7 @@
       this.detachDraggingWire(sourceUnit, currentTargetUnit, wire);
     }
 
-    var targetUnit = (this.canConnect(sourceUnit, unit) ? unit : null);
+    var targetUnit = (unit && this.canConnect(sourceUnit, unit) ? unit : null);
     if (targetUnit) {
       this.attachDraggingWire(sourceUnit, targetUnit, wire);
     }
