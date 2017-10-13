@@ -107,7 +107,7 @@
   MainContent.prototype.connectedTargetPorts = function(sourcePort) {
     var sourceUnit = new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort });
     return this.bindings.filter(function(binding) {
-      return helper.equal(binding.sourceUnit, sourceUnit);
+      return (binding.sourceUnit.port === sourceUnit.port);
     }).map(function(binding) {
       return binding.targetUnit.port;
     });
@@ -118,7 +118,7 @@
 
     // socket of the target port can only be connected to one wire
     var binding = this.bindings.filter(function(binding) {
-      return helper.equal(binding.targetUnit, targetUnit);
+      return (binding.targetUnit.port === targetUnit.port);
     })[0];
     return (binding ? binding.sourceUnit.port : null);
   };
@@ -296,7 +296,7 @@
 
   MainContent.prototype.unbind = function(sourceUnit, targetUnit) {
     var binding = helper.findLast(this.bindings, function(binding) {
-      return helper.equal(binding.sourceUnit, sourceUnit) && helper.equal(binding.targetUnit, targetUnit);
+      return (binding.sourceUnit.port === sourceUnit.port && binding.targetUnit.port === targetUnit.port);
     });
     binding.unbind();
     helper.remove(this.bindings, binding);
@@ -340,7 +340,7 @@
 
   MainContent.prototype.disconnectAll = function(unit) {
     this.bindings.slice().forEach(function(binding) {
-      if (helper.equal(binding.sourceUnit, unit) || helper.equal(binding.targetUnit, unit)) {
+      if (binding.sourceUnit.port === unit.port || binding.targetUnit.port === unit.port) {
         this.disconnect(binding.sourceUnit, binding.targetUnit);
       }
     }.bind(this));
@@ -508,7 +508,7 @@
     var currentTargetUnit = context.targetUnit;
     var unit = this.unitFromSocketPosition(x, y);
 
-    if (unit && helper.equal(unit, currentTargetUnit)) {
+    if (unit && currentTargetUnit && unit.port === currentTargetUnit.port) {
       // fix the target position of the wire
       return;
     }
