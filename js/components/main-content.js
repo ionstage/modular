@@ -16,8 +16,6 @@
     this.lockRelations = [];
     this.bindings = [];
 
-    this.dragStarter = MainContent.prototype.dragStarter.bind(this);
-    this.dragEnder = MainContent.prototype.dragEnder.bind(this);
     this.dragPortPlugStarter = MainContent.prototype.dragPortPlugStarter.bind(this);
     this.dragPortPlugMover = MainContent.prototype.dragPortPlugMover.bind(this);
     this.dragPortPlugEnder = MainContent.prototype.dragPortPlugEnder.bind(this);
@@ -211,8 +209,6 @@
   MainContent.prototype.createModule = function(props) {
     var module = new Module(helper.extend(helper.clone(props), {
       parentElement: this.containerElement(),
-      dragStarter: this.dragStarter,
-      dragEnder: this.dragEnder,
       dragPortPlugStarter: this.dragPortPlugStarter,
       dragPortPlugMover: this.dragPortPlugMover,
       dragPortPlugEnder: this.dragPortPlugEnder,
@@ -224,6 +220,8 @@
     module.on('point', this.onpoint.bind(this));
     module.on('porttoggle', this.onporttoggle.bind(this));
     module.on('portevent', this.onportevent.bind(this));
+    module.on('dragstart', this.ondragstart.bind(this));
+    module.on('dragend', this.ondragend.bind(this));
     return module;
   };
 
@@ -477,12 +475,12 @@
     }.bind(this), 100);
   };
 
-  MainContent.prototype.dragStarter = function() {
+  MainContent.prototype.ondragstart = function() {
     this.updateRetainer();
     this.emit('dragstart');
   };
 
-  MainContent.prototype.dragEnder = function() {
+  MainContent.prototype.ondragend = function() {
     this.updateRetainer();
     this.emit('dragend');
   };

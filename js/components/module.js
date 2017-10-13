@@ -34,8 +34,6 @@
 
     this.onpoint = Module.prototype.onpoint.bind(this);
 
-    this.dragStarter = props.dragStarter;
-    this.dragEnder = props.dragEnder;
     this.dragPortPlugStarter = props.dragPortPlugStarter;
     this.dragPortPlugMover = props.dragPortPlugMover;
     this.dragPortPlugEnder = props.dragPortPlugEnder;
@@ -438,7 +436,7 @@
 
     dom.cancel(event);
     listener.onstart.call(this, x, y, event, context);
-    this.dragStarter();
+    this.emit('dragstart');
   };
 
   Module.prototype.onmove = function(dx, dy, event, context) {
@@ -459,7 +457,7 @@
     }
 
     listener.onend.call(this, dx, dy, event, context);
-    this.dragEnder();
+    this.emit('dragend');
   };
 
   Module.prototype.onmessage = function(event) {
