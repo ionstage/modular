@@ -283,10 +283,10 @@
     helper.remove(this.lockRelations, relation);
   };
 
-  MainContent.prototype.bind = function(sourceUnit, targetUnit) {
+  MainContent.prototype.bind = function(sourcePort, targetPort) {
     var binding = new Binding({
-      sourceUnit: sourceUnit,
-      targetUnit: targetUnit,
+      sourceUnit: new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort }),
+      targetUnit: new Unit({ module: this.moduleFromPort(targetPort), port: targetPort }),
     });
     binding.bind();
     this.bindings.push(binding);
@@ -320,7 +320,7 @@
     var wire = this.createConnectingWire(sourceUnit.port, targetUnit.port);
     wire.markDirty();
     targetUnit.socketConnected(true);
-    this.bind(sourceUnit, targetUnit);
+    this.bind(sourceUnit.port, targetUnit.port);
     this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
     this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     this.updateEventHighlight(sourceUnit.port);
@@ -354,7 +354,7 @@
   MainContent.prototype.attachDraggingWire = function(sourceUnit, targetUnit, wire) {
     wire.handleVisible(false);
     targetUnit.socketConnected(true);
-    this.bind(sourceUnit, targetUnit);
+    this.bind(sourceUnit.port, targetUnit.port);
     this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     this.updateEventHighlight(sourceUnit.port);
     this.updateDragHighlight(targetUnit.port);
