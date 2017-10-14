@@ -35,7 +35,7 @@
   };
 
   Body.prototype.currentDemoName = function() {
-    return dom.urlQuery(dom.location()).demo || '';
+    return (dom.urlQuery(dom.location()).demo || '');
   };
 
   Body.prototype.demoUrl = function(name) {
