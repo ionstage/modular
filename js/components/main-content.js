@@ -292,9 +292,9 @@
     this.bindings.push(binding);
   };
 
-  MainContent.prototype.unbind = function(sourceUnit, targetUnit) {
+  MainContent.prototype.unbind = function(sourcePort, targetPort) {
     var binding = helper.findLast(this.bindings, function(binding) {
-      return (binding.sourceUnit.port === sourceUnit.port && binding.targetUnit.port === targetUnit.port);
+      return (binding.sourceUnit.port === sourcePort && binding.targetUnit.port === targetPort);
     });
     binding.unbind();
     helper.remove(this.bindings, binding);
@@ -330,7 +330,7 @@
     var wire = this.attachedWire(targetUnit.port);
     wire.parentElement(null);
     targetUnit.socketConnected(false);
-    this.unbind(sourceUnit, targetUnit);
+    this.unbind(sourceUnit.port, targetUnit.port);
     this.unlock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
     this.unlock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     targetUnit.socketHighlighted(false);
@@ -363,7 +363,7 @@
   MainContent.prototype.detachDraggingWire = function(sourceUnit, targetUnit, wire) {
     wire.handleVisible(true);
     targetUnit.socketConnected(false);
-    this.unbind(sourceUnit, targetUnit);
+    this.unbind(sourceUnit.port, targetUnit.port);
     this.unlock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
     targetUnit.socketHighlighted(false);
     this.updateDragHighlight(targetUnit.port);
