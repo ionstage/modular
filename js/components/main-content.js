@@ -154,19 +154,21 @@
 
   MainContent.prototype.toConnectionsData = function(modules) {
     return this.bindings.map(function(binding) {
-      var sourceUnit = binding.sourceUnit;
-      var targetUnit = binding.targetUnit;
+      var sourcePort = binding.sourceUnit.port;
+      var targetPort = binding.targetUnit.port;
+      var sourceModule = this.moduleFromPort(sourcePort);
+      var targetModule = this.moduleFromPort(targetPort);
       var sourceModuleIndex = helper.findIndex(modules, function(module) {
-        return sourceUnit.contains(module);
+        return (module === sourceModule);
       });
       var targetModuleIndex = helper.findIndex(modules, function(module) {
-        return targetUnit.contains(module);
+        return (module === targetModule);
       });
       return {
-        source: { moduleIndex: sourceModuleIndex, portName: sourceUnit.name() },
-        target: { moduleIndex: targetModuleIndex, portName: targetUnit.name() },
+        source: { moduleIndex: sourceModuleIndex, portName: sourcePort.name() },
+        target: { moduleIndex: targetModuleIndex, portName: targetPort.name() },
       };
-    });
+    }.bind(this));
   };
 
   MainContent.prototype.load = function(data) {
