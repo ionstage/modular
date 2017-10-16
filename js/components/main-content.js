@@ -189,7 +189,7 @@
         source: this.unitFromModuleAndPortName(modules[source.moduleIndex], source.portName),
         target: this.unitFromModuleAndPortName(modules[target.moduleIndex], target.portName),
       };
-      if (!unitMap.source || !unitMap.target || !this.canConnect(unitMap.source, unitMap.target)) {
+      if (!unitMap.source || !unitMap.target || !this.canConnect(unitMap.source.port, unitMap.target.port)) {
         throw new Error('Invalid connection');
       }
       return unitMap;
@@ -519,7 +519,7 @@
       this.detachDraggingWire(sourceUnit, currentTargetUnit, wire);
     }
 
-    var targetUnit = (unit && this.canConnect(sourceUnit, unit) ? unit : null);
+    var targetUnit = (unit && this.canConnect(sourceUnit.port, unit.port) ? unit : null);
     if (targetUnit) {
       this.attachDraggingWire(sourceUnit, targetUnit, wire);
     }
