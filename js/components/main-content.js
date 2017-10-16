@@ -126,14 +126,15 @@
     return (port ? new Unit({ module: module, port: port }) : null);
   };
 
-  MainContent.prototype.unitFromSocketPosition = function(x, y) {
+  MainContent.prototype.portFromSocketPosition = function(x, y) {
     var port = null;
-    var module = helper.findLast(this.modules, function(module) {
-      // XXX: keep the last port for creating unit
-      port = module.portFromSocketPosition(x, y);
-      return !!port;
-    });
-    return (module ? new Unit({ module: module, port: port }) : null);
+    for (var i = this.modules.length - 1; i >= 0; i--) {
+      port = this.modules[i].portFromSocketPosition(x, y);
+      if (port) {
+        break;
+      }
+    }
+    return port;
   };
 
   MainContent.prototype.toData = function() {
@@ -506,7 +507,8 @@
     var x = context.x + dx;
     var y = context.y + dy;
     var currentTargetUnit = context.targetUnit;
-    var unit = this.unitFromSocketPosition(x, y);
+    var targetPort = this.portFromSocketPosition(x, y);
+    var unit = (targetPort ? new Unit({ module: this.moduleFromPort(targetPort), port: targetPort }) : null);
 
     if (unit && currentTargetUnit && unit.port === currentTargetUnit.port) {
       // fix the target position of the wire
