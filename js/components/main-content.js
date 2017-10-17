@@ -155,19 +155,15 @@
 
   MainContent.prototype.toConnectionsData = function(modules) {
     return this.bindings.map(function(binding) {
-      var sourcePort = binding.sourceUnit.port;
-      var targetPort = binding.targetUnit.port;
-      var sourceModule = this.moduleFromPort(sourcePort);
-      var targetModule = this.moduleFromPort(targetPort);
-      var sourceModuleIndex = helper.findIndex(modules, function(module) {
-        return (module === sourceModule);
-      });
-      var targetModuleIndex = helper.findIndex(modules, function(module) {
-        return (module === targetModule);
-      });
       return {
-        source: { moduleIndex: sourceModuleIndex, portName: sourcePort.name() },
-        target: { moduleIndex: targetModuleIndex, portName: targetPort.name() },
+        source: {
+          moduleIndex: modules.indexOf(this.moduleFromPort(binding.sourceUnit.port)),
+          portName: binding.sourceUnit.port.name(),
+        },
+        target: {
+          moduleIndex: modules.indexOf(this.moduleFromPort(binding.targetUnit.port)),
+          portName: binding.targetUnit.port.name(),
+        },
       };
     }.bind(this));
   };
