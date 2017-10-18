@@ -194,7 +194,7 @@
       return unitMap;
     }.bind(this))).then(function(unitMaps) {
       unitMaps.forEach(function(unitMap) {
-        this.connect(unitMap.source, unitMap.target);
+        this.connect(unitMap.source.port, unitMap.target.port);
       }.bind(this));
     }.bind(this));
   };
@@ -315,14 +315,14 @@
     return true;
   };
 
-  MainContent.prototype.connect = function(sourceUnit, targetUnit) {
-    var wire = this.createConnectingWire(sourceUnit.port, targetUnit.port);
+  MainContent.prototype.connect = function(sourcePort, targetPort) {
+    var wire = this.createConnectingWire(sourcePort, targetPort);
     wire.markDirty();
-    targetUnit.socketConnected(true);
-    this.bind(sourceUnit.port, targetUnit.port);
-    this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
-    this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
-    this.updateEventHighlight(sourceUnit.port);
+    targetPort.socketConnected(true);
+    this.bind(sourcePort, targetPort);
+    this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
+    this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
+    this.updateEventHighlight(sourcePort);
   };
 
   MainContent.prototype.disconnect = function(sourceUnit, targetUnit) {
