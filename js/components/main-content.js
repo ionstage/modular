@@ -335,9 +335,9 @@
     targetPort.socketHighlighted(false);
   };
 
-  MainContent.prototype.disconnectAll = function(unit) {
+  MainContent.prototype.disconnectAll = function(port) {
     this.bindings.slice().forEach(function(binding) {
-      if (binding.sourceUnit.port === unit.port || binding.targetUnit.port === unit.port) {
+      if (binding.sourceUnit.port === port || binding.targetUnit.port === port) {
         this.disconnect(binding.sourceUnit.port, binding.targetUnit.port);
       }
     }.bind(this));
@@ -459,7 +459,7 @@
     var unit = new Unit({ module: this.moduleFromPort(port), port: port });
 
     if (!unit.visible()) {
-      this.disconnectAll(unit);
+      this.disconnectAll(unit.port);
     }
 
     this.updateRetainer();
