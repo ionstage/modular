@@ -325,20 +325,20 @@
     this.updateEventHighlight(sourcePort);
   };
 
-  MainContent.prototype.disconnect = function(sourceUnit, targetUnit) {
-    var wire = this.attachedWire(targetUnit.port);
+  MainContent.prototype.disconnect = function(sourcePort, targetPort) {
+    var wire = this.attachedWire(targetPort);
     wire.parentElement(null);
-    targetUnit.socketConnected(false);
-    this.unbind(sourceUnit.port, targetUnit.port);
-    this.unlock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
-    this.unlock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
-    targetUnit.socketHighlighted(false);
+    targetPort.socketConnected(false);
+    this.unbind(sourcePort, targetPort);
+    this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
+    this.unlock(LockRelation.TYPE_SOCKET, targetPort, wire);
+    targetPort.socketHighlighted(false);
   };
 
   MainContent.prototype.disconnectAll = function(unit) {
     this.bindings.slice().forEach(function(binding) {
       if (binding.sourceUnit.port === unit.port || binding.targetUnit.port === unit.port) {
-        this.disconnect(binding.sourceUnit, binding.targetUnit);
+        this.disconnect(binding.sourceUnit.port, binding.targetUnit.port);
       }
     }.bind(this));
   };
