@@ -343,11 +343,11 @@
     }.bind(this));
   };
 
-  MainContent.prototype.appendDraggingWire = function(sourceUnit, wire) {
-    this.lock(LockRelation.TYPE_PLUG, sourceUnit.port, wire);
-    this.updateEventHighlight(sourceUnit.port);
+  MainContent.prototype.appendDraggingWire = function(sourcePort, wire) {
+    this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
+    this.updateEventHighlight(sourcePort);
     this.draggingWires.push(wire);
-    this.updateDragHighlight(sourceUnit.port);
+    this.updateDragHighlight(sourcePort);
   };
 
   MainContent.prototype.attachDraggingWire = function(sourceUnit, targetUnit, wire) {
@@ -489,7 +489,7 @@
     var sourceUnit = new Unit({ module: module, port: port });
     var wire = this.createDraggingWire(sourceUnit.port);
     wire.markDirty();
-    this.appendDraggingWire(sourceUnit, wire);
+    this.appendDraggingWire(sourceUnit.port, wire);
 
     context.module = module;
     context.x = sourceUnit.port.plugX();
