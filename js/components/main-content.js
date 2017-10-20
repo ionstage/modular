@@ -350,13 +350,13 @@
     this.updateDragHighlight(sourcePort);
   };
 
-  MainContent.prototype.attachDraggingWire = function(sourceUnit, targetUnit, wire) {
+  MainContent.prototype.attachDraggingWire = function(sourcePort, targetPort, wire) {
     wire.handleVisible(false);
-    targetUnit.socketConnected(true);
-    this.bind(sourceUnit.port, targetUnit.port);
-    this.lock(LockRelation.TYPE_SOCKET, targetUnit.port, wire);
-    this.updateEventHighlight(sourceUnit.port);
-    this.updateDragHighlight(targetUnit.port);
+    targetPort.socketConnected(true);
+    this.bind(sourcePort, targetPort);
+    this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
+    this.updateEventHighlight(sourcePort);
+    this.updateDragHighlight(targetPort);
   };
 
   MainContent.prototype.detachDraggingWire = function(sourceUnit, targetUnit, wire) {
@@ -521,7 +521,7 @@
 
     var targetUnit = (unit && this.canConnect(sourceUnit.port, unit.port) ? unit : null);
     if (targetUnit) {
-      this.attachDraggingWire(sourceUnit, targetUnit, wire);
+      this.attachDraggingWire(sourceUnit.port, targetUnit.port, wire);
     }
 
     context.targetUnit = targetUnit;
