@@ -121,11 +121,6 @@
     return (binding ? binding.sourceUnit.port : null);
   };
 
-  MainContent.prototype.unitFromModuleAndPortName = function(module, portName) {
-    var port = (module ? module.port(portName) : null);
-    return (port ? new Unit({ module: module, port: port }) : null);
-  };
-
   MainContent.prototype.portFromSocketPosition = function(x, y) {
     var port = null;
     for (var i = this.modules.length - 1; i >= 0; i--) {
@@ -184,17 +179,17 @@
     return Promise.all(connectionsData.map(function(connectionData) {
       var source = connectionData.source;
       var target = connectionData.target;
-      var unitMap = {
-        source: this.unitFromModuleAndPortName(modules[source.moduleIndex], source.portName),
-        target: this.unitFromModuleAndPortName(modules[target.moduleIndex], target.portName),
-      };
-      if (!unitMap.source || !unitMap.target || !this.canConnect(unitMap.source.port, unitMap.target.port)) {
+      var sourceModule = modules[source.moduleIndex];
+      var targetModule = modules[target.moduleIndex];
+      var sourcePort = (sourceModule ? sourceModule.port(source.portName) : null);
+      var targetPort = (targetModule ? targetModule.port(target.portName) : null);
+      if (!sourcePort || !targetPort || !this.canConnect(sourcePort, targetPort)) {
         throw new Error('Invalid connection');
       }
-      return unitMap;
-    }.bind(this))).then(function(unitMaps) {
-      unitMaps.forEach(function(unitMap) {
-        this.connect(unitMap.source.port, unitMap.target.port);
+      return { source: sourcePort, target: targetPort };
+    }.bind(this))).then(function(portMaps) {
+      portMaps.forEach(function(portMap) {
+        this.connect(portMap.source, portMap.target);
       }.bind(this));
     }.bind(this));
   };
