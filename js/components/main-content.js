@@ -111,11 +111,9 @@
   };
 
   MainContent.prototype.connectedSourcePort = function(targetPort) {
-    var targetUnit = new Unit({ module: this.moduleFromPort(targetPort), port: targetPort });
-
     // socket of the target port can only be connected to one wire
     var binding = this.bindings.filter(function(binding) {
-      return (binding.targetUnit.port === targetUnit.port);
+      return (binding.targetUnit.port === targetPort);
     })[0];
     return (binding ? binding.sourceUnit.port : null);
   };
