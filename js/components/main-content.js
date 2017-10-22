@@ -103,9 +103,8 @@
   };
 
   MainContent.prototype.connectedTargetPorts = function(sourcePort) {
-    var sourceUnit = new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort });
     return this.bindings.filter(function(binding) {
-      return (binding.sourceUnit.port === sourceUnit.port);
+      return (binding.sourceUnit.port === sourcePort);
     }).map(function(binding) {
       return binding.targetUnit.port;
     });
