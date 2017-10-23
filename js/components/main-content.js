@@ -448,12 +448,9 @@
   };
 
   MainContent.prototype.onporttoggle = function(port) {
-    var unit = new Unit({ module: this.moduleFromPort(port), port: port });
-
-    if (!unit.visible()) {
-      this.disconnectAll(unit.port);
+    if (!port.visible()) {
+      this.disconnectAll(port);
     }
-
     this.updateRetainer();
   };
 
