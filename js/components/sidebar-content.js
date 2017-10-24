@@ -2,7 +2,6 @@
   'use strict';
 
   var IScroll = require('iscroll');
-  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
   var SidebarModule = app.SidebarModule || require('./sidebar-module.js');
