@@ -1,8 +1,6 @@
 (function(app) {
   'use strict';
 
-  var helper = app.helper || require('../helper.js');
-
   var Binding = function(props) {
     this.sourceUnit = props.sourceUnit;
     this.targetUnit = props.targetUnit;
