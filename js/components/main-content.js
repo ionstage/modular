@@ -4,6 +4,7 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Binding = app.Binding || require('../models/binding.js');
+  var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
@@ -279,7 +280,7 @@
       sourceUnit: new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort }),
       targetUnit: new Unit({ module: this.moduleFromPort(targetPort), port: targetPort }),
     });
-    binding.bind();
+    CircuitModule.bind(binding.sourceUnit.circuitModuleMember(), binding.targetUnit.circuitModuleMember());
     this.bindings.push(binding);
   };
 
@@ -287,7 +288,7 @@
     var binding = helper.findLast(this.bindings, function(binding) {
       return (binding.sourceUnit.port === sourcePort && binding.targetUnit.port === targetPort);
     });
-    binding.unbind();
+    CircuitModule.unbind(binding.sourceUnit.circuitModuleMember(), binding.targetUnit.circuitModuleMember());
     helper.remove(this.bindings, binding);
   };
 
