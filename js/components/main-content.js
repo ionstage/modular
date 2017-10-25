@@ -276,20 +276,24 @@
   };
 
   MainContent.prototype.bind = function(sourcePort, targetPort) {
-    var binding = new Binding({
-      sourceUnit: new Unit({ module: this.moduleFromPort(sourcePort), port: sourcePort }),
-      targetUnit: new Unit({ module: this.moduleFromPort(targetPort), port: targetPort }),
-    });
-    CircuitModule.bind(binding.sourceUnit.circuitModuleMember(), binding.targetUnit.circuitModuleMember());
-    this.bindings.push(binding);
+    var sourceModule = this.moduleFromPort(sourcePort);
+    var targetModule = this.moduleFromPort(targetPort);
+    var source = sourceModule.circuitModuleMember(sourcePort.name());
+    var target = targetModule.circuitModuleMember(targetPort.name());
+    CircuitModule.bind(source, target);
+    this.bindings.push(new Binding({
+      sourceUnit: new Unit({ module: sourceModule, port: sourcePort }),
+      targetUnit: new Unit({ module: targetModule, port: targetPort }),
+    }));
   };
 
   MainContent.prototype.unbind = function(sourcePort, targetPort) {
-    var binding = helper.findLast(this.bindings, function(binding) {
+    var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
+    var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
+    CircuitModule.unbind(source, target);
+    helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
       return (binding.sourceUnit.port === sourcePort && binding.targetUnit.port === targetPort);
-    });
-    CircuitModule.unbind(binding.sourceUnit.circuitModuleMember(), binding.targetUnit.circuitModuleMember());
-    helper.remove(this.bindings, binding);
+    }));
   };
 
   MainContent.prototype.canConnect = function(sourcePort, targetPort) {
