@@ -2,8 +2,8 @@
   'use strict';
 
   var Binding = function(props) {
-    this.sourceUnit = props.sourceUnit;
-    this.targetUnit = props.targetUnit;
+    this.sourcePort = props.sourcePort;
+    this.targetPort = props.targetPort;
   };
 
   if (typeof module !== 'undefined' && module.exports) {

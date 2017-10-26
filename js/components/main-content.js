@@ -105,18 +105,18 @@
 
   MainContent.prototype.connectedTargetPorts = function(sourcePort) {
     return this.bindings.filter(function(binding) {
-      return (binding.sourceUnit.port === sourcePort);
+      return (binding.sourcePort === sourcePort);
     }).map(function(binding) {
-      return binding.targetUnit.port;
+      return binding.targetPort;
     });
   };
 
   MainContent.prototype.connectedSourcePort = function(targetPort) {
     // socket of the target port can only be connected to one wire
     var binding = this.bindings.filter(function(binding) {
-      return (binding.targetUnit.port === targetPort);
+      return (binding.targetPort === targetPort);
     })[0];
-    return (binding ? binding.sourceUnit.port : null);
+    return (binding ? binding.sourcePort : null);
   };
 
   MainContent.prototype.portFromSocketPosition = function(x, y) {
@@ -150,12 +150,12 @@
     return this.bindings.map(function(binding) {
       return {
         source: {
-          moduleIndex: modules.indexOf(this.moduleFromPort(binding.sourceUnit.port)),
-          portName: binding.sourceUnit.port.name(),
+          moduleIndex: modules.indexOf(this.moduleFromPort(binding.sourcePort)),
+          portName: binding.sourcePort.name(),
         },
         target: {
-          moduleIndex: modules.indexOf(this.moduleFromPort(binding.targetUnit.port)),
-          portName: binding.targetUnit.port.name(),
+          moduleIndex: modules.indexOf(this.moduleFromPort(binding.targetPort)),
+          portName: binding.targetPort.name(),
         },
       };
     }.bind(this));
@@ -276,14 +276,12 @@
   };
 
   MainContent.prototype.bind = function(sourcePort, targetPort) {
-    var sourceModule = this.moduleFromPort(sourcePort);
-    var targetModule = this.moduleFromPort(targetPort);
-    var source = sourceModule.circuitModuleMember(sourcePort.name());
-    var target = targetModule.circuitModuleMember(targetPort.name());
+    var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
+    var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
     CircuitModule.bind(source, target);
     this.bindings.push(new Binding({
-      sourceUnit: new Unit({ module: sourceModule, port: sourcePort }),
-      targetUnit: new Unit({ module: targetModule, port: targetPort }),
+      sourcePort: sourcePort,
+      targetPort: targetPort,
     }));
   };
 
@@ -292,7 +290,7 @@
     var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
     CircuitModule.unbind(source, target);
     helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
-      return (binding.sourceUnit.port === sourcePort && binding.targetUnit.port === targetPort);
+      return (binding.sourcePort === sourcePort && binding.targetPort === targetPort);
     }));
   };
 
@@ -334,8 +332,8 @@
 
   MainContent.prototype.disconnectAll = function(port) {
     this.bindings.slice().forEach(function(binding) {
-      if (binding.sourceUnit.port === port || binding.targetUnit.port === port) {
-        this.disconnect(binding.sourceUnit.port, binding.targetUnit.port);
+      if (binding.sourcePort === port || binding.targetPort === port) {
+        this.disconnect(binding.sourcePort, binding.targetPort);
       }
     }.bind(this));
   };
