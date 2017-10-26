@@ -95,15 +95,11 @@
     if (parentElement && parentElement !== dom.parent(element)) {
       this.onappend();
       dom.append(parentElement, element);
-      return;
-    }
-
-    if (!parentElement && dom.parent(element)) {
+    } else if (!parentElement && dom.parent(element)) {
       this.onremove();
       dom.remove(element);
       this.clearCache();
       this.removeAllListeners();
-      return;
     }
   };
 
