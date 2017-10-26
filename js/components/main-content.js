@@ -112,10 +112,10 @@
 
   MainContent.prototype.connectedSourcePort = function(targetPort) {
     // socket of the target port can only be connected to one wire
-    var binding = this.bindings.filter(function(binding) {
+    var binding = helper.find(this.bindings, function(binding) {
       return (binding.targetPort === targetPort);
-    })[0];
-    return (binding ? binding.sourcePort : null);
+    });
+    return binding.sourcePort;
   };
 
   MainContent.prototype.portFromSocketPosition = function(x, y) {
