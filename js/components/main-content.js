@@ -9,7 +9,6 @@
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
-  var Unit = app.Unit || require('../models/unit.js');
 
   var MainContent = Component.inherits(function(props) {
     this.modules = [];
