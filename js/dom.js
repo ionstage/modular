@@ -123,6 +123,14 @@
     return el.scrollTop;
   };
 
+  dom.offsetLeft = function(el) {
+    return dom.rect(el).left - dom.scrollLeft(el) - dom.rect(dom.body()).left;
+  };
+
+  dom.offsetTop = function(el) {
+    return dom.rect(el).top - dom.scrollTop(el) - dom.rect(dom.body()).top;
+  };
+
   dom.file = function(el) {
     return el.files[0];
   };
