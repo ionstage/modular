@@ -24,15 +24,6 @@
     return this.childElement('.sidebar-module-content');
   };
 
-  SidebarModule.prototype.position = function() {
-    var rect = dom.rect(this.element());
-    var bodyRect = dom.rect(dom.body());
-    return {
-      x: rect.left - bodyRect.left,
-      y: rect.top - bodyRect.top,
-    };
-  };
-
   SidebarModule.prototype.registerDragListener = function() {
     this.draggable = new dom.Draggable({
       element: this.element(),
@@ -111,18 +102,16 @@
   };
 
   SidebarModule.prototype.ondragstart = function(x, y, event, context) {
-    var position = this.position();
-
     context.dragging = true;
     context.timer = null;
-    context.x = position.x;
-    context.y = position.y;
+    context.x = dom.offsetLeft(this.element());
+    context.y = dom.offsetTop(this.element());
 
     context.clone = new SidebarModule.Clone({
       element: this.renderClone(),
       parentElement: dom.body(),
-      x: position.x,
-      y: position.y,
+      x: context.x,
+      y: context.y,
     });
 
     context.clone.markDirty();
