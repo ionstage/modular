@@ -40,25 +40,10 @@
     return this.childElement('.module-wire-handle-container');
   };
 
-  MainContent.prototype.clientPosition = function() {
-    var rect = dom.rect(this.element());
-    return { x: rect.left, y: rect.top };
-  };
-
-  MainContent.prototype.scrollLeft = function() {
-    return dom.scrollLeft(this.element());
-  };
-
-  MainContent.prototype.scrollTop = function() {
-    return dom.scrollTop(this.element());
-  };
-
   MainContent.prototype.localPoint = function(point) {
-    var clientPosition = this.clientPosition();
-    var bodyRect = dom.rect(dom.body());
     return {
-      x: point.x - clientPosition.x + this.scrollLeft() + bodyRect.left,
-      y: point.y - clientPosition.y + this.scrollTop() + bodyRect.top,
+      x: point.x - dom.offsetLeft(this.element()),
+      y: point.y - dom.offsetTop(this.element()),
     };
   };
 
