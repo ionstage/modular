@@ -201,27 +201,14 @@
     return module;
   };
 
-  MainContent.prototype.createConnectingWire = function(sourcePort, targetPort) {
+  MainContent.prototype.createModuleWire = function(sourcePort, targetPort) {
     return new ModuleWire({
       sourceX: sourcePort.plugX(),
       sourceY: sourcePort.plugY(),
-      targetX: targetPort.socketX(),
-      targetY: targetPort.socketY(),
+      targetX: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
+      targetY: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
       handleType: sourcePort.type(),
-      handleVisible: false,
-      parentElement: this.wireContainerElement(),
-      parentHandleElement: this.wireHandleContainerElement(),
-    });
-  };
-
-  MainContent.prototype.createDraggingWire = function(sourcePort) {
-    return new ModuleWire({
-      sourceX: sourcePort.plugX(),
-      sourceY: sourcePort.plugY(),
-      targetX: sourcePort.plugX(),
-      targetY: sourcePort.plugY(),
-      handleType: sourcePort.type(),
-      handleVisible: true,
+      handleVisible: !targetPort,
       parentElement: this.wireContainerElement(),
       parentHandleElement: this.wireHandleContainerElement(),
     });
@@ -295,7 +282,7 @@
   };
 
   MainContent.prototype.connect = function(sourcePort, targetPort) {
-    var wire = this.createConnectingWire(sourcePort, targetPort);
+    var wire = this.createModuleWire(sourcePort, targetPort);
     wire.markDirty();
     targetPort.socketConnected(true);
     this.bind(sourcePort, targetPort);
@@ -461,7 +448,7 @@
   };
 
   MainContent.prototype.dragPortPlugStarter = function(sourcePort, context) {
-    var wire = this.createDraggingWire(sourcePort);
+    var wire = this.createModuleWire(sourcePort, null);
     wire.markDirty();
     this.appendDraggingWire(sourcePort, wire);
 
