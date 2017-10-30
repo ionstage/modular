@@ -1,13 +1,11 @@
 (function(app) {
   'use strict';
 
-  var helper = app.helper || require('./helper.js');
-
   var dom = {};
 
   dom.export = function(key, value) {
     var g = (typeof global !== 'undefined' ? global : window);
-    helper.define(g, key, value);
+    Object.defineProperty(g, key, { value: value });
   };
 
   dom.find = function(el, selector) {
@@ -35,7 +33,7 @@
   };
 
   dom.childNode = function() {
-    return helper.toArray(arguments).reduce(function(el, index) {
+    return Array.prototype.slice.call(arguments).reduce(function(el, index) {
       return ('childNodes' in el ? el.childNodes[index] : null);
     });
   };
@@ -198,7 +196,7 @@
   };
 
   dom.changedTouch = function(event) {
-    return (dom.supportsTouch() ? helper.dig(event, 'changedTouches', 0) : null);
+    return (dom.supportsTouch() && 'changedTouches' in event ? event.changedTouches[0] : null);
   };
 
   dom.target = function(event) {
