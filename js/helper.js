@@ -34,11 +34,6 @@
     return ctor;
   };
 
-  helper.define = function(obj, key, value, option) {
-    var props = helper.extend(helper.clone(option || {}), { value: value });
-    return Object.defineProperty(obj, key, props);
-  };
-
   helper.equal = function(a, b) {
     if (a === b) {
       return true;
@@ -146,7 +141,7 @@
 
   helper.wrapper = function() {
     var Wrapper = function(self, wrapper) {
-      return helper.define(wrapper, 'unwrap', Wrapper.unwrap.bind(self));
+      return Object.defineProperty(wrapper, 'unwrap', { value: Wrapper.unwrap.bind(self) });
     };
 
     Wrapper.unwrap = function(key) {

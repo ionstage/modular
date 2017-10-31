@@ -59,7 +59,10 @@
     Member.prototype.wrapper = function(props) {
       var wrapper = new Wrapper(this, Member.prototype.call.bind(this));
       Member.KEYS.forEach(function(key) {
-        helper.define(wrapper, key, props[key], { enumerable: true });
+        Object.defineProperty(wrapper, key, {
+          value: props[key],
+          enumerable: true,
+        });
       });
       return wrapper;
     };
