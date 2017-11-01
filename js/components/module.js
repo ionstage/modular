@@ -34,9 +34,6 @@
 
     this.onpoint = Module.prototype.onpoint.bind(this);
 
-    this.dragPortPlugStarter = props.dragPortPlugStarter;
-    this.dragPortPlugMover = props.dragPortPlugMover;
-    this.dragPortPlugEnder = props.dragPortPlugEnder;
     this.dragPortSocketStarter = props.dragPortSocketStarter;
     this.dragPortSocketMover = props.dragPortSocketMover;
     this.dragPortSocketEnder = props.dragPortSocketEnder;
@@ -588,13 +585,13 @@
     onstart: function(x, y, event, context) {
       context.port = this.targetPort(dom.target(event));
       context.context = {};
-      this.dragPortPlugStarter(context.port, context.context);
+      this.emit('plugdragstart', context.port, context.context);
     },
     onmove: function(dx, dy, event, context) {
-      this.dragPortPlugMover(context.port, dx, dy, context.context);
+      this.emit('plugdragmove', context.port, dx, dy, context.context);
     },
     onend: function(dx, dy, event, context) {
-      this.dragPortPlugEnder(context.port, context.context);
+      this.emit('plugdragend', context.port, context.context);
     },
   };
 
