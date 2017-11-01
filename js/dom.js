@@ -288,9 +288,8 @@
 
       var onstart = this.onstart;
       if (typeof onstart === 'function') {
-        var rect = dom.rect(this.element);
-        var x = dom.clientX(event) - rect.left + dom.scrollLeft(this.element);
-        var y = dom.clientY(event) - rect.top + dom.scrollTop(this.element);
+        var x = dom.clientX(event) - dom.offsetLeft(this.element);
+        var y = dom.clientY(event) - dom.offsetTop(this.element);
         onstart(x, y, event, this.context);
       }
 
