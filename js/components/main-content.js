@@ -15,10 +15,6 @@
     this.draggingWires = [];
     this.lockRelations = [];
     this.bindings = [];
-
-    this.dragPortSocketStarter = MainContent.prototype.dragPortSocketStarter.bind(this);
-    this.dragPortSocketMover = MainContent.prototype.dragPortSocketMover.bind(this);
-    this.dragPortSocketEnder = MainContent.prototype.dragPortSocketEnder.bind(this);
   });
 
   MainContent.prototype.retainerElement = function() {
@@ -182,9 +178,6 @@
   MainContent.prototype.createModule = function(props) {
     var module = new Module(helper.extend(helper.clone(props), {
       parentElement: this.containerElement(),
-      dragPortSocketStarter: this.dragPortSocketStarter,
-      dragPortSocketMover: this.dragPortSocketMover,
-      dragPortSocketEnder: this.dragPortSocketEnder,
     }));
     module.on('delete', this.ondelete.bind(this));
     module.on('point', this.onpoint.bind(this));
@@ -195,6 +188,9 @@
     module.on('plugdragstart', this.onplugdragstart.bind(this));
     module.on('plugdragmove', this.onplugdragmove.bind(this));
     module.on('plugdragend', this.onplugdragend.bind(this));
+    module.on('socketdragstart', this.onsocketdragstart.bind(this));
+    module.on('socketdragmove', this.onsocketdragmove.bind(this));
+    module.on('socketdragend', this.onsocketdragend.bind(this));
     return module;
   };
 
@@ -486,7 +482,7 @@
     this.removeDraggingWire(sourcePort, context.targetPort, context.wire);
   };
 
-  MainContent.prototype.dragPortSocketStarter = function(targetPort, context) {
+  MainContent.prototype.onsocketdragstart = function(targetPort, context) {
     var wire = this.attachedWire(targetPort);
     var sourcePort = this.connectedSourcePort(targetPort);
 
@@ -501,11 +497,11 @@
     context.targetPort = targetPort;
   };
 
-  MainContent.prototype.dragPortSocketMover = function(targetPort, dx, dy, context) {
+  MainContent.prototype.onsocketdragmove = function(targetPort, dx, dy, context) {
     this.onplugdragmove(context.sourcePort, dx, dy, context);
   };
 
-  MainContent.prototype.dragPortSocketEnder = function(targetPort, context) {
+  MainContent.prototype.onsocketdragend = function(targetPort, context) {
     this.onplugdragend(context.sourcePort, context);
   };
 
