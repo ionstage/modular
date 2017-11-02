@@ -34,17 +34,13 @@
     this.sidebar.disabled(!this.sidebar.disabled());
   };
 
-  Body.prototype.currentDemoName = function() {
-    return (dom.urlQuery(dom.location()).demo || '');
-  };
-
   Body.prototype.demoUrl = function(name) {
     return 'demos/' + name + '.json';
   };
 
   Body.prototype.load = function() {
     return this.sidebar.loadEntries().then(function() {
-      return this.loadDemo(this.currentDemoName());
+      return this.loadDemo();
     }.bind(this));
   };
 
@@ -61,7 +57,8 @@
     }, point), entry.visiblePortNames);
   };
 
-  Body.prototype.loadDemo = function(name) {
+  Body.prototype.loadDemo = function() {
+    var name = dom.urlQuery(dom.location()).demo;
     return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
   };
 
