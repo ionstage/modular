@@ -131,7 +131,7 @@
   };
 
   SidebarModule.HTML_TEXT = [
-    '<div class="sidebar-module">',
+    '<div class="sidebar-module hoverable">',
       '<div class="sidebar-module-header sidebar-module-item"></div>',
       '<div class="sidebar-module-content sidebar-module-item"></div>',
     '</div>',

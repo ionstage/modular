@@ -12,6 +12,10 @@ body {
   user-select: none;
 }
 
+body:not(.hover-disabled) .hoverable:hover {
+  opacity: 0.6;
+}
+
 body.dragging .embed {
   pointer-events: none;
 }

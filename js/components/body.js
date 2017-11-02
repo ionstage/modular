@@ -8,6 +8,7 @@
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
   var Body = Component.inherits(function(props) {
+    this.hoverDisabled = this.prop(false);
     this.dragCount = this.prop(0);
     this.sidebar = new Sidebar({ element: this.childElement('.sidebar') });
     this.main = new Main({ element: this.childElement('.main') });
@@ -75,12 +76,17 @@
   };
 
   Body.prototype.onredraw = function() {
+    this.redrawBy('hoverDisabled', function(hoverDisabled) {
+      dom.toggleClass(this.element(), 'hover-disabled', hoverDisabled);
+    });
+
     this.redrawBy('isDragging', function(isDragging) {
       dom.toggleClass(this.element(), 'dragging', isDragging);
     });
   };
 
   Body.prototype.onready = function() {
+    this.hoverDisabled(dom.supportsTouch());
     this.disabled(true);
     this.load().catch(function(e) {
       alert(e);
