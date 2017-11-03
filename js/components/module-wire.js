@@ -22,11 +22,12 @@
     return dom.childNode(this.element(), 0);
   };
 
-  ModuleWire.prototype.handlePosition = function() {
-    return {
-      x: this.targetX() - this.handleWidth() / 2,
-      y: this.targetY() - this.handleWidth() / 2,
-    };
+  ModuleWire.prototype.handleX = function() {
+    return this.targetX() - this.handleWidth() / 2;
+  };
+
+  ModuleWire.prototype.handleY = function() {
+    return this.targetY() - this.handleWidth() / 2;
   };
 
   ModuleWire.prototype.render = function() {
@@ -59,8 +60,8 @@
       dom.toggleClass(this.handleElement(), 'hide', !handleVisible);
     });
 
-    this.redrawBy('handlePosition', function(handlePosition) {
-      dom.translate(this.handleElement(), handlePosition.x, handlePosition.y);
+    this.redrawBy('handleX', 'handleY', function(handleX, handleY) {
+      dom.translate(this.handleElement(), handleX, handleY);
     });
   };
 
