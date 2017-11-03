@@ -12,6 +12,10 @@
   width: 240px;
 }
 
+.sidebar-module.active {
+  opacity: 0.6;
+}
+
 .sidebar-module.clone {
   background-color: #ffa726;
   border-color: #ffa726;

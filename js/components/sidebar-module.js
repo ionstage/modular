@@ -8,6 +8,7 @@
     this.title = this.prop(props.title);
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
+    this.isActive = this.prop(false);
 
     this.draggable = null;
 
@@ -69,11 +70,16 @@
   };
 
   SidebarModule.prototype.onredraw = function() {
+    this.redrawBy('isActive', function(isActive) {
+      dom.toggleClass(this.element(), 'active', isActive);
+    });
+
     this.redrawTitle();
     this.redrawContent();
   };
 
   SidebarModule.prototype.onstart = function(x, y, event, context) {
+    this.isActive(true);
     if (dom.supportsTouch()) {
       context.dragging = false;
       context.timer = setTimeout(this.ondragstart, 300, x, y, event, context);
@@ -87,12 +93,14 @@
     if (context.dragging) {
       this.ondragmove(dx, dy, event, context);
     } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+      this.isActive(false);
       clearTimeout(context.timer);
       context.timer = null;
     }
   };
 
   SidebarModule.prototype.onend = function(dx, dy, event, context) {
+    this.isActive(false);
     if (context.dragging) {
       this.ondragend(dx, dy, event, context);
     } else if (context.timer) {
