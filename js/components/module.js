@@ -48,12 +48,12 @@
     return (circuitModule ? circuitModule.get(name) : null);
   };
 
-  Module.prototype.diagonalPoint = function() {
-    var rect = dom.rect(this.element());
-    return {
-      x: this.x() + rect.width + this.rightPadding(),
-      y: this.y() + rect.height,
-    };
+  Module.prototype.bottomRightX = function() {
+    return this.x() + dom.rect(this.element()).width + this.rightPadding();
+  };
+
+  Module.prototype.bottomRightY = function() {
+    return this.y() + dom.rect(this.element()).height;
   };
 
   Module.prototype.rightPadding = function() {

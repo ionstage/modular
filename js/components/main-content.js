@@ -43,9 +43,8 @@
   MainContent.prototype.diagonalPoint = function() {
     var point = { x: 0, y: 0 };
     this.modules.forEach(function(module) {
-      var diagonalPoint = module.diagonalPoint();
-      point.x = Math.max(diagonalPoint.x, point.x);
-      point.y = Math.max(diagonalPoint.y, point.y);
+      point.x = Math.max(module.bottomRightX(), point.x);
+      point.y = Math.max(module.bottomRightY(), point.y);
     });
     return point;
   };
