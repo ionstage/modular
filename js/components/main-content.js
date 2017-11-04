@@ -331,7 +331,7 @@
     helper.remove(this.draggingWires, wire);
     this.updateDragHighlight(sourcePort);
 
-    // keep the element of wire if the target unit is connected with the wire
+    // keep the element of dragging wire connected to the target port
     if (targetPort) {
       this.updateDragHighlight(targetPort);
     } else {
