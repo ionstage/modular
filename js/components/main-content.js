@@ -40,20 +40,22 @@
     };
   };
 
-  MainContent.prototype.diagonalPoint = function() {
-    var point = { x: 0, y: 0 };
-    this.modules.forEach(function(module) {
-      point.x = Math.max(module.bottomRightX(), point.x);
-      point.y = Math.max(module.bottomRightY(), point.y);
-    });
-    return point;
+  MainContent.prototype.bottomRightX = function() {
+    return this.modules.reduce(function(value, module) {
+      return Math.max(module.bottomRightX(), value);
+    }, 0);
+  };
+
+  MainContent.prototype.bottomRightY = function() {
+    return this.modules.reduce(function(value, module) {
+      return Math.max(module.bottomRightY(), value);
+    }, 0);
   };
 
   MainContent.prototype.retainerPosition = function() {
-    var diagonalPoint = this.diagonalPoint();
     return {
-      x: diagonalPoint.x - 1 + MainContent.RETAINER_PADDING,
-      y: diagonalPoint.y - 1 + MainContent.RETAINER_PADDING,
+      x: this.bottomRightX() - 1 + MainContent.RETAINER_PADDING,
+      y: this.bottomRightY() - 1 + MainContent.RETAINER_PADDING,
     };
   };
 
