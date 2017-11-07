@@ -52,11 +52,12 @@
     }, 0);
   };
 
-  MainContent.prototype.retainerPosition = function() {
-    return {
-      x: this.bottomRightX() - 1 + MainContent.RETAINER_PADDING,
-      y: this.bottomRightY() - 1 + MainContent.RETAINER_PADDING,
-    };
+  MainContent.prototype.retainerX = function() {
+    return this.bottomRightX() - 1 + MainContent.RETAINER_PADDING;
+  };
+
+  MainContent.prototype.retainerY = function() {
+    return this.bottomRightY() - 1 + MainContent.RETAINER_PADDING;
   };
 
   MainContent.prototype.wireHandleContainerZIndex = function() {
@@ -379,8 +380,8 @@
   };
 
   MainContent.prototype.redrawRetainer = function() {
-    this.redrawBy('retainerPosition', function(retainerPosition) {
-      dom.translate(this.retainerElement(), retainerPosition.x, retainerPosition.y);
+    this.redrawBy('retainerX', 'retainerY', function(retainerX, retainerY) {
+      dom.translate(this.retainerElement(), retainerX, retainerY);
     });
   };
 
