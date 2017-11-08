@@ -23,7 +23,7 @@
 
   Component.prototype.needsUpdate = function(keys) {
     return keys.some(function(key) {
-      return !helper.equal(this[key](), this.cache[key]);
+      return (this[key]() !== this.cache[key]);
     }.bind(this));
   };
 

@@ -34,22 +34,6 @@
     return ctor;
   };
 
-  helper.equal = function(a, b) {
-    if (a === b) {
-      return true;
-    }
-    if (a == null || b == null || typeof a !== 'object' || typeof b !== 'object') {
-      return (a === b);
-    }
-    var keys = Object.keys(a);
-    if (keys.length !== Object.keys(b).length) {
-      return false;
-    }
-    return keys.every(function(key) {
-      return (b.hasOwnProperty(key) && helper.equal(a[key], b[key]));
-    });
-  };
-
   helper.toArray = function(value) {
     return Array.prototype.slice.call(value);
   };
