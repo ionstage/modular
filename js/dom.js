@@ -3,11 +3,6 @@
 
   var dom = {};
 
-  dom.export = function(key, value) {
-    var g = (typeof global !== 'undefined' ? global : window);
-    Object.defineProperty(g, key, { value: value });
-  };
-
   dom.find = function(el, selector) {
     return el.querySelector(selector);
   };
