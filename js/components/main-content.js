@@ -178,9 +178,7 @@
   };
 
   MainContent.prototype.createModule = function(props) {
-    var module = new Module(helper.extend(helper.clone(props), {
-      parentElement: this.containerElement(),
-    }));
+    var module = new Module(props);
     module.on('delete', this.ondelete.bind(this));
     module.on('point', this.onpoint.bind(this));
     module.on('porttoggle', this.onporttoggle.bind(this));
@@ -211,6 +209,7 @@
 
   MainContent.prototype.loadModule = function(props, visiblePortNames) {
     var module = this.createModule(props);
+    module.parentElement(this.containerElement());
     this.modules.push(module);
     this.updateZIndex();
     this.updateWireHandleContainer();
