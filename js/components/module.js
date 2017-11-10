@@ -252,6 +252,14 @@
     dom.writeContent(this.componentElement(), contentText);
   };
 
+  Module.prototype.registerComponentLoadListener = function() {
+    dom.on(this.componentContentWindow(), 'load', function() {
+      setTimeout(function() {
+        this.postMessage(this.name, location.protocol + '//' + location.host);
+      }.bind(this), 0);
+    });
+  };
+
   Module.prototype.resetComponentHeight = function() {
     dom.fillContentHeight(this.componentElement());
     this.portListTop(this.headerHeight() + dom.rect(this.componentElement()).height + 1);
@@ -278,6 +286,7 @@
       url: this.url(),
     }).then(function(text) {
       this.setComponentContent(text, this.messageData());
+      this.registerComponentLoadListener();
       return Promise.race([
         new Promise(this.registerMessageListener.bind(this)),
         new Promise(function(resolve, reject) {
