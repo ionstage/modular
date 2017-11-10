@@ -247,13 +247,6 @@
     this.messageListenable = null;
   };
 
-  Module.prototype.setModularModule = function() {
-    this.componentContentWindow().modular = {
-      Module: CircuitModule.ModularModule,
-      exports: null,
-    };
-  };
-
   Module.prototype.setComponentContent = function(contentText, messageData) {
     dom.name(this.componentContentWindow(), messageData);
     dom.writeContent(this.componentElement(), contentText);
@@ -284,7 +277,6 @@
       type: 'GET',
       url: this.url(),
     }).then(function(text) {
-      this.setModularModule();
       this.setComponentContent(text, this.messageData());
       return Promise.race([
         new Promise(this.registerMessageListener.bind(this)),
