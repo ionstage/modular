@@ -19,7 +19,6 @@
     this.portListTop = this.prop(0);
     this.circuitModule = this.prop(null);
     this.eventCircuitModule = this.prop(null);
-    this.messageData = this.prop(helper.randomString(7));
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
@@ -29,7 +28,6 @@
     this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
 
-    this.messageListenable = null;
     this.draggable = null;
 
     this.onpoint = Module.prototype.onpoint.bind(this);
@@ -232,31 +230,13 @@
     dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
   };
 
-  Module.prototype.registerMessageListener = function(resolve, reject) {
-    this.messageListenable = new dom.Listenable({
-      element: this.componentContentWindow(),
-      type: 'message',
-      callback: Module.prototype.onmessage.bind(this),
-      resolve: resolve,
-      reject: reject,
-    });
-  };
-
-  Module.prototype.unregisterMessageListener = function() {
-    this.messageListenable.destroy();
-    this.messageListenable = null;
-  };
-
-  Module.prototype.setComponentContent = function(contentText, messageData) {
-    dom.name(this.componentContentWindow(), messageData);
+  Module.prototype.setComponentContent = function(contentText) {
     dom.writeContent(this.componentElement(), contentText);
   };
 
-  Module.prototype.registerComponentLoadListener = function() {
+  Module.prototype.registerComponentLoadListener = function(resolve, reject) {
     dom.on(this.componentContentWindow(), 'load', function() {
-      setTimeout(function() {
-        this.postMessage(this.name, location.protocol + '//' + location.host);
-      }.bind(this), 0);
+      resolve();
     });
   };
 
@@ -285,10 +265,9 @@
       type: 'GET',
       url: this.url(),
     }).then(function(text) {
-      this.setComponentContent(text, this.messageData());
-      this.registerComponentLoadListener();
+      this.setComponentContent(text);
       return Promise.race([
-        new Promise(this.registerMessageListener.bind(this)),
+        new Promise(this.registerComponentLoadListener.bind(this)),
         new Promise(function(resolve, reject) {
           setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
         }),
@@ -301,10 +280,8 @@
       this.eventCircuitModule(this.createEventCircuitModule());
       this.bindEventCircuitModule();
       this.registerComponentPointListener();
-      this.unregisterMessageListener();
       this.isLoading(false);
     }.bind(this)).catch(function(e) {
-      this.unregisterMessageListener();
       this.isError(true);
       throw e;
     }.bind(this));
@@ -460,15 +437,6 @@
 
     listener.onend.call(this, dx, dy, event, context);
     this.emit('dragend');
-  };
-
-  Module.prototype.onmessage = function(event) {
-    if (dom.origin(event) !== dom.urlOrigin(dom.location())) {
-      throw new Error('Invalid content origin');
-    }
-    if (dom.messageData(event) !== this.messageData()) {
-      throw new Error('Invalid content data');
-    }
   };
 
   Module.prototype.onpoint = function() {
