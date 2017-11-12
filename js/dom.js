@@ -286,12 +286,9 @@
       this.startPageX = dom.pageX(event);
       this.startPageY = dom.pageY(event);
 
-      var onstart = this.onstart;
-      if (typeof onstart === 'function') {
-        var x = dom.clientX(event) - dom.offsetLeft(this.element);
-        var y = dom.clientY(event) - dom.offsetTop(this.element);
-        onstart(x, y, event, this.context);
-      }
+      var x = dom.clientX(event) - dom.offsetLeft(this.element);
+      var y = dom.clientY(event) - dom.offsetTop(this.element);
+      this.onstart.call(null, x, y, event, this.context);
 
       dom.on(document, dom.eventType('move'), this.move);
       dom.on(document, dom.eventType('end'), this.end);
@@ -304,12 +301,9 @@
         return;
       }
 
-      var onmove = this.onmove;
-      if (typeof onmove === 'function') {
-        var dx = dom.pageX(event) - this.startPageX;
-        var dy = dom.pageY(event) - this.startPageY;
-        onmove(dx, dy, event, this.context);
-      }
+      var dx = dom.pageX(event) - this.startPageX;
+      var dy = dom.pageY(event) - this.startPageY;
+      this.onmove.call(null, dx, dy, event, this.context);
     };
 
     var end = function(event) {
@@ -322,12 +316,9 @@
       dom.off(document, dom.eventType('move'), this.move);
       dom.off(document, dom.eventType('end'), this.end);
 
-      var onend = this.onend;
-      if (typeof onend === 'function') {
-        var dx = dom.pageX(event) - this.startPageX;
-        var dy = dom.pageY(event) - this.startPageY;
-        onend(dx, dy, event, this.context);
-      }
+      var dx = dom.pageX(event) - this.startPageX;
+      var dy = dom.pageY(event) - this.startPageY;
+      this.onend.call(null, dx, dy, event, this.context);
 
       this.lock = false;
     };
