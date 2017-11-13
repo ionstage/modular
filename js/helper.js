@@ -58,6 +58,15 @@
     }, {});
   };
 
+  helper.omit = function(obj, keys) {
+    return Object.keys(obj).reduce(function(ret, key) {
+      if (keys.indexOf(key) === -1) {
+        ret[key] = obj[key];
+      }
+      return ret;
+    }, {});
+  };
+
   helper.dig = function() {
     return helper.toArray(arguments).reduce(function(obj, key) {
       return (typeof obj === 'object' ? obj[key] : null);
