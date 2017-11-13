@@ -42,14 +42,7 @@
   CircuitModule.Member = (function() {
     var Member = function(props) {
       this.callee = circuit[props.type](props.arg);
-      return this.wrapper(helper.extend(this.defaults(), props));
-    };
-
-    Member.prototype.defaults = function() {
-      return {
-        plugDisabled: false,
-        socketDisabled: false,
-      };
+      return this.wrapper(helper.omit(props, ['arg']));
     };
 
     Member.prototype.call = function() {
@@ -58,23 +51,27 @@
 
     Member.prototype.wrapper = function(props) {
       var wrapper = new Wrapper(this, Member.prototype.call.bind(this));
-      Member.KEYS.forEach(function(key) {
-        Object.defineProperty(wrapper, key, {
+      return Object.keys(props).reduce(function(wrapper, key) {
+        return Object.defineProperty(wrapper, key, {
           value: props[key],
           enumerable: true,
         });
-      });
-      return wrapper;
+      }, wrapper);
     };
-
-    Member.KEYS = ['label', 'name', 'type', 'plugDisabled', 'socketDisabled'];
 
     return Member;
   })();
 
   CircuitModule.ModularModule = function(members) {
     return new CircuitModule(members.map(function(member) {
-      return new CircuitModule.Member(member);
+      return new CircuitModule.Member({
+        label: member.label,
+        name: member.name,
+        type: member.type,
+        arg: (member.hasOwnProperty('arg') ? member.arg : void 0),
+        plugDisabled: !!member.plugDisabled,
+        socketDisabled: !!member.socketDisabled,
+      });
     }));
   };
 
