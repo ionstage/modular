@@ -21,9 +21,9 @@
     return this.loadPackageNames().then(function(packageNames) {
       return Promise.all(packageNames.map(function(packageName) {
         return this.loadEntries(packageName);
-      }.bind(this))).then(function(results) {
-        this.entries = helper.flatten(results);
-      }.bind(this));
+      }.bind(this)));
+    }.bind(this)).then(function(results) {
+      this.entries = helper.flatten(results);
     }.bind(this));
   };
 
