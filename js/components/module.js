@@ -768,8 +768,8 @@
       };
 
       Option.prototype.onredraw = function() {
-        this.redrawBy('label', function(value) {
-          dom.text(this.element(), value);
+        this.redrawBy('label', function(label) {
+          dom.text(this.element(), label);
         });
 
         this.redrawBy('name', function(name) {

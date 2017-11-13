@@ -71,8 +71,8 @@
   };
 
   ModulePort.prototype.onredraw = function() {
-    this.redrawBy('type', function(value) {
-      dom.data(this.element(), 'type', value);
+    this.redrawBy('type', function(type) {
+      dom.data(this.element(), 'type', type);
     });
 
     this.redrawBy('top', function(top) {
@@ -130,8 +130,8 @@
     });
 
     Content.prototype.onredraw = function() {
-      this.redrawBy('label', function(value) {
-        dom.text(this.element(), value);
+      this.redrawBy('label', function(label) {
+        dom.text(this.element(), label);
       });
     };
 
