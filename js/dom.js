@@ -257,9 +257,9 @@
       this.onstart = props.onstart;
       this.onmove = props.onmove;
       this.onend = props.onend;
-      this.start = start.bind(this);
-      this.move = move.bind(this);
-      this.end = end.bind(this);
+      this.start = this.start.bind(this);
+      this.move = this.move.bind(this);
+      this.end = this.end.bind(this);
       this.lock = false;
       this.identifier = null;
       this.startPageX = 0;
@@ -276,7 +276,7 @@
       this.context = null;
     };
 
-    var start = function(event) {
+    Draggable.prototype.start = function(event) {
       if (this.lock) {
         return;
       }
@@ -294,7 +294,7 @@
       dom.on(document, dom.eventType('end'), this.end);
     };
 
-    var move = function(event) {
+    Draggable.prototype.move = function(event) {
       var identifier = this.identifier;
 
       if (identifier && identifier !== dom.identifier(event)) {
@@ -306,7 +306,7 @@
       this.onmove.call(null, dx, dy, event, this.context);
     };
 
-    var end = function(event) {
+    Draggable.prototype.end = function(event) {
       var identifier = this.identifier;
 
       if (identifier && identifier !== dom.identifier(event)) {
