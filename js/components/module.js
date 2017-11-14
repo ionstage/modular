@@ -158,10 +158,10 @@
 
   Module.prototype.createPorts = function() {
     return this.circuitModule().getAll().map(function(member) {
-      return new ModulePort(helper.extend(helper.clone(member), {
+      return new ModulePort(helper.extend({
         offsetX: this.portOffsetX(),
         offsetY: this.portOffsetY(),
-      }));
+      }, member));
     }.bind(this));
   };
 
