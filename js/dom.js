@@ -295,9 +295,7 @@
     };
 
     Draggable.prototype.move = function(event) {
-      var identifier = this.identifier;
-
-      if (identifier && identifier !== dom.identifier(event)) {
+      if (this.identifier && this.identifier !== dom.identifier(event)) {
         return;
       }
 
@@ -307,9 +305,7 @@
     };
 
     Draggable.prototype.end = function(event) {
-      var identifier = this.identifier;
-
-      if (identifier && identifier !== dom.identifier(event)) {
+      if (this.identifier && this.identifier !== dom.identifier(event)) {
         return;
       }
 
