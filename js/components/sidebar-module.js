@@ -11,10 +11,6 @@
     this.isActive = this.prop(false);
 
     this.draggable = null;
-
-    this.ondragstart = SidebarModule.prototype.ondragstart.bind(this);
-    this.ondragmove = SidebarModule.prototype.ondragmove.bind(this);
-    this.ondragend = SidebarModule.prototype.ondragend.bind(this);
   });
 
   SidebarModule.prototype.headerElement = function() {
@@ -82,7 +78,7 @@
     this.isActive(true);
     if (dom.supportsTouch()) {
       context.dragging = false;
-      context.timer = setTimeout(this.ondragstart, 300, x, y, event, context);
+      context.timer = setTimeout(this.ondragstart.bind(this), 300, x, y, event, context);
     } else {
       dom.cancel(event);
       this.ondragstart(x, y, event, context);
