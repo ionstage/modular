@@ -31,6 +31,14 @@
     this.main.disabled(value);
   };
 
+  Body.prototype.dropModule = function(name, pageX, pageY) {
+    var x = this.main.contentLocalX(pageX);
+    var y = this.main.contentLocalY(pageY);
+    if (x >= 0 && y >= 0) {
+      this.loadModule(this.sidebar.entry(name), x, y);
+    }
+  };
+
   Body.prototype.toggleSidebar = function() {
     this.sidebar.disabled(!this.sidebar.disabled());
   };
@@ -45,22 +53,18 @@
     }.bind(this));
   };
 
-  Body.prototype.loadModule = function(name, x, y) {
-    var point = this.main.contentLocalPoint({ x: x, y: y });
-    if (point.x < 0 || point.y < 0) {
-      return;
-    }
-
-    var entry = this.sidebar.entry(name);
-    this.main.loadModule(helper.extend({
-      title: entry.label,
-      name: name,
-    }, point), entry.visiblePortNames);
-  };
-
   Body.prototype.loadDemo = function() {
     var name = dom.urlQuery(dom.location()).demo;
     return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
+  };
+
+  Body.prototype.loadModule = function(entry, x, y) {
+    this.main.loadModule({
+      title: entry.label,
+      name: entry.name,
+      x: x,
+      y: y,
+    }, entry.visiblePortNames);
   };
 
   Body.prototype.oninit = function() {
@@ -103,8 +107,8 @@
     this.decrementDragCount();
   };
 
-  Body.prototype.ondrop = function(name, x, y) {
-    this.loadModule(name, x, y);
+  Body.prototype.ondrop = function(name, pageX, pageY) {
+    this.dropModule(name, pageX, pageY);
   };
 
   Body.prototype.onsidebartoggle = function() {

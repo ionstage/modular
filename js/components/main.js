@@ -23,8 +23,12 @@
     return (this.isFullWidth() ? 'expand' : 'collapse');
   };
 
-  Main.prototype.contentLocalPoint = function(point) {
-    return this.content.localPoint(point);
+  Main.prototype.contentLocalX = function(pageX) {
+    return this.content.localX(pageX);
+  };
+
+  Main.prototype.contentLocalY = function(pageY) {
+    return this.content.localY(pageY);
   };
 
   Main.prototype.toggleSidebar = function() {

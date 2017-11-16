@@ -73,8 +73,8 @@
     this.emit('dragend');
   };
 
-  Sidebar.prototype.ondrop = function(name, x, y) {
-    this.emit('drop', name, x, y);
+  Sidebar.prototype.ondrop = function(name, pageX, pageY) {
+    this.emit('drop', name, pageX, pageY);
   };
 
   if (typeof module !== 'undefined' && module.exports) {

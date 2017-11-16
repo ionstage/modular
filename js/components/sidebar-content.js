@@ -67,8 +67,8 @@
     this.emit('dragend');
   };
 
-  SidebarContent.prototype.ondrop = function(name, x, y) {
-    this.emit('drop', name, x, y);
+  SidebarContent.prototype.ondrop = function(name, pageX, pageY) {
+    this.emit('drop', name, pageX, pageY);
   };
 
   SidebarContent.Scrollable = (function() {

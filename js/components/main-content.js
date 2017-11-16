@@ -33,11 +33,12 @@
     return this.childElement('.module-wire-handle-container');
   };
 
-  MainContent.prototype.localPoint = function(point) {
-    return {
-      x: point.x - dom.offsetLeft(this.element()),
-      y: point.y - dom.offsetTop(this.element()),
-    };
+  MainContent.prototype.localX = function(pageX) {
+    return pageX - dom.offsetLeft(this.element())
+  };
+
+  MainContent.prototype.localY = function(pageY) {
+    return pageY - dom.offsetTop(this.element());
   };
 
   MainContent.prototype.bottomRightX = function() {
