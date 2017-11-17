@@ -9,7 +9,7 @@
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
     this.isActive = this.prop(false);
-    this.draggable = new SidebarModule.Draggable({ module: this });
+    this.draggable = new SidebarModule.Draggable({ component: this });
   });
 
   SidebarModule.prototype.headerElement = function() {
@@ -82,22 +82,9 @@
   })();
 
   SidebarModule.Draggable = (function() {
-    var Draggable = function(props) {
-      this.module = props.module;
-      this.draggable = new dom.Draggable({ element: this.module.element() });
-    };
-
-    Draggable.prototype.enable = function() {
-      this.draggable.enable({
-        onstart: this.onstart.bind(this),
-        onmove: this.onmove.bind(this),
-        onend: this.onend.bind(this),
-      });
-    };
-
-    Draggable.prototype.disable = function() {
-      this.draggable.disable();
-    };
+    var Draggable = Component.Draggable.inherits(function(props) {
+      this.module = props.component;
+    });
 
     Draggable.prototype.onstart = function(x, y, event, context) {
       this.module.isActive(true);

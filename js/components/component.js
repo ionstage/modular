@@ -131,6 +131,41 @@
     return ctor;
   };
 
+  Component.Draggable = (function() {
+    var Draggable = function(props) {
+      this.component = props.component;
+      this.draggable = new dom.Draggable({ element: this.component.element() });
+    };
+
+    Draggable.prototype.enable = function() {
+      this.draggable.enable({
+        onstart: this.onstart.bind(this),
+        onmove: this.onmove.bind(this),
+        onend: this.onend.bind(this),
+      });
+    };
+
+    Draggable.prototype.disable = function() {
+      this.draggable.disable();
+    };
+
+    Draggable.prototype.onstart = function(x, y, event, context) {};
+
+    Draggable.prototype.onmove = function(dx, dy, event, context) {};
+
+    Draggable.prototype.onend = function(dx, dy, event, context) {};
+
+    Draggable.inherits = function(initializer) {
+      var superCtor = this;
+      return helper.inherits(function(props) {
+        superCtor.call(this, props);
+        initializer.call(this, props);
+      }, superCtor);
+    };
+
+    return Draggable;
+  })();
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Component;
   } else {

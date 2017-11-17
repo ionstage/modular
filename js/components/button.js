@@ -7,7 +7,7 @@
   var Button = Component.inherits(function(props) {
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
-    this.draggable = new Button.Draggable({ button: this });
+    this.draggable = new Button.Draggable({ component: this });
   });
 
   Button.prototype.oninit = function() {
@@ -25,18 +25,9 @@
   };
 
   Button.Draggable = (function() {
-    var Draggable = function(props) {
-      this.button = props.button;
-      this.draggable = new dom.Draggable({ element: this.button.element() });
-    };
-
-    Draggable.prototype.enable = function() {
-      this.draggable.enable({
-        onstart: this.onstart.bind(this),
-        onmove: this.onmove.bind(this),
-        onend: this.onend.bind(this),
-      });
-    };
+    var Draggable = Component.Draggable.inherits(function(props) {
+      this.button = props.component;
+    });
 
     Draggable.prototype.onstart = function(x, y, event, context) {
       context.target = dom.target(event);

@@ -27,7 +27,7 @@
 
     this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
-    this.draggable = new Module.Draggable({ module: this });
+    this.draggable = new Module.Draggable({ component: this });
 
     this.onpoint = Module.prototype.onpoint.bind(this);
   });
@@ -769,22 +769,9 @@
   })();
 
   Module.Draggable = (function() {
-    var Draggable = function(props) {
-      this.module = props.module;
-      this.draggable = new dom.Draggable({ element: this.module.element() });
-    };
-
-    Draggable.prototype.enable = function() {
-      this.draggable.enable({
-        onstart: this.onstart.bind(this),
-        onmove: this.onmove.bind(this),
-        onend: this.onend.bind(this),
-      });
-    };
-
-    Draggable.prototype.disable = function() {
-      this.draggable.disable();
-    };
+    var Draggable = Component.Draggable.inherits(function(props) {
+      this.module = props.component;
+    });
 
     Draggable.prototype.onstart = function(x, y, event, context) {
       var listener = this.module.dragListener(dom.target(event));
