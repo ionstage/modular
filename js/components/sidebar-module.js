@@ -9,8 +9,7 @@
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
     this.isActive = this.prop(false);
-
-    this.draggable = null;
+    this.draggable = new SidebarModule.Draggable({ module: this });
   });
 
   SidebarModule.prototype.headerElement = function() {
@@ -19,20 +18,6 @@
 
   SidebarModule.prototype.contentElement = function() {
     return this.childElement('.sidebar-module-content');
-  };
-
-  SidebarModule.prototype.registerDragListener = function() {
-    this.draggable = new dom.Draggable({
-      element: this.element(),
-      onstart: SidebarModule.prototype.onstart.bind(this),
-      onmove: SidebarModule.prototype.onmove.bind(this),
-      onend: SidebarModule.prototype.onend.bind(this),
-    });
-  };
-
-  SidebarModule.prototype.unregisterDragListener = function() {
-    this.draggable.destroy();
-    this.draggable = null;
   };
 
   SidebarModule.prototype.render = function() {
@@ -58,11 +43,11 @@
   };
 
   SidebarModule.prototype.onappend = function() {
-    this.registerDragListener();
+    this.draggable.enable();
   };
 
   SidebarModule.prototype.onremove = function() {
-    this.unregisterDragListener();
+    this.draggable.disable();
   };
 
   SidebarModule.prototype.onredraw = function() {
@@ -72,66 +57,6 @@
 
     this.redrawTitle();
     this.redrawContent();
-  };
-
-  SidebarModule.prototype.onstart = function(x, y, event, context) {
-    this.isActive(true);
-    if (dom.supportsTouch()) {
-      context.dragging = false;
-      context.timer = setTimeout(this.ondragstart.bind(this), 300, x, y, event, context);
-    } else {
-      dom.cancel(event);
-      this.ondragstart(x, y, event, context);
-    }
-  };
-
-  SidebarModule.prototype.onmove = function(dx, dy, event, context) {
-    if (context.dragging) {
-      this.ondragmove(dx, dy, event, context);
-    } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
-      this.isActive(false);
-      clearTimeout(context.timer);
-      context.timer = null;
-    }
-  };
-
-  SidebarModule.prototype.onend = function(dx, dy, event, context) {
-    this.isActive(false);
-    if (context.dragging) {
-      this.ondragend(dx, dy, event, context);
-    } else if (context.timer) {
-      clearTimeout(context.timer);
-      context.timer = null;
-    }
-  };
-
-  SidebarModule.prototype.ondragstart = function(x, y, event, context) {
-    context.dragging = true;
-    context.timer = null;
-    context.x = dom.offsetLeft(this.element());
-    context.y = dom.offsetTop(this.element());
-
-    context.clone = new SidebarModule.Clone({
-      element: this.renderClone(),
-      parentElement: dom.body(),
-      x: context.x,
-      y: context.y,
-    });
-
-    context.clone.markDirty();
-    this.emit('dragstart');
-  };
-
-  SidebarModule.prototype.ondragmove = function(dx, dy, event, context) {
-    context.clone.x(context.x + dx);
-    context.clone.y(context.y + dy);
-  };
-
-  SidebarModule.prototype.ondragend = function(dx, dy, event, context) {
-    context.dragging = false;
-    context.clone.parentElement(null);
-    this.emit('dragend');
-    this.emit('drop', this.name(), context.x + dx, context.y + dy);
   };
 
   SidebarModule.HTML_TEXT = [
@@ -154,6 +79,87 @@
     };
 
     return Clone;
+  })();
+
+  SidebarModule.Draggable = (function() {
+    var Draggable = function(props) {
+      this.module = props.module;
+      this.draggable = new dom.Draggable({ element: this.module.element() });
+    };
+
+    Draggable.prototype.enable = function() {
+      this.draggable.enable({
+        onstart: this.onstart.bind(this),
+        onmove: this.onmove.bind(this),
+        onend: this.onend.bind(this),
+      });
+    };
+
+    Draggable.prototype.disable = function() {
+      this.draggable.disable();
+    };
+
+    Draggable.prototype.onstart = function(x, y, event, context) {
+      this.module.isActive(true);
+      if (dom.supportsTouch()) {
+        context.dragging = false;
+        context.timer = setTimeout(this.ondragstart.bind(this), 300, x, y, event, context);
+      } else {
+        dom.cancel(event);
+        this.ondragstart(x, y, event, context);
+      }
+    };
+
+    Draggable.prototype.onmove = function(dx, dy, event, context) {
+      if (context.dragging) {
+        this.ondragmove(dx, dy, event, context);
+      } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+        this.module.isActive(false);
+        clearTimeout(context.timer);
+        context.timer = null;
+      }
+    };
+
+    Draggable.prototype.onend = function(dx, dy, event, context) {
+      this.module.isActive(false);
+      if (context.dragging) {
+        this.ondragend(dx, dy, event, context);
+      } else if (context.timer) {
+        clearTimeout(context.timer);
+        context.timer = null;
+      }
+    };
+
+    Draggable.prototype.ondragstart = function(x, y, event, context) {
+      context.dragging = true;
+      context.timer = null;
+      context.x = dom.offsetLeft(this.module.element());
+      context.y = dom.offsetTop(this.module.element());
+
+      context.clone = new SidebarModule.Clone({
+        element: this.module.renderClone(),
+        parentElement: dom.body(),
+        x: context.x,
+        y: context.y,
+      });
+
+      context.clone.markDirty();
+      this.module.emit('dragstart');
+    };
+
+    Draggable.prototype.ondragmove = function(dx, dy, event, context) {
+      context.clone.x(context.x + dx);
+      context.clone.y(context.y + dy);
+    };
+
+    Draggable.prototype.ondragend = function(dx, dy, event, context) {
+      context.dragging = false;
+      context.clone.parentElement(null);
+      this.module.emit('dragend');
+      this.module.emit('drop', this.module.name(), context.x + dx, context.y + dy);
+    };
+
+    return Draggable;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {

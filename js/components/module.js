@@ -27,8 +27,7 @@
 
     this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
-
-    this.draggable = null;
+    this.draggable = new Module.Draggable({ module: this });
 
     this.onpoint = Module.prototype.onpoint.bind(this);
   });
@@ -208,20 +207,6 @@
     dom.off(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
   };
 
-  Module.prototype.registerDragListener = function() {
-    this.draggable = new dom.Draggable({
-      element: this.element(),
-      onstart: Module.prototype.onstart.bind(this),
-      onmove: Module.prototype.onmove.bind(this),
-      onend: Module.prototype.onend.bind(this),
-    });
-  };
-
-  Module.prototype.unregisterDragListener = function() {
-    this.draggable.destroy();
-    this.draggable = null;
-  };
-
   Module.prototype.registerPointListener = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
   };
@@ -362,13 +347,13 @@
   };
 
   Module.prototype.onappend = function() {
-    this.registerDragListener();
+    this.draggable.enable();
     this.portSelect.onappend();
     this.registerPointListener();
   };
 
   Module.prototype.onremove = function() {
-    this.unregisterDragListener();
+    this.draggable.disable();
     this.portSelect.onremove();
     this.unregisterPointListener();
     this.unbindEventCircuitModule();
@@ -403,40 +388,6 @@
 
   Module.prototype.onselect = function(name) {
     this.showPort(name);
-  };
-
-  Module.prototype.onstart = function(x, y, event, context) {
-    var listener = this.dragListener(dom.target(event));
-    context.listener = listener;
-
-    if (!listener) {
-      return;
-    }
-
-    dom.cancel(event);
-    listener.onstart.call(this, x, y, event, context);
-    this.emit('dragstart');
-  };
-
-  Module.prototype.onmove = function(dx, dy, event, context) {
-    var listener = context.listener;
-
-    if (!listener) {
-      return;
-    }
-
-    listener.onmove.call(this, dx, dy, event, context);
-  };
-
-  Module.prototype.onend = function(dx, dy, event, context) {
-    var listener = context.listener;
-
-    if (!listener) {
-      return;
-    }
-
-    listener.onend.call(this, dx, dy, event, context);
-    this.emit('dragend');
   };
 
   Module.prototype.onpoint = function() {
@@ -812,6 +763,61 @@
     };
 
     return Relation;
+  })();
+
+  Module.Draggable = (function() {
+    var Draggable = function(props) {
+      this.module = props.module;
+      this.draggable = new dom.Draggable({ element: this.module.element() });
+    };
+
+    Draggable.prototype.enable = function() {
+      this.draggable.enable({
+        onstart: this.onstart.bind(this),
+        onmove: this.onmove.bind(this),
+        onend: this.onend.bind(this),
+      });
+    };
+
+    Draggable.prototype.disable = function() {
+      this.draggable.disable();
+    };
+
+    Draggable.prototype.onstart = function(x, y, event, context) {
+      var listener = this.module.dragListener(dom.target(event));
+      context.listener = listener;
+
+      if (!listener) {
+        return;
+      }
+
+      dom.cancel(event);
+      listener.onstart.call(this.module, x, y, event, context);
+      this.module.emit('dragstart');
+    };
+
+    Draggable.prototype.onmove = function(dx, dy, event, context) {
+      var listener = context.listener;
+
+      if (!listener) {
+        return;
+      }
+
+      listener.onmove.call(this.module, dx, dy, event, context);
+    };
+
+    Draggable.prototype.onend = function(dx, dy, event, context) {
+      var listener = context.listener;
+
+      if (!listener) {
+        return;
+      }
+
+      listener.onend.call(this.module, dx, dy, event, context);
+      this.module.emit('dragend');
+    };
+
+    return Draggable;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {

@@ -254,26 +254,32 @@
   dom.Draggable = (function() {
     var Draggable = function(props) {
       this.element = props.element;
-      this.onstart = props.onstart;
-      this.onmove = props.onmove;
-      this.onend = props.onend;
       this.start = this.start.bind(this);
       this.move = this.move.bind(this);
       this.end = this.end.bind(this);
+      this.onstart = null;
+      this.onmove = null;
+      this.onend = null;
       this.lock = false;
       this.identifier = null;
       this.startPageX = 0;
       this.startPageY = 0;
       this.context = {};
+    };
 
+    Draggable.prototype.enable = function(listeners) {
+      this.onstart = listeners.onstart;
+      this.onmove = listeners.onmove;
+      this.onend = listeners.onend;
       dom.on(this.element, dom.eventType('start'), this.start);
     };
 
-    Draggable.prototype.destroy = function() {
+    Draggable.prototype.disable = function() {
       dom.off(this.element, dom.eventType('start'), this.start);
       dom.off(document, dom.eventType('move'), this.move);
       dom.off(document, dom.eventType('end'), this.end);
-      this.context = null;
+      this.lock = false;
+      this.context = {};
     };
 
     Draggable.prototype.start = function(event) {
