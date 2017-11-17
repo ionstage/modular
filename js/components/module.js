@@ -295,6 +295,9 @@
       return;
     }
 
+    port.offsetX(this.portOffsetX());
+    port.offsetY(this.portOffsetY());
+
     this.portList.add(port);
     this.portSelect.remove(port);
 
