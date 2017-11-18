@@ -30,18 +30,6 @@
     return element;
   };
 
-  SidebarModule.prototype.redrawTitle = function() {
-    this.redrawBy('title', function(title) {
-      dom.text(this.headerElement(), title);
-    });
-  };
-
-  SidebarModule.prototype.redrawContent = function() {
-    this.redrawBy('content', function(content) {
-      dom.text(this.contentElement(), content);
-    });
-  };
-
   SidebarModule.prototype.onappend = function() {
     this.draggable.enable();
   };
@@ -55,8 +43,13 @@
       dom.toggleClass(this.element(), 'active', isActive);
     });
 
-    this.redrawTitle();
-    this.redrawContent();
+    this.redrawBy('title', function(title) {
+      dom.text(this.headerElement(), title);
+    });
+
+    this.redrawBy('content', function(content) {
+      dom.text(this.contentElement(), content);
+    });
   };
 
   SidebarModule.HTML_TEXT = [
