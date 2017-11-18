@@ -25,25 +25,23 @@
   };
 
   Button.Draggable = (function() {
-    var Draggable = Component.Draggable.inherits(function(props) {
-      this.button = props.component;
-    });
+    var Draggable = Component.Draggable.inherits();
 
-    Draggable.prototype.onstart = function(x, y, event, context) {
+    Draggable.prototype.onstart = function(button, x, y, event, context) {
       context.target = dom.target(event);
       dom.cancel(event);
       dom.removeFocus();
-      this.button.isActive(true);
+      button.isActive(true);
     };
 
-    Draggable.prototype.onmove = function(dx, dy, event, context) {
-      this.button.isActive(dom.target(event) === context.target);
+    Draggable.prototype.onmove = function(button, dx, dy, event, context) {
+      button.isActive(dom.target(event) === context.target);
     };
 
-    Draggable.prototype.onend = function(dx, dy, event, context) {
-      this.button.isActive(false);
+    Draggable.prototype.onend = function(button, dx, dy, event, context) {
+      button.isActive(false);
       if (dom.target(event) === context.target) {
-        this.button.emit('tap');
+        button.emit('tap');
       }
     };
 

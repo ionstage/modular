@@ -82,68 +82,66 @@
   })();
 
   SidebarModule.Draggable = (function() {
-    var Draggable = Component.Draggable.inherits(function(props) {
-      this.module = props.component;
-    });
+    var Draggable = Component.Draggable.inherits();
 
-    Draggable.prototype.onstart = function(x, y, event, context) {
-      this.module.isActive(true);
+    Draggable.prototype.onstart = function(module, x, y, event, context) {
+      module.isActive(true);
       if (dom.supportsTouch()) {
         context.dragging = false;
-        context.timer = setTimeout(this.ondragstart.bind(this), 300, x, y, event, context);
+        context.timer = setTimeout(this.ondragstart.bind(this), 300, module, x, y, event, context);
       } else {
         dom.cancel(event);
-        this.ondragstart(x, y, event, context);
+        this.ondragstart(module, x, y, event, context);
       }
     };
 
-    Draggable.prototype.onmove = function(dx, dy, event, context) {
+    Draggable.prototype.onmove = function(module, dx, dy, event, context) {
       if (context.dragging) {
-        this.ondragmove(dx, dy, event, context);
+        this.ondragmove(module, dx, dy, event, context);
       } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
-        this.module.isActive(false);
+        module.isActive(false);
         clearTimeout(context.timer);
         context.timer = null;
       }
     };
 
-    Draggable.prototype.onend = function(dx, dy, event, context) {
-      this.module.isActive(false);
+    Draggable.prototype.onend = function(module, dx, dy, event, context) {
+      module.isActive(false);
       if (context.dragging) {
-        this.ondragend(dx, dy, event, context);
+        this.ondragend(module, dx, dy, event, context);
       } else if (context.timer) {
         clearTimeout(context.timer);
         context.timer = null;
       }
     };
 
-    Draggable.prototype.ondragstart = function(x, y, event, context) {
+    Draggable.prototype.ondragstart = function(module, x, y, event, context) {
       context.dragging = true;
       context.timer = null;
-      context.x = dom.offsetLeft(this.module.element());
-      context.y = dom.offsetTop(this.module.element());
+      context.x = dom.offsetLeft(module.element());
+      context.y = dom.offsetTop(module.element());
 
       context.clone = new SidebarModule.Clone({
-        element: this.module.renderClone(),
+        element: module.renderClone(),
         parentElement: dom.body(),
         x: context.x,
         y: context.y,
       });
 
       context.clone.markDirty();
-      this.module.emit('dragstart');
+      module.emit('dragstart');
     };
 
-    Draggable.prototype.ondragmove = function(dx, dy, event, context) {
+    Draggable.prototype.ondragmove = function(module, dx, dy, event, context) {
       context.clone.x(context.x + dx);
       context.clone.y(context.y + dy);
     };
 
-    Draggable.prototype.ondragend = function(dx, dy, event, context) {
+    Draggable.prototype.ondragend = function(module, dx, dy, event, context) {
       context.dragging = false;
       context.clone.parentElement(null);
-      this.module.emit('dragend');
-      this.module.emit('drop', this.module.name(), context.x + dx, context.y + dy);
+      module.emit('dragend');
+      module.emit('drop', module.name(), context.x + dx, context.y + dy);
     };
 
     return Draggable;

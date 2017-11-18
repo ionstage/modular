@@ -769,12 +769,10 @@
   })();
 
   Module.Draggable = (function() {
-    var Draggable = Component.Draggable.inherits(function(props) {
-      this.module = props.component;
-    });
+    var Draggable = Component.Draggable.inherits();
 
-    Draggable.prototype.onstart = function(x, y, event, context) {
-      var listener = this.module.dragListener(dom.target(event));
+    Draggable.prototype.onstart = function(module, x, y, event, context) {
+      var listener = module.dragListener(dom.target(event));
       context.listener = listener;
 
       if (!listener) {
@@ -782,29 +780,29 @@
       }
 
       dom.cancel(event);
-      listener.onstart.call(this.module, x, y, event, context);
-      this.module.emit('dragstart');
+      listener.onstart.call(module, x, y, event, context);
+      module.emit('dragstart');
     };
 
-    Draggable.prototype.onmove = function(dx, dy, event, context) {
+    Draggable.prototype.onmove = function(module, dx, dy, event, context) {
       var listener = context.listener;
 
       if (!listener) {
         return;
       }
 
-      listener.onmove.call(this.module, dx, dy, event, context);
+      listener.onmove.call(module, dx, dy, event, context);
     };
 
-    Draggable.prototype.onend = function(dx, dy, event, context) {
+    Draggable.prototype.onend = function(module, dx, dy, event, context) {
       var listener = context.listener;
 
       if (!listener) {
         return;
       }
 
-      listener.onend.call(this.module, dx, dy, event, context);
-      this.module.emit('dragend');
+      listener.onend.call(module, dx, dy, event, context);
+      module.emit('dragend');
     };
 
     return Draggable;

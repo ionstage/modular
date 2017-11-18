@@ -139,9 +139,9 @@
 
     Draggable.prototype.enable = function() {
       this.draggable.enable({
-        onstart: this.onstart.bind(this),
-        onmove: this.onmove.bind(this),
-        onend: this.onend.bind(this),
+        onstart: this.onstart.bind(this, this.component),
+        onmove: this.onmove.bind(this, this.component),
+        onend: this.onend.bind(this, this.component),
       });
     };
 
@@ -149,17 +149,16 @@
       this.draggable.disable();
     };
 
-    Draggable.prototype.onstart = function(x, y, event, context) {};
+    Draggable.prototype.onstart = function(component, x, y, event, context) {};
 
-    Draggable.prototype.onmove = function(dx, dy, event, context) {};
+    Draggable.prototype.onmove = function(component, dx, dy, event, context) {};
 
-    Draggable.prototype.onend = function(dx, dy, event, context) {};
+    Draggable.prototype.onend = function(component, dx, dy, event, context) {};
 
     Draggable.inherits = function(initializer) {
       var superCtor = this;
       return helper.inherits(function(props) {
         superCtor.call(this, props);
-        initializer.call(this, props);
       }, superCtor);
     };
 
