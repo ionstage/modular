@@ -402,78 +402,78 @@
   };
 
   Module.DRAG_LISTENER_POSITION = {
-    onstart: function(x, y, event, context) {
-      context.x = this.x();
-      context.y = this.y();
-      this.isMoving(true);
+    onstart: function(module, x, y, event, context) {
+      context.x = module.x();
+      context.y = module.y();
+      module.isMoving(true);
     },
-    onmove: function(dx, dy, event, context) {
-      this.moveX(context.x + dx);
-      this.moveY(context.y + dy);
+    onmove: function(module, dx, dy, event, context) {
+      module.moveX(context.x + dx);
+      module.moveY(context.y + dy);
     },
-    onend: function(dx, dy, event, context) {
-      this.isMoving(false);
+    onend: function(module, dx, dy, event, context) {
+      module.isMoving(false);
     },
   };
 
   Module.DRAG_LISTENER_DELETE = {
-    onstart: function(x, y, event, context) {
+    onstart: function(module, x, y, event, context) {
       context.target = dom.target(event);
-      this.isDeleting(true);
+      module.isDeleting(true);
     },
-    onmove: function(dx, dy, event, context) {
-      this.isDeleting(dom.target(event) === context.target);
+    onmove: function(module, dx, dy, event, context) {
+      module.isDeleting(dom.target(event) === context.target);
     },
-    onend: function(dx, dy, event, context) {
-      this.isDeleting(false);
+    onend: function(module, dx, dy, event, context) {
+      module.isDeleting(false);
       if (dom.target(event) === context.target) {
-        this.delete();
+        module.delete();
       }
     },
   };
 
   Module.DRAG_LISTENER_HIDE_PORT = {
-    onstart: function(x, y, event, context) {
+    onstart: function(module, x, y, event, context) {
       context.target = dom.target(event);
     },
     onmove: function() { /* do nothing */ },
-    onend: function(dx, dy, event, context) {
+    onend: function(module, dx, dy, event, context) {
       if (dom.target(event) === context.target) {
-        var name = this.targetPort(context.target).name();
-        this.hidePort(name);
+        var name = module.targetPort(context.target).name();
+        module.hidePort(name);
       }
     },
   };
 
   Module.DRAG_LISTENER_SORT_PORT = {
-    onstart: function(x, y, event, context) {
-      var port = this.targetPort(dom.target(event));
+    onstart: function(module, x, y, event, context) {
+      var port = module.targetPort(dom.target(event));
       var top = port.top();
       context.port = port;
       context.top = top;
       context.placeholderTop = top;
       port.isMoving(true);
     },
-    onmove: function(dx, dy, event, context) {
+    onmove: function(module, dx, dy, event, context) {
       var targetPort = context.port;
 
       // move the target port within the port list
-      targetPort.top(helper.clamp(context.top + dy, 0, this.portList.height() - targetPort.height()));
+      targetPort.top(helper.clamp(context.top + dy, 0, module.portList.height() - targetPort.height()));
 
       if (targetPort.top() - context.placeholderTop > 0) {
-        Module.DRAG_LISTENER_SORT_PORT.onmovedown.call(this, dx, dy, event, context);
+        this.onmovedown(module, dx, dy, event, context);
       } else {
-        Module.DRAG_LISTENER_SORT_PORT.onmoveup.call(this, dx, dy, event, context);
+        this.onmoveup(module, dx, dy, event, context);
       }
     },
-    onmovedown: function(dx, dy, event, context) {
+    onmovedown: function(module, dx, dy, event, context) {
       var targetPort = context.port;
       var targetPortHeight = targetPort.height();
       var targetPortMiddle = targetPort.middle();
       var placeholderTop = context.placeholderTop;
 
       // move up the ports over the target port
-      this.visiblePorts().filter(function(port) {
+      module.visiblePorts().filter(function(port) {
         var top = port.top();
         return (port !== targetPort && placeholderTop <= top && top < targetPortMiddle);
       }).forEach(function(port) {
@@ -483,14 +483,14 @@
 
       context.placeholderTop = placeholderTop;
     },
-    onmoveup: function(dx, dy, event, context) {
+    onmoveup: function(module, dx, dy, event, context) {
       var targetPort = context.port;
       var targetPortHeight = targetPort.height();
       var targetPortMiddle = targetPort.middle();
       var placeholderTop = context.placeholderTop;
 
       // move down the ports under the target port
-      this.visiblePorts().filter(function(port) {
+      module.visiblePorts().filter(function(port) {
         var bottom = port.bottom();
         return (port !== targetPort && targetPortMiddle < bottom && bottom <= placeholderTop);
       }).forEach(function(port) {
@@ -501,7 +501,7 @@
 
       context.placeholderTop = placeholderTop;
     },
-    onend: function(dx, dy, event, context) {
+    onend: function(module, dx, dy, event, context) {
       var port = context.port;
       port.top(context.placeholderTop);
       port.isMoving(false);
@@ -509,30 +509,30 @@
   };
 
   Module.DRAG_LISTENER_DRAG_PORT_PLAG = {
-    onstart: function(x, y, event, context) {
-      context.port = this.targetPort(dom.target(event));
+    onstart: function(module, x, y, event, context) {
+      context.port = module.targetPort(dom.target(event));
       context.context = {};
-      this.emit('plugdragstart', context.port, context.context);
+      module.emit('plugdragstart', context.port, context.context);
     },
-    onmove: function(dx, dy, event, context) {
-      this.emit('plugdragmove', context.port, dx, dy, context.context);
+    onmove: function(module, dx, dy, event, context) {
+      module.emit('plugdragmove', context.port, dx, dy, context.context);
     },
-    onend: function(dx, dy, event, context) {
-      this.emit('plugdragend', context.port, context.context);
+    onend: function(module, dx, dy, event, context) {
+      module.emit('plugdragend', context.port, context.context);
     },
   };
 
   Module.DRAG_LISTENER_DRAG_PORT_SOCKET = {
-    onstart: function(x, y, event, context) {
-      context.port = this.targetPort(dom.target(event));
+    onstart: function(module, x, y, event, context) {
+      context.port = module.targetPort(dom.target(event));
       context.context = {};
-      this.emit('socketdragstart', context.port, context.context);
+      module.emit('socketdragstart', context.port, context.context);
     },
-    onmove: function(dx, dy, event, context) {
-      this.emit('socketdragmove', context.port, dx, dy, context.context);
+    onmove: function(module, dx, dy, event, context) {
+      module.emit('socketdragmove', context.port, dx, dy, context.context);
     },
-    onend: function(dx, dy, event, context) {
-      this.emit('socketdragend', context.port, context.context);
+    onend: function(module, dx, dy, event, context) {
+      module.emit('socketdragend', context.port, context.context);
     },
   };
 
@@ -780,7 +780,7 @@
       }
 
       dom.cancel(event);
-      listener.onstart.call(module, x, y, event, context);
+      listener.onstart(module, x, y, event, context);
       module.emit('dragstart');
     };
 
@@ -791,7 +791,7 @@
         return;
       }
 
-      listener.onmove.call(module, dx, dy, event, context);
+      listener.onmove(module, dx, dy, event, context);
     };
 
     Draggable.prototype.onend = function(module, dx, dy, event, context) {
@@ -801,7 +801,7 @@
         return;
       }
 
-      listener.onend.call(module, dx, dy, event, context);
+      listener.onend(module, dx, dy, event, context);
       module.emit('dragend');
     };
 
