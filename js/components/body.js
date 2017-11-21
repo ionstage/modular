@@ -32,8 +32,8 @@
   };
 
   Body.prototype.dropModule = function(name, pageX, pageY) {
-    var x = this.main.contentLocalX(pageX);
-    var y = this.main.contentLocalY(pageY);
+    var x = pageX - this.main.contentOffsetLeft();
+    var y = pageY - this.main.contentOffsetTop();
     if (x >= 0 && y >= 0) {
       this.loadModule(this.sidebar.entry(name), x, y);
     }

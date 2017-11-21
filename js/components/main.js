@@ -23,12 +23,12 @@
     return (this.isFullWidth() ? 'expand' : 'collapse');
   };
 
-  Main.prototype.contentLocalX = function(pageX) {
-    return this.content.localX(pageX);
+  Main.prototype.contentOffsetLeft = function() {
+    return this.content.offsetLeft();
   };
 
-  Main.prototype.contentLocalY = function(pageY) {
-    return this.content.localY(pageY);
+  Main.prototype.contentOffsetTop = function() {
+    return this.content.offsetTop();
   };
 
   Main.prototype.toggleSidebar = function() {
