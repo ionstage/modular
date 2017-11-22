@@ -22,8 +22,8 @@
 
   CircuitModule.prototype.wrapper = function() {
     return {
-      get: CircuitModule.prototype.get.bind(this),
-      getAll: CircuitModule.prototype.getAll.bind(this),
+      get: this.get.bind(this),
+      getAll: this.getAll.bind(this),
     };
   };
 
@@ -50,7 +50,7 @@
     };
 
     Member.prototype.wrapper = function(props) {
-      var wrapper = new Wrapper(this, Member.prototype.call.bind(this));
+      var wrapper = new Wrapper(this, this.call.bind(this));
       return Object.keys(props).reduce(function(wrapper, key) {
         return Object.defineProperty(wrapper, key, {
           value: props[key],

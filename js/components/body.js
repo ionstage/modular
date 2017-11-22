@@ -68,7 +68,7 @@
   };
 
   Body.prototype.oninit = function() {
-    dom.ready(Body.prototype.onready.bind(this));
+    dom.ready(this.onready.bind(this));
     this.sidebar.on('dragstart', this.ondragstart.bind(this));
     this.sidebar.on('dragend', this.ondragend.bind(this));
     this.sidebar.on('drop', this.ondrop.bind(this));

@@ -29,7 +29,7 @@
     this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
     this.draggable = new Module.Draggable({ component: this });
 
-    this.onpoint = Module.prototype.onpoint.bind(this);
+    this.onpoint = this.onpoint.bind(this);
   });
 
   Module.prototype.componentElement = function() {
@@ -653,7 +653,7 @@
     var PortSelect = Component.inherits(function(props) {
       this.ports = [];
       this.options = [];
-      this.onchange = PortSelect.prototype.onchange.bind(this);
+      this.onchange = this.onchange.bind(this);
     });
 
     PortSelect.prototype.optGroupElement = function(type) {

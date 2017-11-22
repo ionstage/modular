@@ -35,7 +35,7 @@
     };
 
     Input.prototype.oninit = function() {
-      dom.on(this.element(), 'change', Input.prototype.onchange.bind(this));
+      dom.on(this.element(), 'change', this.onchange.bind(this));
     };
 
     Input.prototype.onchange = function(event) {

@@ -409,7 +409,7 @@
       this.callback = props.callback;
       this.resolve = props.resolve;
       this.reject = props.reject;
-      this.listener = Listenable.prototype.listener.bind(this);
+      this.listener = this.listener.bind(this);
 
       dom.on(this.element, this.type, this.listener);
     };
