@@ -203,7 +203,6 @@
       targetY: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
       handleType: sourcePort.type(),
       handleVisible: !targetPort,
-      parentElement: this.wireContainerElement(),
       parentHandleElement: this.wireHandleContainerElement(),
     });
   };
@@ -278,7 +277,7 @@
 
   MainContent.prototype.connect = function(sourcePort, targetPort) {
     var wire = this.createModuleWire(sourcePort, targetPort);
-    wire.markDirty();
+    wire.parentElement(this.wireContainerElement());
     targetPort.socketConnected(true);
     this.bind(sourcePort, targetPort);
     this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
@@ -444,7 +443,7 @@
 
   MainContent.prototype.onplugdragstart = function(sourcePort, context) {
     var wire = this.createModuleWire(sourcePort, null);
-    wire.markDirty();
+    wire.parentElement(this.wireContainerElement());
     this.appendDraggingWire(sourcePort, wire);
 
     context.x = sourcePort.plugX();

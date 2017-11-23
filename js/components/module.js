@@ -672,7 +672,6 @@
 
     PortSelect.prototype.createOption = function(port) {
       return new PortSelect.Option({
-        parentElement: this.optGroupElement(port.type()),
         label: port.label(),
         name: port.name(),
       });
@@ -698,6 +697,7 @@
         return port.label();
       }).map(function(port) {
         var option = this.createOption(port);
+        option.parentElement(this.optGroupElement(port.type()));
         option.redraw();
         return option;
       }.bind(this));

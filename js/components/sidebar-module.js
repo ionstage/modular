@@ -116,12 +116,11 @@
 
       context.clone = new SidebarModule.Clone({
         element: module.renderClone(),
-        parentElement: dom.body(),
         x: context.x,
         y: context.y,
       });
 
-      context.clone.markDirty();
+      context.clone.parentElement(dom.body());
       module.emit('dragstart');
     };
 

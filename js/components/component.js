@@ -7,12 +7,9 @@
 
   var Component = helper.inherits(function(props) {
     Component.super_.call(this);
-
     var element = props.element || this.render();
-    var parentElement = props.parentElement || (element ? dom.parent(element) : null);
-
     this.element = this.prop(element);
-    this.parentElement = this.prop(parentElement);
+    this.parentElement = this.prop(element ? dom.parent(element) : null);
     this.cache = {};
     this.listeners = {};
   }, jCore.Component);
