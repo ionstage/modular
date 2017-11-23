@@ -24,11 +24,9 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
     this.headerHeight = this.prop(32);
-
     this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
     this.draggable = new Module.Draggable({ component: this });
-
     this.onpoint = this.onpoint.bind(this);
   });
 

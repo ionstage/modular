@@ -75,7 +75,6 @@
   Component.prototype.redrawBy = function() {
     var args = helper.toArray(arguments);
     var callback = args.pop();
-
     if (this.needsUpdate(args)) {
       callback.apply(this, this.values(args));
       this.updateCache(args);
