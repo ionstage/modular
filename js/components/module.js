@@ -772,36 +772,30 @@
     var Draggable = Component.Draggable.inherits();
 
     Draggable.prototype.onstart = function(module, x, y, event, context) {
-      var listener = module.dragListener(dom.target(event));
-      context.listener = listener;
-
-      if (!listener) {
+      context.listener = module.dragListener(dom.target(event));
+      if (!context.listener) {
         return;
       }
 
       dom.cancel(event);
-      listener.onstart(module, x, y, event, context);
+      context.listener.onstart(module, x, y, event, context);
       module.emit('dragstart');
     };
 
     Draggable.prototype.onmove = function(module, dx, dy, event, context) {
-      var listener = context.listener;
-
-      if (!listener) {
+      if (!context.listener) {
         return;
       }
 
-      listener.onmove(module, dx, dy, event, context);
+      context.listener.onmove(module, dx, dy, event, context);
     };
 
     Draggable.prototype.onend = function(module, dx, dy, event, context) {
-      var listener = context.listener;
-
-      if (!listener) {
+      if (!context.listener) {
         return;
       }
 
-      listener.onend(module, dx, dy, event, context);
+      context.listener.onend(module, dx, dy, event, context);
       module.emit('dragend');
     };
 
