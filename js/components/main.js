@@ -10,18 +10,9 @@
   var Main = Component.inherits(function(props) {
     this.disabled = this.prop(true);
     this.isFullWidth = this.prop(false);
-
-    this.header = new MainHeader({
-      element: this.childElement('.main-header'),
-      sidebarToggleType: this.sidebarToggleType(),
-    });
-
+    this.header = new MainHeader({ element: this.childElement('.main-header') });
     this.content = new MainContent({ element: this.childElement('.main-content') });
   });
-
-  Main.prototype.sidebarToggleType = function() {
-    return (this.isFullWidth() ? 'expand' : 'collapse');
-  };
 
   Main.prototype.contentOffsetLeft = function() {
     return this.content.offsetLeft();
@@ -33,7 +24,6 @@
 
   Main.prototype.toggleSidebar = function() {
     this.isFullWidth(!this.isFullWidth());
-    this.header.sidebarToggleDisabled(true);
   };
 
   Main.prototype.loadContent = function(data) {
@@ -58,7 +48,6 @@
   };
 
   Main.prototype.oninit = function() {
-    dom.on(this.element(), 'transitionend', this.ontransitionend.bind(this));
     this.header.on('sidebartoggle', this.onsidebartoggle.bind(this));
     this.header.on('load', this.onload.bind(this));
     this.header.on('save', this.onsave.bind(this));
@@ -76,14 +65,16 @@
     });
   };
 
-  Main.prototype.ontransitionend = function() {
-    this.header.sidebarToggleType(this.sidebarToggleType());
-    this.header.sidebarToggleDisabled(false);
-  };
-
-  Main.prototype.onsidebartoggle = function() {
+  Main.prototype.onsidebartoggle = function(done) {
     this.toggleSidebar();
     this.emit('sidebartoggle');
+
+    var ontransitionend = function() {
+      dom.off(this.element(), 'transitionend', ontransitionend);
+      done();
+    }.bind(this);
+
+    dom.on(this.element(), 'transitionend', ontransitionend);
   };
 
   Main.prototype.ondragstart = function() {

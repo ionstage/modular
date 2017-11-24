@@ -6,12 +6,18 @@
   var Component = app.Component || require('./component.js');
 
   var ToggleButton = Component.inherits(function(props) {
-    this.type = this.prop(props.type);
+    this.types = ['collapse', 'expand'];
+    this.currentIndex = this.prop(0);
     this.button = new Button({ element: props.element });
   });
 
-  ToggleButton.prototype.disabled = function(value) {
-    return this.button.disabled(value);
+  ToggleButton.prototype.toggle = function() {
+    this.currentIndex((this.currentIndex() + 1) % this.types.length);
+  };
+
+  ToggleButton.prototype.done = function() {
+    this.toggle();
+    this.button.disabled(false);
   };
 
   ToggleButton.prototype.oninit = function() {
@@ -19,13 +25,14 @@
   };
 
   ToggleButton.prototype.onredraw = function() {
-    this.redrawBy('type', function(type) {
-      dom.data(this.element(), 'type', type);
+    this.redrawBy('currentIndex', function(currentIndex) {
+      dom.data(this.element(), 'type', this.types[currentIndex]);
     });
   };
 
   ToggleButton.prototype.ontap = function() {
-    this.emit('tap');
+    this.button.disabled(true);
+    this.emit('toggle', this.done.bind(this));
   };
 
   if (typeof module !== 'undefined' && module.exports) {

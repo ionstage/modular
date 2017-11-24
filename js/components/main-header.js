@@ -7,31 +7,19 @@
   var ToggleButton = app.ToggleButton || require('./toggle-button.js');
 
   var MainHeader = Component.inherits(function(props) {
-    this.sidebarToggleButton = new ToggleButton({
-      element: this.childElement('.sidebar-toggle-button'),
-      type: props.sidebarToggleType,
-    });
-
+    this.sidebarToggleButton = new ToggleButton({ element: this.childElement('.sidebar-toggle-button') });
     this.loadButton = new LoadButton({ element: this.childElement('.load-button') });
     this.saveButton = new Button({ element: this.childElement('.save-button') });
   });
 
   MainHeader.prototype.oninit = function() {
-    this.sidebarToggleButton.on('tap', this.onsidebartoggle.bind(this));
+    this.sidebarToggleButton.on('toggle', this.onsidebartoggle.bind(this));
     this.loadButton.on('load', this.onload.bind(this));
     this.saveButton.on('tap', this.onsave.bind(this));
   };
 
-  MainHeader.prototype.sidebarToggleType = function(value) {
-    return this.sidebarToggleButton.type(value);
-  };
-
-  MainHeader.prototype.sidebarToggleDisabled = function(value) {
-    return this.sidebarToggleButton.disabled(value);
-  };
-
-  MainHeader.prototype.onsidebartoggle = function() {
-    this.emit('sidebartoggle');
+  MainHeader.prototype.onsidebartoggle = function(done) {
+    this.emit('sidebartoggle', done);
   };
 
   MainHeader.prototype.onload = function(file) {
