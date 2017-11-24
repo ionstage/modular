@@ -150,7 +150,7 @@
 
     Draggable.prototype.onend = function(component, dx, dy, event, context) {};
 
-    Draggable.inherits = function(initializer) {
+    Draggable.inherits = function() {
       var superCtor = this;
       return helper.inherits(function(props) {
         superCtor.call(this, props);
