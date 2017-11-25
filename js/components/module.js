@@ -218,7 +218,7 @@
   };
 
   Module.prototype.registerComponentLoadListener = function(resolve, reject) {
-    dom.on(this.componentContentWindow(), 'load', function() {
+    dom.once(this.componentContentWindow(), 'load', function() {
       resolve();
     });
   };
