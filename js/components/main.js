@@ -68,13 +68,9 @@
   Main.prototype.onsidebartoggle = function(done) {
     this.toggleSidebar();
     this.emit('sidebartoggle');
-
-    var ontransitionend = function() {
-      dom.off(this.element(), 'transitionend', ontransitionend);
+    dom.once(this.element(), 'transitionend', function() {
       done();
-    }.bind(this);
-
-    dom.on(this.element(), 'transitionend', ontransitionend);
+    });
   };
 
   Main.prototype.ondragstart = function() {

@@ -183,6 +183,14 @@
     el.removeEventListener(type, listener, !!useCapture);
   };
 
+  dom.once = function(el, type, listener, useCapture) {
+    var wrapper = function() {
+      dom.off(el, type, wrapper, useCapture);
+      listener.apply(null, arguments);
+    };
+    dom.on(el, type, wrapper, useCapture);
+  };
+
   dom.ready = function(listener) {
     document.addEventListener('DOMContentLoaded', listener, false);
   };
