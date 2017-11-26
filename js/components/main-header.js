@@ -13,21 +13,9 @@
   });
 
   MainHeader.prototype.oninit = function() {
-    this.sidebarToggleButton.on('toggle', this.onsidebartoggle.bind(this));
-    this.loadButton.on('load', this.onload.bind(this));
-    this.saveButton.on('tap', this.onsave.bind(this));
-  };
-
-  MainHeader.prototype.onsidebartoggle = function(done) {
-    this.emit('sidebartoggle', done);
-  };
-
-  MainHeader.prototype.onload = function(file) {
-    this.emit('load', file);
-  };
-
-  MainHeader.prototype.onsave = function() {
-    this.emit('save');
+    this.sidebarToggleButton.on('toggle', this.emit.bind(this, 'sidebartoggle'));
+    this.loadButton.on('load', this.emit.bind(this, 'load'));
+    this.saveButton.on('tap', this.emit.bind(this, 'save'));
   };
 
   if (typeof module !== 'undefined' && module.exports) {

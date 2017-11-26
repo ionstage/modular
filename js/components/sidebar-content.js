@@ -13,9 +13,9 @@
 
   SidebarContent.prototype.createModule = function(props) {
     var module = new SidebarModule(props);
-    module.on('dragstart', this.ondragstart.bind(this));
-    module.on('dragend', this.ondragend.bind(this));
-    module.on('drop', this.ondrop.bind(this));
+    module.on('dragstart', this.emit.bind(this, 'dragstart'));
+    module.on('dragend', this.emit.bind(this, 'dragend'));
+    module.on('drop', this.emit.bind(this, 'drop'));
     return module;
   };
 
@@ -57,18 +57,6 @@
 
   SidebarContent.prototype.onredraw = function() {
     this.scrollable.refresh();
-  };
-
-  SidebarContent.prototype.ondragstart = function() {
-    this.emit('dragstart');
-  };
-
-  SidebarContent.prototype.ondragend = function() {
-    this.emit('dragend');
-  };
-
-  SidebarContent.prototype.ondrop = function(name, pageX, pageY) {
-    this.emit('drop', name, pageX, pageY);
   };
 
   SidebarContent.Scrollable = (function() {

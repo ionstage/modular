@@ -12,15 +12,11 @@
 
   LoadButton.prototype.oninit = function() {
     this.button.on('tap', this.ontap.bind(this));
-    this.input.on('load', this.onload.bind(this));
+    this.input.on('load', this.emit.bind(this, 'load'));
   };
 
   LoadButton.prototype.ontap = function() {
     this.input.click();
-  };
-
-  LoadButton.prototype.onload = function(file) {
-    this.emit('load', file);
   };
 
   LoadButton.Input = (function() {

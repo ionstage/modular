@@ -46,7 +46,7 @@
     this.header.on('search', this.onsearch.bind(this));
     this.content.on('dragstart', this.ondragstart.bind(this));
     this.content.on('dragend', this.ondragend.bind(this));
-    this.content.on('drop', this.ondrop.bind(this));
+    this.content.on('drop', this.emit.bind(this, 'drop'));
   };
 
   Sidebar.prototype.onredraw = function() {
@@ -71,10 +71,6 @@
   Sidebar.prototype.ondragend = function() {
     this.decrementDragCount();
     this.emit('dragend');
-  };
-
-  Sidebar.prototype.ondrop = function(name, pageX, pageY) {
-    this.emit('drop', name, pageX, pageY);
   };
 
   if (typeof module !== 'undefined' && module.exports) {

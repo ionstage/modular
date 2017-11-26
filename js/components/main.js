@@ -51,8 +51,8 @@
     this.header.on('sidebartoggle', this.onsidebartoggle.bind(this));
     this.header.on('load', this.onload.bind(this));
     this.header.on('save', this.onsave.bind(this));
-    this.content.on('dragstart', this.ondragstart.bind(this));
-    this.content.on('dragend', this.ondragend.bind(this));
+    this.content.on('dragstart', this.emit.bind(this, 'dragstart'));
+    this.content.on('dragend', this.emit.bind(this, 'dragend'));
   };
 
   Main.prototype.onredraw = function() {
@@ -71,14 +71,6 @@
     dom.once(this.element(), 'transitionend', function() {
       done();
     });
-  };
-
-  Main.prototype.ondragstart = function() {
-    this.emit('dragstart');
-  };
-
-  Main.prototype.ondragend = function() {
-    this.emit('dragend');
   };
 
   Main.prototype.onload = function(file) {

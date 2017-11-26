@@ -27,7 +27,7 @@
     this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
     this.draggable = new Module.Draggable({ component: this });
-    this.onpoint = this.onpoint.bind(this);
+    this.onpoint = this.emit.bind(this, 'point', this);
   });
 
   Module.prototype.componentElement = function() {
@@ -168,7 +168,7 @@
         label: port.label(),
         name: port.name(),
         type: port.type(),
-        arg: this.onportevent.bind(this, port),
+        arg: this.emit.bind(this, 'portevent', port),
       };
     }.bind(this)));
   };
@@ -389,14 +389,6 @@
 
   Module.prototype.onselect = function(name) {
     this.showPort(name);
-  };
-
-  Module.prototype.onpoint = function() {
-    this.emit('point', this);
-  };
-
-  Module.prototype.onportevent = function(port) {
-    this.emit('portevent', port);
   };
 
   Module.DRAG_LISTENER_POSITION = {

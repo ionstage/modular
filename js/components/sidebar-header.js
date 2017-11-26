@@ -14,11 +14,7 @@
   };
 
   SidebarHeader.prototype.oninit = function() {
-    this.searchInput.on('input', this.onsearch.bind(this));
-  };
-
-  SidebarHeader.prototype.onsearch = function(text) {
-    this.emit('search', text);
+    this.searchInput.on('input', this.emit.bind(this, 'search'));
   };
 
   SidebarHeader.SearchInput = (function() {
