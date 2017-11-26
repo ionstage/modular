@@ -24,12 +24,6 @@
     return dom.render(SidebarModule.HTML_TEXT);
   };
 
-  SidebarModule.prototype.renderClone = function() {
-    var element = dom.clone(this.element());
-    dom.addClass(element, 'clone');
-    return element;
-  };
-
   SidebarModule.prototype.onappend = function() {
     this.draggable.enable();
   };
@@ -64,6 +58,10 @@
       this.x = this.prop(props.x);
       this.y = this.prop(props.y);
     });
+
+    Clone.prototype.oninit = function() {
+      dom.addClass(this.element(), 'clone');
+    };
 
     Clone.prototype.onredraw = function() {
       this.redrawBy('x', 'y', function(x, y) {
@@ -115,7 +113,7 @@
       context.y = dom.offsetTop(module.element());
 
       context.clone = new SidebarModule.Clone({
-        element: module.renderClone(),
+        element: dom.clone(module.element()),
         x: context.x,
         y: context.y,
       });
