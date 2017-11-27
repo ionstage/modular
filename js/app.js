@@ -5,6 +5,6 @@
   var Body = app.Body || require('./components/body.js');
   var CircuitModule = app.CircuitModule || require('./models/circuit-module.js');
 
-  dom.export('ModularModule', CircuitModule.ModularModule);
+  dom.export('modular', CircuitModule.modular);
   app.body = new Body({ element: dom.body() });
 })(this.app || (this.app = {}));

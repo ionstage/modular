@@ -75,6 +75,13 @@
     }));
   };
 
+  CircuitModule.modular = function() {
+    return Object.create({}, {
+      Module: { value: CircuitModule.ModularModule },
+      exports: { value: null, writable: true },
+    });
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = CircuitModule;
   } else {

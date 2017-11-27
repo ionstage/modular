@@ -235,7 +235,7 @@
   };
 
   Module.prototype.loadCircuitModule = function() {
-    var circuitModule = helper.dig(this.componentContentWindow(), 'modular', 'exports');
+    var circuitModule = this.componentContentWindow().modular.exports;
     if (!circuitModule) {
       throw new Error('Invalid circuit element');
     }
