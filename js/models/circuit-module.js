@@ -76,7 +76,7 @@
   };
 
   CircuitModule.modular = function() {
-    return Object.create({}, {
+    return Object.create(Object.prototype, {
       Module: { value: CircuitModule.ModularModule },
       exports: { value: null, writable: true },
     });
