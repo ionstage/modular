@@ -146,11 +146,11 @@
     });
   };
 
-  Module.prototype.dragListener = function(target) {
-    var entry = helper.find(Module.DRAG_LISTENER_ENTRIES, function(entry) {
+  Module.prototype.dragListeners = function(target) {
+    var entry = helper.find(Module.DRAG_LISTENERS_ENTRIES, function(entry) {
       return dom.hasClass(target, entry.className);
     });
-    return (entry ? entry.listener : null);
+    return (entry ? entry.listeners : null);
   };
 
   Module.prototype.createPorts = function() {
@@ -526,13 +526,13 @@
     },
   };
 
-  Module.DRAG_LISTENER_ENTRIES = [
-    { className: 'module-title', listener: Module.DRAG_LISTENER_POSITION },
-    { className: 'module-delete-button', listener: Module.DRAG_LISTENER_DELETE },
-    { className: 'module-port-hide-button', listener: Module.DRAG_LISTENER_HIDE_PORT },
-    { className: 'module-port-content', listener: Module.DRAG_LISTENER_SORT_PORT },
-    { className: 'module-port-plug', listener: Module.DRAG_LISTENER_DRAG_PORT_PLAG },
-    { className: 'module-port-socket-handle', listener: Module.DRAG_LISTENER_DRAG_PORT_SOCKET },
+  Module.DRAG_LISTENERS_ENTRIES = [
+    { className: 'module-title', listeners: Module.DRAG_LISTENER_POSITION },
+    { className: 'module-delete-button', listeners: Module.DRAG_LISTENER_DELETE },
+    { className: 'module-port-hide-button', listeners: Module.DRAG_LISTENER_HIDE_PORT },
+    { className: 'module-port-content', listeners: Module.DRAG_LISTENER_SORT_PORT },
+    { className: 'module-port-plug', listeners: Module.DRAG_LISTENER_DRAG_PORT_PLAG },
+    { className: 'module-port-socket-handle', listeners: Module.DRAG_LISTENER_DRAG_PORT_SOCKET },
   ];
 
   Module.HTML_TEXT = [
@@ -762,30 +762,30 @@
     var Draggable = Component.Draggable.inherits();
 
     Draggable.prototype.onstart = function(module, x, y, event, context) {
-      context.listener = module.dragListener(dom.target(event));
-      if (!context.listener) {
+      context.listeners = module.dragListeners(dom.target(event));
+      if (!context.listeners) {
         return;
       }
 
       dom.cancel(event);
-      context.listener.onstart(module, x, y, event, context);
+      context.listeners.onstart(module, x, y, event, context);
       module.emit('dragstart');
     };
 
     Draggable.prototype.onmove = function(module, dx, dy, event, context) {
-      if (!context.listener) {
+      if (!context.listeners) {
         return;
       }
 
-      context.listener.onmove(module, dx, dy, event, context);
+      context.listeners.onmove(module, dx, dy, event, context);
     };
 
     Draggable.prototype.onend = function(module, dx, dy, event, context) {
-      if (!context.listener) {
+      if (!context.listeners) {
         return;
       }
 
-      context.listener.onend(module, dx, dy, event, context);
+      context.listeners.onend(module, dx, dy, event, context);
       module.emit('dragend');
     };
 
