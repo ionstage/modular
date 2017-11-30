@@ -3,14 +3,6 @@
 
   var helper = {};
 
-  helper.randomString = function(len) {
-    var s = [];
-    for (var i = 0, n = Math.ceil(len / 7); i < n; i++) {
-      s.push(Math.random().toString(36).slice(-7));
-    }
-    return s.join('').slice(-len);
-  };
-
   helper.encodePath = function(str) {
     return str.split('/').map(function(s) {
       return encodeURIComponent(s);
@@ -45,19 +37,6 @@
     return obj;
   };
 
-  helper.clone = function(obj) {
-    return helper.extend({}, obj);
-  };
-
-  helper.pick = function(obj, keys) {
-    return keys.reduce(function(ret, key) {
-      if (obj.hasOwnProperty(key)) {
-        ret[key] = obj[key];
-      }
-      return ret;
-    }, {});
-  };
-
   helper.omit = function(obj, keys) {
     return Object.keys(obj).reduce(function(ret, key) {
       if (keys.indexOf(key) === -1) {
@@ -65,12 +44,6 @@
       }
       return ret;
     }, {});
-  };
-
-  helper.dig = function() {
-    return helper.toArray(arguments).reduce(function(obj, key) {
-      return (typeof obj === 'object' ? obj[key] : null);
-    });
   };
 
   helper.sortBy = function(array, iteratee) {
