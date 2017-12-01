@@ -328,17 +328,16 @@
     this.updateDragHighlight(targetPort);
   };
 
-  MainContent.prototype.removeDraggingWire = function(sourcePort, targetPort, wire) {
+  MainContent.prototype.keepDraggingWire = function(sourcePort, targetPort, wire) {
     helper.remove(this.draggingWires, wire);
     this.updateDragHighlight(sourcePort);
+    this.updateDragHighlight(targetPort);
+  };
 
-    // keep the element of dragging wire connected to the target port
-    if (targetPort) {
-      this.updateDragHighlight(targetPort);
-    } else {
-      this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
-      wire.parentElement(null);
-    }
+  MainContent.prototype.removeDraggingWire = function(sourcePort, wire) {
+    helper.remove(this.draggingWires, wire);
+    this.updateDragHighlight(sourcePort);
+    this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
   };
 
   MainContent.prototype.updateRetainer = function() {
@@ -480,7 +479,12 @@
   };
 
   MainContent.prototype.onplugdragend = function(sourcePort, context) {
-    this.removeDraggingWire(sourcePort, context.targetPort, context.wire);
+    if (context.targetPort) {
+      this.keepDraggingWire(sourcePort, context.targetPort, context.wire);
+    } else {
+      this.removeDraggingWire(sourcePort, context.wire);
+      context.wire.parentElement(null);
+    }
   };
 
   MainContent.prototype.onsocketdragstart = function(targetPort, context) {
