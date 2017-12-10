@@ -1,13 +1,13 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
-  var Component = app.Component || require('./component.js');
 
-  var LoadButton = Component.inherits(function(props) {
+  var LoadButton = jCore.Component.inherits(function(props) {
     this.button = new Button({ element: props.element });
-    this.input = new LoadButton.Input({ element: this.childElement('.button-input') });
+    this.input = new LoadButton.Input({ element: this.findElement('.button-input') });
   });
 
   LoadButton.prototype.oninit = function() {
@@ -20,7 +20,7 @@
   };
 
   LoadButton.Input = (function() {
-    var Input = Component.inherits();
+    var Input = jCore.Component.inherits();
 
     Input.prototype.click = function() {
       dom.click(this.element());

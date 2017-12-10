@@ -1,17 +1,17 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var FileSaver = require('file-saver');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
   var MainContent = app.MainContent || require('./main-content.js');
   var MainHeader = app.MainHeader || require('./main-header.js');
 
-  var Main = Component.inherits(function(props) {
+  var Main = jCore.Component.inherits(function(props) {
     this.disabled = this.prop(true);
     this.isFullWidth = this.prop(false);
-    this.header = new MainHeader({ element: this.childElement('.main-header') });
-    this.content = new MainContent({ element: this.childElement('.main-content') });
+    this.header = new MainHeader({ element: this.findElement('.main-header') });
+    this.content = new MainContent({ element: this.findElement('.main-content') });
   });
 
   Main.prototype.contentOffsetLeft = function() {

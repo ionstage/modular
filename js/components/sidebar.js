@@ -1,18 +1,18 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
   var EntryCollection = app.EntryCollection || require('../models/entry-collection.js');
   var SidebarContent = app.SidebarContent || require('./sidebar-content.js');
   var SidebarHeader = app.SidebarHeader || require('./sidebar-header.js');
 
-  var Sidebar = Component.inherits(function(props) {
+  var Sidebar = jCore.Component.inherits(function(props) {
     this.disabled = this.prop(true);
     this.dragCount = this.prop(0);
     this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
-    this.header = new SidebarHeader({ element: this.childElement('.sidebar-header') });
-    this.content = new SidebarContent({ element: this.childElement('.sidebar-content') });
+    this.header = new SidebarHeader({ element: this.findElement('.sidebar-header') });
+    this.content = new SidebarContent({ element: this.findElement('.sidebar-content') });
   });
 
   Sidebar.prototype.scrollEnabled = function() {

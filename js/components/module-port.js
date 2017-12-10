@@ -2,11 +2,9 @@
   'use strict';
 
   var jCore = require('jcore');
-  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
 
-  var ModulePort = Component.inherits(function(props) {
+  var ModulePort = jCore.Component.inherits(function(props) {
     this.label = this.prop(props.label);
     this.name = this.prop(props.name);
     this.type = this.prop(props.type);
@@ -62,11 +60,11 @@
   ModulePort.prototype.oninit = function() {
     this.addRelation(new ModulePort.Relation({
       port: this,
-      plug: new ModulePort.Handle({ element: this.childElement('.module-port-plug') }),
-      socket: new ModulePort.Socket({ element: this.childElement('.module-port-socket') }),
-      socketHandle: new ModulePort.Handle({ element: this.childElement('.module-port-socket-handle') }),
-      content: new ModulePort.Content({ element: this.childElement('.module-port-content') }),
-      hideButton: new ModulePort.HideButton({ element: this.childElement('.module-port-hide-button') }),
+      plug: new ModulePort.Handle({ element: this.findElement('.module-port-plug') }),
+      socket: new ModulePort.Socket({ element: this.findElement('.module-port-socket') }),
+      socketHandle: new ModulePort.Handle({ element: this.findElement('.module-port-socket-handle') }),
+      content: new ModulePort.Content({ element: this.findElement('.module-port-content') }),
+      hideButton: new ModulePort.HideButton({ element: this.findElement('.module-port-hide-button') }),
     }));
   };
 
@@ -103,7 +101,7 @@
   ].join('');
 
   ModulePort.Handle = (function() {
-    var Handle = Component.inherits(function() {
+    var Handle = jCore.Component.inherits(function() {
       this.disabled = this.prop(false);
       this.highlighted = this.prop(false);
     });
@@ -125,7 +123,7 @@
   ModulePort.Socket = ModulePort.Handle.inherits();
 
   ModulePort.Content = (function() {
-    var Content = Component.inherits(function() {
+    var Content = jCore.Component.inherits(function() {
       this.label = this.prop('');
     });
 
@@ -139,7 +137,7 @@
   })();
 
   ModulePort.HideButton = (function() {
-    var HideButton = Component.inherits(function() {
+    var HideButton = jCore.Component.inherits(function() {
       this.disabled = this.prop(false);
     });
 
@@ -153,14 +151,14 @@
   })();
 
   ModulePort.Relation = (function() {
-    var Relation = helper.inherits(function(props) {
+    var Relation = jCore.Relation.inherits(function(props) {
       this.port = props.port;
       this.plug = props.plug;
       this.socket = props.socket;
       this.socketHandle = props.socketHandle;
       this.content = props.content;
       this.hideButton = props.hideButton;
-    }, jCore.Relation);
+    });
 
     Relation.prototype.update = function() {
       this.updatePlug();

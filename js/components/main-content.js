@@ -1,16 +1,16 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Binding = app.Binding || require('../models/binding.js');
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
-  var Component = app.Component || require('./component.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
   var ModuleWire = app.ModuleWire || require('./module-wire.js');
 
-  var MainContent = Component.inherits(function(props) {
+  var MainContent = jCore.Component.inherits(function(props) {
     this.modules = [];
     this.draggingWires = [];
     this.lockRelations = [];
@@ -18,19 +18,19 @@
   });
 
   MainContent.prototype.retainerElement = function() {
-    return this.childElement('.main-content-retainer');
+    return this.findElement('.main-content-retainer');
   };
 
   MainContent.prototype.wireContainerElement = function() {
-    return this.childElement('.module-wire-container');
+    return this.findElement('.module-wire-container');
   };
 
   MainContent.prototype.containerElement = function() {
-    return this.childElement('.module-container');
+    return this.findElement('.module-container');
   };
 
   MainContent.prototype.wireHandleContainerElement = function() {
-    return this.childElement('.module-wire-handle-container');
+    return this.findElement('.module-wire-handle-container');
   };
 
   MainContent.prototype.offsetLeft = function() {
@@ -404,6 +404,7 @@
   };
 
   MainContent.prototype.ondelete = function(module) {
+    module.removeAllListeners();
     helper.remove(this.modules, module);
     this.updateZIndex();
     this.updateWireHandleContainer();

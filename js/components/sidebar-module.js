@@ -1,23 +1,23 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
 
-  var SidebarModule = Component.inherits(function(props) {
+  var SidebarModule = jCore.Component.inherits(function(props) {
     this.title = this.prop(props.title);
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
     this.isActive = this.prop(false);
-    this.draggable = new SidebarModule.Draggable({ component: this });
+    this.draggable = new SidebarModule.Draggable(this);
   });
 
   SidebarModule.prototype.headerElement = function() {
-    return this.childElement('.sidebar-module-header');
+    return this.findElement('.sidebar-module-header');
   };
 
   SidebarModule.prototype.contentElement = function() {
-    return this.childElement('.sidebar-module-content');
+    return this.findElement('.sidebar-module-content');
   };
 
   SidebarModule.prototype.render = function() {
@@ -54,7 +54,7 @@
   ].join('');
 
   SidebarModule.Clone = (function() {
-    var Clone = Component.inherits(function(props) {
+    var Clone = jCore.Component.inherits(function(props) {
       this.x = this.prop(props.x);
       this.y = this.prop(props.y);
     });
@@ -73,7 +73,7 @@
   })();
 
   SidebarModule.Draggable = (function() {
-    var Draggable = Component.Draggable.inherits();
+    var Draggable = jCore.Draggable.inherits();
 
     Draggable.prototype.onstart = function(module, x, y, event, context) {
       module.isActive(true);

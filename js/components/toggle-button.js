@@ -1,11 +1,11 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
-  var Component = app.Component || require('./component.js');
 
-  var ToggleButton = Component.inherits(function(props) {
+  var ToggleButton = jCore.Component.inherits(function(props) {
     this.types = ['collapse', 'expand'];
     this.currentIndex = this.prop(0);
     this.button = new Button({ element: props.element });

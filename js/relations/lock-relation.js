@@ -2,13 +2,12 @@
   'use strict';
 
   var jCore = require('jcore');
-  var helper = app.helper || require('../helper.js');
 
-  var LockRelation = helper.inherits(function(props) {
+  var LockRelation = jCore.Relation.inherits(function(props) {
     this.type = props.type;
     this.port = props.port;
     this.wire = props.wire;
-  }, jCore.Relation);
+  });
 
   LockRelation.prototype.update = function() {
     var x = this.port[this.type.portKeys.x]();

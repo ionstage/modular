@@ -5,10 +5,9 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
-  var Component = app.Component || require('./component.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
 
-  var Module = Component.inherits(function(props) {
+  var Module = jCore.Component.inherits(function(props) {
     this.title = this.prop(props.title);
     this.name = this.prop(props.name);
     this.x = this.prop(props.x);
@@ -24,14 +23,14 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
     this.headerHeight = this.prop(32);
-    this.portList = new Module.PortList({ element: this.childElement('.module-port-list') });
-    this.portSelect = new Module.PortSelect({ element: this.childElement('.module-port-select') });
-    this.draggable = new Module.Draggable({ component: this });
+    this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
+    this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
+    this.draggable = new Module.Draggable(this);
     this.onpoint = this.emit.bind(this, 'point', this);
   });
 
   Module.prototype.componentElement = function() {
-    return this.childElement('.module-component');
+    return this.findElement('.module-component');
   };
 
   Module.prototype.componentContentWindow = function() {
@@ -334,9 +333,9 @@
     this.portSelect.on('select', this.onselect.bind(this));
     this.addRelation(new Module.Relation({
       module: this,
-      title: new Module.Title({ element: this.childElement('.module-title') }),
-      deleteButton: new Module.DeleteButton({ element: this.childElement('.module-delete-button') }),
-      footer: new Module.Footer({ element: this.childElement('.module-footer') }),
+      title: new Module.Title({ element: this.findElement('.module-title') }),
+      deleteButton: new Module.DeleteButton({ element: this.findElement('.module-delete-button') }),
+      footer: new Module.Footer({ element: this.findElement('.module-footer') }),
     }));
   };
 
@@ -405,7 +404,7 @@
   ].join('');
 
   Module.Title = (function() {
-    var Title = Component.inherits(function() {
+    var Title = jCore.Component.inherits(function() {
       this.text = this.prop('');
     });
 
@@ -419,7 +418,7 @@
   })();
 
   Module.DeleteButton = (function() {
-    var DeleteButton = Component.inherits(function() {
+    var DeleteButton = jCore.Component.inherits(function() {
       this.disabled = this.prop(false);
     });
 
@@ -433,7 +432,7 @@
   })();
 
   Module.PortList = (function() {
-    var PortList = Component.inherits(function() {
+    var PortList = jCore.Component.inherits(function() {
       this.ports = [];
     });
 
@@ -475,7 +474,7 @@
   })();
 
   Module.Footer = (function() {
-    var Footer = Component.inherits(function() {
+    var Footer = jCore.Component.inherits(function() {
       this.disabled = this.prop(false);
     });
 
@@ -489,14 +488,14 @@
   })();
 
   Module.PortSelect = (function() {
-    var PortSelect = Component.inherits(function(props) {
+    var PortSelect = jCore.Component.inherits(function(props) {
       this.ports = [];
       this.options = [];
       this.onchange = this.onchange.bind(this);
     });
 
     PortSelect.prototype.optGroupElement = function(type) {
-      return this.childElement('optgroup[data-type="' + type + '"]');
+      return this.findElement('optgroup[data-type="' + type + '"]');
     };
 
     PortSelect.prototype.add = function(port) {
@@ -551,7 +550,7 @@
     };
 
     PortSelect.Option = (function() {
-      var Option = Component.inherits(function(props) {
+      var Option = jCore.Component.inherits(function(props) {
         this.label = this.prop(props.label);
         this.name = this.prop(props.name);
       });
@@ -579,12 +578,12 @@
   })();
 
   Module.Relation = (function() {
-    var Relation = helper.inherits(function(props) {
+    var Relation = jCore.Relation.inherits(function(props) {
       this.module = props.module;
       this.title = props.title;
       this.deleteButton = props.deleteButton;
       this.footer = props.footer;
-    }, jCore.Relation);
+    });
 
     Relation.prototype.update = function() {
       this.updateTitle();
@@ -608,7 +607,7 @@
   })();
 
   Module.Draggable = (function() {
-    var Draggable = Component.Draggable.inherits();
+    var Draggable = jCore.Draggable.inherits();
 
     Draggable.prototype.onstart = function(module, x, y, event, context) {
       context.listeners = Draggable.listenersByTarget(dom.target(event));

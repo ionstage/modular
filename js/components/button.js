@@ -1,13 +1,13 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
 
-  var Button = Component.inherits(function(props) {
+  var Button = jCore.Component.inherits(function(props) {
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
-    this.draggable = new Button.Draggable({ component: this });
+    this.draggable = new Button.Draggable(this);
   });
 
   Button.prototype.oninit = function() {
@@ -25,7 +25,7 @@
   };
 
   Button.Draggable = (function() {
-    var Draggable = Component.Draggable.inherits();
+    var Draggable = jCore.Draggable.inherits();
 
     Draggable.prototype.onstart = function(button, x, y, event, context) {
       context.target = dom.target(event);

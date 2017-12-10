@@ -2,11 +2,11 @@
   'use strict';
 
   var IScroll = require('iscroll');
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
   var SidebarModule = app.SidebarModule || require('./sidebar-module.js');
 
-  var SidebarContent = Component.inherits(function(props) {
+  var SidebarContent = jCore.Component.inherits(function(props) {
     this.modules = [];
     this.scrollable = new SidebarContent.Scrollable({ element: props.element });
   });
@@ -21,7 +21,7 @@
 
   SidebarContent.prototype.appendModule = function(props) {
     var module = this.createModule(props);
-    module.parentElement(this.childElement('.sidebar-module-container'));
+    module.parentElement(this.findElement('.sidebar-module-container'));
     this.modules.push(module);
     this.markDirty();
   };
@@ -29,6 +29,7 @@
   SidebarContent.prototype.clear = function() {
     this.modules.forEach(function(module) {
       module.parentElement(null);
+      module.removeAllListeners();
     });
     this.modules = [];
     this.markDirty();

@@ -1,10 +1,10 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
 
-  var ModuleWire = Component.inherits(function(props) {
+  var ModuleWire = jCore.Component.inherits(function(props) {
     this.sourceX = this.prop(props.sourceX);
     this.sourceY = this.prop(props.sourceY);
     this.targetX = this.prop(props.targetX);

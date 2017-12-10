@@ -1,15 +1,15 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var Button = app.Button || require('./button.js');
-  var Component = app.Component || require('./component.js');
   var LoadButton = app.LoadButton || require('./load-button.js');
   var ToggleButton = app.ToggleButton || require('./toggle-button.js');
 
-  var MainHeader = Component.inherits(function(props) {
-    this.sidebarToggleButton = new ToggleButton({ element: this.childElement('.sidebar-toggle-button') });
-    this.loadButton = new LoadButton({ element: this.childElement('.load-button') });
-    this.saveButton = new Button({ element: this.childElement('.save-button') });
+  var MainHeader = jCore.Component.inherits(function(props) {
+    this.sidebarToggleButton = new ToggleButton({ element: this.findElement('.sidebar-toggle-button') });
+    this.loadButton = new LoadButton({ element: this.findElement('.load-button') });
+    this.saveButton = new Button({ element: this.findElement('.save-button') });
   });
 
   MainHeader.prototype.oninit = function() {

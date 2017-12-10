@@ -1,16 +1,16 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
   var Main = app.Main || require('./main.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
-  var Body = Component.inherits(function(props) {
+  var Body = jCore.Component.inherits(function(props) {
     this.hoverDisabled = this.prop(false);
     this.dragCount = this.prop(0);
-    this.sidebar = new Sidebar({ element: this.childElement('.sidebar') });
-    this.main = new Main({ element: this.childElement('.main') });
+    this.sidebar = new Sidebar({ element: this.findElement('.sidebar') });
+    this.main = new Main({ element: this.findElement('.main') });
   });
 
   Body.prototype.isDragging = function() {

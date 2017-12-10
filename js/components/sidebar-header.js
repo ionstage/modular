@@ -1,11 +1,11 @@
 (function(app) {
   'use strict';
 
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
-  var Component = app.Component || require('./component.js');
 
-  var SidebarHeader = Component.inherits(function() {
-    this.searchInput = new SidebarHeader.SearchInput({ element: this.childElement('.search-input') });
+  var SidebarHeader = jCore.Component.inherits(function() {
+    this.searchInput = new SidebarHeader.SearchInput({ element: this.findElement('.search-input') });
   });
 
   SidebarHeader.prototype.loadSearchText = function() {
@@ -18,7 +18,7 @@
   };
 
   SidebarHeader.SearchInput = (function() {
-    var SearchInput = Component.inherits(function() {
+    var SearchInput = jCore.Component.inherits(function() {
       this.isFocused = this.prop(false);
     });
 
