@@ -3,7 +3,7 @@
 
   var dom = app.dom || require('../dom.js');
   var Component = app.Component || require('./component.js');
-  var EntryCollection = app.EntryCollection || require('../collections/entry-collection.js');
+  var EntryCollection = app.EntryCollection || require('../models/entry-collection.js');
   var SidebarContent = app.SidebarContent || require('./sidebar-content.js');
   var SidebarHeader = app.SidebarHeader || require('./sidebar-header.js');
 
