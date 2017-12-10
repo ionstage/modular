@@ -17,11 +17,11 @@
     "jcore": "^0.1.0"
   },
   "devDependencies": {
-    "browser-sync": "^2.12.5",
-    "browserify": "^13.0.0",
-    "clean-css": "^3.4.12",
-    "font-awesome-svg-png": "^1.1.5",
-    "uglify-js": "^2.6.2"
+    "browser-sync": "^2.18.13",
+    "browserify": "^14.5.0",
+    "clean-css-cli": "^4.1.10",
+    "font-awesome-svg-png": "^1.2.2",
+    "uglify-js": "^3.2.1"
   },
   "private": true
 }
