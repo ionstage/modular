@@ -13,23 +13,6 @@
     return Math.min(Math.max(number, lower), upper);
   };
 
-  helper.inherits = function(ctor, superCtor) {
-    ctor.super_ = superCtor;
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true,
-      },
-    });
-    return ctor;
-  };
-
-  helper.toArray = function(value) {
-    return Array.prototype.slice.call(value);
-  };
-
   helper.extend = function(obj, src) {
     Object.keys(src).forEach(function(key) {
       obj[key] = src[key];
