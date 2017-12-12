@@ -8,10 +8,6 @@
     Object.defineProperty(g, key, { value: value });
   };
 
-  dom.find = function(el, selector) {
-    return el.querySelector(selector);
-  };
-
   dom.body = function() {
     return document.body;
   };
@@ -36,10 +32,6 @@
     return Array.prototype.slice.call(arguments).reduce(function(el, index) {
       return ('childNodes' in el ? el.childNodes[index] : null);
     });
-  };
-
-  dom.parent = function(el) {
-    return el.parentNode;
   };
 
   dom.contains = function(el, other) {
@@ -84,10 +76,6 @@
       return el.dataset[key];
     }
     el.dataset[key] = value;
-  };
-
-  dom.name = function(el, s) {
-    el.name = s;
   };
 
   dom.text = function(el, s) {
@@ -216,14 +204,6 @@
     event.preventDefault();
   };
 
-  dom.origin = function(event) {
-    return event.origin;
-  };
-
-  dom.messageData = function(event) {
-    return event.data;
-  };
-
   dom.eventType = function(name) {
     var supportsTouch = dom.supportsTouch();
     switch (name) {
@@ -237,104 +217,6 @@
         throw new Error('Invalid event type');
     }
   };
-
-  dom.pageX = function(event) {
-    return (dom.changedTouch(event) || event).pageX;
-  };
-
-  dom.pageY = function(event) {
-    return (dom.changedTouch(event) || event).pageY;
-  };
-
-  dom.clientX = function(event) {
-    return (dom.changedTouch(event) || event).clientX;
-  };
-
-  dom.clientY = function(event) {
-    return (dom.changedTouch(event) || event).clientY;
-  };
-
-  dom.identifier = function(event) {
-    var touch = dom.changedTouch(event);
-    return (touch ? touch.identifier : null);
-  };
-
-  dom.Draggable = (function() {
-    var Draggable = function(props) {
-      this.element = props.element;
-      this.start = this.start.bind(this);
-      this.move = this.move.bind(this);
-      this.end = this.end.bind(this);
-      this.onstart = null;
-      this.onmove = null;
-      this.onend = null;
-      this.lock = false;
-      this.identifier = null;
-      this.startPageX = 0;
-      this.startPageY = 0;
-      this.context = {};
-    };
-
-    Draggable.prototype.enable = function(listeners) {
-      this.onstart = listeners.onstart;
-      this.onmove = listeners.onmove;
-      this.onend = listeners.onend;
-      dom.on(this.element, dom.eventType('start'), this.start);
-    };
-
-    Draggable.prototype.disable = function() {
-      dom.off(this.element, dom.eventType('start'), this.start);
-      dom.off(document, dom.eventType('move'), this.move);
-      dom.off(document, dom.eventType('end'), this.end);
-      this.lock = false;
-      this.context = {};
-    };
-
-    Draggable.prototype.start = function(event) {
-      if (this.lock) {
-        return;
-      }
-
-      this.lock = true;
-      this.identifier = dom.identifier(event);
-      this.startPageX = dom.pageX(event);
-      this.startPageY = dom.pageY(event);
-
-      var x = dom.clientX(event) - dom.offsetLeft(this.element);
-      var y = dom.clientY(event) - dom.offsetTop(this.element);
-      this.onstart.call(null, x, y, event, this.context);
-
-      dom.on(document, dom.eventType('move'), this.move);
-      dom.on(document, dom.eventType('end'), this.end);
-    };
-
-    Draggable.prototype.move = function(event) {
-      if (this.identifier && this.identifier !== dom.identifier(event)) {
-        return;
-      }
-
-      var dx = dom.pageX(event) - this.startPageX;
-      var dy = dom.pageY(event) - this.startPageY;
-      this.onmove.call(null, dx, dy, event, this.context);
-    };
-
-    Draggable.prototype.end = function(event) {
-      if (this.identifier && this.identifier !== dom.identifier(event)) {
-        return;
-      }
-
-      dom.off(document, dom.eventType('move'), this.move);
-      dom.off(document, dom.eventType('end'), this.end);
-
-      var dx = dom.pageX(event) - this.startPageX;
-      var dy = dom.pageY(event) - this.startPageY;
-      this.onend.call(null, dx, dy, event, this.context);
-
-      this.lock = false;
-    };
-
-    return Draggable;
-  })();
 
   dom.readFile = function(file) {
     return new Promise(function(resolve, reject) {
@@ -395,10 +277,6 @@
     return document.location;
   };
 
-  dom.urlOrigin = function(url) {
-    return url.protocol + '//' + url.host;
-  };
-
   dom.urlQuery = function(url) {
     return url.search.substring(1).split('&').reduce(function(obj, param) {
       var items = param.split('=');
@@ -409,34 +287,6 @@
       return obj;
     }, {});
   };
-
-  dom.Listenable = (function() {
-    var Listenable = function(props) {
-      this.element = props.element;
-      this.type = props.type;
-      this.callback = props.callback;
-      this.resolve = props.resolve;
-      this.reject = props.reject;
-      this.listener = this.listener.bind(this);
-
-      dom.on(this.element, this.type, this.listener);
-    };
-
-    Listenable.prototype.destroy = function() {
-      dom.off(this.element, this.type, this.listener);
-    };
-
-    Listenable.prototype.listener = function(event) {
-      try {
-        this.callback(event);
-        this.resolve();
-      } catch (e) {
-        this.reject(e);
-      }
-    };
-
-    return Listenable;
-  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = dom;
