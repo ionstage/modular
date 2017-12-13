@@ -101,20 +101,12 @@
     return el.getBoundingClientRect();
   };
 
-  dom.scrollLeft = function(el) {
-    return el.scrollLeft;
-  };
-
-  dom.scrollTop = function(el) {
-    return el.scrollTop;
-  };
-
   dom.offsetLeft = function(el) {
-    return dom.rect(el).left - dom.scrollLeft(el) - dom.rect(dom.body()).left;
+    return dom.rect(el).left - el.scrollLeft - dom.rect(document.body).left;
   };
 
   dom.offsetTop = function(el) {
-    return dom.rect(el).top - dom.scrollTop(el) - dom.rect(dom.body()).top;
+    return dom.rect(el).top - el.scrollTop - dom.rect(document.body).top;
   };
 
   dom.file = function(el) {
@@ -205,14 +197,13 @@
   };
 
   dom.eventType = function(name) {
-    var supportsTouch = dom.supportsTouch();
     switch (name) {
       case 'start':
-        return (supportsTouch ? 'touchstart' : 'mousedown');
+        return (dom.supportsTouch() ? 'touchstart' : 'mousedown');
       case 'move':
-        return (supportsTouch ? 'touchmove' : 'mousemove');
+        return (dom.supportsTouch() ? 'touchmove' : 'mousemove');
       case 'end':
-        return (supportsTouch ? 'touchend' : 'mouseup');
+        return (dom.supportsTouch() ? 'touchend' : 'mouseup');
       default:
         throw new Error('Invalid event type');
     }
