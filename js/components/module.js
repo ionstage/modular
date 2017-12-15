@@ -101,6 +101,10 @@
     return (this.visiblePorts().length === this.ports.length);
   };
 
+  Module.prototype.containsPort = function(port) {
+    return (this.ports.indexOf(port) !== -1);
+  };
+
   Module.prototype.hasHighlightedPort = function() {
     return this.ports.some(function(port) {
       return port.highlighted();
