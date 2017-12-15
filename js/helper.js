@@ -45,10 +45,9 @@
 
   helper.remove = function(array, item) {
     var index = array.indexOf(item);
-    if (index < 0 || index >= array.length) {
-      throw new RangeError('Invalid index');
+    if (index !== -1) {
+      array.splice(index, 1);
     }
-    array.splice(index, 1);
   };
 
   helper.moveToBack = function(array, item) {
