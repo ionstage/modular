@@ -14,7 +14,6 @@
     this.y = this.prop(props.y);
     this.zIndex = this.prop('auto');
     this.deletable = this.prop(true);
-    this.ports = this.prop([]);
     this.portListTop = this.prop(0);
     this.circuitModule = this.prop(null);
     this.eventCircuitModule = this.prop(null);
@@ -23,6 +22,7 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
     this.headerHeight = this.prop(32);
+    this.ports = [];
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
     this.draggable = new Module.Draggable(this);
@@ -75,19 +75,19 @@
   };
 
   Module.prototype.port = function(name) {
-    return helper.find(this.ports(), function(port) {
+    return helper.find(this.ports, function(port) {
       return (port.name() === name);
     });
   };
 
   Module.prototype.targetPort = function(target) {
-    return helper.find(this.ports(), function(port) {
+    return helper.find(this.ports, function(port) {
       return dom.contains(port.element(), target);
     });
   };
 
   Module.prototype.eventPorts = function() {
-    return this.ports().filter(function(port) {
+    return this.ports.filter(function(port) {
       return (port.type() === ModulePort.TYPE_EVENT);
     });
   };
@@ -98,28 +98,26 @@
 
   Module.prototype.footerDisabled = function() {
     // disable footer when all ports are visible
-    return (this.visiblePorts().length === this.ports().length);
+    return (this.visiblePorts().length === this.ports.length);
   };
 
   Module.prototype.hasHighlightedPort = function() {
-    return this.ports().some(function(port) {
+    return this.ports.some(function(port) {
       return port.highlighted();
     })
   };
 
   Module.prototype.portFromSocketPosition = function(x, y) {
-    var ports = this.ports();
-
-    if (ports.length === 0) {
+    if (this.ports.length === 0) {
       return null;
     }
 
     // all ports are at the same position to the x-axis
-    if (Math.abs(x - ports[0].socketX()) > 18) {
+    if (Math.abs(x - this.ports[0].socketX()) > 18) {
       return null;
     }
 
-    return helper.findLast(ports, function(port) {
+    return helper.findLast(this.ports, function(port) {
       return (Math.abs(y - port.socketY()) <= 18 && port.visible() && !port.socketDisabled());
     }.bind(this));
   };
@@ -221,7 +219,7 @@
   };
 
   Module.prototype.resetPortSelect = function() {
-    this.ports().forEach(function(port) {
+    this.ports.forEach(function(port) {
       this.portSelect.add(port);
     }.bind(this));
   };
@@ -250,7 +248,7 @@
     }.bind(this)).then(function() {
       this.resetComponentHeight();
       this.circuitModule(this.loadCircuitModule());
-      this.ports(this.createPorts());
+      this.ports = this.createPorts();
       this.resetPortSelect();
       this.eventCircuitModule(this.createEventCircuitModule());
       this.bindEventCircuitModule();
@@ -312,7 +310,7 @@
   };
 
   Module.prototype.hideAllPorts = function() {
-    this.ports().forEach(function(port) {
+    this.ports.forEach(function(port) {
       this.hidePort(port.name());
     }.bind(this));
   };

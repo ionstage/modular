@@ -67,7 +67,7 @@
 
   MainContent.prototype.moduleFromPort = function(port) {
     return helper.find(this.modules, function(module) {
-      return (module.ports().indexOf(port) !== -1);
+      return (module.ports.indexOf(port) !== -1);
     });
   };
 
