@@ -15,7 +15,6 @@
     this.zIndex = this.prop('auto');
     this.deletable = this.prop(true);
     this.portListTop = this.prop(0);
-    this.circuitModule = this.prop(null);
     this.eventCircuitModule = this.prop(null);
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
@@ -23,6 +22,7 @@
     this.isDeleting = this.prop(false);
     this.headerHeight = this.prop(32);
     this.ports = [];
+    this.circuitModule = null;
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
     this.draggable = new Module.Draggable(this);
@@ -38,8 +38,7 @@
   };
 
   Module.prototype.circuitModuleMember = function(name) {
-    var circuitModule = this.circuitModule();
-    return (circuitModule ? circuitModule.get(name) : null);
+    return (this.circuitModule ? this.circuitModule.get(name) : null);
   };
 
   Module.prototype.bottomRightX = function() {
@@ -148,7 +147,7 @@
   };
 
   Module.prototype.createPorts = function() {
-    return this.circuitModule().getAll().map(function(member) {
+    return this.circuitModule.getAll().map(function(member) {
       return new ModulePort(helper.extend({
         offsetX: this.portOffsetX(),
         offsetY: this.portOffsetY(),
@@ -168,27 +167,25 @@
   };
 
   Module.prototype.bindEventCircuitModule = function() {
-    var circuitModule = this.circuitModule();
     var eventCircuitModule = this.eventCircuitModule();
-    if (!circuitModule || !eventCircuitModule) {
+    if (!this.circuitModule || !eventCircuitModule) {
       return;
     }
 
     eventCircuitModule.getAll().forEach(function(member) {
-      CircuitModule.bind(circuitModule.get(member.name), member);
-    });
+      CircuitModule.bind(this.circuitModule.get(member.name), member);
+    }.bind(this));
   };
 
   Module.prototype.unbindEventCircuitModule = function() {
-    var circuitModule = this.circuitModule();
     var eventCircuitModule = this.eventCircuitModule();
-    if (!circuitModule || !eventCircuitModule) {
+    if (!this.circuitModule || !eventCircuitModule) {
       return;
     }
 
     eventCircuitModule.getAll().forEach(function(member) {
-      CircuitModule.unbind(circuitModule.get(member.name), member);
-    });
+      CircuitModule.unbind(this.circuitModule.get(member.name), member);
+    }.bind(this));
   };
 
   Module.prototype.registerComponentPointListener = function() {
@@ -251,7 +248,7 @@
       ]);
     }.bind(this)).then(function() {
       this.resetComponentHeight();
-      this.circuitModule(this.loadCircuitModule());
+      this.circuitModule = this.loadCircuitModule();
       this.ports = this.createPorts();
       this.resetPortSelect();
       this.eventCircuitModule(this.createEventCircuitModule());
