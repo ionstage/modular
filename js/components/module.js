@@ -15,7 +15,6 @@
     this.zIndex = this.prop('auto');
     this.deletable = this.prop(true);
     this.portListTop = this.prop(0);
-    this.eventCircuitModule = this.prop(null);
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
@@ -23,6 +22,7 @@
     this.headerHeight = this.prop(32);
     this.ports = [];
     this.circuitModule = null;
+    this.eventCircuitModule = null;
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
     this.draggable = new Module.Draggable(this);
@@ -167,23 +167,21 @@
   };
 
   Module.prototype.bindEventCircuitModule = function() {
-    var eventCircuitModule = this.eventCircuitModule();
-    if (!this.circuitModule || !eventCircuitModule) {
+    if (!this.circuitModule || !this.eventCircuitModule) {
       return;
     }
 
-    eventCircuitModule.getAll().forEach(function(member) {
+    this.eventCircuitModule.getAll().forEach(function(member) {
       CircuitModule.bind(this.circuitModule.get(member.name), member);
     }.bind(this));
   };
 
   Module.prototype.unbindEventCircuitModule = function() {
-    var eventCircuitModule = this.eventCircuitModule();
-    if (!this.circuitModule || !eventCircuitModule) {
+    if (!this.circuitModule || !this.eventCircuitModule) {
       return;
     }
 
-    eventCircuitModule.getAll().forEach(function(member) {
+    this.eventCircuitModule.getAll().forEach(function(member) {
       CircuitModule.unbind(this.circuitModule.get(member.name), member);
     }.bind(this));
   };
@@ -251,7 +249,7 @@
       this.circuitModule = this.loadCircuitModule();
       this.ports = this.createPorts();
       this.resetPortSelect();
-      this.eventCircuitModule(this.createEventCircuitModule());
+      this.eventCircuitModule = this.createEventCircuitModule();
       this.bindEventCircuitModule();
       this.registerComponentPointListener();
       this.isLoading(false);
