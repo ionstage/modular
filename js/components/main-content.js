@@ -404,7 +404,6 @@
   };
 
   MainContent.prototype.ondelete = function(module) {
-    module.removeAllListeners();
     helper.remove(this.modules, module);
     this.updateZIndex();
     this.updateWireHandleContainer();

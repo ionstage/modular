@@ -348,6 +348,7 @@
     this.unregisterPointListener();
     this.unbindEventCircuitModule();
     this.unregisterComponentPointListener();
+    this.removeAllListeners();
   };
 
   Module.prototype.onredraw = function() {

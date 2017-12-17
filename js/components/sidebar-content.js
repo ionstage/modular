@@ -29,7 +29,6 @@
   SidebarContent.prototype.clear = function() {
     this.modules.forEach(function(module) {
       module.parentElement(null);
-      module.removeAllListeners();
     });
     this.modules = [];
     this.markDirty();

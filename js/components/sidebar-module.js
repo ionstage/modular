@@ -30,6 +30,7 @@
 
   SidebarModule.prototype.onremove = function() {
     this.draggable.disable();
+    this.removeAllListeners();
   };
 
   SidebarModule.prototype.onredraw = function() {
