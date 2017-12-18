@@ -180,18 +180,8 @@
 
   MainContent.prototype.createModule = function(props) {
     var module = new Module(props);
-    module.on('delete', this.ondelete.bind(this));
-    module.on('point', this.onpoint.bind(this));
-    module.on('porttoggle', this.onporttoggle.bind(this));
-    module.on('portevent', this.onportevent.bind(this));
-    module.on('dragstart', this.ondragstart.bind(this));
-    module.on('dragend', this.ondragend.bind(this));
-    module.on('plugdragstart', this.onplugdragstart.bind(this));
-    module.on('plugdragmove', this.onplugdragmove.bind(this));
-    module.on('plugdragend', this.onplugdragend.bind(this));
-    module.on('socketdragstart', this.onsocketdragstart.bind(this));
-    module.on('socketdragmove', this.onsocketdragmove.bind(this));
-    module.on('socketdragend', this.onsocketdragend.bind(this));
+    module.on('append', this.onmoduleappend.bind(this));
+    module.on('remove', this.onmoduleremove.bind(this));
     return module;
   };
 
@@ -401,6 +391,25 @@
   MainContent.prototype.onredraw = function() {
     this.redrawRetainer();
     this.redrawWireHandleContainer();
+  };
+
+  MainContent.prototype.onmoduleappend = function(module) {
+    module.on('delete', this.ondelete.bind(this));
+    module.on('point', this.onpoint.bind(this));
+    module.on('porttoggle', this.onporttoggle.bind(this));
+    module.on('portevent', this.onportevent.bind(this));
+    module.on('dragstart', this.ondragstart.bind(this));
+    module.on('dragend', this.ondragend.bind(this));
+    module.on('plugdragstart', this.onplugdragstart.bind(this));
+    module.on('plugdragmove', this.onplugdragmove.bind(this));
+    module.on('plugdragend', this.onplugdragend.bind(this));
+    module.on('socketdragstart', this.onsocketdragstart.bind(this));
+    module.on('socketdragmove', this.onsocketdragmove.bind(this));
+    module.on('socketdragend', this.onsocketdragend.bind(this));
+  };
+
+  MainContent.prototype.onmoduleremove = function(module) {
+    module.removeAllListeners();
   };
 
   MainContent.prototype.ondelete = function(module) {
