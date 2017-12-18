@@ -13,9 +13,8 @@
 
   SidebarContent.prototype.createModule = function(props) {
     var module = new SidebarModule(props);
-    module.on('dragstart', this.emit.bind(this, 'dragstart'));
-    module.on('dragend', this.emit.bind(this, 'dragend'));
-    module.on('drop', this.emit.bind(this, 'drop'));
+    module.on('append', this.onmoduleappend.bind(this));
+    module.on('remove', this.onmoduleremove.bind(this));
     return module;
   };
 
@@ -57,6 +56,16 @@
 
   SidebarContent.prototype.onredraw = function() {
     this.scrollable.refresh();
+  };
+
+  SidebarContent.prototype.onmoduleappend = function(module) {
+    module.on('dragstart', this.emit.bind(this, 'dragstart'));
+    module.on('dragend', this.emit.bind(this, 'dragend'));
+    module.on('drop', this.emit.bind(this, 'drop'));
+  };
+
+  SidebarContent.prototype.onmoduleremove = function(module) {
+    module.removeAllListeners();
   };
 
   SidebarContent.Scrollable = (function() {
