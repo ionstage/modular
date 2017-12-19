@@ -23,9 +23,7 @@
   };
 
   dom.remove = function(el) {
-    if (el.parentNode) {
-      el.parentNode.removeChild(el);
-    }
+    el.parentNode.removeChild(el);
   };
 
   dom.childNode = function() {
