@@ -26,12 +26,6 @@
     el.parentNode.removeChild(el);
   };
 
-  dom.childNode = function() {
-    return Array.prototype.slice.call(arguments).reduce(function(el, index) {
-      return ('childNodes' in el ? el.childNodes[index] : null);
-    });
-  };
-
   dom.contains = function(el, other) {
     return el.contains(other);
   };

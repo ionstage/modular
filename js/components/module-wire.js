@@ -18,8 +18,7 @@
   });
 
   ModuleWire.prototype.pathElement = function() {
-    // use 'dom.childNode' method for SVGElement
-    return dom.childNode(this.element(), 0);
+    return this.findElement('path');
   };
 
   ModuleWire.prototype.handleX = function() {
