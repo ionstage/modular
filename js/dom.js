@@ -113,8 +113,8 @@
     doc.close();
   };
 
-  dom.fillContentHeight = function(iframe) {
-    iframe.style.height = iframe.contentDocument.documentElement.scrollHeight + 'px';
+  dom.contentHeight = function(iframe) {
+    return iframe.contentDocument.documentElement.scrollHeight;
   };
 
   dom.isFocused = function(el) {

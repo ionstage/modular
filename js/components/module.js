@@ -213,7 +213,7 @@
   };
 
   Module.prototype.resetComponentHeight = function() {
-    dom.fillContentHeight(this.componentElement());
+    dom.css(this.componentElement(), { height: dom.contentHeight(this.componentElement()) + 'px' });
     this.portListTop(this.headerHeight() + dom.rect(this.componentElement()).height + 1);
   };
 
