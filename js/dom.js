@@ -64,9 +64,6 @@
   };
 
   dom.data = function(el, key, value) {
-    if (typeof value === 'undefined') {
-      return el.dataset[key];
-    }
     el.dataset[key] = value;
   };
 
