@@ -14,7 +14,7 @@
   };
 
   EntryCollection.prototype.entriesUrl = function(packageName) {
-    return 'modular_modules/' + helper.encodePath(packageName) + '/index.json';
+    return 'modular_modules/' + encodeURI(packageName) + '/index.json';
   };
 
   EntryCollection.prototype.load = function() {

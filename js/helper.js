@@ -3,12 +3,6 @@
 
   var helper = {};
 
-  helper.encodePath = function(str) {
-    return str.split('/').map(function(s) {
-      return encodeURIComponent(s);
-    }).join('/');
-  };
-
   helper.clamp = function(number, lower, upper) {
     return Math.min(Math.max(number, lower), upper);
   };

@@ -126,7 +126,7 @@
   };
 
   Module.prototype.url = function() {
-    return 'modular_modules/' + helper.encodePath(this.name()) + '.html';
+    return 'modular_modules/' + encodeURI(this.name()) + '.html';
   };
 
   Module.prototype.props = function() {
