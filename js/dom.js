@@ -83,7 +83,7 @@
   };
 
   dom.selectAll = function(el) {
-    el.setSelectionRange(0, 9999);
+    el.setSelectionRange(0, el.value.length);
   };
 
   dom.rect = function(el) {
