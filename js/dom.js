@@ -257,8 +257,8 @@
     return document.location;
   };
 
-  dom.urlQuery = function(url, key) {
-    var params = url.search.substring(1).split('&');
+  dom.urlQuery = function(loc, key) {
+    var params = loc.search.substring(1).split('&');
     for (var i = 0, len = params.length; i < len; i++) {
       var items = params[i].split('=');
       if (decodeURIComponent(items[0] || '') === key) {
