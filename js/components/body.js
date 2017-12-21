@@ -53,7 +53,7 @@
   };
 
   Body.prototype.loadDemo = function() {
-    var name = dom.urlQuery(dom.location()).demo;
+    var name = dom.urlQuery(dom.location(), 'demo');
     return (name ? this.main.loadUrl(this.demoUrl(name)) : Promise.resolve());
   };
 

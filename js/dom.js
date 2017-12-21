@@ -257,15 +257,15 @@
     return document.location;
   };
 
-  dom.urlQuery = function(url) {
-    return url.search.substring(1).split('&').reduce(function(obj, param) {
-      var items = param.split('=');
-      var key = items[0];
-      if (key) {
-        obj[decodeURIComponent(key)] = decodeURIComponent(items[1] || '');
+  dom.urlQuery = function(url, key) {
+    var params = url.search.substring(1).split('&');
+    for (var i = 0, len = params.length; i < len; i++) {
+      var items = params[i].split('=');
+      if (decodeURIComponent(items[0] || '') === key) {
+        return decodeURIComponent(items[1] || '');
       }
-      return obj;
-    }, {});
+    }
+    return null;
   };
 
   if (typeof module !== 'undefined' && module.exports) {
