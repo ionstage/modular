@@ -42,11 +42,11 @@
   };
 
   Module.prototype.bottomRightX = function() {
-    return this.x() + dom.rect(this.element()).width + this.rightPadding();
+    return this.x() + dom.width(this.element()) + this.rightPadding();
   };
 
   Module.prototype.bottomRightY = function() {
-    return this.y() + dom.rect(this.element()).height;
+    return this.y() + dom.height(this.element());
   };
 
   Module.prototype.rightPadding = function() {
@@ -214,7 +214,7 @@
 
   Module.prototype.resetComponentHeight = function() {
     dom.css(this.componentElement(), { height: dom.contentHeight(this.componentElement()) + 'px' });
-    this.portListTop(this.headerHeight() + dom.rect(this.componentElement()).height + 1);
+    this.portListTop(this.headerHeight() + dom.height(this.componentElement()) + 1);
   };
 
   Module.prototype.resetPortSelect = function() {

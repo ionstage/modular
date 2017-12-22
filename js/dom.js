@@ -86,16 +86,20 @@
     el.setSelectionRange(0, el.value.length);
   };
 
-  dom.rect = function(el) {
-    return el.getBoundingClientRect();
+  dom.width = function(el) {
+    return el.getBoundingClientRect().width;
+  };
+
+  dom.height = function(el) {
+    return el.getBoundingClientRect().height;
   };
 
   dom.offsetLeft = function(el) {
-    return dom.rect(el).left - el.scrollLeft - dom.rect(document.body).left;
+    return el.getBoundingClientRect().left - el.scrollLeft - document.body.getBoundingClientRect().left;
   };
 
   dom.offsetTop = function(el) {
-    return dom.rect(el).top - el.scrollTop - dom.rect(document.body).top;
+    return el.getBoundingClientRect().top - el.scrollTop - document.body.getBoundingClientRect().top;
   };
 
   dom.file = function(el) {
