@@ -41,12 +41,9 @@
     this.redrawBy('sourceX', 'sourceY', 'targetX', 'targetY', function(sourceX, sourceY, targetX, targetY) {
       var x = Math.min(sourceX, targetX);
       var y = Math.min(sourceY, targetY);
-
+      var d = ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' ');
       dom.translate(this.element(), x, y);
-
-      dom.attr(this.pathElement(), {
-        d: ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' '),
-      });
+      dom.attr(this.pathElement(), { d: d });
     });
   };
 
