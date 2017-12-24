@@ -15,11 +15,8 @@
     this.draggingWires = [];
     this.lockRelations = [];
     this.bindings = [];
+    this.retainer = new MainContent.Retainer({ element: this.findElement('.main-content-retainer') });
   });
-
-  MainContent.prototype.retainerElement = function() {
-    return this.findElement('.main-content-retainer');
-  };
 
   MainContent.prototype.wireContainerElement = function() {
     return this.findElement('.module-wire-container');
@@ -331,7 +328,8 @@
   };
 
   MainContent.prototype.updateRetainer = function() {
-    this.markDirty();
+    this.retainer.x(this.retainerX());
+    this.retainer.y(this.retainerY());
   };
 
   MainContent.prototype.updateWireHandleContainer = function() {
@@ -367,12 +365,6 @@
     module.deletable(!module.hasHighlightedPort());
   };
 
-  MainContent.prototype.redrawRetainer = function() {
-    this.redrawBy('retainerX', 'retainerY', function(retainerX, retainerY) {
-      dom.translate(this.retainerElement(), retainerX, retainerY);
-    });
-  };
-
   MainContent.prototype.redrawWireHandleContainer = function() {
     this.redrawBy('wireHandleContainerZIndex', function(wireHandleContainerZIndex) {
       dom.css(this.wireHandleContainerElement(), { zIndex: wireHandleContainerZIndex });
@@ -389,7 +381,6 @@
   };
 
   MainContent.prototype.onredraw = function() {
-    this.redrawRetainer();
     this.redrawWireHandleContainer();
   };
 
@@ -520,6 +511,21 @@
   };
 
   MainContent.RETAINER_PADDING = 80;
+
+  MainContent.Retainer = (function() {
+    var Retainer = jCore.Component.inherits(function() {
+      this.x = this.prop(0);
+      this.y = this.prop(0);
+    });
+
+    Retainer.prototype.onredraw = function() {
+      this.redrawBy('x', 'y', function(x, y) {
+        dom.translate(this.element(), x, y);
+      });
+    };
+
+    return Retainer;
+  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = MainContent;
