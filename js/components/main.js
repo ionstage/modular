@@ -26,11 +26,6 @@
     this.isFullWidth(!this.isFullWidth());
   };
 
-  Main.prototype.loadContent = function(data) {
-    this.content.clear();
-    return this.content.load(data);
-  };
-
   Main.prototype.loadFile = function(file) {
     return dom.readFile(file).then(function(text) {
       return this.loadContent(JSON.parse(text));
@@ -41,6 +36,11 @@
     return dom.loadJSON(url).then(function(data) {
       return this.loadContent(data);
     }.bind(this));
+  };
+
+  Main.prototype.loadContent = function(data) {
+    this.content.clear();
+    return this.content.load(data);
   };
 
   Main.prototype.loadModule = function(props, visiblePortNames) {
