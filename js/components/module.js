@@ -23,18 +23,15 @@
     this.ports = [];
     this.circuitModule = null;
     this.eventCircuitModule = null;
+    this.component = new Module.Component({ element: this.findElement('.module-component') });
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
     this.draggable = new Module.Draggable(this);
     this.onpoint = this.emit.bind(this, 'point', this);
   });
 
-  Module.prototype.componentElement = function() {
-    return this.findElement('.module-component');
-  };
-
   Module.prototype.componentContentWindow = function() {
-    return dom.contentWindow(this.componentElement());
+    return dom.contentWindow(this.component.element());
   };
 
   Module.prototype.circuitModuleMember = function(name) {
@@ -202,10 +199,6 @@
     dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
   };
 
-  Module.prototype.setComponentContent = function(contentText) {
-    dom.writeContent(this.componentElement(), contentText);
-  };
-
   Module.prototype.registerComponentLoadListener = function(resolve, reject) {
     dom.once(this.componentContentWindow(), 'load', function() {
       resolve();
@@ -213,8 +206,8 @@
   };
 
   Module.prototype.resetComponentHeight = function() {
-    dom.css(this.componentElement(), { height: dom.contentHeight(this.componentElement()) + 'px' });
-    this.portListTop(this.headerHeight() + dom.height(this.componentElement()) + 1);
+    this.component.resetHeight();
+    this.portListTop(this.headerHeight() + this.component.height() + 1);
   };
 
   Module.prototype.resetPortSelect = function() {
@@ -237,7 +230,7 @@
       type: 'GET',
       url: this.url(),
     }).then(function(text) {
-      this.setComponentContent(text);
+      this.component.loadContent(text);
       return Promise.race([
         new Promise(this.registerComponentLoadListener.bind(this)),
         new Promise(function(resolve, reject) {
@@ -428,6 +421,24 @@
     };
 
     return DeleteButton;
+  })();
+
+  Module.Component = (function() {
+    var Component = jCore.Component.inherits();
+
+    Component.prototype.loadContent = function(text) {
+      dom.writeContent(this.element(), text);
+    };
+
+    Component.prototype.height = function() {
+      return dom.height(this.element());
+    };
+
+    Component.prototype.resetHeight = function() {
+      dom.css(this.element(), { height: dom.contentHeight(this.element()) + 'px' });
+    };
+
+    return Component;
   })();
 
   Module.PortList = (function() {
