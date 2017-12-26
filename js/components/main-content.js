@@ -16,6 +16,7 @@
     this.lockRelations = [];
     this.bindings = [];
     this.retainer = new MainContent.Retainer({ element: this.findElement('.main-content-retainer') });
+    this.wireHandleContainer = new MainContent.WireHandleContainer({ element: this.findElement('.module-wire-handle-container') });
   });
 
   MainContent.prototype.wireContainerElement = function() {
@@ -24,10 +25,6 @@
 
   MainContent.prototype.containerElement = function() {
     return this.findElement('.module-container');
-  };
-
-  MainContent.prototype.wireHandleContainerElement = function() {
-    return this.findElement('.module-wire-handle-container');
   };
 
   MainContent.prototype.offsetLeft = function() {
@@ -190,7 +187,7 @@
       targetY: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
       handleType: sourcePort.type(),
       handleVisible: !targetPort,
-      parentHandleElement: this.wireHandleContainerElement(),
+      parentHandleElement: this.wireHandleContainer.element(),
     });
   };
 
@@ -333,7 +330,7 @@
   };
 
   MainContent.prototype.updateWireHandleContainer = function() {
-    this.markDirty();
+    this.wireHandleContainer.zIndex(this.wireHandleContainerZIndex());
   };
 
   MainContent.prototype.updateZIndex = function() {
@@ -365,12 +362,6 @@
     module.deletable(!module.hasHighlightedPort());
   };
 
-  MainContent.prototype.redrawWireHandleContainer = function() {
-    this.redrawBy('wireHandleContainerZIndex', function(wireHandleContainerZIndex) {
-      dom.css(this.wireHandleContainerElement(), { zIndex: wireHandleContainerZIndex });
-    });
-  };
-
   MainContent.prototype.oninit = function() {
     dom.on(this.element(), dom.eventType('start'), function(event) {
       // remove keyboard focus when pointing background
@@ -378,10 +369,6 @@
         dom.removeFocus();
       }
     }.bind(this));
-  };
-
-  MainContent.prototype.onredraw = function() {
-    this.redrawWireHandleContainer();
   };
 
   MainContent.prototype.onmoduleappend = function(module) {
@@ -525,6 +512,20 @@
     };
 
     return Retainer;
+  })();
+
+  MainContent.WireHandleContainer = (function() {
+    var WireHandleContainer = jCore.Component.inherits(function() {
+      this.zIndex = this.prop('auto');
+    });
+
+    WireHandleContainer.prototype.onredraw = function() {
+      this.redrawBy('zIndex', function(zIndex) {
+        dom.css(this.element(), { zIndex: zIndex });
+      });
+    };
+
+    return WireHandleContainer;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
