@@ -427,16 +427,13 @@
         url: url,
       }).then(function(text) {
         dom.writeContent(this.element(), text);
-        return Promise.race([
-          new Promise(function(resolve, reject) {
-            dom.once(this.contentWindow(), 'load', function() {
-              resolve();
-            });
-          }.bind(this)),
-          new Promise(function(resolve, reject) {
-            setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
-          }),
-        ]);
+        return new Promise(function(resolve, reject) {
+          var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
+          dom.once(this.contentWindow(), 'load', function() {
+            clearTimeout(timeoutID);
+            resolve();
+          });
+        }.bind(this));
       }.bind(this));
     };
 
