@@ -199,12 +199,6 @@
     dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
   };
 
-  Module.prototype.registerComponentLoadListener = function(resolve, reject) {
-    dom.once(this.componentContentWindow(), 'load', function() {
-      resolve();
-    });
-  };
-
   Module.prototype.resetComponentHeight = function() {
     this.component.resetHeight();
     this.portListTop(this.headerHeight() + this.component.height() + 1);
@@ -226,18 +220,7 @@
 
   Module.prototype.loadComponent = function() {
     this.isLoading(true);
-    return dom.ajax({
-      type: 'GET',
-      url: this.url(),
-    }).then(function(text) {
-      this.component.loadContent(text);
-      return Promise.race([
-        new Promise(this.registerComponentLoadListener.bind(this)),
-        new Promise(function(resolve, reject) {
-          setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
-        }),
-      ]);
-    }.bind(this)).then(function() {
+    return this.component.load(this.url()).then(function() {
       this.resetComponentHeight();
       this.circuitModule = this.loadCircuitModule();
       this.ports = this.createPorts();
@@ -426,8 +409,8 @@
   Module.Component = (function() {
     var Component = jCore.Component.inherits();
 
-    Component.prototype.loadContent = function(text) {
-      dom.writeContent(this.element(), text);
+    Component.prototype.contentWindow = function() {
+      return dom.contentWindow(this.element());
     };
 
     Component.prototype.height = function() {
@@ -436,6 +419,25 @@
 
     Component.prototype.resetHeight = function() {
       dom.css(this.element(), { height: dom.contentHeight(this.element()) + 'px' });
+    };
+
+    Component.prototype.load = function(url) {
+      return dom.ajax({
+        type: 'GET',
+        url: url,
+      }).then(function(text) {
+        dom.writeContent(this.element(), text);
+        return Promise.race([
+          new Promise(function(resolve, reject) {
+            dom.once(this.contentWindow(), 'load', function() {
+              resolve();
+            });
+          }.bind(this)),
+          new Promise(function(resolve, reject) {
+            setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
+          }),
+        ]);
+      }.bind(this));
     };
 
     return Component;
