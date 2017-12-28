@@ -625,8 +625,8 @@
       }
 
       dom.cancel(event);
-      context.listeners.onstart(module, x, y, event, context);
       module.emit('dragstart');
+      context.listeners.onstart(module, x, y, event, context);
     };
 
     Draggable.prototype.onmove = function(module, dx, dy, event, context) {
@@ -642,8 +642,8 @@
         return;
       }
 
-      context.listeners.onend(module, dx, dy, event, context);
       module.emit('dragend');
+      context.listeners.onend(module, dx, dy, event, context);
     };
 
     Draggable.titleListeners = {
