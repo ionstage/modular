@@ -183,14 +183,6 @@
     }.bind(this));
   };
 
-  Module.prototype.registerComponentPointListener = function() {
-    dom.on(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
-  };
-
-  Module.prototype.unregisterComponentPointListener = function() {
-    dom.off(this.componentContentWindow(), dom.eventType('start'), this.onpoint, true);
-  };
-
   Module.prototype.registerPointListener = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
   };
@@ -227,7 +219,6 @@
       this.resetPortSelect();
       this.eventCircuitModule = this.createEventCircuitModule();
       this.bindEventCircuitModule();
-      this.registerComponentPointListener();
       this.isLoading(false);
     }.bind(this)).catch(function(e) {
       this.isError(true);
@@ -314,16 +305,18 @@
 
   Module.prototype.onappend = function() {
     this.draggable.enable();
+    this.component.on('point', this.onpoint);
     this.portSelect.onappend();
     this.registerPointListener();
   };
 
   Module.prototype.onremove = function() {
     this.draggable.disable();
+    this.component.unload();
+    this.component.removeAllListeners();
     this.portSelect.onremove();
     this.unregisterPointListener();
     this.unbindEventCircuitModule();
-    this.unregisterComponentPointListener();
   };
 
   Module.prototype.onredraw = function() {
@@ -405,7 +398,9 @@
   })();
 
   Module.Component = (function() {
-    var Component = jCore.Component.inherits();
+    var Component = jCore.Component.inherits(function() {
+      this.onpoint = this.emit.bind(this, 'point');
+    });
 
     Component.prototype.contentWindow = function() {
       return dom.contentWindow(this.element());
@@ -425,6 +420,7 @@
         url: url,
       }).then(function(text) {
         dom.writeContent(this.element(), text);
+        dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
         return new Promise(function(resolve, reject) {
           var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
           dom.once(this.contentWindow(), 'load', function() {
@@ -433,6 +429,10 @@
           });
         }.bind(this));
       }.bind(this));
+    };
+
+    Component.prototype.unload = function() {
+      dom.off(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
     };
 
     return Component;
