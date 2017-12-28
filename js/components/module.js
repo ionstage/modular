@@ -316,7 +316,6 @@
     this.draggable.enable();
     this.portSelect.onappend();
     this.registerPointListener();
-    this.emit('append', this);
   };
 
   Module.prototype.onremove = function() {
@@ -325,7 +324,6 @@
     this.unregisterPointListener();
     this.unbindEventCircuitModule();
     this.unregisterComponentPointListener();
-    this.emit('remove', this);
   };
 
   Module.prototype.onredraw = function() {
