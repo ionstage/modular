@@ -13,8 +13,9 @@
 
   SidebarContent.prototype.createModule = function(props) {
     var module = new SidebarModule(props);
-    module.on('append', this.onmoduleappend.bind(this));
-    module.on('remove', this.onmoduleremove.bind(this));
+    module.on('dragstart', this.emit.bind(this, 'dragstart'));
+    module.on('dragend', this.emit.bind(this, 'dragend'));
+    module.on('drop', this.emit.bind(this, 'drop'));
     return module;
   };
 
@@ -28,6 +29,7 @@
   SidebarContent.prototype.clear = function() {
     this.modules.forEach(function(module) {
       module.parentElement(null);
+      module.removeAllListeners();
     });
     this.modules = [];
     this.markDirty();
@@ -56,16 +58,6 @@
 
   SidebarContent.prototype.onredraw = function() {
     this.scrollable.refresh();
-  };
-
-  SidebarContent.prototype.onmoduleappend = function(module) {
-    module.on('dragstart', this.emit.bind(this, 'dragstart'));
-    module.on('dragend', this.emit.bind(this, 'dragend'));
-    module.on('drop', this.emit.bind(this, 'drop'));
-  };
-
-  SidebarContent.prototype.onmoduleremove = function(module) {
-    module.removeAllListeners();
   };
 
   SidebarContent.Scrollable = (function() {

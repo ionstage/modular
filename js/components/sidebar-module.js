@@ -26,12 +26,10 @@
 
   SidebarModule.prototype.onappend = function() {
     this.draggable.enable();
-    this.emit('append', this);
   };
 
   SidebarModule.prototype.onremove = function() {
     this.draggable.disable();
-    this.emit('remove', this);
   };
 
   SidebarModule.prototype.onredraw = function() {
