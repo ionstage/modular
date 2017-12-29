@@ -49,3 +49,11 @@
   pointer-events: none;
   width: 1px;
 }
+
+.module-container {
+  z-index: 0;
+}
+
+.module-wire-handle-container {
+  z-index: 1;
+}

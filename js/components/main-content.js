@@ -16,7 +16,6 @@
     this.lockRelations = [];
     this.bindings = [];
     this.retainer = new MainContent.Retainer({ element: this.findElement('.main-content-retainer') });
-    this.wireHandleContainer = new MainContent.WireHandleContainer({ element: this.findElement('.module-wire-handle-container') });
   });
 
   MainContent.prototype.wireContainerElement = function() {
@@ -53,10 +52,6 @@
 
   MainContent.prototype.retainerY = function() {
     return this.bottomRightY() - 1 + MainContent.RETAINER_PADDING;
-  };
-
-  MainContent.prototype.wireHandleContainerZIndex = function() {
-    return this.modules.length + 1;
   };
 
   MainContent.prototype.moduleFromPort = function(port) {
@@ -197,7 +192,7 @@
       targetY: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
       handleType: sourcePort.type(),
       handleVisible: !targetPort,
-      parentHandleElement: this.wireHandleContainer.element(),
+      parentHandleElement: this.findElement('.module-wire-handle-container'),
     });
   };
 
@@ -206,7 +201,6 @@
     module.parentElement(this.containerElement());
     this.modules.push(module);
     this.updateZIndex();
-    this.updateWireHandleContainer();
     module.redraw();
     return module.loadComponent().then(function() {
       visiblePortNames.forEach(function(name) {
@@ -339,10 +333,6 @@
     this.retainer.y(this.retainerY());
   };
 
-  MainContent.prototype.updateWireHandleContainer = function() {
-    this.wireHandleContainer.zIndex(this.wireHandleContainerZIndex());
-  };
-
   MainContent.prototype.updateZIndex = function() {
     this.modules.forEach(function(module, index) {
       module.zIndex(index);
@@ -385,7 +375,6 @@
     module.removeAllListeners();
     helper.remove(this.modules, module);
     this.updateZIndex();
-    this.updateWireHandleContainer();
   };
 
   MainContent.prototype.onpoint = function(module) {
@@ -504,20 +493,6 @@
     };
 
     return Retainer;
-  })();
-
-  MainContent.WireHandleContainer = (function() {
-    var WireHandleContainer = jCore.Component.inherits(function() {
-      this.zIndex = this.prop('auto');
-    });
-
-    WireHandleContainer.prototype.onredraw = function() {
-      this.redrawBy('zIndex', function(zIndex) {
-        dom.css(this.element(), { zIndex: zIndex });
-      });
-    };
-
-    return WireHandleContainer;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
