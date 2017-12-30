@@ -187,12 +187,6 @@
     this.portListTop(this.headerHeight() + this.component.height() + 1);
   };
 
-  Module.prototype.resetPortSelect = function() {
-    this.ports.forEach(function(port) {
-      this.portSelect.add(port);
-    }.bind(this));
-  };
-
   Module.prototype.loadCircuitModule = function() {
     var circuitModule = this.componentContentWindow().modular.exports;
     if (!circuitModule) {
@@ -207,7 +201,7 @@
       this.resetComponentHeight();
       this.circuitModule = this.loadCircuitModule();
       this.ports = this.createPorts();
-      this.resetPortSelect();
+      this.portSelect.set(this.ports);
       this.eventCircuitModule = this.createEventCircuitModule();
       this.bindEventCircuitModule();
       this.isLoading(false);
@@ -492,6 +486,11 @@
 
     PortSelect.prototype.optGroupElement = function(type) {
       return this.findElement('optgroup[data-type="' + type + '"]');
+    };
+
+    PortSelect.prototype.set = function(ports) {
+      this.ports = ports.slice();
+      this.markDirty();
     };
 
     PortSelect.prototype.add = function(port) {
