@@ -27,7 +27,6 @@
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
     this.draggable = new Module.Draggable(this);
-    this.onpoint = this.emit.bind(this, 'point', this);
   });
 
   Module.prototype.componentContentWindow = function() {
@@ -183,14 +182,6 @@
     }.bind(this));
   };
 
-  Module.prototype.registerPointListener = function() {
-    dom.on(this.element(), dom.eventType('start'), this.onpoint, true);
-  };
-
-  Module.prototype.unregisterPointListener = function() {
-    dom.off(this.element(), dom.eventType('start'), this.onpoint, true);
-  };
-
   Module.prototype.resetComponentHeight = function() {
     this.component.resetHeight();
     this.portListTop(this.headerHeight() + this.component.height() + 1);
@@ -305,9 +296,8 @@
 
   Module.prototype.onappend = function() {
     this.draggable.enable();
-    this.component.on('point', this.onpoint);
+    this.component.on('point', this.emit.bind(this, 'point', this));
     this.portSelect.onappend();
-    this.registerPointListener();
   };
 
   Module.prototype.onremove = function() {
@@ -315,7 +305,6 @@
     this.component.unload();
     this.component.removeAllListeners();
     this.portSelect.onremove();
-    this.unregisterPointListener();
     this.unbindEventCircuitModule();
   };
 
@@ -617,6 +606,7 @@
     var Draggable = jCore.Draggable.inherits();
 
     Draggable.prototype.onstart = function(module, x, y, event, context) {
+      module.emit('point', module);
       context.listeners = Draggable.listenersByTarget(dom.target(event));
       if (!context.listeners) {
         return;
