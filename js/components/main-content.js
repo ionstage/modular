@@ -47,11 +47,11 @@
   };
 
   MainContent.prototype.retainerX = function() {
-    return this.bottomRightX() - 1 + MainContent.RETAINER_PADDING;
+    return this.bottomRightX() + (this.modules.length > 0 ? this.retainer.margin() : 0);
   };
 
   MainContent.prototype.retainerY = function() {
-    return this.bottomRightY() - 1 + MainContent.RETAINER_PADDING;
+    return this.bottomRightY() + (this.modules.length > 0 ? this.retainer.margin() : 0);
   };
 
   MainContent.prototype.moduleFromPort = function(port) {
@@ -479,12 +479,11 @@
     this.onplugdragend(context.sourcePort, context);
   };
 
-  MainContent.RETAINER_PADDING = 80;
-
   MainContent.Retainer = (function() {
     var Retainer = jCore.Component.inherits(function() {
       this.x = this.prop(0);
       this.y = this.prop(0);
+      this.margin = this.prop(80);
     });
 
     Retainer.prototype.onredraw = function() {
