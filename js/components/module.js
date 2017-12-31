@@ -183,7 +183,6 @@
   };
 
   Module.prototype.resetComponentHeight = function() {
-    this.component.resetHeight();
     this.portListTop(this.headerHeight() + this.component.height() + 1);
   };
 
@@ -393,16 +392,13 @@
       return dom.height(this.element());
     };
 
-    Component.prototype.resetHeight = function() {
-      dom.css(this.element(), { height: dom.contentHeight(this.element()) + 'px' });
-    };
-
     Component.prototype.load = function(url) {
       return dom.ajax({
         type: 'GET',
         url: url,
       }).then(function(text) {
         dom.writeContent(this.element(), text);
+        dom.css(this.element(), { height: dom.contentHeight(this.element()) + 'px' });
         dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
         return new Promise(function(resolve, reject) {
           var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
