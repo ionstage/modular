@@ -14,7 +14,6 @@
     this.y = this.prop(props.y);
     this.zIndex = this.prop('auto');
     this.deletable = this.prop(true);
-    this.portListTop = this.prop(0);
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
@@ -66,7 +65,7 @@
   };
 
   Module.prototype.portOffsetY = function() {
-    return this.y() + this.portListTop();
+    return this.y() + this.headerHeight() + this.component.height() + 1;
   };
 
   Module.prototype.port = function(name) {
@@ -182,10 +181,6 @@
     }.bind(this));
   };
 
-  Module.prototype.resetComponentHeight = function() {
-    this.portListTop(this.headerHeight() + this.component.height() + 1);
-  };
-
   Module.prototype.loadCircuitModule = function() {
     var circuitModule = this.componentContentWindow().modular.exports;
     if (!circuitModule) {
@@ -197,7 +192,6 @@
   Module.prototype.loadComponent = function() {
     this.isLoading(true);
     return this.component.load(this.url()).then(function() {
-      this.resetComponentHeight();
       this.circuitModule = this.loadCircuitModule();
       this.ports = this.createPorts();
       this.portSelect.set(this.ports);
@@ -381,15 +375,12 @@
 
   Module.Component = (function() {
     var Component = jCore.Component.inherits(function() {
+      this.height = this.prop(0);
       this.onpoint = this.emit.bind(this, 'point');
     });
 
     Component.prototype.contentWindow = function() {
       return dom.contentWindow(this.element());
-    };
-
-    Component.prototype.height = function() {
-      return dom.height(this.element());
     };
 
     Component.prototype.load = function(url) {
@@ -400,6 +391,7 @@
         dom.writeContent(this.element(), text);
         dom.css(this.element(), { height: dom.contentHeight(this.element()) + 'px' });
         dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
+        this.height(dom.height(this.element()));
         return new Promise(function(resolve, reject) {
           var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
           dom.once(this.contentWindow(), 'load', function() {
