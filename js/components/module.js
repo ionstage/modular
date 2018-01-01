@@ -386,7 +386,7 @@
         dom.writeContent(this.element(), text);
         dom.css(this.element(), { height: dom.contentHeight(this.element()) + 'px' });
         dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
-        this.height(dom.height(this.element()));
+      }.bind(this)).then(function() {
         return new Promise(function(resolve, reject) {
           var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
           dom.once(this.contentWindow(), 'load', function() {
@@ -395,6 +395,7 @@
           });
         }.bind(this));
       }.bind(this)).then(function() {
+        this.height(dom.height(this.element()));
         this.circuitModule = this.contentWindow().modular.exports;
       }.bind(this));
     };
