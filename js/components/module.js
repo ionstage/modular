@@ -20,7 +20,6 @@
     this.isDeleting = this.prop(false);
     this.headerHeight = this.prop(32);
     this.ports = [];
-    this.eventCircuitModule = null;
     this.component = new Module.Component({ element: this.findElement('.module-component') });
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
@@ -72,12 +71,6 @@
   Module.prototype.targetPort = function(target) {
     return helper.find(this.ports, function(port) {
       return dom.contains(port.element(), target);
-    });
-  };
-
-  Module.prototype.eventPorts = function() {
-    return this.ports.filter(function(port) {
-      return (port.type() === ModulePort.TYPE_EVENT);
     });
   };
 
@@ -145,44 +138,11 @@
     }.bind(this));
   };
 
-  Module.prototype.createEventCircuitModule = function() {
-    return new CircuitModule.ModularModule(this.eventPorts().map(function(port) {
-      return {
-        label: port.label(),
-        name: port.name(),
-        type: port.type(),
-        arg: this.emit.bind(this, 'portevent', port),
-      };
-    }.bind(this)));
-  };
-
-  Module.prototype.bindEventCircuitModule = function() {
-    if (!this.eventCircuitModule) {
-      return;
-    }
-
-    this.eventCircuitModule.getAll().forEach(function(member) {
-      CircuitModule.bind(this.component.get(member.name), member);
-    }.bind(this));
-  };
-
-  Module.prototype.unbindEventCircuitModule = function() {
-    if (!this.eventCircuitModule) {
-      return;
-    }
-
-    this.eventCircuitModule.getAll().forEach(function(member) {
-      CircuitModule.unbind(this.component.get(member.name), member);
-    }.bind(this));
-  };
-
   Module.prototype.loadComponent = function() {
     this.isLoading(true);
     return this.component.load(this.url()).then(function() {
       this.ports = this.createPorts();
       this.portSelect.set(this.ports);
-      this.eventCircuitModule = this.createEventCircuitModule();
-      this.bindEventCircuitModule();
       this.isLoading(false);
     }.bind(this)).catch(function(e) {
       this.isError(true);
@@ -270,6 +230,7 @@
   Module.prototype.onappend = function() {
     this.draggable.enable();
     this.component.on('point', this.emit.bind(this, 'point', this));
+    this.component.on('event', this.onportevent.bind(this));
     this.portSelect.onappend();
   };
 
@@ -278,7 +239,6 @@
     this.component.unload();
     this.component.removeAllListeners();
     this.portSelect.onremove();
-    this.unbindEventCircuitModule();
   };
 
   Module.prototype.onredraw = function() {
@@ -309,6 +269,10 @@
 
   Module.prototype.onselect = function(name) {
     this.showPort(name);
+  };
+
+  Module.prototype.onportevent = function(member) {
+    this.emit('portevent', this.port(member.name));
   };
 
   Module.HTML_TEXT = [
@@ -363,6 +327,7 @@
     var Component = jCore.Component.inherits(function() {
       this.height = this.prop(0);
       this.circuitModule = null;
+      this.eventCircuitModule = null;
       this.onpoint = this.emit.bind(this, 'point');
     });
 
@@ -376,6 +341,26 @@
 
     Component.prototype.getAll = function() {
       return this.circuitModule.getAll();
+    };
+
+    Component.prototype.createEventCircuitModule = function() {
+      return new CircuitModule.ModularModule(this.circuitModule.getAll().filter(function(member) {
+        return (member.type === 'event');
+      }).map(function(member) {
+        return helper.extend({ arg: this.emit.bind(this, 'event', member) }, member);
+      }.bind(this)));
+    };
+
+    Component.prototype.bindEventCircuitModule = function() {
+      this.eventCircuitModule.getAll().forEach(function(member) {
+        CircuitModule.bind(this.circuitModule.get(member.name), member);
+      }.bind(this));
+    };
+
+    Component.prototype.unbindEventCircuitModule = function() {
+      this.eventCircuitModule.getAll().forEach(function(member) {
+        CircuitModule.unbind(this.circuitModule.get(member.name), member);
+      }.bind(this));
     };
 
     Component.prototype.load = function(url) {
@@ -397,11 +382,16 @@
       }.bind(this)).then(function() {
         this.height(dom.height(this.element()));
         this.circuitModule = this.contentWindow().modular.exports;
+        this.eventCircuitModule = this.createEventCircuitModule();
+        this.bindEventCircuitModule();
       }.bind(this));
     };
 
     Component.prototype.unload = function() {
       dom.off(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
+      if (this.eventCircuitModule) {
+        this.unbindEventCircuitModule();
+      }
     };
 
     return Component;
