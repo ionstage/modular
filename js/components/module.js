@@ -20,7 +20,6 @@
     this.isDeleting = this.prop(false);
     this.headerHeight = this.prop(32);
     this.ports = [];
-    this.circuitModule = null;
     this.eventCircuitModule = null;
     this.component = new Module.Component({ element: this.findElement('.module-component') });
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
@@ -28,12 +27,8 @@
     this.draggable = new Module.Draggable(this);
   });
 
-  Module.prototype.componentContentWindow = function() {
-    return dom.contentWindow(this.component.element());
-  };
-
   Module.prototype.circuitModuleMember = function(name) {
-    return (this.circuitModule ? this.circuitModule.get(name) : null);
+    return this.component.get(name);
   };
 
   Module.prototype.bottomRightX = function() {
@@ -142,7 +137,7 @@
   };
 
   Module.prototype.createPorts = function() {
-    return this.circuitModule.getAll().map(function(member) {
+    return this.component.getAll().map(function(member) {
       return new ModulePort(helper.extend({
         offsetX: this.portOffsetX(),
         offsetY: this.portOffsetY(),
@@ -162,37 +157,28 @@
   };
 
   Module.prototype.bindEventCircuitModule = function() {
-    if (!this.circuitModule || !this.eventCircuitModule) {
+    if (!this.eventCircuitModule) {
       return;
     }
 
     this.eventCircuitModule.getAll().forEach(function(member) {
-      CircuitModule.bind(this.circuitModule.get(member.name), member);
+      CircuitModule.bind(this.component.get(member.name), member);
     }.bind(this));
   };
 
   Module.prototype.unbindEventCircuitModule = function() {
-    if (!this.circuitModule || !this.eventCircuitModule) {
+    if (!this.eventCircuitModule) {
       return;
     }
 
     this.eventCircuitModule.getAll().forEach(function(member) {
-      CircuitModule.unbind(this.circuitModule.get(member.name), member);
+      CircuitModule.unbind(this.component.get(member.name), member);
     }.bind(this));
-  };
-
-  Module.prototype.loadCircuitModule = function() {
-    var circuitModule = this.componentContentWindow().modular.exports;
-    if (!circuitModule) {
-      throw new Error('Invalid circuit element');
-    }
-    return circuitModule;
   };
 
   Module.prototype.loadComponent = function() {
     this.isLoading(true);
     return this.component.load(this.url()).then(function() {
-      this.circuitModule = this.loadCircuitModule();
       this.ports = this.createPorts();
       this.portSelect.set(this.ports);
       this.eventCircuitModule = this.createEventCircuitModule();
@@ -376,11 +362,20 @@
   Module.Component = (function() {
     var Component = jCore.Component.inherits(function() {
       this.height = this.prop(0);
+      this.circuitModule = null;
       this.onpoint = this.emit.bind(this, 'point');
     });
 
     Component.prototype.contentWindow = function() {
       return dom.contentWindow(this.element());
+    };
+
+    Component.prototype.get = function(name) {
+      return this.circuitModule.get(name);
+    };
+
+    Component.prototype.getAll = function() {
+      return this.circuitModule.getAll();
     };
 
     Component.prototype.load = function(url) {
@@ -399,6 +394,8 @@
             resolve();
           });
         }.bind(this));
+      }.bind(this)).then(function() {
+        this.circuitModule = this.contentWindow().modular.exports;
       }.bind(this));
     };
 
