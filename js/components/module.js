@@ -19,6 +19,7 @@
     this.isDeleting = this.prop(false);
     this.ports = [];
     this.header = new Module.Header({ element: this.findElement('.module-header') });
+    this.footer = new Module.Footer({ element: this.findElement('.module-footer') });
     this.component = new Module.Component({ element: this.findElement('.module-component') });
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
@@ -77,11 +78,6 @@
     return this.portList.ports.slice();
   };
 
-  Module.prototype.footerDisabled = function() {
-    // disable footer when all ports are visible
-    return (this.visiblePorts().length === this.ports.length);
-  };
-
   Module.prototype.containsPort = function(port) {
     return (this.ports.indexOf(port) !== -1);
   };
@@ -126,6 +122,11 @@
     }).map(function(port) {
       return port.name();
     });
+  };
+
+  Module.prototype.footerDisabled = function() {
+    // disable footer when all ports are visible
+    return (this.visiblePorts().length === this.ports.length);
   };
 
   Module.prototype.createPorts = function() {
@@ -181,11 +182,11 @@
 
     this.portList.add(port);
     this.portSelect.remove(port);
+    this.footer.disabled(this.footerDisabled());
 
     // move right not to position the port-socket outside
     this.moveX(this.x());
 
-    this.markDirty();
     this.emit('porttoggle', port);
   };
 
@@ -198,7 +199,7 @@
 
     this.portList.remove(port);
     this.portSelect.add(port);
-    this.markDirty();
+    this.footer.disabled(this.footerDisabled());
     this.emit('porttoggle', port);
   };
 
@@ -223,10 +224,6 @@
   Module.prototype.oninit = function() {
     this.header.text(this.title());
     this.portSelect.on('select', this.onselect.bind(this));
-    this.addRelation(new Module.Relation({
-      module: this,
-      footer: new Module.Footer({ element: this.findElement('.module-footer') }),
-    }));
   };
 
   Module.prototype.onappend = function() {
@@ -323,6 +320,20 @@
     };
 
     return Header;
+  })();
+
+  Module.Footer = (function() {
+    var Footer = jCore.Component.inherits(function() {
+      this.disabled = this.prop(false);
+    });
+
+    Footer.prototype.onredraw = function() {
+      this.redrawBy('disabled', function(disabled) {
+        dom.toggleClass(this.element(), 'hide', disabled);
+      });
+    };
+
+    return Footer;
   })();
 
   Module.Component = (function() {
@@ -441,20 +452,6 @@
     return PortList;
   })();
 
-  Module.Footer = (function() {
-    var Footer = jCore.Component.inherits(function() {
-      this.disabled = this.prop(false);
-    });
-
-    Footer.prototype.onredraw = function() {
-      this.redrawBy('disabled', function(disabled) {
-        dom.toggleClass(this.element(), 'hide', disabled);
-      });
-    };
-
-    return Footer;
-  })();
-
   Module.PortSelect = (function() {
     var PortSelect = jCore.Component.inherits(function(props) {
       this.ports = [];
@@ -548,23 +545,6 @@
     })();
 
     return PortSelect;
-  })();
-
-  Module.Relation = (function() {
-    var Relation = jCore.Relation.inherits(function(props) {
-      this.module = props.module;
-      this.footer = props.footer;
-    });
-
-    Relation.prototype.update = function() {
-      this.updateFooter();
-    };
-
-    Relation.prototype.updateFooter = function() {
-      this.footer.disabled(this.module.footerDisabled());
-    };
-
-    return Relation;
   })();
 
   Module.Draggable = (function() {
