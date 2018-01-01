@@ -13,13 +13,12 @@
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
     this.zIndex = this.prop('auto');
-    this.deletable = this.prop(true);
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
-    this.headerHeight = this.prop(32);
     this.ports = [];
+    this.header = new Module.Header({ element: this.findElement('.module-header') });
     this.component = new Module.Component({ element: this.findElement('.module-component') });
     this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
     this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
@@ -59,7 +58,7 @@
   };
 
   Module.prototype.portOffsetY = function() {
-    return this.y() + this.headerHeight() + this.component.height() + 1;
+    return this.y() + this.header.height() + this.component.height() + 1;
   };
 
   Module.prototype.port = function(name) {
@@ -166,6 +165,10 @@
     }.bind(this));
   };
 
+  Module.prototype.deletable = function(value) {
+    this.header.deleteButtonEnabled(value);
+  };
+
   Module.prototype.showPort = function(name) {
     var port = this.port(name);
 
@@ -218,11 +221,10 @@
   };
 
   Module.prototype.oninit = function() {
+    this.header.text(this.title());
     this.portSelect.on('select', this.onselect.bind(this));
     this.addRelation(new Module.Relation({
       module: this,
-      title: new Module.Title({ element: this.findElement('.module-title') }),
-      deleteButton: new Module.DeleteButton({ element: this.findElement('.module-delete-button') }),
       footer: new Module.Footer({ element: this.findElement('.module-footer') }),
     }));
   };
@@ -295,32 +297,32 @@
     '</div>',
   ].join('');
 
-  Module.Title = (function() {
-    var Title = jCore.Component.inherits(function() {
+  Module.Header = (function() {
+    var Header = jCore.Component.inherits(function() {
       this.text = this.prop('');
+      this.deleteButtonEnabled = this.prop(true);
+      this.height = this.prop(32);
     });
 
-    Title.prototype.onredraw = function() {
+    Header.prototype.titleElement = function() {
+      return this.findElement('.module-title');
+    };
+
+    Header.prototype.deleteButtonElement = function() {
+      return this.findElement('.module-delete-button');
+    };
+
+    Header.prototype.onredraw = function() {
       this.redrawBy('text', function(text) {
-        dom.text(this.element(), text);
+        dom.text(this.titleElement(), text);
+      });
+
+      this.redrawBy('deleteButtonEnabled', function(deleteButtonEnabled) {
+        dom.toggleClass(this.deleteButtonElement(), 'disabled', !deleteButtonEnabled);
       });
     };
 
-    return Title;
-  })();
-
-  Module.DeleteButton = (function() {
-    var DeleteButton = jCore.Component.inherits(function() {
-      this.disabled = this.prop(false);
-    });
-
-    DeleteButton.prototype.onredraw = function() {
-      this.redrawBy('disabled', function(disabled) {
-        dom.toggleClass(this.element(), 'disabled', disabled);
-      });
-    };
-
-    return DeleteButton;
+    return Header;
   })();
 
   Module.Component = (function() {
@@ -551,23 +553,11 @@
   Module.Relation = (function() {
     var Relation = jCore.Relation.inherits(function(props) {
       this.module = props.module;
-      this.title = props.title;
-      this.deleteButton = props.deleteButton;
       this.footer = props.footer;
     });
 
     Relation.prototype.update = function() {
-      this.updateTitle();
-      this.updateDeleteButton();
       this.updateFooter();
-    };
-
-    Relation.prototype.updateTitle = function() {
-      this.title.text(this.module.title());
-    };
-
-    Relation.prototype.updateDeleteButton = function() {
-      this.deleteButton.disabled(!this.module.deletable());
     };
 
     Relation.prototype.updateFooter = function() {
