@@ -223,13 +223,13 @@
 
   Module.prototype.oninit = function() {
     this.header.text(this.title());
-    this.portSelect.on('select', this.onselect.bind(this));
   };
 
   Module.prototype.onappend = function() {
     this.draggable.enable();
     this.component.on('point', this.emit.bind(this, 'point', this));
     this.component.on('event', this.onportevent.bind(this));
+    this.portSelect.on('select', this.onselect.bind(this));
     this.portSelect.onappend();
   };
 
@@ -237,6 +237,7 @@
     this.draggable.disable();
     this.component.unload();
     this.component.removeAllListeners();
+    this.portSelect.removeAllListeners();
     this.portSelect.onremove();
   };
 
