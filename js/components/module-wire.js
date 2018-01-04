@@ -24,22 +24,6 @@
     return dom.render(ModuleWire.HTML_TEXT);
   };
 
-  ModuleWire.prototype.redrawPath = function() {
-    this.redrawBy('sourceX', 'sourceY', 'targetX', 'targetY', function(sourceX, sourceY, targetX, targetY) {
-      var x = Math.min(sourceX, targetX);
-      var y = Math.min(sourceY, targetY);
-      var d = ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' ');
-      dom.translate(this.element(), x, y);
-      dom.attr(this.pathElement(), { d: d });
-    });
-  };
-
-  ModuleWire.prototype.redrawHighlight = function() {
-    this.redrawBy('highlighted', function(highlighted) {
-      dom.className(this.pathElement(), 'module-wire-path' + (highlighted ? ' highlighted' : ''));
-    });
-  };
-
   ModuleWire.prototype.oninit = function() {
     this.handle.type(this.handleType());
     this.handle.visible(this.handleVisible());
@@ -60,8 +44,17 @@
   };
 
   ModuleWire.prototype.onredraw = function() {
-    this.redrawPath();
-    this.redrawHighlight();
+    this.redrawBy('sourceX', 'sourceY', 'targetX', 'targetY', function(sourceX, sourceY, targetX, targetY) {
+      var x = Math.min(sourceX, targetX);
+      var y = Math.min(sourceY, targetY);
+      var d = ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' ');
+      dom.translate(this.element(), x, y);
+      dom.attr(this.pathElement(), { d: d });
+    });
+
+    this.redrawBy('highlighted', function(highlighted) {
+      dom.className(this.pathElement(), 'module-wire-path' + (highlighted ? ' highlighted' : ''));
+    });
   };
 
   ModuleWire.HTML_TEXT = [
