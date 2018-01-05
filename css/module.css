@@ -1,3 +1,14 @@
+.module-container {
+  z-index: 0;
+}
+
+.module-container-retainer {
+  height: 1px;
+  pointer-events: none;
+  position: absolute;
+  width: 1px;
+}
+
 .module {
   position: absolute;
   width: 240px;

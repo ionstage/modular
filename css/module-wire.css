@@ -1,4 +1,4 @@
-.module-wire-container {
+.wire-container {
   pointer-events: none;
 }
 
@@ -17,6 +17,10 @@
 
 .module-wire-path.highlighted {
   stroke: #f44336;
+}
+
+.wire-handle-container {
+  z-index: 1;
 }
 
 .module-wire-handle {

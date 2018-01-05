@@ -15,11 +15,11 @@
     this.draggingWires = [];
     this.lockRelations = [];
     this.bindings = [];
-    this.retainer = new MainContent.Retainer({ element: this.findElement('.main-content-retainer') });
+    this.retainer = new MainContent.Retainer({ element: this.findElement('.module-container-retainer') });
   });
 
   MainContent.prototype.wireContainerElement = function() {
-    return this.findElement('.module-wire-container');
+    return this.findElement('.wire-container');
   };
 
   MainContent.prototype.containerElement = function() {
@@ -192,7 +192,7 @@
       targetY: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
       handleType: sourcePort.type(),
       handleVisible: !targetPort,
-      parentHandleElement: this.findElement('.module-wire-handle-container'),
+      parentHandleElement: this.findElement('.wire-handle-container'),
     });
   };
 
