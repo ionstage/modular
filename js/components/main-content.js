@@ -8,7 +8,7 @@
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
-  var ModuleWire = app.ModuleWire || require('./module-wire.js');
+  var Wire = app.Wire || require('./wire.js');
 
   var MainContent = jCore.Component.inherits(function(props) {
     this.modules = [];
@@ -184,8 +184,8 @@
     return module;
   };
 
-  MainContent.prototype.createModuleWire = function(sourcePort, targetPort) {
-    return new ModuleWire({
+  MainContent.prototype.createWire = function(sourcePort, targetPort) {
+    return new Wire({
       sourceX: sourcePort.plugX(),
       sourceY: sourcePort.plugY(),
       targetX: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
@@ -264,7 +264,7 @@
   };
 
   MainContent.prototype.connect = function(sourcePort, targetPort) {
-    var wire = this.createModuleWire(sourcePort, targetPort);
+    var wire = this.createWire(sourcePort, targetPort);
     wire.parentElement(this.wireContainerElement());
     targetPort.socketConnected(true);
     this.bind(sourcePort, targetPort);
@@ -410,7 +410,7 @@
   };
 
   MainContent.prototype.onplugdragstart = function(sourcePort, context) {
-    var wire = this.createModuleWire(sourcePort, null);
+    var wire = this.createWire(sourcePort, null);
     wire.parentElement(this.wireContainerElement());
     this.appendDraggingWire(sourcePort, wire);
 

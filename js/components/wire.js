@@ -4,7 +4,7 @@
   var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
 
-  var ModuleWire = jCore.Component.inherits(function(props) {
+  var Wire = jCore.Component.inherits(function(props) {
     this.sourceX = this.prop(props.sourceX);
     this.sourceY = this.prop(props.sourceY);
     this.targetX = this.prop(props.targetX);
@@ -13,37 +13,37 @@
     this.handleVisible = this.prop(props.handleVisible);
     this.highlighted = this.prop(false);
     this.parentHandleElement = this.prop(props.parentHandleElement);
-    this.handle = new ModuleWire.Handle();
+    this.handle = new Wire.Handle();
   });
 
-  ModuleWire.prototype.pathElement = function() {
+  Wire.prototype.pathElement = function() {
     return this.findElement('path');
   };
 
-  ModuleWire.prototype.render = function() {
-    return dom.render(ModuleWire.HTML_TEXT);
+  Wire.prototype.render = function() {
+    return dom.render(Wire.HTML_TEXT);
   };
 
-  ModuleWire.prototype.oninit = function() {
+  Wire.prototype.oninit = function() {
     this.handle.type(this.handleType());
     this.handle.visible(this.handleVisible());
-    this.addRelation(new ModuleWire.Relation({
+    this.addRelation(new Wire.Relation({
       wire: this,
       handle: this.handle,
     }));
   };
 
-  ModuleWire.prototype.onappend = function() {
+  Wire.prototype.onappend = function() {
     this.handle.parentElement(this.parentHandleElement());
     this.handle.redraw();
   };
 
-  ModuleWire.prototype.onremove = function() {
+  Wire.prototype.onremove = function() {
     this.handle.parentElement(null);
     this.handle.redraw();
   };
 
-  ModuleWire.prototype.onredraw = function() {
+  Wire.prototype.onredraw = function() {
     this.redrawBy('sourceX', 'sourceY', 'targetX', 'targetY', function(sourceX, sourceY, targetX, targetY) {
       var x = Math.min(sourceX, targetX);
       var y = Math.min(sourceY, targetY);
@@ -53,17 +53,17 @@
     });
 
     this.redrawBy('highlighted', function(highlighted) {
-      dom.className(this.pathElement(), 'module-wire-path' + (highlighted ? ' highlighted' : ''));
+      dom.className(this.pathElement(), 'wire-path' + (highlighted ? ' highlighted' : ''));
     });
   };
 
-  ModuleWire.HTML_TEXT = [
-    '<svg class="module-wire">',
-      '<path class="module-wire-path"></path>',
+  Wire.HTML_TEXT = [
+    '<svg class="wire">',
+      '<path class="wire-path"></path>',
     '</svg>',
   ].join('');
 
-  ModuleWire.Handle = (function() {
+  Wire.Handle = (function() {
     var Handle = jCore.Component.inherits(function() {
       this.x = this.prop(0);
       this.y = this.prop(0);
@@ -95,12 +95,12 @@
       });
     };
 
-    Handle.HTML_TEXT = '<div class="module-wire-handle"></div>';
+    Handle.HTML_TEXT = '<div class="wire-handle"></div>';
 
     return Handle;
   })();
 
-  ModuleWire.Relation = (function() {
+  Wire.Relation = (function() {
     var Relation = jCore.Relation.inherits(function(props) {
       this.wire = props.wire;
       this.handle = props.handle;
@@ -117,8 +117,8 @@
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = ModuleWire;
+    module.exports = Wire;
   } else {
-    app.ModuleWire = ModuleWire;
+    app.Wire = Wire;
   }
 })(this.app || (this.app = {}));

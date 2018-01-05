@@ -2,20 +2,20 @@
   pointer-events: none;
 }
 
-.module-wire {
+.wire {
   height: 1px;
   overflow: visible;
   position: absolute;
   width: 1px;
 }
 
-.module-wire-path {
+.wire-path {
   fill: none;
   stroke: #212121;
   stroke-width: 2;
 }
 
-.module-wire-path.highlighted {
+.wire-path.highlighted {
   stroke: #f44336;
 }
 
@@ -23,7 +23,7 @@
   z-index: 1;
 }
 
-.module-wire-handle {
+.wire-handle {
   background-color: #212121;
   cursor: crosshair;
   height: 24px;
@@ -31,18 +31,18 @@
   width: 24px;
 }
 
-.module-wire-handle[data-type='prop'] {
+.wire-handle[data-type='prop'] {
   border-radius: 3px;
 }
 
-.module-wire-handle[data-type='event'] {
+.wire-handle[data-type='event'] {
   border-radius: 50%;
 }
 
-.module-wire-handle.hide {
+.wire-handle.hide {
   display: none;
 }
 
-.module-wire-handle.highlighted {
+.wire-handle.highlighted {
   background-color: #f44336;
 }
