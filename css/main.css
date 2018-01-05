@@ -17,11 +17,11 @@
   padding-left: 0;
 }
 
-.main-child {
+.main-item {
   pointer-events: auto;
 }
 
-.main.disabled > .main-child {
+.main.disabled > .main-item {
   pointer-events: none;
 }
 
