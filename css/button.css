@@ -1,5 +1,5 @@
-.button-container::after,
-.button-container-cell::after {
+.button-group-container::after,
+.button-group::after {
   clear: both;
   content: '.';
   display: block;
@@ -7,11 +7,11 @@
   visibility: hidden;
 }
 
-.button-container-cell.left {
+.button-group.left {
   float: left;
 }
 
-.button-container-cell.right {
+.button-group.right {
   float: right;
 }
 
@@ -35,7 +35,7 @@
   pointer-events: none;
 }
 
-.button-container-cell.right > .button:last-child {
+.button-group.right > .button:last-child {
   margin-left: 9px;
 }
 
