@@ -11,19 +11,14 @@
   var Wire = app.Wire || require('./wire.js');
 
   var MainContent = jCore.Component.inherits(function(props) {
-    this.modules = [];
     this.draggingWires = [];
     this.lockRelations = [];
     this.bindings = [];
-    this.retainer = new MainContent.Retainer({ element: this.findElement('.module-container-retainer') });
+    this.moduleContainer = new MainContent.ModuleContainer({ element: this.findElement('.module-container') });
   });
 
   MainContent.prototype.wireContainerElement = function() {
     return this.findElement('.wire-container');
-  };
-
-  MainContent.prototype.containerElement = function() {
-    return this.findElement('.module-container');
   };
 
   MainContent.prototype.offsetLeft = function() {
@@ -32,32 +27,6 @@
 
   MainContent.prototype.offsetTop = function() {
     return dom.offsetTop(this.element());
-  };
-
-  MainContent.prototype.bottomRightX = function() {
-    return this.modules.reduce(function(value, module) {
-      return Math.max(module.bottomRightX(), value);
-    }, 0);
-  };
-
-  MainContent.prototype.bottomRightY = function() {
-    return this.modules.reduce(function(value, module) {
-      return Math.max(module.bottomRightY(), value);
-    }, 0);
-  };
-
-  MainContent.prototype.retainerX = function() {
-    return this.bottomRightX() + (this.modules.length > 0 ? this.retainer.margin() : 0);
-  };
-
-  MainContent.prototype.retainerY = function() {
-    return this.bottomRightY() + (this.modules.length > 0 ? this.retainer.margin() : 0);
-  };
-
-  MainContent.prototype.moduleFromPort = function(port) {
-    return helper.find(this.modules, function(module) {
-      return module.containsPort(port);
-    });
   };
 
   MainContent.prototype.lockedWires = function(type, port) {
@@ -88,26 +57,15 @@
     return binding.sourcePort;
   };
 
-  MainContent.prototype.portFromSocketPosition = function(x, y) {
-    var port = null;
-    for (var i = this.modules.length - 1; i >= 0; i--) {
-      port = this.modules[i].portFromSocketPosition(x, y);
-      if (port) {
-        break;
-      }
-    }
-    return port;
-  };
-
   MainContent.prototype.toData = function() {
     return {
       modules: this.toModulesData(),
-      connections: this.toConnectionsData(this.modules),
+      connections: this.toConnectionsData(this.moduleContainer.modules),
     };
   };
 
   MainContent.prototype.toModulesData = function() {
-    return this.modules.map(function(module) {
+    return this.moduleContainer.modules.map(function(module) {
       return {
         props: module.props(),
         visiblePortNames: module.visiblePortNames(),
@@ -119,11 +77,11 @@
     return this.bindings.map(function(binding) {
       return {
         source: {
-          moduleIndex: modules.indexOf(this.moduleFromPort(binding.sourcePort)),
+          moduleIndex: modules.indexOf(this.moduleContainer.moduleFromPort(binding.sourcePort)),
           portName: binding.sourcePort.name(),
         },
         target: {
-          moduleIndex: modules.indexOf(this.moduleFromPort(binding.targetPort)),
+          moduleIndex: modules.indexOf(this.moduleContainer.moduleFromPort(binding.targetPort)),
           portName: binding.targetPort.name(),
         },
       };
@@ -162,26 +120,7 @@
   };
 
   MainContent.prototype.clear = function() {
-    this.modules.slice().forEach(function(module) {
-      module.delete();
-    });
-  };
-
-  MainContent.prototype.createModule = function(props) {
-    var module = new Module(props);
-    module.on('delete', this.ondelete.bind(this));
-    module.on('point', this.onpoint.bind(this));
-    module.on('porttoggle', this.onporttoggle.bind(this));
-    module.on('portevent', this.onportevent.bind(this));
-    module.on('dragstart', this.ondragstart.bind(this));
-    module.on('dragend', this.ondragend.bind(this));
-    module.on('plugdragstart', this.onplugdragstart.bind(this));
-    module.on('plugdragmove', this.onplugdragmove.bind(this));
-    module.on('plugdragend', this.onplugdragend.bind(this));
-    module.on('socketdragstart', this.onsocketdragstart.bind(this));
-    module.on('socketdragmove', this.onsocketdragmove.bind(this));
-    module.on('socketdragend', this.onsocketdragend.bind(this));
-    return module;
+    this.moduleContainer.clear();
   };
 
   MainContent.prototype.createWire = function(sourcePort, targetPort) {
@@ -197,17 +136,7 @@
   };
 
   MainContent.prototype.loadModule = function(props, visiblePortNames) {
-    var module = this.createModule(props);
-    module.parentElement(this.containerElement());
-    this.modules.push(module);
-    this.updateZIndex();
-    module.redraw();
-    return module.loadComponent().then(function() {
-      visiblePortNames.forEach(function(name) {
-        module.showPort(name);
-      });
-      return module;
-    });
+    return this.moduleContainer.loadModule(props, visiblePortNames);
   };
 
   MainContent.prototype.lock = function(type, port, wire) {
@@ -229,8 +158,8 @@
   };
 
   MainContent.prototype.bind = function(sourcePort, targetPort) {
-    var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
-    var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
+    var source = this.moduleContainer.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
+    var target = this.moduleContainer.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
     CircuitModule.bind(source, target);
     this.bindings.push(new Binding({
       sourcePort: sourcePort,
@@ -239,8 +168,8 @@
   };
 
   MainContent.prototype.unbind = function(sourcePort, targetPort) {
-    var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
-    var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
+    var source = this.moduleContainer.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
+    var target = this.moduleContainer.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
     CircuitModule.unbind(source, target);
     helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
       return (binding.sourcePort === sourcePort && binding.targetPort === targetPort);
@@ -328,17 +257,6 @@
     this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
   };
 
-  MainContent.prototype.updateRetainer = function() {
-    this.retainer.x(this.retainerX());
-    this.retainer.y(this.retainerY());
-  };
-
-  MainContent.prototype.updateZIndex = function() {
-    this.modules.forEach(function(module, index) {
-      module.zIndex(index);
-    });
-  };
-
   MainContent.prototype.updateEventHighlight = function(sourcePort) {
     var highlighted = sourcePort.plugHighlighted();
     this.connectedTargetPorts(sourcePort).forEach(function(targetPort) {
@@ -358,7 +276,7 @@
     port.highlighted(highlighted);
 
     // module is deletable if all ports are NOT highlighted
-    var module = this.moduleFromPort(port);
+    var module = this.moduleContainer.moduleFromPort(port);
     module.deletable(!module.hasHighlightedPort());
   };
 
@@ -369,25 +287,38 @@
         dom.removeFocus();
       }
     }.bind(this));
+
+    this.moduleContainer.on('delete', this.ondelete.bind(this));
+    this.moduleContainer.on('point', this.onpoint.bind(this));
+    this.moduleContainer.on('porttoggle', this.onporttoggle.bind(this));
+    this.moduleContainer.on('portevent', this.onportevent.bind(this));
+    this.moduleContainer.on('dragstart', this.ondragstart.bind(this));
+    this.moduleContainer.on('dragend', this.ondragend.bind(this));
+    this.moduleContainer.on('plugdragstart', this.onplugdragstart.bind(this));
+    this.moduleContainer.on('plugdragmove', this.onplugdragmove.bind(this));
+    this.moduleContainer.on('plugdragend', this.onplugdragend.bind(this));
+    this.moduleContainer.on('socketdragstart', this.onsocketdragstart.bind(this));
+    this.moduleContainer.on('socketdragmove', this.onsocketdragmove.bind(this));
+    this.moduleContainer.on('socketdragend', this.onsocketdragend.bind(this));
   };
 
   MainContent.prototype.ondelete = function(module) {
     module.removeAllListeners();
-    helper.remove(this.modules, module);
-    this.updateRetainer();
-    this.updateZIndex();
+    helper.remove(this.moduleContainer.modules, module);
+    this.moduleContainer.updateRetainer();
+    this.moduleContainer.updateZIndex();
   };
 
   MainContent.prototype.onpoint = function(module) {
-    helper.moveToBack(this.modules, module);
-    this.updateZIndex();
+    helper.moveToBack(this.moduleContainer.modules, module);
+    this.moduleContainer.updateZIndex();
   };
 
   MainContent.prototype.onporttoggle = function(port) {
     if (!port.visible()) {
       this.disconnectAll(port);
     }
-    this.updateRetainer();
+    this.moduleContainer.updateRetainer();
   };
 
   MainContent.prototype.onportevent = function(sourcePort) {
@@ -400,12 +331,12 @@
   };
 
   MainContent.prototype.ondragstart = function() {
-    this.updateRetainer();
+    this.moduleContainer.updateRetainer();
     this.emit('dragstart');
   };
 
   MainContent.prototype.ondragend = function() {
-    this.updateRetainer();
+    this.moduleContainer.updateRetainer();
     this.emit('dragend');
   };
 
@@ -424,7 +355,7 @@
     var x = context.x + dx;
     var y = context.y + dy;
     var currentTargetPort = context.targetPort;
-    var port = this.portFromSocketPosition(x, y);
+    var port = this.moduleContainer.portFromSocketPosition(x, y);
 
     if (port && currentTargetPort && port === currentTargetPort) {
       // fix the target position of the wire
@@ -479,20 +410,114 @@
     this.onplugdragend(context.sourcePort, context);
   };
 
-  MainContent.Retainer = (function() {
-    var Retainer = jCore.Component.inherits(function() {
-      this.x = this.prop(0);
-      this.y = this.prop(0);
-      this.margin = this.prop(80);
+  MainContent.ModuleContainer = (function() {
+    var ModuleContainer = jCore.Component.inherits(function() {
+      this.modules = [];
+      this.retainer = new ModuleContainer.Retainer({ element: this.findElement('.module-container-retainer') });
     });
 
-    Retainer.prototype.onredraw = function() {
-      this.redrawBy('x', 'y', function(x, y) {
-        dom.translate(this.element(), x, y);
+    ModuleContainer.prototype.bottomRightX = function() {
+      return this.modules.reduce(function(value, module) {
+        return Math.max(module.bottomRightX(), value);
+      }, 0);
+    };
+
+    ModuleContainer.prototype.bottomRightY = function() {
+      return this.modules.reduce(function(value, module) {
+        return Math.max(module.bottomRightY(), value);
+      }, 0);
+    };
+
+    ModuleContainer.prototype.retainerX = function() {
+      return this.bottomRightX() + (this.modules.length > 0 ? this.retainer.margin() : 0);
+    };
+
+    ModuleContainer.prototype.retainerY = function() {
+      return this.bottomRightY() + (this.modules.length > 0 ? this.retainer.margin() : 0);
+    };
+
+    ModuleContainer.prototype.moduleFromPort = function(port) {
+      return helper.find(this.modules, function(module) {
+        return module.containsPort(port);
       });
     };
 
-    return Retainer;
+    ModuleContainer.prototype.portFromSocketPosition = function(x, y) {
+      var port = null;
+      for (var i = this.modules.length - 1; i >= 0; i--) {
+        port = this.modules[i].portFromSocketPosition(x, y);
+        if (port) {
+          break;
+        }
+      }
+      return port;
+    };
+
+    ModuleContainer.prototype.createModule = function(props) {
+      var module = new Module(props);
+      module.on('delete', this.emit.bind(this, 'delete'));
+      module.on('point', this.emit.bind(this, 'point'));
+      module.on('porttoggle', this.emit.bind(this, 'porttoggle'));
+      module.on('portevent', this.emit.bind(this, 'portevent'));
+      module.on('dragstart', this.emit.bind(this, 'dragstart'));
+      module.on('dragend', this.emit.bind(this, 'dragend'));
+      module.on('plugdragstart', this.emit.bind(this, 'plugdragstart'));
+      module.on('plugdragmove', this.emit.bind(this, 'plugdragmove'));
+      module.on('plugdragend', this.emit.bind(this, 'plugdragend'));
+      module.on('socketdragstart', this.emit.bind(this, 'socketdragstart'));
+      module.on('socketdragmove', this.emit.bind(this, 'socketdragmove'));
+      module.on('socketdragend', this.emit.bind(this, 'socketdragend'));
+      return module;
+    };
+
+    ModuleContainer.prototype.clear = function() {
+      this.modules.slice().forEach(function(module) {
+        module.delete();
+      });
+    };
+
+    ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
+      var module = this.createModule(props);
+      module.parentElement(this.element());
+      this.modules.push(module);
+      this.updateZIndex();
+      module.redraw();
+      return module.loadComponent().then(function() {
+        visiblePortNames.forEach(function(name) {
+          module.showPort(name);
+        });
+        return module;
+      });
+    };
+
+    ModuleContainer.prototype.updateRetainer = function() {
+      this.retainer.x(this.retainerX());
+      this.retainer.y(this.retainerY());
+    };
+
+    ModuleContainer.prototype.updateZIndex = function() {
+      this.modules.forEach(function(module, index) {
+        module.zIndex(index);
+      });
+    };
+
+    ModuleContainer.Retainer = (function() {
+      var Retainer = jCore.Component.inherits(function() {
+        this.x = this.prop(0);
+        this.y = this.prop(0);
+        this.margin = this.prop(80);
+      });
+
+      Retainer.prototype.onredraw = function() {
+        this.redrawBy('x', 'y', function(x, y) {
+          dom.translate(this.element(), x, y);
+        });
+      };
+
+      return Retainer;
+    })();
+
+    return ModuleContainer;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
