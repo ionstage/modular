@@ -288,7 +288,6 @@
       }
     }.bind(this));
 
-    this.moduleContainer.on('point', this.onpoint.bind(this));
     this.moduleContainer.on('porttoggle', this.onporttoggle.bind(this));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
     this.moduleContainer.on('dragstart', this.ondragstart.bind(this));
@@ -299,11 +298,6 @@
     this.moduleContainer.on('socketdragstart', this.onsocketdragstart.bind(this));
     this.moduleContainer.on('socketdragmove', this.onsocketdragmove.bind(this));
     this.moduleContainer.on('socketdragend', this.onsocketdragend.bind(this));
-  };
-
-  MainContent.prototype.onpoint = function(module) {
-    helper.moveToBack(this.moduleContainer.modules, module);
-    this.moduleContainer.updateZIndex();
   };
 
   MainContent.prototype.onporttoggle = function(port) {
@@ -447,7 +441,7 @@
     ModuleContainer.prototype.createModule = function(props) {
       var module = new Module(props);
       module.on('delete', this.ondelete.bind(this));
-      module.on('point', this.emit.bind(this, 'point'));
+      module.on('point', this.onpoint.bind(this));
       module.on('porttoggle', this.emit.bind(this, 'porttoggle'));
       module.on('portevent', this.emit.bind(this, 'portevent'));
       module.on('dragstart', this.emit.bind(this, 'dragstart'));
@@ -496,6 +490,11 @@
       module.removeAllListeners();
       helper.remove(this.modules, module);
       this.updateRetainer();
+      this.updateZIndex();
+    };
+
+    ModuleContainer.prototype.onpoint = function(module) {
+      helper.moveToBack(this.modules, module);
       this.updateZIndex();
     };
 
