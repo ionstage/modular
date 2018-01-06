@@ -53,7 +53,7 @@
 }
 
 .module-delete-button:hover {
-  opacity: 0.6;
+  opacity: .6;
 }
 
 .module-delete-button::before {

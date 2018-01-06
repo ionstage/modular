@@ -13,7 +13,7 @@
 }
 
 .sidebar-module.active {
-  opacity: 0.6;
+  opacity: .6;
 }
 
 .sidebar-module.clone {
@@ -21,7 +21,7 @@
   border-color: #ffa726;
   color: #ffa726;
   margin: 0;
-  opacity: 0.6;
+  opacity: .6;
   position: absolute;
   z-index: 9999;
 }

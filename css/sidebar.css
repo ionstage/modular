@@ -2,13 +2,13 @@
   border-right: 1px solid #e0e0e0;
   height: 100%;
   position: fixed;
-  -webkit-transition: opacity 0.1s ease-in-out;
-  transition: opacity 0.1s ease-in-out;
+  -webkit-transition: opacity .1s ease-in-out;
+  transition: opacity .1s ease-in-out;
   width: 279px;
 }
 
 .sidebar.disabled {
-  opacity: 0.6;
+  opacity: .6;
   pointer-events: none;
 }
 

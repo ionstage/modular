@@ -4,13 +4,13 @@
   padding-left: 280px;
   pointer-events: none;
   position: fixed;
-  -webkit-transition: opacity 0.1s ease-in-out, padding-left 0.3s ease-in-out;
-  transition: opacity 0.1s ease-in-out, padding-left 0.3s ease-in-out;
+  -webkit-transition: opacity .1s ease-in-out, padding-left .3s ease-in-out;
+  transition: opacity .1s ease-in-out, padding-left .3s ease-in-out;
   width: 100%;
 }
 
 .main.disabled {
-  opacity: 0.6;
+  opacity: .6;
 }
 
 .main.full-width {
