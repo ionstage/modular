@@ -288,7 +288,6 @@
       }
     }.bind(this));
 
-    this.moduleContainer.on('delete', this.ondelete.bind(this));
     this.moduleContainer.on('point', this.onpoint.bind(this));
     this.moduleContainer.on('porttoggle', this.onporttoggle.bind(this));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
@@ -300,13 +299,6 @@
     this.moduleContainer.on('socketdragstart', this.onsocketdragstart.bind(this));
     this.moduleContainer.on('socketdragmove', this.onsocketdragmove.bind(this));
     this.moduleContainer.on('socketdragend', this.onsocketdragend.bind(this));
-  };
-
-  MainContent.prototype.ondelete = function(module) {
-    module.removeAllListeners();
-    helper.remove(this.moduleContainer.modules, module);
-    this.moduleContainer.updateRetainer();
-    this.moduleContainer.updateZIndex();
   };
 
   MainContent.prototype.onpoint = function(module) {
@@ -454,7 +446,7 @@
 
     ModuleContainer.prototype.createModule = function(props) {
       var module = new Module(props);
-      module.on('delete', this.emit.bind(this, 'delete'));
+      module.on('delete', this.ondelete.bind(this));
       module.on('point', this.emit.bind(this, 'point'));
       module.on('porttoggle', this.emit.bind(this, 'porttoggle'));
       module.on('portevent', this.emit.bind(this, 'portevent'));
@@ -498,6 +490,13 @@
       this.modules.forEach(function(module, index) {
         module.zIndex(index);
       });
+    };
+
+    ModuleContainer.prototype.ondelete = function(module) {
+      module.removeAllListeners();
+      helper.remove(this.modules, module);
+      this.updateRetainer();
+      this.updateZIndex();
     };
 
     ModuleContainer.Retainer = (function() {
