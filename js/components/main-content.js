@@ -443,14 +443,13 @@
     };
 
     ModuleContainer.prototype.portFromSocketPosition = function(x, y) {
-      var port = null;
       for (var i = this.modules.length - 1; i >= 0; i--) {
-        port = this.modules[i].portFromSocketPosition(x, y);
+        var port = this.modules[i].portFromSocketPosition(x, y);
         if (port) {
-          break;
+          return port;
         }
       }
-      return port;
+      return null;
     };
 
     ModuleContainer.prototype.createModule = function(props) {
