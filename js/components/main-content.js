@@ -281,13 +281,7 @@
   };
 
   MainContent.prototype.oninit = function() {
-    dom.on(this.element(), dom.eventType('start'), function(event) {
-      // remove keyboard focus when pointing background
-      if (dom.target(event) === this.element()) {
-        dom.removeFocus();
-      }
-    }.bind(this));
-
+    dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
     this.moduleContainer.on('porttoggle', this.onporttoggle.bind(this));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
     this.moduleContainer.on('dragstart', this.ondragstart.bind(this));
@@ -298,6 +292,13 @@
     this.moduleContainer.on('socketdragstart', this.onsocketdragstart.bind(this));
     this.moduleContainer.on('socketdragmove', this.onsocketdragmove.bind(this));
     this.moduleContainer.on('socketdragend', this.onsocketdragend.bind(this));
+  };
+
+  MainContent.prototype.onpoint = function(event) {
+    // remove keyboard focus when pointing background
+    if (dom.target(event) === this.element()) {
+      dom.removeFocus();
+    }
   };
 
   MainContent.prototype.onporttoggle = function(port) {
