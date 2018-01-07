@@ -27,7 +27,7 @@
   });
 
   Module.prototype.height = function() {
-    return this.header.height() + this.component.outerHeight() + this.portList.height() + this.footer.height();
+    return this.header.height() + this.footer.height() + this.component.outerHeight() + this.portList.height();
   };
 
   Module.prototype.circuitModuleMember = function(name) {
