@@ -73,6 +73,7 @@
 
 .module-component {
   border: 0;
+  border-bottom: 1px solid #212121;
   display: block;
   height: 0;
   width: 100%;

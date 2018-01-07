@@ -27,7 +27,7 @@
   });
 
   Module.prototype.height = function() {
-    return this.header.height() + this.component.height() + this.portList.height() + this.footer.height() + 1;
+    return this.header.height() + this.component.outerHeight() + this.portList.height() + this.footer.height();
   };
 
   Module.prototype.circuitModuleMember = function(name) {
@@ -63,7 +63,7 @@
   };
 
   Module.prototype.portOffsetY = function() {
-    return this.y() + this.header.height() + this.component.height() + 1;
+    return this.y() + this.header.height() + this.component.outerHeight();
   };
 
   Module.prototype.port = function(name) {
@@ -352,6 +352,10 @@
       this.eventCircuitModule = null;
       this.onpoint = this.emit.bind(this, 'point');
     });
+
+    Component.prototype.outerHeight = function() {
+      return this.height() + 1;
+    };
 
     Component.prototype.contentWindow = function() {
       return dom.contentWindow(this.element());
