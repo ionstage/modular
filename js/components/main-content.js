@@ -282,7 +282,7 @@
 
   MainContent.prototype.oninit = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
-    this.moduleContainer.on('porttoggle', this.onporttoggle.bind(this));
+    this.moduleContainer.on('porthide', this.onporthide.bind(this));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
     this.moduleContainer.on('dragstart', this.ondragstart.bind(this));
     this.moduleContainer.on('dragend', this.ondragend.bind(this));
@@ -301,11 +301,8 @@
     }
   };
 
-  MainContent.prototype.onporttoggle = function(port) {
-    if (!port.visible()) {
-      this.disconnectAll(port);
-    }
-    this.moduleContainer.updateRetainer();
+  MainContent.prototype.onporthide = function(port) {
+    this.disconnectAll(port);
   };
 
   MainContent.prototype.onportevent = function(sourcePort) {
@@ -443,7 +440,8 @@
       var module = new Module(props);
       module.on('delete', this.ondelete.bind(this));
       module.on('point', this.onpoint.bind(this));
-      module.on('porttoggle', this.emit.bind(this, 'porttoggle'));
+      module.on('portshow', this.onportshow.bind(this));
+      module.on('porthide', this.onporthide.bind(this));
       module.on('portevent', this.emit.bind(this, 'portevent'));
       module.on('dragstart', this.emit.bind(this, 'dragstart'));
       module.on('dragend', this.emit.bind(this, 'dragend'));
@@ -497,6 +495,16 @@
     ModuleContainer.prototype.onpoint = function(module) {
       helper.moveToBack(this.modules, module);
       this.updateZIndex();
+    };
+
+    ModuleContainer.prototype.onportshow = function(port) {
+      this.updateRetainer();
+      this.emit('portshow', port);
+    };
+
+    ModuleContainer.prototype.onporthide = function(port) {
+      this.updateRetainer();
+      this.emit('porthide', port);
     };
 
     ModuleContainer.Retainer = (function() {

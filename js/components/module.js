@@ -187,7 +187,7 @@
     // move right not to position the port-socket outside
     this.moveX(this.x());
 
-    this.emit('porttoggle', port);
+    this.emit('portshow', port);
   };
 
   Module.prototype.hidePort = function(name) {
@@ -200,7 +200,7 @@
     this.portList.remove(port);
     this.portSelect.add(port);
     this.footer.disabled(this.footerDisabled());
-    this.emit('porttoggle', port);
+    this.emit('porthide', port);
   };
 
   Module.prototype.hideAllPorts = function() {
