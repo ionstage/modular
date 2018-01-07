@@ -12,6 +12,7 @@
     this.name = this.prop(props.name);
     this.x = this.prop(props.x);
     this.y = this.prop(props.y);
+    this.width = this.prop(240);
     this.zIndex = this.prop('auto');
     this.isLoading = this.prop(false);
     this.isError = this.prop(false);
@@ -35,7 +36,7 @@
   };
 
   Module.prototype.bottomRightX = function() {
-    return this.x() + dom.width(this.element()) + this.rightPadding();
+    return this.x() + this.width() + this.rightPadding();
   };
 
   Module.prototype.bottomRightY = function() {
