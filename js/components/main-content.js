@@ -284,8 +284,8 @@
     dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
     this.moduleContainer.on('porthide', this.onporthide.bind(this));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
-    this.moduleContainer.on('dragstart', this.ondragstart.bind(this));
-    this.moduleContainer.on('dragend', this.ondragend.bind(this));
+    this.moduleContainer.on('dragstart', this.emit.bind(this, 'dragstart'));
+    this.moduleContainer.on('dragend', this.emit.bind(this, 'dragend'));
     this.moduleContainer.on('plugdragstart', this.onplugdragstart.bind(this));
     this.moduleContainer.on('plugdragmove', this.onplugdragmove.bind(this));
     this.moduleContainer.on('plugdragend', this.onplugdragend.bind(this));
@@ -312,16 +312,6 @@
       sourcePort.plugHighlighted(false);
       this.updateEventHighlight(sourcePort);
     }.bind(this), 100);
-  };
-
-  MainContent.prototype.ondragstart = function() {
-    this.moduleContainer.updateRetainer();
-    this.emit('dragstart');
-  };
-
-  MainContent.prototype.ondragend = function() {
-    this.moduleContainer.updateRetainer();
-    this.emit('dragend');
   };
 
   MainContent.prototype.onplugdragstart = function(sourcePort, context) {
@@ -443,8 +433,8 @@
       module.on('portshow', this.onportshow.bind(this));
       module.on('porthide', this.onporthide.bind(this));
       module.on('portevent', this.emit.bind(this, 'portevent'));
-      module.on('dragstart', this.emit.bind(this, 'dragstart'));
-      module.on('dragend', this.emit.bind(this, 'dragend'));
+      module.on('dragstart', this.ondragstart.bind(this));
+      module.on('dragend', this.ondragend.bind(this));
       module.on('plugdragstart', this.emit.bind(this, 'plugdragstart'));
       module.on('plugdragmove', this.emit.bind(this, 'plugdragmove'));
       module.on('plugdragend', this.emit.bind(this, 'plugdragend'));
@@ -505,6 +495,16 @@
     ModuleContainer.prototype.onporthide = function(port) {
       this.updateRetainer();
       this.emit('porthide', port);
+    };
+
+    ModuleContainer.prototype.ondragstart = function() {
+      this.updateRetainer();
+      this.emit('dragstart');
+    };
+
+    ModuleContainer.prototype.ondragend = function() {
+      this.updateRetainer();
+      this.emit('dragend');
     };
 
     ModuleContainer.Retainer = (function() {
