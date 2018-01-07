@@ -454,7 +454,7 @@
       var module = this.createModule(props);
       module.parentElement(this.element());
       this.modules.push(module);
-      this.updateZIndex();
+      this.markDirty();
       module.redraw();
       return module.loadComponent().then(function() {
         visiblePortNames.forEach(function(name) {
@@ -464,46 +464,38 @@
       });
     };
 
-    ModuleContainer.prototype.updateRetainer = function() {
-      this.retainer.x(this.retainerX());
-      this.retainer.y(this.retainerY());
-    };
-
-    ModuleContainer.prototype.updateZIndex = function() {
-      this.modules.forEach(function(module, index) {
-        module.zIndex(index);
-      });
+    ModuleContainer.prototype.oninit = function() {
+      this.addRelation(new ModuleContainer.Relation({ retainer: this.retainer }));
     };
 
     ModuleContainer.prototype.ondelete = function(module) {
       module.removeAllListeners();
       helper.remove(this.modules, module);
-      this.updateRetainer();
-      this.updateZIndex();
+      this.markDirty();
     };
 
     ModuleContainer.prototype.onpoint = function(module) {
       helper.moveToBack(this.modules, module);
-      this.updateZIndex();
+      this.markDirty();
     };
 
     ModuleContainer.prototype.onportshow = function(port) {
-      this.updateRetainer();
+      this.markDirty();
       this.emit('portshow', port);
     };
 
     ModuleContainer.prototype.onporthide = function(port) {
-      this.updateRetainer();
+      this.markDirty();
       this.emit('porthide', port);
     };
 
     ModuleContainer.prototype.ondragstart = function() {
-      this.updateRetainer();
+      this.markDirty();
       this.emit('dragstart');
     };
 
     ModuleContainer.prototype.ondragend = function() {
-      this.updateRetainer();
+      this.markDirty();
       this.emit('dragend');
     };
 
@@ -521,6 +513,30 @@
       };
 
       return Retainer;
+    })();
+
+    ModuleContainer.Relation = (function() {
+      var Relation = jCore.Relation.inherits(function(props) {
+        this.retainer = props.retainer;
+      });
+
+      Relation.prototype.update = function(container) {
+        this.updateZIndex(container);
+        this.updateRetainer(container);
+      };
+
+      Relation.prototype.updateZIndex = function(container) {
+        container.modules.forEach(function(module, index) {
+          module.zIndex(index);
+        });
+      };
+
+      Relation.prototype.updateRetainer = function(container) {
+        this.retainer.x(container.retainerX());
+        this.retainer.y(container.retainerY());
+      };
+
+      return Relation;
     })();
 
     return ModuleContainer;
