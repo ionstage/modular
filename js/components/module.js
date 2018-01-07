@@ -396,7 +396,8 @@
         url: url,
       }).then(function(text) {
         dom.writeContent(this.element(), text);
-        dom.css(this.element(), { height: dom.contentHeight(this.element()) + 'px' });
+        this.height(dom.contentHeight(this.element()));
+        dom.css(this.element(), { height: this.height() + 'px' });
         dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
       }.bind(this)).then(function() {
         return new Promise(function(resolve, reject) {
@@ -407,7 +408,6 @@
           });
         }.bind(this));
       }.bind(this)).then(function() {
-        this.height(dom.height(this.element()));
         this.circuitModule = this.contentWindow().modular.exports;
         this.eventCircuitModule = this.createEventCircuitModule();
         this.bindEventCircuitModule();
