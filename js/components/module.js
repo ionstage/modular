@@ -26,6 +26,10 @@
     this.draggable = new Module.Draggable(this);
   });
 
+  Module.prototype.height = function() {
+    return this.header.height() + this.component.height() + this.portList.height() + this.footer.height() + 1;
+  };
+
   Module.prototype.circuitModuleMember = function(name) {
     return this.component.get(name);
   };
@@ -35,7 +39,7 @@
   };
 
   Module.prototype.bottomRightY = function() {
-    return this.y() + dom.height(this.element());
+    return this.y() + this.height();
   };
 
   Module.prototype.rightPadding = function() {
@@ -327,6 +331,10 @@
     var Footer = jCore.Component.inherits(function() {
       this.disabled = this.prop(false);
     });
+
+    Footer.prototype.height = function() {
+      return (this.disabled() ? 0 : 21);
+    };
 
     Footer.prototype.onredraw = function() {
       this.redrawBy('disabled', function(disabled) {
