@@ -454,9 +454,9 @@
     ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
       var module = this.createModule(props);
       module.parentElement(this.element());
+      module.redraw();
       this.modules.push(module);
       this.markDirty();
-      module.redraw();
       return module.loadComponent().then(function() {
         visiblePortNames.forEach(function(name) {
           module.showPort(name);
