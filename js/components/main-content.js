@@ -448,6 +448,7 @@
       this.modules.slice().forEach(function(module) {
         module.delete();
       });
+      this.markDirty();
     };
 
     ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
