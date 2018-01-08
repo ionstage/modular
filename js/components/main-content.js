@@ -479,9 +479,8 @@
       this.markDirty();
     };
 
-    ModuleContainer.prototype.onportshow = function(port) {
+    ModuleContainer.prototype.onportshow = function() {
       this.markDirty();
-      this.emit('portshow', port);
     };
 
     ModuleContainer.prototype.ondragend = function() {
