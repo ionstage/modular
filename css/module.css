@@ -4,8 +4,8 @@
 
 .module-container-retainer {
   height: 1px;
-  pointer-events: none;
   position: absolute;
+  visibility: hidden;
   width: 1px;
 }
 
