@@ -431,9 +431,9 @@
       module.on('delete', this.ondelete.bind(this));
       module.on('point', this.onpoint.bind(this));
       module.on('portshow', this.onportshow.bind(this));
-      module.on('porthide', this.onporthide.bind(this));
+      module.on('porthide', this.emit.bind(this, 'porthide'));
       module.on('portevent', this.emit.bind(this, 'portevent'));
-      module.on('dragstart', this.ondragstart.bind(this));
+      module.on('dragstart', this.emit.bind(this, 'dragstart'));
       module.on('dragend', this.ondragend.bind(this));
       module.on('plugdragstart', this.emit.bind(this, 'plugdragstart'));
       module.on('plugdragmove', this.emit.bind(this, 'plugdragmove'));
@@ -471,7 +471,6 @@
     ModuleContainer.prototype.ondelete = function(module) {
       module.removeAllListeners();
       helper.remove(this.modules, module);
-      this.markDirty();
     };
 
     ModuleContainer.prototype.onpoint = function(module) {
@@ -482,16 +481,6 @@
     ModuleContainer.prototype.onportshow = function(port) {
       this.markDirty();
       this.emit('portshow', port);
-    };
-
-    ModuleContainer.prototype.onporthide = function(port) {
-      this.markDirty();
-      this.emit('porthide', port);
-    };
-
-    ModuleContainer.prototype.ondragstart = function() {
-      this.markDirty();
-      this.emit('dragstart');
     };
 
     ModuleContainer.prototype.ondragend = function() {
