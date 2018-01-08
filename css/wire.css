@@ -1,5 +1,6 @@
 .wire-container {
   pointer-events: none;
+  z-index: 0;
 }
 
 .wire {
@@ -20,7 +21,7 @@
 }
 
 .wire-handle-container {
-  z-index: 1;
+  z-index: 2;
 }
 
 .wire-handle {
