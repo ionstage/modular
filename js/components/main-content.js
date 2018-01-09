@@ -440,13 +440,6 @@
       return module;
     };
 
-    ModuleContainer.prototype.clear = function() {
-      this.modules.slice().forEach(function(module) {
-        module.delete();
-      });
-      this.markDirty();
-    };
-
     ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
       var module = this.createModule(props);
       module.parentElement(this.element());
@@ -459,6 +452,13 @@
         });
         return module;
       });
+    };
+
+    ModuleContainer.prototype.clear = function() {
+      this.modules.slice().forEach(function(module) {
+        module.delete();
+      });
+      this.markDirty();
     };
 
     ModuleContainer.prototype.oninit = function() {
