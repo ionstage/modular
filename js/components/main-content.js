@@ -274,10 +274,6 @@
       return (this.draggingWires.indexOf(relation.wire) !== -1);
     }.bind(this));
     port.highlighted(highlighted);
-
-    // module is deletable if all ports are NOT highlighted
-    var module = this.moduleContainer.moduleFromPort(port);
-    module.deletable(!module.hasHighlightedPort());
   };
 
   MainContent.prototype.oninit = function() {

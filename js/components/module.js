@@ -171,16 +171,14 @@
     }.bind(this));
   };
 
-  Module.prototype.deletable = function(value) {
-    this.header.deleteButtonEnabled(value);
-  };
-
   Module.prototype.showPort = function(name) {
     var port = this.port(name);
 
     if (!port || port.visible()) {
       return;
     }
+
+    port.on('highlight', this.onporthighlight.bind(this));
 
     port.offsetX(this.portOffsetX());
     port.offsetY(this.portOffsetY());
@@ -201,6 +199,8 @@
     if (!port || !port.visible()) {
       return;
     }
+
+    port.removeAllListeners();
 
     this.portList.remove(port);
     this.portSelect.add(port);
@@ -278,6 +278,11 @@
 
   Module.prototype.onportevent = function(member) {
     this.emit('portevent', this.port(member.name));
+  };
+
+  Module.prototype.onporthighlight = function() {
+    // module is NOT deletable if some ports are highlighted
+    this.header.deleteButtonEnabled(!this.hasHighlightedPort());
   };
 
   Module.HTML_TEXT = [
