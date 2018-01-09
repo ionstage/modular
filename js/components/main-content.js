@@ -399,11 +399,11 @@
     };
 
     ModuleContainer.prototype.retainerX = function() {
-      return this.bottomRightX() + (this.modules.length > 0 ? this.retainer.margin() : 0);
+      return (this.modules.length > 0 ? this.bottomRightX() + this.retainer.margin() : 0);
     };
 
     ModuleContainer.prototype.retainerY = function() {
-      return this.bottomRightY() + (this.modules.length > 0 ? this.retainer.margin() : 0);
+      return (this.modules.length > 0 ? this.bottomRightY() + this.retainer.margin() : 0);
     };
 
     ModuleContainer.prototype.moduleFromPort = function(port) {
