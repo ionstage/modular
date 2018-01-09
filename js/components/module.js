@@ -143,12 +143,15 @@
     }.bind(this));
   };
 
-  Module.prototype.loadComponent = function() {
+  Module.prototype.load = function(visiblePortNames) {
     this.isLoading(true);
+    this.redraw();
     return this.component.load(this.url()).then(function() {
       this.ports = this.createPorts();
       this.portSelect.set(this.ports);
+      this.showPorts(visiblePortNames);
       this.isLoading(false);
+      return this;
     }.bind(this)).catch(function(e) {
       this.isError(true);
       throw e;
@@ -206,6 +209,12 @@
     this.portSelect.add(port);
     this.footer.disabled(this.footerDisabled());
     this.emit('porthide', port);
+  };
+
+  Module.prototype.showPorts = function(names) {
+    names.forEach(function(name) {
+      this.showPort(name);
+    }.bind(this));
   };
 
   Module.prototype.hideAllPorts = function() {
