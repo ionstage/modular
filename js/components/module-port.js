@@ -13,7 +13,6 @@
     this.offsetX = this.prop(props.offsetX);
     this.offsetY = this.prop(props.offsetY);
     this.top = this.prop(0);
-    this.highlighted = this.prop(false);
     this.isMoving = this.prop(false);
     this.height = this.prop(44);
     this.plugOffsetX = this.prop(261);
@@ -24,11 +23,8 @@
     this.socket = new ModulePort.Socket({ element: this.findElement('.module-port-socket') });
     this.socketHandle = new ModulePort.Handle({ element: this.findElement('.module-port-socket-handle') });
     this.content = new ModulePort.Content({ element: this.findElement('.module-port-content') });
+    this.hideButton = new ModulePort.HideButton({ element: this.findElement('.module-port-hide-button') });
   });
-
-  ModulePort.prototype.hideButtonElement = function() {
-    return this.findElement('.module-port-hide-button');
-  };
 
   ModulePort.prototype.visible = function() {
     return (this.parentElement() !== null);
@@ -56,6 +52,19 @@
 
   ModulePort.prototype.socketY = function() {
     return this.offsetY() + this.middle();
+  };
+
+  ModulePort.prototype.highlighted = function(value) {
+    // don't hide highlighted port
+    var highlighted = this.hideButton.disabled();
+    if (typeof value === 'undefined') {
+      return highlighted;
+    }
+    if (value === highlighted) {
+      return;
+    }
+    this.hideButton.disabled(value);
+    this.markDirty();
   };
 
   ModulePort.prototype.plugHighlighted = function(value) {
@@ -93,9 +102,6 @@
 
     this.redrawBy('highlighted', function(highlighted) {
       dom.toggleClass(this.element(), 'highlighted', highlighted);
-
-      // don't hide highlighted port
-      dom.toggleClass(this.hideButtonElement(), 'disabled', highlighted);
     });
 
     this.redrawBy('isMoving', function(isMoving) {
@@ -151,6 +157,20 @@
     };
 
     return Content;
+  })();
+
+  ModulePort.HideButton = (function() {
+    var HideButton = jCore.Component.inherits(function() {
+      this.disabled = this.prop(false);
+    });
+
+    HideButton.prototype.onredraw = function() {
+      this.redrawBy('disabled', function(disabled) {
+        dom.toggleClass(this.element(), 'disabled', disabled);
+      });
+    };
+
+    return HideButton;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
