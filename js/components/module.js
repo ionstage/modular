@@ -90,7 +90,7 @@
   Module.prototype.hasHighlightedPort = function() {
     return this.ports.some(function(port) {
       return port.highlighted();
-    })
+    });
   };
 
   Module.prototype.portFromSocketPosition = function(x, y) {
