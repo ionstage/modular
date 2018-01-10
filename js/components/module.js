@@ -134,8 +134,8 @@
     return (this.visiblePorts().length === this.ports.length);
   };
 
-  Module.prototype.createPorts = function() {
-    return this.component.getAll().map(function(member) {
+  Module.prototype.createPorts = function(members) {
+    return members.map(function(member) {
       return new ModulePort(helper.extend({
         offsetX: this.portOffsetX(),
         offsetY: this.portOffsetY(),
@@ -146,8 +146,8 @@
   Module.prototype.load = function(visiblePortNames) {
     this.isLoading(true);
     this.redraw();
-    return this.component.load(this.url()).then(function() {
-      this.ports = this.createPorts();
+    return this.component.load(this.url()).then(function(component) {
+      this.ports = this.createPorts(component.getAll());
       this.portSelect.set(this.ports);
       this.showPorts(visiblePortNames);
       this.isLoading(false);
@@ -425,6 +425,7 @@
         this.circuitModule = this.contentWindow().modular.exports;
         this.eventCircuitModule = this.createEventCircuitModule();
         this.bindEventCircuitModule();
+        return this;
       }.bind(this));
     };
 
