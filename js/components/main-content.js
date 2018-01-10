@@ -274,6 +274,7 @@
       return (this.draggingWires.indexOf(relation.wire) !== -1);
     }.bind(this));
     port.highlighted(highlighted);
+    port.markDirty();
   };
 
   MainContent.prototype.oninit = function() {
