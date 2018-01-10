@@ -112,26 +112,25 @@
     return 'modular_modules/' + encodeURI(this.name()) + '.html';
   };
 
-  Module.prototype.props = function() {
-    return {
-      title: this.title(),
-      name: this.name(),
-      x: this.x(),
-      y: this.y(),
-    };
-  };
-
-  Module.prototype.visiblePortNames = function() {
-    return this.visiblePorts().sort(function(a, b) {
-      return a.top() - b.top();
-    }).map(function(port) {
-      return port.name();
-    });
-  };
-
   Module.prototype.footerDisabled = function() {
     // disable footer when all ports are visible
     return (this.visiblePorts().length === this.ports.length);
+  };
+
+  Module.prototype.toData = function() {
+    return {
+      props: {
+        title: this.title(),
+        name: this.name(),
+        x: this.x(),
+        y: this.y(),
+      },
+      visiblePortNames: this.visiblePorts().sort(function(a, b) {
+        return a.top() - b.top();
+      }).map(function(port) {
+        return port.name();
+      }),
+    };
   };
 
   Module.prototype.createPorts = function(members) {

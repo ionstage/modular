@@ -66,10 +66,7 @@
 
   MainContent.prototype.toModulesData = function() {
     return this.moduleContainer.modules.map(function(module) {
-      return {
-        props: module.props(),
-        visiblePortNames: module.visiblePortNames(),
-      };
+      return module.toData();
     });
   };
 
