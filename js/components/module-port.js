@@ -65,7 +65,6 @@
     }
     this.hideButton.disabled(value);
     this.markDirty();
-    this.emit('highlight', this);
   };
 
   ModulePort.prototype.plugHighlighted = function(value) {
