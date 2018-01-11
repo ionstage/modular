@@ -13,7 +13,7 @@
     this.offsetX = this.prop(props.offsetX);
     this.offsetY = this.prop(props.offsetY);
     this.top = this.prop(0);
-    this.highlighted = this.prop(false);
+    this.highlightCount = this.prop(0);
     this.isMoving = this.prop(false);
     this.height = this.prop(44);
     this.plugOffsetX = this.prop(261);
@@ -56,6 +56,18 @@
 
   ModulePort.prototype.socketY = function() {
     return this.offsetY() + this.middle();
+  };
+
+  ModulePort.prototype.incrementHighlightCount = function() {
+    this.highlightCount(this.highlightCount() + 1);
+  };
+
+  ModulePort.prototype.decrementHighlightCount = function() {
+    this.highlightCount(this.highlightCount() - 1);
+  };
+
+  ModulePort.prototype.highlighted = function() {
+    return (this.highlightCount() !== 0);
   };
 
   ModulePort.prototype.plugHighlighted = function(value) {
