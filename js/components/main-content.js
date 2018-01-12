@@ -4,7 +4,6 @@
   var jCore = require('jcore');
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
-  var Binding = app.Binding || require('../models/binding.js');
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
@@ -446,7 +445,7 @@
       var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
       var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
       CircuitModule.bind(source, target);
-      this.bindings.push(new Binding({
+      this.bindings.push(new ModuleContainer.Binding({
         sourcePort: sourcePort,
         targetPort: targetPort,
       }));
@@ -482,6 +481,11 @@
     ModuleContainer.prototype.ondragend = function() {
       this.markDirty();
       this.emit('dragend');
+    };
+
+    ModuleContainer.Binding = function(props) {
+      this.sourcePort = props.sourcePort;
+      this.targetPort = props.targetPort;
     };
 
     ModuleContainer.Retainer = (function() {
