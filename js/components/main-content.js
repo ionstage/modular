@@ -48,16 +48,7 @@
   };
 
   MainContent.prototype.toData = function() {
-    return {
-      modules: this.toModulesData(),
-      connections: this.moduleContainer.toConnectionsData(this.moduleContainer.modules),
-    };
-  };
-
-  MainContent.prototype.toModulesData = function() {
-    return this.moduleContainer.modules.map(function(module) {
-      return module.toData();
-    });
+    return this.moduleContainer.toData();
   };
 
   MainContent.prototype.load = function(data) {
@@ -382,6 +373,26 @@
       return null;
     };
 
+    ModuleContainer.prototype.toData = function() {
+      return {
+        modules: this.modules.map(function(module) {
+          return module.toData();
+        }),
+        connections: this.bindings.map(function(binding) {
+          return {
+            source: {
+              moduleIndex: this.modules.indexOf(this.moduleFromPort(binding.sourcePort)),
+              portName: binding.sourcePort.name(),
+            },
+            target: {
+              moduleIndex: this.modules.indexOf(this.moduleFromPort(binding.targetPort)),
+              portName: binding.targetPort.name(),
+            },
+          };
+        }.bind(this)),
+      };
+    };
+
     ModuleContainer.prototype.createModule = function(props) {
       var module = new Module(props);
       module.on('delete', this.ondelete.bind(this));
@@ -429,21 +440,6 @@
         return (binding.targetPort === targetPort);
       });
       return binding.sourcePort;
-    };
-
-    ModuleContainer.prototype.toConnectionsData = function(modules) {
-      return this.bindings.map(function(binding) {
-        return {
-          source: {
-            moduleIndex: modules.indexOf(this.moduleFromPort(binding.sourcePort)),
-            portName: binding.sourcePort.name(),
-          },
-          target: {
-            moduleIndex: modules.indexOf(this.moduleFromPort(binding.targetPort)),
-            portName: binding.targetPort.name(),
-          },
-        };
-      }.bind(this));
     };
 
     ModuleContainer.prototype.bind = function(sourcePort, targetPort) {
