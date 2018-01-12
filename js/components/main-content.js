@@ -38,14 +38,6 @@
     return this.lockedWires(LockRelation.TYPE_SOCKET, targetPort)[0];
   };
 
-  MainContent.prototype.connectedTargetPorts = function(sourcePort) {
-    return this.moduleContainer.connectedTargetPorts(sourcePort);
-  };
-
-  MainContent.prototype.connectedSourcePort = function(targetPort) {
-    return this.moduleContainer.connectedSourcePort(targetPort);
-  };
-
   MainContent.prototype.toData = function() {
     return this.moduleContainer.toData();
   };
@@ -119,14 +111,6 @@
     helper.remove(this.lockRelations, relation);
   };
 
-  MainContent.prototype.bind = function(sourcePort, targetPort) {
-    this.moduleContainer.bind(sourcePort, targetPort);
-  };
-
-  MainContent.prototype.unbind = function(sourcePort, targetPort) {
-    this.moduleContainer.unbind(sourcePort, targetPort);
-  };
-
   MainContent.prototype.canConnect = function(sourcePort, targetPort) {
     if (sourcePort.type() !== targetPort.type()) {
       return false;
@@ -147,7 +131,7 @@
     var wire = this.createWire(sourcePort, targetPort);
     wire.parentElement(this.wireContainerElement());
     targetPort.socketConnected(true);
-    this.bind(sourcePort, targetPort);
+    this.moduleContainer.bind(sourcePort, targetPort);
     this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
     targetPort.socketHighlighted(sourcePort.plugHighlighted());
@@ -158,7 +142,7 @@
     var wire = this.attachedWire(targetPort);
     wire.parentElement(null);
     targetPort.socketConnected(false);
-    this.unbind(sourcePort, targetPort);
+    this.moduleContainer.unbind(sourcePort, targetPort);
     this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
     this.unlock(LockRelation.TYPE_SOCKET, targetPort, wire);
     targetPort.socketHighlighted(false);
@@ -174,7 +158,7 @@
 
   MainContent.prototype.portEventHighlighted = function(sourcePort, highlighted) {
     sourcePort.plugHighlighted(highlighted);
-    this.connectedTargetPorts(sourcePort).forEach(function(targetPort) {
+    this.moduleContainer.connectedTargetPorts(sourcePort).forEach(function(targetPort) {
       targetPort.socketHighlighted(highlighted);
     });
     this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
@@ -192,7 +176,7 @@
   MainContent.prototype.attachDraggingWire = function(sourcePort, targetPort, wire) {
     wire.handleVisible(false);
     targetPort.socketConnected(true);
-    this.bind(sourcePort, targetPort);
+    this.moduleContainer.bind(sourcePort, targetPort);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
     targetPort.socketHighlighted(sourcePort.plugHighlighted());
     targetPort.incrementHighlightCount();
@@ -202,7 +186,7 @@
   MainContent.prototype.detachDraggingWire = function(sourcePort, targetPort, wire) {
     wire.handleVisible(true);
     targetPort.socketConnected(false);
-    this.unbind(sourcePort, targetPort);
+    this.moduleContainer.unbind(sourcePort, targetPort);
     this.unlock(LockRelation.TYPE_SOCKET, targetPort, wire);
     targetPort.socketHighlighted(false);
     targetPort.decrementHighlightCount();
@@ -307,7 +291,7 @@
 
   MainContent.prototype.onsocketdragstart = function(targetPort, context) {
     var wire = this.attachedWire(targetPort);
-    var sourcePort = this.connectedSourcePort(targetPort);
+    var sourcePort = this.moduleContainer.connectedSourcePort(targetPort);
 
     sourcePort.incrementHighlightCount();
     targetPort.incrementHighlightCount();
