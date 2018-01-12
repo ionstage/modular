@@ -195,7 +195,8 @@
     this.bind(sourcePort, targetPort);
     this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
-    this.updateEventHighlight(sourcePort);
+    targetPort.socketHighlighted(sourcePort.plugHighlighted());
+    wire.highlighted(sourcePort.plugHighlighted());
   };
 
   MainContent.prototype.disconnect = function(sourcePort, targetPort) {
@@ -216,9 +217,19 @@
     }.bind(this));
   };
 
+  MainContent.prototype.portEventHighlighted = function(sourcePort, highlighted) {
+    sourcePort.plugHighlighted(highlighted);
+    this.connectedTargetPorts(sourcePort).forEach(function(targetPort) {
+      targetPort.socketHighlighted(highlighted);
+    });
+    this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
+      wire.highlighted(highlighted);
+    });
+  };
+
   MainContent.prototype.appendDraggingWire = function(sourcePort, wire) {
     this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
-    this.updateEventHighlight(sourcePort);
+    wire.highlighted(sourcePort.plugHighlighted());
     sourcePort.incrementHighlightCount();
     this.updateModuleDeletable(sourcePort);
   };
@@ -228,7 +239,7 @@
     targetPort.socketConnected(true);
     this.bind(sourcePort, targetPort);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
-    this.updateEventHighlight(sourcePort);
+    targetPort.socketHighlighted(sourcePort.plugHighlighted());
     targetPort.incrementHighlightCount();
     this.updateModuleDeletable(targetPort);
   };
@@ -254,16 +265,6 @@
     sourcePort.decrementHighlightCount();
     this.updateModuleDeletable(sourcePort);
     this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
-  };
-
-  MainContent.prototype.updateEventHighlight = function(sourcePort) {
-    var highlighted = sourcePort.plugHighlighted();
-    this.connectedTargetPorts(sourcePort).forEach(function(targetPort) {
-      targetPort.socketHighlighted(highlighted);
-    });
-    this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
-      wire.highlighted(highlighted);
-    });
   };
 
   MainContent.prototype.updateModuleDeletable = function(port) {
@@ -298,12 +299,8 @@
   };
 
   MainContent.prototype.onportevent = function(sourcePort) {
-    sourcePort.plugHighlighted(true);
-    this.updateEventHighlight(sourcePort);
-    setTimeout(function() {
-      sourcePort.plugHighlighted(false);
-      this.updateEventHighlight(sourcePort);
-    }.bind(this), 100);
+    this.portEventHighlighted(sourcePort, true);
+    setTimeout(this.portEventHighlighted.bind(this), 100, sourcePort, false);
   };
 
   MainContent.prototype.onplugdragstart = function(sourcePort, context) {
