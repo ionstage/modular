@@ -12,7 +12,6 @@
 
   var MainContent = jCore.Component.inherits(function(props) {
     this.lockRelations = [];
-    this.bindings = [];
     this.moduleContainer = new MainContent.ModuleContainer({ element: this.findElement('.module-container') });
   });
 
@@ -41,25 +40,17 @@
   };
 
   MainContent.prototype.connectedTargetPorts = function(sourcePort) {
-    return this.bindings.filter(function(binding) {
-      return (binding.sourcePort === sourcePort);
-    }).map(function(binding) {
-      return binding.targetPort;
-    });
+    return this.moduleContainer.connectedTargetPorts(sourcePort);
   };
 
   MainContent.prototype.connectedSourcePort = function(targetPort) {
-    // socket of the target port can only be connected to one wire
-    var binding = helper.find(this.bindings, function(binding) {
-      return (binding.targetPort === targetPort);
-    });
-    return binding.sourcePort;
+    return this.moduleContainer.connectedSourcePort(targetPort);
   };
 
   MainContent.prototype.toData = function() {
     return {
       modules: this.toModulesData(),
-      connections: this.toConnectionsData(this.moduleContainer.modules),
+      connections: this.moduleContainer.toConnectionsData(this.moduleContainer.modules),
     };
   };
 
@@ -67,21 +58,6 @@
     return this.moduleContainer.modules.map(function(module) {
       return module.toData();
     });
-  };
-
-  MainContent.prototype.toConnectionsData = function(modules) {
-    return this.bindings.map(function(binding) {
-      return {
-        source: {
-          moduleIndex: modules.indexOf(this.moduleContainer.moduleFromPort(binding.sourcePort)),
-          portName: binding.sourcePort.name(),
-        },
-        target: {
-          moduleIndex: modules.indexOf(this.moduleContainer.moduleFromPort(binding.targetPort)),
-          portName: binding.targetPort.name(),
-        },
-      };
-    }.bind(this));
   };
 
   MainContent.prototype.load = function(data) {
@@ -154,22 +130,11 @@
   };
 
   MainContent.prototype.bind = function(sourcePort, targetPort) {
-    var source = this.moduleContainer.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
-    var target = this.moduleContainer.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
-    CircuitModule.bind(source, target);
-    this.bindings.push(new Binding({
-      sourcePort: sourcePort,
-      targetPort: targetPort,
-    }));
+    this.moduleContainer.bind(sourcePort, targetPort);
   };
 
   MainContent.prototype.unbind = function(sourcePort, targetPort) {
-    var source = this.moduleContainer.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
-    var target = this.moduleContainer.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
-    CircuitModule.unbind(source, target);
-    helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
-      return (binding.sourcePort === sourcePort && binding.targetPort === targetPort);
-    }));
+    this.moduleContainer.unbind(sourcePort, targetPort);
   };
 
   MainContent.prototype.canConnect = function(sourcePort, targetPort) {
@@ -210,7 +175,7 @@
   };
 
   MainContent.prototype.disconnectAll = function(port) {
-    this.bindings.slice().forEach(function(binding) {
+    this.moduleContainer.bindings.slice().forEach(function(binding) {
       if (binding.sourcePort === port || binding.targetPort === port) {
         this.disconnect(binding.sourcePort, binding.targetPort);
       }
@@ -377,6 +342,7 @@
   MainContent.ModuleContainer = (function() {
     var ModuleContainer = jCore.Component.inherits(function() {
       this.modules = [];
+      this.bindings = [];
       this.retainer = new ModuleContainer.Retainer({ element: this.findElement('.module-container-retainer') });
     });
 
@@ -447,6 +413,56 @@
         module.delete();
       });
       this.markDirty();
+    };
+
+    ModuleContainer.prototype.connectedTargetPorts = function(sourcePort) {
+      return this.bindings.filter(function(binding) {
+        return (binding.sourcePort === sourcePort);
+      }).map(function(binding) {
+        return binding.targetPort;
+      });
+    };
+
+    ModuleContainer.prototype.connectedSourcePort = function(targetPort) {
+      // socket of the target port can only be connected to one wire
+      var binding = helper.find(this.bindings, function(binding) {
+        return (binding.targetPort === targetPort);
+      });
+      return binding.sourcePort;
+    };
+
+    ModuleContainer.prototype.toConnectionsData = function(modules) {
+      return this.bindings.map(function(binding) {
+        return {
+          source: {
+            moduleIndex: modules.indexOf(this.moduleFromPort(binding.sourcePort)),
+            portName: binding.sourcePort.name(),
+          },
+          target: {
+            moduleIndex: modules.indexOf(this.moduleFromPort(binding.targetPort)),
+            portName: binding.targetPort.name(),
+          },
+        };
+      }.bind(this));
+    };
+
+    ModuleContainer.prototype.bind = function(sourcePort, targetPort) {
+      var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
+      var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
+      CircuitModule.bind(source, target);
+      this.bindings.push(new Binding({
+        sourcePort: sourcePort,
+        targetPort: targetPort,
+      }));
+    };
+
+    ModuleContainer.prototype.unbind = function(sourcePort, targetPort) {
+      var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
+      var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
+      CircuitModule.unbind(source, target);
+      helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
+        return (binding.sourcePort === sourcePort && binding.targetPort === targetPort);
+      }));
     };
 
     ModuleContainer.prototype.oninit = function() {
