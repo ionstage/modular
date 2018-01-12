@@ -31,10 +31,6 @@
     return this.header.height() + this.footer.height() + this.component.outerHeight() + this.portList.height();
   };
 
-  Module.prototype.circuitModuleMember = function(name) {
-    return this.component.get(name);
-  };
-
   Module.prototype.bottomRightX = function() {
     return this.x() + this.width() + this.rightPadding();
   };
@@ -138,6 +134,7 @@
       return new ModulePort(helper.extend({
         offsetX: this.portOffsetX(),
         offsetY: this.portOffsetY(),
+        member: member,
       }, member));
     }.bind(this));
   };

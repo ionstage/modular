@@ -426,9 +426,7 @@
     };
 
     ModuleContainer.prototype.bind = function(sourcePort, targetPort) {
-      var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
-      var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
-      CircuitModule.bind(source, target);
+      CircuitModule.bind(sourcePort.member, targetPort.member);
       this.bindings.push(new ModuleContainer.Binding({
         sourcePort: sourcePort,
         targetPort: targetPort,
@@ -436,9 +434,7 @@
     };
 
     ModuleContainer.prototype.unbind = function(sourcePort, targetPort) {
-      var source = this.moduleFromPort(sourcePort).circuitModuleMember(sourcePort.name());
-      var target = this.moduleFromPort(targetPort).circuitModuleMember(targetPort.name());
-      CircuitModule.unbind(source, target);
+      CircuitModule.unbind(sourcePort.member, targetPort.member);
       helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
         return (binding.sourcePort === sourcePort && binding.targetPort === targetPort);
       }));

@@ -27,16 +27,16 @@
     };
   };
 
-  CircuitModule.bind = function(source, target) {
-    var sourceCallee = source.unwrap(Wrapper.KEY).callee;
-    var targetCallee = target.unwrap(Wrapper.KEY).callee;
-    circuit.bind(sourceCallee, targetCallee);
+  CircuitModule.bind = function(sourceMember, targetMember) {
+    var source = sourceMember.unwrap(Wrapper.KEY).callee;
+    var target = targetMember.unwrap(Wrapper.KEY).callee;
+    circuit.bind(source, target);
   };
 
-  CircuitModule.unbind = function(source, target) {
-    var sourceCallee = source.unwrap(Wrapper.KEY).callee;
-    var targetCallee = target.unwrap(Wrapper.KEY).callee;
-    circuit.unbind(sourceCallee, targetCallee);
+  CircuitModule.unbind = function(sourceMember, targetMember) {
+    var source = sourceMember.unwrap(Wrapper.KEY).callee;
+    var target = targetMember.unwrap(Wrapper.KEY).callee;
+    circuit.unbind(source, target);
   };
 
   CircuitModule.Member = (function() {
