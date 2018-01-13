@@ -158,9 +158,7 @@
 
   MainContent.prototype.portEventHighlighted = function(sourcePort, highlighted) {
     sourcePort.plugHighlighted(highlighted);
-    this.moduleContainer.connectedTargetPorts(sourcePort).forEach(function(targetPort) {
-      targetPort.socketHighlighted(highlighted);
-    });
+    this.moduleContainer.portEventHighlighted(sourcePort, highlighted)
     this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
       wire.highlighted(highlighted);
     });
@@ -380,14 +378,6 @@
       this.markDirty();
     };
 
-    ModuleContainer.prototype.connectedTargetPorts = function(sourcePort) {
-      return this.bindings.filter(function(binding) {
-        return (binding.sourcePort === sourcePort);
-      }).map(function(binding) {
-        return binding.targetPort;
-      });
-    };
-
     ModuleContainer.prototype.connectedSourcePort = function(targetPort) {
       // socket of the target port can only be connected to one wire
       var binding = helper.find(this.bindings, function(binding) {
@@ -409,6 +399,14 @@
       helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
         return (binding.sourcePort === sourcePort && binding.targetPort === targetPort);
       }));
+    };
+
+    ModuleContainer.prototype.portEventHighlighted = function(sourcePort, highlighted) {
+      this.bindings.forEach(function(binding) {
+        if (binding.sourcePort === sourcePort) {
+          binding.targetPort.socketHighlighted(highlighted);
+        }
+      });
     };
 
     ModuleContainer.prototype.oninit = function() {
