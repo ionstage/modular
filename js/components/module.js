@@ -150,7 +150,7 @@
     this.isLoading(true);
     this.redraw();
     return this.component.load(this.url()).then(function(component) {
-      this.ports = this.createPorts(component.getAll());
+      this.ports = this.createPorts(component.members);
       this.portSelect.set(this.ports);
       this.showPorts(visiblePortNames);
       this.isLoading(false);
@@ -384,8 +384,8 @@
   Module.Component = (function() {
     var Component = jCore.Component.inherits(function() {
       this.height = this.prop(0);
-      this.circuitModule = null;
-      this.eventCircuitModule = null;
+      this.members = [];
+      this.eventMembers = [];
       this.onpoint = this.emit.bind(this, 'point');
     });
 
@@ -397,31 +397,29 @@
       return dom.contentWindow(this.element());
     };
 
-    Component.prototype.get = function(name) {
-      return this.circuitModule.get(name);
-    };
-
-    Component.prototype.getAll = function() {
-      return this.circuitModule.getAll();
+    Component.prototype.member = function(name) {
+      return helper.findLast(this.members, function(member) {
+        return (member.name === name);
+      });
     };
 
     Component.prototype.createEventCircuitModule = function() {
-      return new CircuitModule.ModularModule(this.circuitModule.getAll().filter(function(member) {
+      return new CircuitModule.ModularModule(this.members.filter(function(member) {
         return (member.type === 'event');
       }).map(function(member) {
         return helper.extend({ arg: this.emit.bind(this, 'event', member) }, member);
       }.bind(this)));
     };
 
-    Component.prototype.bindEventCircuitModule = function() {
-      this.eventCircuitModule.getAll().forEach(function(member) {
-        CircuitModule.bind(this.circuitModule.get(member.name), member);
+    Component.prototype.bindEventMembers = function() {
+      this.eventMembers.forEach(function(member) {
+        CircuitModule.bind(this.member(member.name), member);
       }.bind(this));
     };
 
-    Component.prototype.unbindEventCircuitModule = function() {
-      this.eventCircuitModule.getAll().forEach(function(member) {
-        CircuitModule.unbind(this.circuitModule.get(member.name), member);
+    Component.prototype.unbindEventMembers = function() {
+      this.eventMembers.forEach(function(member) {
+        CircuitModule.unbind(this.member(member.name), member);
       }.bind(this));
     };
 
@@ -443,18 +441,16 @@
           });
         }.bind(this));
       }.bind(this)).then(function() {
-        this.circuitModule = this.contentWindow().modular.exports;
-        this.eventCircuitModule = this.createEventCircuitModule();
-        this.bindEventCircuitModule();
+        this.members = this.contentWindow().modular.exports.getAll();
+        this.eventMembers = this.createEventCircuitModule().getAll();
+        this.bindEventMembers();
         return this;
       }.bind(this));
     };
 
     Component.prototype.unload = function() {
       dom.off(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
-      if (this.eventCircuitModule) {
-        this.unbindEventCircuitModule();
-      }
+      this.unbindEventMembers();
     };
 
     return Component;
