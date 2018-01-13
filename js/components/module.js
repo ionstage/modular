@@ -129,9 +129,16 @@
     };
   };
 
+  Module.prototype.createPort = function(props) {
+    var port = new ModulePort(props);
+    port.on('highlight', this.onporthighlight.bind(this));
+    port.on('unhighlight', this.onportunhighlight.bind(this));
+    return port;
+  };
+
   Module.prototype.createPorts = function(members) {
     return members.map(function(member) {
-      return new ModulePort(helper.extend({
+      return this.createPort(helper.extend({
         offsetX: this.portOffsetX(),
         offsetY: this.portOffsetY(),
         member: member,
@@ -168,10 +175,6 @@
     this.visiblePorts().forEach(function(port) {
       port.offsetY(this.portOffsetY());
     }.bind(this));
-  };
-
-  Module.prototype.deletable = function(value) {
-    this.header.deleteButtonEnabled(value);
   };
 
   Module.prototype.showPort = function(name) {
@@ -219,6 +222,12 @@
     }.bind(this));
   };
 
+  Module.prototype.removePortsAllListeners = function() {
+    this.ports.forEach(function(port) {
+      port.removeAllListeners();
+    });
+  };
+
   Module.prototype.delete = function() {
     // remove all connections of connected ports
     this.hideAllPorts();
@@ -244,6 +253,7 @@
   };
 
   Module.prototype.onremove = function() {
+    this.removePortsAllListeners();
     this.draggable.disable();
     this.component.unload();
     this.component.removeAllListeners();
@@ -281,6 +291,14 @@
     this.showPort(name);
   };
 
+  Module.prototype.onporthighlight = function() {
+    this.header.incrementDeletableCount();
+  };
+
+  Module.prototype.onportunhighlight = function() {
+    this.header.decrementDeletableCount();
+  };
+
   Module.prototype.onportevent = function(member) {
     this.emit('portevent', this.port(member.name));
   };
@@ -308,7 +326,7 @@
   Module.Header = (function() {
     var Header = jCore.Component.inherits(function() {
       this.text = this.prop('');
-      this.deleteButtonEnabled = this.prop(true);
+      this.deletableCount = this.prop(0);
       this.height = this.prop(32);
     });
 
@@ -320,13 +338,25 @@
       return this.findElement('.module-delete-button');
     };
 
+    Header.prototype.incrementDeletableCount = function() {
+      this.deletableCount(this.deletableCount() + 1);
+    };
+
+    Header.prototype.decrementDeletableCount = function() {
+      this.deletableCount(this.deletableCount() - 1);
+    };
+
+    Header.prototype.deleteButtonDisabled = function() {
+      return (this.deletableCount() !== 0);
+    };
+
     Header.prototype.onredraw = function() {
       this.redrawBy('text', function(text) {
         dom.text(this.titleElement(), text);
       });
 
-      this.redrawBy('deleteButtonEnabled', function(deleteButtonEnabled) {
-        dom.toggleClass(this.deleteButtonElement(), 'disabled', !deleteButtonEnabled);
+      this.redrawBy('deleteButtonDisabled', function(deleteButtonDisabled) {
+        dom.toggleClass(this.deleteButtonElement(), 'disabled', deleteButtonDisabled);
       });
     };
 

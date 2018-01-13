@@ -170,7 +170,6 @@
     this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
     wire.highlighted(sourcePort.plugHighlighted());
     sourcePort.incrementHighlightCount();
-    this.updateModuleDeletable(sourcePort);
   };
 
   MainContent.prototype.attachDraggingWire = function(sourcePort, targetPort, wire) {
@@ -180,7 +179,6 @@
     this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
     targetPort.socketHighlighted(sourcePort.plugHighlighted());
     targetPort.incrementHighlightCount();
-    this.updateModuleDeletable(targetPort);
   };
 
   MainContent.prototype.detachDraggingWire = function(sourcePort, targetPort, wire) {
@@ -190,26 +188,16 @@
     this.unlock(LockRelation.TYPE_SOCKET, targetPort, wire);
     targetPort.socketHighlighted(false);
     targetPort.decrementHighlightCount();
-    this.updateModuleDeletable(targetPort);
   };
 
   MainContent.prototype.keepDraggingWire = function(sourcePort, targetPort, wire) {
     sourcePort.decrementHighlightCount();
     targetPort.decrementHighlightCount();
-    this.updateModuleDeletable(sourcePort);
-    this.updateModuleDeletable(targetPort);
   };
 
   MainContent.prototype.removeDraggingWire = function(sourcePort, wire) {
     sourcePort.decrementHighlightCount();
-    this.updateModuleDeletable(sourcePort);
     this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
-  };
-
-  MainContent.prototype.updateModuleDeletable = function(port) {
-    // module is deletable if all ports are NOT highlighted
-    var module = this.moduleContainer.moduleFromPort(port);
-    module.deletable(!module.hasHighlightedPort());
   };
 
   MainContent.prototype.oninit = function() {
@@ -295,8 +283,6 @@
 
     sourcePort.incrementHighlightCount();
     targetPort.incrementHighlightCount();
-    this.updateModuleDeletable(sourcePort);
-    this.updateModuleDeletable(targetPort);
 
     context.x = wire.targetX();
     context.y = wire.targetY();

@@ -61,10 +61,16 @@
 
   ModulePort.prototype.incrementHighlightCount = function() {
     this.highlightCount(this.highlightCount() + 1);
+    if (this.highlightCount() === 1) {
+      this.emit('highlight', this);
+    }
   };
 
   ModulePort.prototype.decrementHighlightCount = function() {
     this.highlightCount(this.highlightCount() - 1);
+    if (this.highlightCount() === 0) {
+      this.emit('unhighlight', this);
+    }
   };
 
   ModulePort.prototype.highlighted = function() {
