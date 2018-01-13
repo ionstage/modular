@@ -326,12 +326,6 @@
       return (this.modules.length > 0 ? this.bottomRightY() + this.retainer.margin() : 0);
     };
 
-    ModuleContainer.prototype.moduleFromPort = function(port) {
-      return helper.find(this.modules, function(module) {
-        return module.containsPort(port);
-      });
-    };
-
     ModuleContainer.prototype.portFromSocketPosition = function(x, y) {
       for (var i = this.modules.length - 1; i >= 0; i--) {
         var port = this.modules[i].portFromSocketPosition(x, y);
@@ -348,16 +342,7 @@
           return module.toData();
         }),
         connections: this.bindings.map(function(binding) {
-          return {
-            source: {
-              moduleIndex: this.modules.indexOf(this.moduleFromPort(binding.sourcePort)),
-              portName: binding.sourcePort.name(),
-            },
-            target: {
-              moduleIndex: this.modules.indexOf(this.moduleFromPort(binding.targetPort)),
-              portName: binding.targetPort.name(),
-            },
-          };
+         return binding.toData(this.modules);
         }.bind(this)),
       };
     };
@@ -449,10 +434,27 @@
       this.emit('dragend');
     };
 
-    ModuleContainer.Binding = function(props) {
-      this.sourcePort = props.sourcePort;
-      this.targetPort = props.targetPort;
-    };
+    ModuleContainer.Binding = (function() {
+      var Binding = function(props) {
+        this.sourcePort = props.sourcePort;
+        this.targetPort = props.targetPort;
+      };
+
+      Binding.prototype.toData = function(modules) {
+        return {
+          source: {
+            moduleIndex: modules.indexOf(this.sourcePort.module),
+            portName: this.sourcePort.name(),
+          },
+          target: {
+            moduleIndex: modules.indexOf(this.targetPort.module),
+            portName: this.targetPort.name(),
+          },
+        };
+      };
+
+      return Binding;
+    })();
 
     ModuleContainer.Retainer = (function() {
       var Retainer = jCore.Component.inherits(function() {

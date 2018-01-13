@@ -21,6 +21,7 @@
     this.socketOffsetX = this.prop(-25);
     this.socketWidth = this.prop(50);
     this.member = props.member;
+    this.module = props.module;
     this.plug = new ModulePort.Handle({ element: this.findElement('.module-port-plug') });
     this.socket = new ModulePort.Socket({ element: this.findElement('.module-port-socket') });
     this.socketHandle = new ModulePort.Handle({ element: this.findElement('.module-port-socket-handle') });

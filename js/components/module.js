@@ -142,6 +142,7 @@
         offsetX: this.portOffsetX(),
         offsetY: this.portOffsetY(),
         member: member,
+        module: this,
       }, member));
     }.bind(this));
   };
