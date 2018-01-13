@@ -284,8 +284,8 @@
     sourcePort.incrementHighlightCount();
     targetPort.incrementHighlightCount();
 
-    context.x = wire.targetX();
-    context.y = wire.targetY();
+    context.x = targetPort.socketX();
+    context.y = targetPort.socketY();
     context.wire = wire;
     context.sourcePort = sourcePort;
     context.targetPort = targetPort;
