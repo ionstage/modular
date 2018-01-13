@@ -350,7 +350,7 @@
       module.on('delete', this.ondelete.bind(this));
       module.on('point', this.onpoint.bind(this));
       module.on('portshow', this.onportshow.bind(this));
-      module.on('porthide', this.emit.bind(this, 'porthide'));
+      module.on('porthide', this.onporthide.bind(this));
       module.on('portevent', this.emit.bind(this, 'portevent'));
       module.on('dragstart', this.emit.bind(this, 'dragstart'));
       module.on('dragend', this.ondragend.bind(this));
@@ -367,7 +367,7 @@
       var module = this.createModule(props);
       module.parentElement(this.element());
       this.modules.push(module);
-      this.markDirty();
+      this.refresh();
       return module.load(visiblePortNames);
     };
 
@@ -375,7 +375,6 @@
       this.modules.slice().forEach(function(module) {
         module.delete();
       });
-      this.markDirty();
     };
 
     ModuleContainer.prototype.connectedSourcePort = function(targetPort) {
@@ -409,26 +408,39 @@
       });
     };
 
-    ModuleContainer.prototype.oninit = function() {
-      this.addRelation(new ModuleContainer.Relation({ retainer: this.retainer }));
+    ModuleContainer.prototype.refresh = function() {
+      // reset z-index of each module
+      this.modules.forEach(function(module, index) {
+        module.zIndex(index);
+      });
+
+      // move retainer to the proper position
+      this.retainer.x(this.retainerX());
+      this.retainer.y(this.retainerY());
     };
 
     ModuleContainer.prototype.ondelete = function(module) {
       module.removeAllListeners();
       helper.remove(this.modules, module);
+      this.refresh();
     };
 
     ModuleContainer.prototype.onpoint = function(module) {
       helper.moveToBack(this.modules, module);
-      this.markDirty();
+      this.refresh();
     };
 
     ModuleContainer.prototype.onportshow = function() {
-      this.markDirty();
+      this.refresh();
+    };
+
+    ModuleContainer.prototype.onporthide = function(port) {
+      this.refresh();
+      this.emit('porthide', port);
     };
 
     ModuleContainer.prototype.ondragend = function() {
-      this.markDirty();
+      this.refresh();
       this.emit('dragend');
     };
 
@@ -468,30 +480,6 @@
       };
 
       return Retainer;
-    })();
-
-    ModuleContainer.Relation = (function() {
-      var Relation = jCore.Relation.inherits(function(props) {
-        this.retainer = props.retainer;
-      });
-
-      Relation.prototype.update = function(container) {
-        this.updateZIndex(container);
-        this.updateRetainer(container);
-      };
-
-      Relation.prototype.updateZIndex = function(container) {
-        container.modules.forEach(function(module, index) {
-          module.zIndex(index);
-        });
-      };
-
-      Relation.prototype.updateRetainer = function(container) {
-        this.retainer.x(container.retainerX());
-        this.retainer.y(container.retainerY());
-      };
-
-      return Relation;
     })();
 
     return ModuleContainer;
