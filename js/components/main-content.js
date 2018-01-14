@@ -206,7 +206,7 @@
       this.detachDraggingWire(sourcePort, currentTargetPort, wire);
     }
 
-    var targetPort = (port && this.moduleContainer.canConnect(sourcePort, port) ? port : null);
+    var targetPort = (this.moduleContainer.canConnect(sourcePort, port) ? port : null);
     if (targetPort) {
       this.attachDraggingWire(sourcePort, targetPort, wire);
     }
@@ -334,7 +334,7 @@
     ModuleContainer.prototype.loadConnections = function(connectionsData, modules) {
       return Promise.all(connectionsData.map(function(connectionData) {
         var binding = ModuleContainer.Binding.fromData(connectionData, modules);
-        if (!binding.sourcePort || !binding.targetPort || !this.canConnect(binding.sourcePort, binding.targetPort)) {
+        if (!this.canConnect(binding.sourcePort, binding.targetPort)) {
           throw new Error('Invalid connection');
         }
         return binding;
@@ -368,6 +368,9 @@
     };
 
     ModuleContainer.prototype.canConnect = function(sourcePort, targetPort) {
+      if (!sourcePort || !targetPort) {
+        return false;
+      }
       if (sourcePort.type() !== targetPort.type()) {
         return false;
       }
