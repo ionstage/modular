@@ -350,10 +350,18 @@
       }.bind(this));
     };
 
+    ModuleContainer.prototype.removeModule = function(module) {
+      this.disconnectByModule(module);
+      module.removeAllListeners();
+      module.parentElement(null);
+      helper.remove(this.modules, module);
+      this.refresh();
+    };
+
     ModuleContainer.prototype.clear = function() {
-      this.modules.slice().forEach(function(module) {
-        module.delete();
-      });
+      this.modules.slice().reverse().forEach(function(module) {
+        this.removeModule(module);
+      }.bind(this));
     };
 
     ModuleContainer.prototype.connectedSourcePort = function(targetPort) {
@@ -443,10 +451,7 @@
     };
 
     ModuleContainer.prototype.ondelete = function(module) {
-      this.disconnectByModule(module);
-      module.removeAllListeners();
-      helper.remove(this.modules, module);
-      this.refresh();
+      this.removeModule(module);
     };
 
     ModuleContainer.prototype.onpoint = function(module) {

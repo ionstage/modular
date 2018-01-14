@@ -229,11 +229,6 @@
     });
   };
 
-  Module.prototype.delete = function() {
-    this.parentElement(null);
-    this.emit('delete', this);
-  };
-
   Module.prototype.render = function() {
     return dom.render(Module.HTML_TEXT);
   };
@@ -649,7 +644,7 @@
       onend: function(module, dx, dy, event, context) {
         module.isDeleting(false);
         if (dom.target(event) === context.target) {
-          module.delete();
+          module.emit('delete', module);
         }
       },
     };
