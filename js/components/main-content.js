@@ -95,19 +95,8 @@
   MainContent.prototype.disconnect = function(sourcePort, targetPort) {
     var wire = this.attachedWire(targetPort);
     wire.parentElement(null);
-    targetPort.socketConnected(false);
-    this.moduleContainer.unbind(sourcePort, targetPort);
     this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
     this.unlock(LockRelation.TYPE_SOCKET, targetPort, wire);
-    targetPort.socketHighlighted(false);
-  };
-
-  MainContent.prototype.disconnectAll = function(port) {
-    this.moduleContainer.bindings.slice().forEach(function(binding) {
-      if (binding.sourcePort === port || binding.targetPort === port) {
-        this.disconnect(binding.sourcePort, binding.targetPort);
-      }
-    }.bind(this));
   };
 
   MainContent.prototype.portEventHighlighted = function(sourcePort, highlighted) {
@@ -155,7 +144,7 @@
   MainContent.prototype.oninit = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
     this.moduleContainer.on('connect', this.onconnect.bind(this));
-    this.moduleContainer.on('porthide', this.onporthide.bind(this));
+    this.moduleContainer.on('disconnect', this.ondisconnect.bind(this));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
     this.moduleContainer.on('dragstart', this.emit.bind(this, 'dragstart'));
     this.moduleContainer.on('dragend', this.emit.bind(this, 'dragend'));
@@ -178,8 +167,8 @@
     this.connect(sourcePort, targetPort);
   };
 
-  MainContent.prototype.onporthide = function(port) {
-    this.disconnectAll(port);
+  MainContent.prototype.ondisconnect = function(sourcePort, targetPort) {
+    this.disconnect(sourcePort, targetPort);
   };
 
   MainContent.prototype.onportevent = function(sourcePort) {
@@ -398,6 +387,21 @@
       this.emit('connect', sourcePort, targetPort);
     };
 
+    ModuleContainer.prototype.disconnect = function(sourcePort, targetPort) {
+      targetPort.socketConnected(false);
+      this.unbind(sourcePort, targetPort);
+      targetPort.socketHighlighted(false);
+      this.emit('disconnect', sourcePort, targetPort);
+    };
+
+    ModuleContainer.prototype.disconnectAll = function(port) {
+      this.bindings.slice().forEach(function(binding) {
+        if (binding.sourcePort === port || binding.targetPort === port) {
+          this.disconnect(binding.sourcePort, binding.targetPort);
+        }
+      }.bind(this));
+    };
+
     ModuleContainer.prototype.bind = function(sourcePort, targetPort) {
       CircuitModule.bind(sourcePort.member, targetPort.member);
       this.bindings.push(new ModuleContainer.Binding({
@@ -448,8 +452,8 @@
     };
 
     ModuleContainer.prototype.onporthide = function(port) {
+      this.disconnectAll(port);
       this.refresh();
-      this.emit('porthide', port);
     };
 
     ModuleContainer.prototype.ondragend = function() {
