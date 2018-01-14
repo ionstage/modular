@@ -333,19 +333,14 @@
 
     ModuleContainer.prototype.loadConnections = function(connectionsData, modules) {
       return Promise.all(connectionsData.map(function(connectionData) {
-        var source = connectionData.source;
-        var target = connectionData.target;
-        var sourceModule = modules[source.moduleIndex];
-        var targetModule = modules[target.moduleIndex];
-        var sourcePort = (sourceModule ? sourceModule.port(source.portName) : null);
-        var targetPort = (targetModule ? targetModule.port(target.portName) : null);
-        if (!sourcePort || !targetPort || !this.canConnect(sourcePort, targetPort)) {
+        var binding = ModuleContainer.Binding.fromData(connectionData, modules);
+        if (!binding.sourcePort || !binding.targetPort || !this.canConnect(binding.sourcePort, binding.targetPort)) {
           throw new Error('Invalid connection');
         }
-        return { source: sourcePort, target: targetPort };
-      }.bind(this))).then(function(portMaps) {
-        portMaps.forEach(function(portMap) {
-          this.connect(portMap.source, portMap.target);
+        return binding;
+      }.bind(this))).then(function(bindings) {
+        bindings.forEach(function(binding) {
+          this.connect(binding.sourcePort, binding.targetPort);
         }.bind(this));
       }.bind(this));
     };
@@ -490,6 +485,15 @@
             portName: this.targetPort.name(),
           },
         };
+      };
+
+      Binding.fromData = function(data, modules) {
+        var sourceModule = modules[data.source.moduleIndex];
+        var targetModule = modules[data.target.moduleIndex];
+        return new Binding({
+          sourcePort: (sourceModule ? sourceModule.port(data.source.portName) : null),
+          targetPort: (targetModule ? targetModule.port(data.target.portName) : null),
+        });
       };
 
       return Binding;
