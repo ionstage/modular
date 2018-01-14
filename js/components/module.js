@@ -592,30 +592,24 @@
     Draggable.prototype.onstart = function(module, x, y, event, context) {
       module.emit('point', module);
       context.listeners = Draggable.listenersByTarget(dom.target(event));
-      if (!context.listeners) {
-        return;
+      if (context.listeners) {
+        dom.cancel(event);
+        module.emit('dragstart');
+        context.listeners.onstart(module, x, y, event, context);
       }
-
-      dom.cancel(event);
-      module.emit('dragstart');
-      context.listeners.onstart(module, x, y, event, context);
     };
 
     Draggable.prototype.onmove = function(module, dx, dy, event, context) {
-      if (!context.listeners) {
-        return;
+      if (context.listeners) {
+        context.listeners.onmove(module, dx, dy, event, context);
       }
-
-      context.listeners.onmove(module, dx, dy, event, context);
     };
 
     Draggable.prototype.onend = function(module, dx, dy, event, context) {
-      if (!context.listeners) {
-        return;
+      if (context.listeners) {
+        module.emit('dragend');
+        context.listeners.onend(module, dx, dy, event, context);
       }
-
-      module.emit('dragend');
-      context.listeners.onend(module, dx, dy, event, context);
     };
 
     Draggable.titleListeners = {
