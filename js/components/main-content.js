@@ -43,34 +43,7 @@
   };
 
   MainContent.prototype.load = function(data) {
-    return this.loadModules(data.modules).then(function(modules) {
-      return this.loadConnections(data.connections, modules);
-    }.bind(this));
-  };
-
-  MainContent.prototype.loadModules = function(modulesData) {
-    return Promise.all(modulesData.map(function(moduleData) {
-      return this.loadModule(moduleData.props, moduleData.visiblePortNames);
-    }.bind(this)));
-  };
-
-  MainContent.prototype.loadConnections = function(connectionsData, modules) {
-    return Promise.all(connectionsData.map(function(connectionData) {
-      var source = connectionData.source;
-      var target = connectionData.target;
-      var sourceModule = modules[source.moduleIndex];
-      var targetModule = modules[target.moduleIndex];
-      var sourcePort = (sourceModule ? sourceModule.port(source.portName) : null);
-      var targetPort = (targetModule ? targetModule.port(target.portName) : null);
-      if (!sourcePort || !targetPort || !this.canConnect(sourcePort, targetPort)) {
-        throw new Error('Invalid connection');
-      }
-      return { source: sourcePort, target: targetPort };
-    }.bind(this))).then(function(portMaps) {
-      portMaps.forEach(function(portMap) {
-        this.connect(portMap.source, portMap.target);
-      }.bind(this));
-    }.bind(this));
+    return this.moduleContainer.load(data);
   };
 
   MainContent.prototype.clear = function() {
@@ -111,30 +84,11 @@
     helper.remove(this.lockRelations, relation);
   };
 
-  MainContent.prototype.canConnect = function(sourcePort, targetPort) {
-    if (sourcePort.type() !== targetPort.type()) {
-      return false;
-    }
-    if (sourcePort.plugDisabled() || targetPort.socketDisabled()) {
-      return false;
-    }
-    if (!sourcePort.visible() || !targetPort.visible()) {
-      return false;
-    }
-    if (targetPort.socketConnected()) {
-      return false;
-    }
-    return true;
-  };
-
   MainContent.prototype.connect = function(sourcePort, targetPort) {
     var wire = this.createWire(sourcePort, targetPort);
     wire.parentElement(this.wireContainerElement());
-    targetPort.socketConnected(true);
-    this.moduleContainer.bind(sourcePort, targetPort);
     this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
-    targetPort.socketHighlighted(sourcePort.plugHighlighted());
     wire.highlighted(sourcePort.plugHighlighted());
   };
 
@@ -200,6 +154,7 @@
 
   MainContent.prototype.oninit = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
+    this.moduleContainer.on('connect', this.onconnect.bind(this));
     this.moduleContainer.on('porthide', this.onporthide.bind(this));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
     this.moduleContainer.on('dragstart', this.emit.bind(this, 'dragstart'));
@@ -217,6 +172,10 @@
     if (dom.target(event) === this.element()) {
       dom.removeFocus();
     }
+  };
+
+  MainContent.prototype.onconnect = function(sourcePort, targetPort) {
+    this.connect(sourcePort, targetPort);
   };
 
   MainContent.prototype.onporthide = function(port) {
@@ -258,7 +217,7 @@
       this.detachDraggingWire(sourcePort, currentTargetPort, wire);
     }
 
-    var targetPort = (port && this.canConnect(sourcePort, port) ? port : null);
+    var targetPort = (port && this.moduleContainer.canConnect(sourcePort, port) ? port : null);
     if (targetPort) {
       this.attachDraggingWire(sourcePort, targetPort, wire);
     }
@@ -363,12 +322,43 @@
       return module;
     };
 
+    ModuleContainer.prototype.load = function(data) {
+      return this.loadModules(data.modules).then(function(modules) {
+        return this.loadConnections(data.connections, modules);
+      }.bind(this));
+    };
+
+    ModuleContainer.prototype.loadModules = function(modulesData) {
+      return Promise.all(modulesData.map(function(moduleData) {
+        return this.loadModule(moduleData.props, moduleData.visiblePortNames);
+      }.bind(this)));
+    };
+
     ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
       var module = this.createModule(props);
       module.parentElement(this.element());
       this.modules.push(module);
       this.refresh();
       return module.load(visiblePortNames);
+    };
+
+    ModuleContainer.prototype.loadConnections = function(connectionsData, modules) {
+      return Promise.all(connectionsData.map(function(connectionData) {
+        var source = connectionData.source;
+        var target = connectionData.target;
+        var sourceModule = modules[source.moduleIndex];
+        var targetModule = modules[target.moduleIndex];
+        var sourcePort = (sourceModule ? sourceModule.port(source.portName) : null);
+        var targetPort = (targetModule ? targetModule.port(target.portName) : null);
+        if (!sourcePort || !targetPort || !this.canConnect(sourcePort, targetPort)) {
+          throw new Error('Invalid connection');
+        }
+        return { source: sourcePort, target: targetPort };
+      }.bind(this))).then(function(portMaps) {
+        portMaps.forEach(function(portMap) {
+          this.connect(portMap.source, portMap.target);
+        }.bind(this));
+      }.bind(this));
     };
 
     ModuleContainer.prototype.clear = function() {
@@ -383,6 +373,29 @@
         return (binding.targetPort === targetPort);
       });
       return binding.sourcePort;
+    };
+
+    ModuleContainer.prototype.canConnect = function(sourcePort, targetPort) {
+      if (sourcePort.type() !== targetPort.type()) {
+        return false;
+      }
+      if (sourcePort.plugDisabled() || targetPort.socketDisabled()) {
+        return false;
+      }
+      if (!sourcePort.visible() || !targetPort.visible()) {
+        return false;
+      }
+      if (targetPort.socketConnected()) {
+        return false;
+      }
+      return true;
+    };
+
+    ModuleContainer.prototype.connect = function(sourcePort, targetPort) {
+      targetPort.socketConnected(true);
+      this.bind(sourcePort, targetPort);
+      targetPort.socketHighlighted(sourcePort.plugHighlighted());
+      this.emit('connect', sourcePort, targetPort);
     };
 
     ModuleContainer.prototype.bind = function(sourcePort, targetPort) {
