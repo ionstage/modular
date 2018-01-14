@@ -394,7 +394,13 @@
       this.emit('disconnect', sourcePort, targetPort);
     };
 
-    ModuleContainer.prototype.disconnectAll = function(port) {
+    ModuleContainer.prototype.disconnectByModule = function(module) {
+      module.ports.forEach(function(port) {
+        this.disconnectByPort(port);
+      }.bind(this));
+    };
+
+    ModuleContainer.prototype.disconnectByPort = function(port) {
       this.bindings.slice().forEach(function(binding) {
         if (binding.sourcePort === port || binding.targetPort === port) {
           this.disconnect(binding.sourcePort, binding.targetPort);
@@ -437,6 +443,7 @@
     };
 
     ModuleContainer.prototype.ondelete = function(module) {
+      this.disconnectByModule(module);
       module.removeAllListeners();
       helper.remove(this.modules, module);
       this.refresh();
@@ -452,7 +459,7 @@
     };
 
     ModuleContainer.prototype.onporthide = function(port) {
-      this.disconnectAll(port);
+      this.disconnectByPort(port);
       this.refresh();
     };
 

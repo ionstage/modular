@@ -230,9 +230,6 @@
   };
 
   Module.prototype.delete = function() {
-    // remove all connections of connected ports
-    this.hideAllPorts();
-
     this.parentElement(null);
     this.emit('delete', this);
   };
