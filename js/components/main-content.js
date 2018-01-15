@@ -187,7 +187,7 @@
     context.targetPort = null;
   };
 
-  MainContent.prototype.onplugdragmove = function(sourcePort, dx, dy, context) {
+  MainContent.prototype.onplugdragmove = function(sourcePort, context, dx, dy) {
     var x = context.x + dx;
     var y = context.y + dy;
     var currentTargetPort = context.targetPort;
@@ -237,8 +237,8 @@
     context.targetPort = targetPort;
   };
 
-  MainContent.prototype.onsocketdragmove = function(targetPort, dx, dy, context) {
-    this.onplugdragmove(context.sourcePort, dx, dy, context);
+  MainContent.prototype.onsocketdragmove = function(targetPort, context, dx, dy) {
+    this.onplugdragmove(context.sourcePort, context, dx, dy);
   };
 
   MainContent.prototype.onsocketdragend = function(targetPort, context) {

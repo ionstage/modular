@@ -726,7 +726,7 @@
         module.emit('plugdragstart', context.port, context.context);
       },
       onmove: function(module, dx, dy, event, context) {
-        module.emit('plugdragmove', context.port, dx, dy, context.context);
+        module.emit('plugdragmove', context.port, context.context, dx, dy);
       },
       onend: function(module, dx, dy, event, context) {
         module.emit('plugdragend', context.port, context.context);
@@ -740,7 +740,7 @@
         module.emit('socketdragstart', context.port, context.context);
       },
       onmove: function(module, dx, dy, event, context) {
-        module.emit('socketdragmove', context.port, dx, dy, context.context);
+        module.emit('socketdragmove', context.port, context.context, dx, dy);
       },
       onend: function(module, dx, dy, event, context) {
         module.emit('socketdragend', context.port, context.context);
