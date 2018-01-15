@@ -332,14 +332,13 @@
     };
 
     ModuleContainer.prototype.loadConnections = function(connectionsData, modules) {
-      return Promise.all(connectionsData.map(function(connectionData) {
-        var binding = ModuleContainer.Binding.fromData(connectionData, modules);
-        if (!this.canConnect(binding.sourcePort, binding.targetPort)) {
-          throw new Error('Invalid connection');
-        }
-        return binding;
-      }.bind(this))).then(function(bindings) {
+      return Promise.resolve(connectionsData.map(function(connectionData) {
+        return ModuleContainer.Binding.fromData(connectionData, modules);
+      })).then(function(bindings) {
         bindings.forEach(function(binding) {
+          if (!this.canConnect(binding.sourcePort, binding.targetPort)) {
+            throw new Error('Invalid connection');
+          }
           this.connect(binding.sourcePort, binding.targetPort);
         }.bind(this));
       }.bind(this));
