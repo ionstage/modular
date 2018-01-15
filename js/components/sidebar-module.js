@@ -2,6 +2,7 @@
   'use strict';
 
   var jCore = require('jcore');
+  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
 
   var SidebarModule = jCore.Component.inherits(function(props) {
@@ -18,6 +19,10 @@
 
   SidebarModule.prototype.contentElement = function() {
     return this.findElement('.sidebar-module-content');
+  };
+
+  SidebarModule.prototype.createClone = function(props) {
+    return new SidebarModule.Clone(helper.extend({ element: dom.clone(this.element()) }, props));
   };
 
   SidebarModule.prototype.render = function() {
@@ -111,13 +116,7 @@
       context.timer = null;
       context.x = dom.offsetLeft(module.element());
       context.y = dom.offsetTop(module.element());
-
-      context.clone = new SidebarModule.Clone({
-        element: dom.clone(module.element()),
-        x: context.x,
-        y: context.y,
-      });
-
+      context.clone = module.createClone({ x: context.x, y: context.y });
       context.clone.parentElement(dom.body());
       module.emit('dragstart');
     };
