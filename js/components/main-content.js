@@ -408,15 +408,11 @@
       if (targetPort) {
         targetPort.incrementHighlightCount();
       }
-      context.x = (targetPort ? targetPort.socketX() : sourcePort.plugX());
-      context.y = (targetPort ? targetPort.socketY() : sourcePort.plugY());
       context.targetPort = targetPort;
       this.emit('handlestart', sourcePort, targetPort, context);
     };
 
-    ModuleContainer.prototype.handlemove = function(sourcePort, targetPort, context, dx, dy) {
-      var x = context.x + dx;
-      var y = context.y + dy;
+    ModuleContainer.prototype.handlemove = function(sourcePort, targetPort, context, x, y) {
       var port = this.portFromSocketPosition(x, y);
 
       if (port && targetPort && port === targetPort) {
@@ -474,20 +470,24 @@
     };
 
     ModuleContainer.prototype.onplugdragstart = function(sourcePort, context) {
+      context.x = sourcePort.plugX();
+      context.y = sourcePort.plugY();
       this.handlestart(sourcePort, null, context);
     };
 
     ModuleContainer.prototype.onplugdragmove = function(sourcePort, context, dx, dy) {
-      this.handlemove(sourcePort, context.targetPort, context, dx, dy);
+      this.handlemove(sourcePort, context.targetPort, context, context.x + dx, context.y + dy);
     };
 
     ModuleContainer.prototype.onsocketdragstart = function(targetPort, context) {
+      context.x = targetPort.socketX();
+      context.y = targetPort.socketY();
       context.sourcePort = this.connectedSourcePort(targetPort);
       this.handlestart(context.sourcePort, targetPort, context);
     };
 
     ModuleContainer.prototype.onsocketdragmove = function(targetPort, context, dx, dy) {
-      this.handlemove(context.sourcePort, context.targetPort, context, dx, dy);
+      this.handlemove(context.sourcePort, context.targetPort, context, context.x + dx, context.y + dy);
     };
 
     ModuleContainer.Binding = (function() {
