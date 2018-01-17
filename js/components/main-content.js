@@ -408,7 +408,6 @@
       if (targetPort) {
         targetPort.incrementHighlightCount();
       }
-      context.targetPort = targetPort;
       this.emit('handlestart', sourcePort, targetPort, context);
     };
 
@@ -472,7 +471,8 @@
     ModuleContainer.prototype.onplugdragstart = function(sourcePort, context) {
       context.x = sourcePort.plugX();
       context.y = sourcePort.plugY();
-      this.handlestart(sourcePort, null, context);
+      context.targetPort = null;
+      this.handlestart(sourcePort, context.targetPort, context);
     };
 
     ModuleContainer.prototype.onplugdragmove = function(sourcePort, context, dx, dy) {
@@ -483,7 +483,8 @@
       context.x = targetPort.socketX();
       context.y = targetPort.socketY();
       context.sourcePort = this.connectedSourcePort(targetPort);
-      this.handlestart(context.sourcePort, targetPort, context);
+      context.targetPort = targetPort;
+      this.handlestart(context.sourcePort, context.targetPort, context);
     };
 
     ModuleContainer.prototype.onsocketdragmove = function(targetPort, context, dx, dy) {
