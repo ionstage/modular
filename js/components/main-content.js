@@ -330,29 +330,13 @@
     };
 
     ModuleContainer.prototype.connect = function(sourcePort, targetPort) {
-      targetPort.socketConnected(true);
-      this.bind(sourcePort, targetPort);
-      targetPort.socketHighlighted(sourcePort.plugHighlighted());
+      this.attach(sourcePort, targetPort);
       this.emit('connect', sourcePort, targetPort);
     };
 
     ModuleContainer.prototype.disconnect = function(sourcePort, targetPort) {
-      targetPort.socketConnected(false);
-      this.unbind(sourcePort, targetPort);
-      targetPort.socketHighlighted(false);
+      this.detach(sourcePort, targetPort);
       this.emit('disconnect', sourcePort, targetPort);
-    };
-
-    ModuleContainer.prototype.attach = function(sourcePort, targetPort) {
-      targetPort.socketConnected(true);
-      this.bind(sourcePort, targetPort);
-      targetPort.socketHighlighted(sourcePort.plugHighlighted());
-    };
-
-    ModuleContainer.prototype.detach = function(sourcePort, targetPort) {
-      targetPort.socketConnected(false);
-      this.unbind(sourcePort, targetPort);
-      targetPort.socketHighlighted(false);
     };
 
     ModuleContainer.prototype.disconnectByModule = function(module) {
@@ -367,6 +351,18 @@
           this.disconnect(binding.sourcePort, binding.targetPort);
         }
       }.bind(this));
+    };
+
+    ModuleContainer.prototype.attach = function(sourcePort, targetPort) {
+      this.bind(sourcePort, targetPort);
+      targetPort.socketConnected(true);
+      targetPort.socketHighlighted(sourcePort.plugHighlighted());
+    };
+
+    ModuleContainer.prototype.detach = function(sourcePort, targetPort) {
+      this.unbind(sourcePort, targetPort);
+      targetPort.socketConnected(false);
+      targetPort.socketHighlighted(false);
     };
 
     ModuleContainer.prototype.bind = function(sourcePort, targetPort) {
