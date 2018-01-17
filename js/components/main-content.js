@@ -303,7 +303,7 @@
     };
 
     ModuleContainer.prototype.connectedSourcePort = function(targetPort) {
-      // socket of the target port can only be connected to one wire
+      // socket of the target port can only be connected to one source port
       var binding = helper.find(this.bindings, function(binding) {
         return (binding.targetPort === targetPort);
       });
