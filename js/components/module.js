@@ -147,13 +147,19 @@
     }.bind(this));
   };
 
+  Module.prototype.setPorts = function(ports, visiblePortNames) {
+    this.ports = ports;
+    this.portSelect.set(ports);
+    visiblePortNames.forEach(function(name) {
+      this.showPort(name);
+    }.bind(this));
+  };
+
   Module.prototype.load = function(visiblePortNames) {
     this.isLoading(true);
     this.redraw();
     return this.component.load(this.url()).then(function(component) {
-      this.ports = this.createPorts(component.members);
-      this.portSelect.set(this.ports);
-      this.showPorts(visiblePortNames);
+      this.setPorts(this.createPorts(component.members), visiblePortNames);
       this.isLoading(false);
       return this;
     }.bind(this)).catch(function(e) {
@@ -209,12 +215,6 @@
     this.portSelect.add(port);
     this.footer.disabled(this.footerDisabled());
     this.emit('porthide', port);
-  };
-
-  Module.prototype.showPorts = function(names) {
-    names.forEach(function(name) {
-      this.showPort(name);
-    }.bind(this));
   };
 
   Module.prototype.removePortsAllListeners = function() {
