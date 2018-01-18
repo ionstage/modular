@@ -217,12 +217,6 @@
     }.bind(this));
   };
 
-  Module.prototype.hideAllPorts = function() {
-    this.ports.forEach(function(port) {
-      this.hidePort(port.name());
-    }.bind(this));
-  };
-
   Module.prototype.removePortsAllListeners = function() {
     this.ports.forEach(function(port) {
       port.removeAllListeners();
