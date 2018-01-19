@@ -456,34 +456,34 @@
       this.emit('dragend');
     };
 
-    ModuleContainer.prototype.onplugdragstart = function(sourcePort, context) {
-      context.x = sourcePort.plugX();
-      context.y = sourcePort.plugY();
+    ModuleContainer.prototype.onplugdragstart = function(port, context) {
+      context.x = port.plugX();
+      context.y = port.plugY();
       context.targetPort = null;
-      this.handlestart(sourcePort, context.targetPort, context);
+      this.handlestart(port, context.targetPort, context);
     };
 
-    ModuleContainer.prototype.onplugdragmove = function(sourcePort, context, dx, dy) {
-      this.handlemove(sourcePort, context.targetPort, context, context.x + dx, context.y + dy);
+    ModuleContainer.prototype.onplugdragmove = function(port, context, dx, dy) {
+      this.handlemove(port, context.targetPort, context, context.x + dx, context.y + dy);
     };
 
-    ModuleContainer.prototype.onplugdragend = function(sourcePort, context) {
-      this.handleend(sourcePort, context.targetPort, context);
+    ModuleContainer.prototype.onplugdragend = function(port, context) {
+      this.handleend(port, context.targetPort, context);
     };
 
-    ModuleContainer.prototype.onsocketdragstart = function(targetPort, context) {
-      context.x = targetPort.socketX();
-      context.y = targetPort.socketY();
-      context.sourcePort = this.connectedSourcePort(targetPort);
-      context.targetPort = targetPort;
+    ModuleContainer.prototype.onsocketdragstart = function(port, context) {
+      context.x = port.socketX();
+      context.y = port.socketY();
+      context.sourcePort = this.connectedSourcePort(port);
+      context.targetPort = port;
       this.handlestart(context.sourcePort, context.targetPort, context);
     };
 
-    ModuleContainer.prototype.onsocketdragmove = function(targetPort, context, dx, dy) {
+    ModuleContainer.prototype.onsocketdragmove = function(port, context, dx, dy) {
       this.handlemove(context.sourcePort, context.targetPort, context, context.x + dx, context.y + dy);
     };
 
-    ModuleContainer.prototype.onsocketdragend = function(targetPort, context) {
+    ModuleContainer.prototype.onsocketdragend = function(port, context) {
       this.handleend(context.sourcePort, context.targetPort, context);
     };
 
