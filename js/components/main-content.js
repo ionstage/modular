@@ -387,7 +387,8 @@
       if (targetPort) {
         targetPort.incrementHighlightCount();
       }
-      this.emit('handlestart', sourcePort, targetPort, context);
+      context.context = {};
+      this.emit('handlestart', sourcePort, targetPort, context.context);
     };
 
     ModuleContainer.prototype.handlemove = function(sourcePort, targetPort, context, x, y) {
@@ -398,7 +399,7 @@
         return;
       }
 
-      this.emit('handlemove', sourcePort, targetPort, context, x, y);
+      this.emit('handlemove', sourcePort, targetPort, context.context, x, y);
 
       if (targetPort) {
         this.handledetach(sourcePort, targetPort, context);
@@ -417,19 +418,19 @@
       if (targetPort) {
         targetPort.decrementHighlightCount();
       }
-      this.emit('handleend', sourcePort, targetPort, context);
+      this.emit('handleend', sourcePort, targetPort, context.context);
     };
 
     ModuleContainer.prototype.handleattach = function(sourcePort, targetPort, context) {
       this.attach(sourcePort, targetPort);
       targetPort.incrementHighlightCount();
-      this.emit('handleattach', sourcePort, targetPort, context);
+      this.emit('handleattach', sourcePort, targetPort, context.context);
     };
 
     ModuleContainer.prototype.handledetach = function(sourcePort, targetPort, context) {
       this.detach(sourcePort, targetPort);
       targetPort.decrementHighlightCount();
-      this.emit('handledetach', sourcePort, targetPort, context);
+      this.emit('handledetach', sourcePort, targetPort, context.context);
     };
 
     ModuleContainer.prototype.ondelete = function(module) {
