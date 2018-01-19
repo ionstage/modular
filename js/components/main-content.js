@@ -107,16 +107,6 @@
     });
   };
 
-  MainContent.prototype.keepDraggingWire = function(sourcePort, targetPort, wire) {
-    sourcePort.decrementHighlightCount();
-    targetPort.decrementHighlightCount();
-  };
-
-  MainContent.prototype.removeDraggingWire = function(sourcePort, wire) {
-    sourcePort.decrementHighlightCount();
-    this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
-  };
-
   MainContent.prototype.oninit = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
     this.moduleContainer.on('connect', this.onconnect.bind(this));
@@ -126,10 +116,9 @@
     this.moduleContainer.on('dragend', this.emit.bind(this, 'dragend'));
     this.moduleContainer.on('handlestart', this.onhandlestart.bind(this));
     this.moduleContainer.on('handlemove', this.onhandlemove.bind(this));
+    this.moduleContainer.on('handleend', this.onhandleend.bind(this));
     this.moduleContainer.on('handleattach', this.onhandleattach.bind(this));
     this.moduleContainer.on('handledetach', this.onhandledetach.bind(this));
-    this.moduleContainer.on('plugdragend', this.onplugdragend.bind(this));
-    this.moduleContainer.on('socketdragend', this.onsocketdragend.bind(this));
   };
 
   MainContent.prototype.onpoint = function(event) {
@@ -166,6 +155,13 @@
     context.wire.targetY(y);
   };
 
+  MainContent.prototype.onhandleend = function(sourcePort, targetPort, context) {
+    if (!targetPort) {
+      this.unlock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
+      context.wire.parentElement(null);
+    }
+  };
+
   MainContent.prototype.onhandleattach = function(sourcePort, targetPort, context) {
     context.wire.handleVisible(false);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
@@ -174,19 +170,6 @@
   MainContent.prototype.onhandledetach = function(sourcePort, targetPort, context) {
     context.wire.handleVisible(true);
     this.unlock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
-  };
-
-  MainContent.prototype.onplugdragend = function(sourcePort, context) {
-    if (context.targetPort) {
-      this.keepDraggingWire(sourcePort, context.targetPort, context.wire);
-    } else {
-      this.removeDraggingWire(sourcePort, context.wire);
-      context.wire.parentElement(null);
-    }
-  };
-
-  MainContent.prototype.onsocketdragend = function(targetPort, context) {
-    this.onplugdragend(context.sourcePort, context);
   };
 
   MainContent.ModuleContainer = (function() {
@@ -248,10 +231,10 @@
       module.on('dragend', this.ondragend.bind(this));
       module.on('plugdragstart', this.onplugdragstart.bind(this));
       module.on('plugdragmove', this.onplugdragmove.bind(this));
-      module.on('plugdragend', this.emit.bind(this, 'plugdragend'));
+      module.on('plugdragend', this.onplugdragend.bind(this));
       module.on('socketdragstart', this.onsocketdragstart.bind(this));
       module.on('socketdragmove', this.onsocketdragmove.bind(this));
-      module.on('socketdragend', this.emit.bind(this, 'socketdragend'));
+      module.on('socketdragend', this.onsocketdragend.bind(this));
       return module;
     };
 
@@ -429,6 +412,14 @@
       context.targetPort = targetPort;
     };
 
+    ModuleContainer.prototype.handleend = function(sourcePort, targetPort, context) {
+      sourcePort.decrementHighlightCount();
+      if (targetPort) {
+        targetPort.decrementHighlightCount();
+      }
+      this.emit('handleend', sourcePort, targetPort, context);
+    };
+
     ModuleContainer.prototype.handleattach = function(sourcePort, targetPort, context) {
       this.attach(sourcePort, targetPort);
       targetPort.incrementHighlightCount();
@@ -475,6 +466,10 @@
       this.handlemove(sourcePort, context.targetPort, context, context.x + dx, context.y + dy);
     };
 
+    ModuleContainer.prototype.onplugdragend = function(sourcePort, context) {
+      this.handleend(sourcePort, context.targetPort, context);
+    };
+
     ModuleContainer.prototype.onsocketdragstart = function(targetPort, context) {
       context.x = targetPort.socketX();
       context.y = targetPort.socketY();
@@ -485,6 +480,10 @@
 
     ModuleContainer.prototype.onsocketdragmove = function(targetPort, context, dx, dy) {
       this.handlemove(context.sourcePort, context.targetPort, context, context.x + dx, context.y + dy);
+    };
+
+    ModuleContainer.prototype.onsocketdragend = function(targetPort, context) {
+      this.handleend(context.sourcePort, context.targetPort, context);
     };
 
     ModuleContainer.Binding = (function() {
