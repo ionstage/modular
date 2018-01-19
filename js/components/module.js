@@ -83,12 +83,6 @@
     return (this.ports.indexOf(port) !== -1);
   };
 
-  Module.prototype.hasHighlightedPort = function() {
-    return this.ports.some(function(port) {
-      return port.highlighted();
-    });
-  };
-
   Module.prototype.portFromSocketPosition = function(x, y) {
     if (this.ports.length === 0) {
       return null;
