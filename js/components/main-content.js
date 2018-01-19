@@ -58,6 +58,7 @@
       targetY: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
       handleType: sourcePort.type(),
       handleVisible: !targetPort,
+      highlighted: sourcePort.plugHighlighted(),
       parentHandleElement: this.findElement('.wire-handle-container'),
     });
   };
@@ -89,7 +90,6 @@
     wire.parentElement(this.wireContainerElement());
     this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
-    wire.highlighted(sourcePort.plugHighlighted());
   };
 
   MainContent.prototype.disconnect = function(sourcePort, targetPort) {
@@ -146,7 +146,6 @@
     if (!targetPort) {
       context.wire.parentElement(this.wireContainerElement());
       this.lock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
-      context.wire.highlighted(sourcePort.plugHighlighted());
     }
   };
 

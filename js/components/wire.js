@@ -11,7 +11,7 @@
     this.targetY = this.prop(props.targetY);
     this.handleType = this.prop(props.handleType);
     this.handleVisible = this.prop(props.handleVisible);
-    this.highlighted = this.prop(false);
+    this.highlighted = this.prop(props.highlighted);
     this.parentHandleElement = this.prop(props.parentHandleElement);
     this.handle = new Wire.Handle();
   });
