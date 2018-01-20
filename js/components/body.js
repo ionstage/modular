@@ -67,6 +67,7 @@
   };
 
   Body.prototype.oninit = function() {
+    this.hoverDisabled(dom.supportsTouch());
     dom.ready(this.onready.bind(this));
     this.sidebar.on('dragstart', this.ondragstart.bind(this));
     this.sidebar.on('dragend', this.ondragend.bind(this));
@@ -89,7 +90,6 @@
   };
 
   Body.prototype.onready = function() {
-    this.hoverDisabled(dom.supportsTouch());
     this.disabled(true);
     this.load().catch(function(e) {
       alert(e);
