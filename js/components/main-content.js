@@ -32,12 +32,12 @@
     return this.moduleContainer.load(data);
   };
 
-  MainContent.prototype.clear = function() {
-    this.moduleContainer.clear();
-  };
-
   MainContent.prototype.loadModule = function(props, visiblePortNames) {
     return this.moduleContainer.loadModule(props, visiblePortNames);
+  };
+
+  MainContent.prototype.clear = function() {
+    this.moduleContainer.clear();
   };
 
   MainContent.prototype.portEventHighlighted = function(sourcePort, highlighted) {
@@ -115,6 +115,14 @@
       return null;
     };
 
+    ModuleContainer.prototype.connectedSourcePort = function(targetPort) {
+      // socket of the target port can only be connected to one source port
+      var binding = helper.find(this.bindings, function(binding) {
+        return (binding.targetPort === targetPort);
+      });
+      return binding.sourcePort;
+    };
+
     ModuleContainer.prototype.toData = function() {
       return {
         modules: this.modules.map(function(module) {
@@ -150,18 +158,18 @@
       }.bind(this));
     };
 
-    ModuleContainer.prototype.loadModules = function(modulesData) {
-      return Promise.all(modulesData.map(function(moduleData) {
-        return this.loadModule(moduleData.props, moduleData.visiblePortNames);
-      }.bind(this)));
-    };
-
     ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
       var module = this.createModule(props);
       module.parentElement(this.element());
       this.modules.push(module);
       this.refresh();
       return module.load(visiblePortNames);
+    };
+
+    ModuleContainer.prototype.loadModules = function(modulesData) {
+      return Promise.all(modulesData.map(function(moduleData) {
+        return this.loadModule(moduleData.props, moduleData.visiblePortNames);
+      }.bind(this)));
     };
 
     ModuleContainer.prototype.loadConnections = function(connectionsData, modules) {
@@ -189,14 +197,6 @@
       this.modules.slice().reverse().forEach(function(module) {
         this.removeModule(module);
       }.bind(this));
-    };
-
-    ModuleContainer.prototype.connectedSourcePort = function(targetPort) {
-      // socket of the target port can only be connected to one source port
-      var binding = helper.find(this.bindings, function(binding) {
-        return (binding.targetPort === targetPort);
-      });
-      return binding.sourcePort;
     };
 
     ModuleContainer.prototype.canConnect = function(sourcePort, targetPort) {
