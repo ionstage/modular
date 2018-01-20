@@ -11,6 +11,7 @@
     this.visible = this.prop(props.visible);
     this.highlighted = this.prop(props.highlighted);
     this.width = this.prop(24);
+    this.height = this.prop(24);
     this.port = props.port;
   });
 
@@ -20,7 +21,7 @@
 
   WireHandle.prototype.onredraw = function() {
     this.redrawBy('cx', 'cy', function(cx, cy) {
-      dom.translate(this.element(), cx - this.width() / 2, cy - this.width() / 2);
+      dom.translate(this.element(), cx - this.width() / 2, cy - this.height() / 2);
     });
 
     this.redrawBy('type', function(type) {
