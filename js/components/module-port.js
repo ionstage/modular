@@ -88,7 +88,7 @@
   };
 
   ModulePort.prototype.socketConnected = function(value) {
-    return !this.socketHandle.disabled(typeof value !== 'undefined' ? !value : void 0);
+    return this.socketHandle.visible(value);
   };
 
   ModulePort.prototype.render = function() {
@@ -96,9 +96,9 @@
   };
 
   ModulePort.prototype.oninit = function() {
-    this.plug.disabled(this.plugDisabled());
-    this.socket.disabled(this.socketDisabled());
-    this.socketHandle.disabled(true);
+    this.plug.visible(!this.plugDisabled());
+    this.socket.visible(!this.socketDisabled());
+    this.socketHandle.visible(false);
     this.content.label(this.label());
   };
 
@@ -139,13 +139,13 @@
 
   ModulePort.Handle = (function() {
     var Handle = jCore.Component.inherits(function() {
-      this.disabled = this.prop(false);
+      this.visible = this.prop(true);
       this.highlighted = this.prop(false);
     });
 
     Handle.prototype.onredraw = function() {
-      this.redrawBy('disabled', function(disabled) {
-        dom.toggleClass(this.element(), 'hide', disabled);
+      this.redrawBy('visible', function(visible) {
+        dom.toggleClass(this.element(), 'hide', !visible);
       });
 
       this.redrawBy('highlighted', function(highlighted) {
