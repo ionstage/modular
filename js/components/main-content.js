@@ -12,8 +12,8 @@
 
   var MainContent = jCore.Component.inherits(function(props) {
     this.lockRelations = [];
-    this.wireHandles = [];
     this.moduleContainer = new MainContent.ModuleContainer({ element: this.findElement('.module-container') });
+    this.wireHandleContainer = new MainContent.WireHandleContainer({ element: this.findElement('.wire-handle-container') });
   });
 
   MainContent.prototype.wireContainerElement = function() {
@@ -62,17 +62,6 @@
     });
   };
 
-  MainContent.prototype.createWireHandle = function(sourcePort, targetPort) {
-    return new WireHandle({
-      cx: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
-      cy: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
-      type: sourcePort.type(),
-      visible: !targetPort,
-      highlighted: sourcePort.plugHighlighted(),
-      port: sourcePort,
-    });
-  };
-
   MainContent.prototype.loadModule = function(props, visiblePortNames) {
     return this.moduleContainer.loadModule(props, visiblePortNames);
   };
@@ -115,11 +104,7 @@
     this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
       wire.highlighted(highlighted);
     });
-    this.wireHandles.forEach(function(wireHandle) {
-      if (wireHandle.port === sourcePort) {
-        wireHandle.highlighted(highlighted);
-      }
-    });
+    this.wireHandleContainer.portEventHighlighted(sourcePort, highlighted);
   };
 
   MainContent.prototype.oninit = function() {
@@ -162,16 +147,13 @@
       context.wire.parentElement(this.wireContainerElement());
       this.lock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
     }
-    context.wireHandle = this.createWireHandle(sourcePort, targetPort);
-    context.wireHandle.parentElement(this.findElement('.wire-handle-container'));
-    this.wireHandles.push(context.wireHandle);
+    this.wireHandleContainer.handlestart(sourcePort, targetPort, context);
   };
 
   MainContent.prototype.onhandlemove = function(sourcePort, targetPort, context, x, y) {
     context.wire.targetX(x);
     context.wire.targetY(y);
-    context.wireHandle.cx(x);
-    context.wireHandle.cy(y);
+    this.wireHandleContainer.handlemove(sourcePort, targetPort, context, x, y);
   };
 
   MainContent.prototype.onhandleend = function(sourcePort, targetPort, context) {
@@ -179,18 +161,17 @@
       this.unlock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
       context.wire.parentElement(null);
     }
-    context.wireHandle.parentElement(null);
-    helper.remove(this.wireHandles, context.wireHandle);
+    this.wireHandleContainer.handleend(sourcePort, targetPort, context);
   };
 
   MainContent.prototype.onhandleattach = function(sourcePort, targetPort, context) {
-    context.wireHandle.visible(false);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
+    this.wireHandleContainer.handleattach(sourcePort, targetPort, context);
   };
 
   MainContent.prototype.onhandledetach = function(sourcePort, targetPort, context) {
-    context.wireHandle.visible(true);
     this.unlock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
+    this.wireHandleContainer.handledetach(sourcePort, targetPort, context);
   };
 
   MainContent.ModuleContainer = (function() {
@@ -556,6 +537,57 @@
     })();
 
     return ModuleContainer;
+  })();
+
+  MainContent.WireHandleContainer = (function() {
+    var WireHandleContainer = jCore.Component.inherits(function() {
+      this.wireHandles = [];
+    });
+
+    WireHandleContainer.prototype.createWireHandle = function(sourcePort, targetPort) {
+      return new WireHandle({
+        cx: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
+        cy: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
+        type: sourcePort.type(),
+        visible: !targetPort,
+        highlighted: sourcePort.plugHighlighted(),
+        port: sourcePort,
+      });
+    };
+
+    WireHandleContainer.prototype.portEventHighlighted = function(sourcePort, highlighted) {
+      this.wireHandles.forEach(function(wireHandle) {
+        if (wireHandle.port === sourcePort) {
+          wireHandle.highlighted(highlighted);
+        }
+      });
+    };
+
+    WireHandleContainer.prototype.handlestart = function(sourcePort, targetPort, context) {
+      context.wireHandle = this.createWireHandle(sourcePort, targetPort);
+      context.wireHandle.parentElement(this.element());
+      this.wireHandles.push(context.wireHandle);
+    };
+
+    WireHandleContainer.prototype.handlemove = function(sourcePort, targetPort, context, x, y) {
+      context.wireHandle.cx(x);
+      context.wireHandle.cy(y);
+    };
+
+    WireHandleContainer.prototype.handleend = function(sourcePort, targetPort, context) {
+      context.wireHandle.parentElement(null);
+      helper.remove(this.wireHandles, context.wireHandle);
+    };
+
+    WireHandleContainer.prototype.handleattach = function(sourcePort, targetPort, context) {
+      context.wireHandle.visible(false);
+    };
+
+    WireHandleContainer.prototype.handledetach = function(sourcePort, targetPort, context) {
+      context.wireHandle.visible(true);
+    };
+
+    return WireHandleContainer;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
