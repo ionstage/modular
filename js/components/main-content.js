@@ -8,9 +8,11 @@
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
   var Wire = app.Wire || require('./wire.js');
+  var WireHandle = app.WireHandle || require('./wire-handle.js');
 
   var MainContent = jCore.Component.inherits(function(props) {
     this.lockRelations = [];
+    this.wireHandles = [];
     this.moduleContainer = new MainContent.ModuleContainer({ element: this.findElement('.module-container') });
   });
 
@@ -56,10 +58,18 @@
       sourceY: sourcePort.plugY(),
       targetX: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
       targetY: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
-      handleType: sourcePort.type(),
-      handleVisible: !targetPort,
       highlighted: sourcePort.plugHighlighted(),
-      parentHandleElement: this.findElement('.wire-handle-container'),
+    });
+  };
+
+  MainContent.prototype.createWireHandle = function(sourcePort, targetPort) {
+    return new WireHandle({
+      cx: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
+      cy: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
+      type: sourcePort.type(),
+      visible: !targetPort,
+      highlighted: sourcePort.plugHighlighted(),
+      port: sourcePort,
     });
   };
 
@@ -105,6 +115,11 @@
     this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
       wire.highlighted(highlighted);
     });
+    this.wireHandles.forEach(function(wireHandle) {
+      if (wireHandle.port === sourcePort) {
+        wireHandle.highlighted(highlighted);
+      }
+    });
   };
 
   MainContent.prototype.oninit = function() {
@@ -147,11 +162,16 @@
       context.wire.parentElement(this.wireContainerElement());
       this.lock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
     }
+    context.wireHandle = this.createWireHandle(sourcePort, targetPort);
+    context.wireHandle.parentElement(this.findElement('.wire-handle-container'));
+    this.wireHandles.push(context.wireHandle);
   };
 
   MainContent.prototype.onhandlemove = function(sourcePort, targetPort, context, x, y) {
     context.wire.targetX(x);
     context.wire.targetY(y);
+    context.wireHandle.cx(x);
+    context.wireHandle.cy(y);
   };
 
   MainContent.prototype.onhandleend = function(sourcePort, targetPort, context) {
@@ -159,15 +179,17 @@
       this.unlock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
       context.wire.parentElement(null);
     }
+    context.wireHandle.parentElement(null);
+    helper.remove(this.wireHandles, context.wireHandle);
   };
 
   MainContent.prototype.onhandleattach = function(sourcePort, targetPort, context) {
-    context.wire.handleVisible(false);
+    context.wireHandle.visible(false);
     this.lock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
   };
 
   MainContent.prototype.onhandledetach = function(sourcePort, targetPort, context) {
-    context.wire.handleVisible(true);
+    context.wireHandle.visible(true);
     this.unlock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
   };
 
