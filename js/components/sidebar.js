@@ -27,12 +27,6 @@
     this.dragCount(this.dragCount() - 1);
   };
 
-  Sidebar.prototype.loadEntries = function() {
-    return this.entryCollection.load().then(function() {
-      this.header.loadSearchText();
-    }.bind(this));
-  };
-
   Sidebar.prototype.entry = function(name) {
     return this.entryCollection.get(name);
   };
@@ -40,6 +34,12 @@
   Sidebar.prototype.search = function(text) {
     var entries = this.entryCollection.search(text);
     this.content.setModules(entries);
+  };
+
+  Sidebar.prototype.loadEntries = function() {
+    return this.entryCollection.load().then(function() {
+      this.header.loadSearchText();
+    }.bind(this));
   };
 
   Sidebar.prototype.oninit = function() {

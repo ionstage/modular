@@ -17,6 +17,21 @@
     return 'modular_modules/' + encodeURI(packageName) + '/index.json';
   };
 
+  EntryCollection.prototype.get = function(name) {
+    return helper.findLast(this.entries, function(entry) {
+      return (entry.name === name);
+    });
+  };
+
+  EntryCollection.prototype.search = function(keyword) {
+    return helper.sortBy(this.entries.filter(function(entry) {
+      return (entry.keywordScore(keyword) !== 0);
+    }), function(entry) {
+      // sort in descending order
+      return -(entry.keywordScore(keyword));
+    });
+  };
+
   EntryCollection.prototype.load = function() {
     return this.loadPackageNames().then(function(packageNames) {
       return Promise.all(packageNames.map(function(packageName) {
@@ -37,21 +52,6 @@
         var name = packageName + '/' + props.src;
         return new Entry(helper.extend(props, { name: name }));
       });
-    });
-  };
-
-  EntryCollection.prototype.get = function(name) {
-    return helper.findLast(this.entries, function(entry) {
-      return (entry.name === name);
-    });
-  };
-
-  EntryCollection.prototype.search = function(keyword) {
-    return helper.sortBy(this.entries.filter(function(entry) {
-      return (entry.keywordScore(keyword) !== 0);
-    }), function(entry) {
-      // sort in descending order
-      return -(entry.keywordScore(keyword));
     });
   };
 
