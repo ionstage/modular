@@ -49,16 +49,21 @@
 
   MainContent.prototype.oninit = function() {
     dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
-    this.moduleContainer.on('connect', this.onconnect.bind(this));
-    this.moduleContainer.on('disconnect', this.ondisconnect.bind(this));
+    this.moduleContainer.on('connect', this.wireContainer.onconnect.bind(this.wireContainer));
+    this.moduleContainer.on('disconnect', this.wireContainer.ondisconnect.bind(this.wireContainer));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
     this.moduleContainer.on('dragstart', this.emit.bind(this, 'dragstart'));
     this.moduleContainer.on('dragend', this.emit.bind(this, 'dragend'));
-    this.moduleContainer.on('handlestart', this.onhandlestart.bind(this));
-    this.moduleContainer.on('handlemove', this.onhandlemove.bind(this));
-    this.moduleContainer.on('handleend', this.onhandleend.bind(this));
-    this.moduleContainer.on('handleattach', this.onhandleattach.bind(this));
-    this.moduleContainer.on('handledetach', this.onhandledetach.bind(this));
+    this.moduleContainer.on('handlestart', this.wireContainer.onhandlestart.bind(this.wireContainer));
+    this.moduleContainer.on('handlemove', this.wireContainer.onhandlemove.bind(this.wireContainer));
+    this.moduleContainer.on('handleend', this.wireContainer.onhandleend.bind(this.wireContainer));
+    this.moduleContainer.on('handleattach', this.wireContainer.onhandleattach.bind(this.wireContainer));
+    this.moduleContainer.on('handledetach', this.wireContainer.onhandledetach.bind(this.wireContainer));
+    this.moduleContainer.on('handlestart', this.wireHandleContainer.onhandlestart.bind(this.wireHandleContainer));
+    this.moduleContainer.on('handlemove', this.wireHandleContainer.onhandlemove.bind(this.wireHandleContainer));
+    this.moduleContainer.on('handleend', this.wireHandleContainer.onhandleend.bind(this.wireHandleContainer));
+    this.moduleContainer.on('handleattach', this.wireHandleContainer.onhandleattach.bind(this.wireHandleContainer));
+    this.moduleContainer.on('handledetach', this.wireHandleContainer.onhandledetach.bind(this.wireHandleContainer));
   };
 
   MainContent.prototype.onpoint = function(event) {
@@ -68,42 +73,9 @@
     }
   };
 
-  MainContent.prototype.onconnect = function(sourcePort, targetPort) {
-    this.wireContainer.connect(sourcePort, targetPort);
-  };
-
-  MainContent.prototype.ondisconnect = function(sourcePort, targetPort) {
-    this.wireContainer.disconnect(sourcePort, targetPort);
-  };
-
   MainContent.prototype.onportevent = function(sourcePort) {
     this.portEventHighlighted(sourcePort, true);
     setTimeout(this.portEventHighlighted.bind(this), 100, sourcePort, false);
-  };
-
-  MainContent.prototype.onhandlestart = function(sourcePort, targetPort, context) {
-    this.wireContainer.handlestart(sourcePort, targetPort, context);
-    this.wireHandleContainer.handlestart(sourcePort, targetPort, context);
-  };
-
-  MainContent.prototype.onhandlemove = function(sourcePort, targetPort, context, x, y) {
-    this.wireContainer.handlemove(sourcePort, targetPort, context, x, y);
-    this.wireHandleContainer.handlemove(sourcePort, targetPort, context, x, y);
-  };
-
-  MainContent.prototype.onhandleend = function(sourcePort, targetPort, context) {
-    this.wireContainer.handleend(sourcePort, targetPort, context);
-    this.wireHandleContainer.handleend(sourcePort, targetPort, context);
-  };
-
-  MainContent.prototype.onhandleattach = function(sourcePort, targetPort, context) {
-    this.wireContainer.handleattach(sourcePort, targetPort, context);
-    this.wireHandleContainer.handleattach(sourcePort, targetPort, context);
-  };
-
-  MainContent.prototype.onhandledetach = function(sourcePort, targetPort, context) {
-    this.wireContainer.handledetach(sourcePort, targetPort, context);
-    this.wireHandleContainer.handledetach(sourcePort, targetPort, context);
   };
 
   MainContent.ModuleContainer = (function() {
@@ -516,27 +488,27 @@
       helper.remove(this.lockRelations, relation);
     };
 
-    WireContainer.prototype.connect = function(sourcePort, targetPort) {
-      var wire = this.createWire(sourcePort, targetPort);
-      wire.parentElement(this.element());
-      this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
-      this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
-    };
-
-    WireContainer.prototype.disconnect = function(sourcePort, targetPort) {
-      var wire = this.attachedWire(targetPort);
-      wire.parentElement(null);
-      this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
-      this.unlock(LockRelation.TYPE_SOCKET, targetPort, wire);
-    };
-
     WireContainer.prototype.portEventHighlighted = function(sourcePort, highlighted) {
       this.lockedWires(LockRelation.TYPE_PLUG, sourcePort).forEach(function(wire) {
         wire.highlighted(highlighted);
       });
     };
 
-    WireContainer.prototype.handlestart = function(sourcePort, targetPort, context) {
+    WireContainer.prototype.onconnect = function(sourcePort, targetPort) {
+      var wire = this.createWire(sourcePort, targetPort);
+      wire.parentElement(this.element());
+      this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
+      this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
+    };
+
+    WireContainer.prototype.ondisconnect = function(sourcePort, targetPort) {
+      var wire = this.attachedWire(targetPort);
+      wire.parentElement(null);
+      this.unlock(LockRelation.TYPE_PLUG, sourcePort, wire);
+      this.unlock(LockRelation.TYPE_SOCKET, targetPort, wire);
+    };
+
+    WireContainer.prototype.onhandlestart = function(sourcePort, targetPort, context) {
       context.wire = (targetPort ? this.attachedWire(targetPort) : this.createWire(sourcePort, null));
       if (!targetPort) {
         context.wire.parentElement(this.element());
@@ -544,23 +516,23 @@
       }
     };
 
-    WireContainer.prototype.handlemove = function(sourcePort, targetPort, context, x, y) {
+    WireContainer.prototype.onhandlemove = function(sourcePort, targetPort, context, x, y) {
       context.wire.targetX(x);
       context.wire.targetY(y);
     };
 
-    WireContainer.prototype.handleend = function(sourcePort, targetPort, context) {
+    WireContainer.prototype.onhandleend = function(sourcePort, targetPort, context) {
       if (!targetPort) {
         this.unlock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
         context.wire.parentElement(null);
       }
     };
 
-    WireContainer.prototype.handleattach = function(sourcePort, targetPort, context) {
+    WireContainer.prototype.onhandleattach = function(sourcePort, targetPort, context) {
       this.lock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
     };
 
-    WireContainer.prototype.handledetach = function(sourcePort, targetPort, context) {
+    WireContainer.prototype.onhandledetach = function(sourcePort, targetPort, context) {
       this.unlock(LockRelation.TYPE_SOCKET, targetPort, context.wire);
     };
 
@@ -591,27 +563,27 @@
       });
     };
 
-    WireHandleContainer.prototype.handlestart = function(sourcePort, targetPort, context) {
+    WireHandleContainer.prototype.onhandlestart = function(sourcePort, targetPort, context) {
       context.wireHandle = this.createWireHandle(sourcePort, targetPort);
       context.wireHandle.parentElement(this.element());
       this.wireHandles.push(context.wireHandle);
     };
 
-    WireHandleContainer.prototype.handlemove = function(sourcePort, targetPort, context, x, y) {
+    WireHandleContainer.prototype.onhandlemove = function(sourcePort, targetPort, context, x, y) {
       context.wireHandle.cx(x);
       context.wireHandle.cy(y);
     };
 
-    WireHandleContainer.prototype.handleend = function(sourcePort, targetPort, context) {
+    WireHandleContainer.prototype.onhandleend = function(sourcePort, targetPort, context) {
       context.wireHandle.parentElement(null);
       helper.remove(this.wireHandles, context.wireHandle);
     };
 
-    WireHandleContainer.prototype.handleattach = function(sourcePort, targetPort, context) {
+    WireHandleContainer.prototype.onhandleattach = function(sourcePort, targetPort, context) {
       context.wireHandle.visible(false);
     };
 
-    WireHandleContainer.prototype.handledetach = function(sourcePort, targetPort, context) {
+    WireHandleContainer.prototype.onhandledetach = function(sourcePort, targetPort, context) {
       context.wireHandle.visible(true);
     };
 
