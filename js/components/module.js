@@ -39,6 +39,14 @@
     return this.y() + this.height();
   };
 
+  Module.prototype.portOffsetX = function() {
+    return this.x();
+  };
+
+  Module.prototype.portOffsetY = function() {
+    return this.y() + this.header.height() + this.component.outerHeight();
+  };
+
   Module.prototype.rightPadding = function() {
     return this.visiblePorts().map(function(port) {
       return (port.plugDisabled() ? 0 : port.plugWidth());
@@ -53,14 +61,6 @@
     }).reduce(function(prev, curr) {
       return Math.max(prev, curr);
     }, 0);
-  };
-
-  Module.prototype.portOffsetX = function() {
-    return this.x();
-  };
-
-  Module.prototype.portOffsetY = function() {
-    return this.y() + this.header.height() + this.component.outerHeight();
   };
 
   Module.prototype.port = function(name) {
@@ -145,6 +145,12 @@
     }.bind(this));
   };
 
+  Module.prototype.removePortsAllListeners = function() {
+    this.ports.forEach(function(port) {
+      port.removeAllListeners();
+    });
+  };
+
   Module.prototype.load = function(visiblePortNames) {
     this.isLoading(true);
     this.redraw();
@@ -207,12 +213,6 @@
     this.emit('porthide', port);
   };
 
-  Module.prototype.removePortsAllListeners = function() {
-    this.ports.forEach(function(port) {
-      port.removeAllListeners();
-    });
-  };
-
   Module.prototype.render = function() {
     return dom.render(Module.HTML_TEXT);
   };
@@ -264,6 +264,10 @@
     });
   };
 
+  Module.prototype.onportevent = function(member) {
+    this.emit('portevent', this.port(member.name));
+  };
+
   Module.prototype.onselect = function(name) {
     this.showPort(name);
   };
@@ -274,10 +278,6 @@
 
   Module.prototype.onportunhighlight = function() {
     this.header.decrementDeletableCount();
-  };
-
-  Module.prototype.onportevent = function(member) {
-    this.emit('portevent', this.port(member.name));
   };
 
   Module.HTML_TEXT = [
@@ -315,16 +315,16 @@
       return this.findElement('.module-delete-button');
     };
 
+    Header.prototype.deleteButtonDisabled = function() {
+      return (this.deletableCount() !== 0);
+    };
+
     Header.prototype.incrementDeletableCount = function() {
       this.deletableCount(this.deletableCount() + 1);
     };
 
     Header.prototype.decrementDeletableCount = function() {
       this.deletableCount(this.deletableCount() - 1);
-    };
-
-    Header.prototype.deleteButtonDisabled = function() {
-      return (this.deletableCount() !== 0);
     };
 
     Header.prototype.onredraw = function() {
