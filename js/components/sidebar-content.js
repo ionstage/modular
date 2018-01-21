@@ -19,31 +19,26 @@
     return module;
   };
 
-  SidebarContent.prototype.appendModule = function(props) {
-    var module = this.createModule(props);
-    module.parentElement(this.findElement('.sidebar-module-container'));
-    this.modules.push(module);
-    this.markDirty();
-  };
-
-  SidebarContent.prototype.clear = function() {
-    this.modules.forEach(function(module) {
-      module.parentElement(null);
-      module.removeAllListeners();
-    });
-    this.modules = [];
-    this.markDirty();
-  };
-
-  SidebarContent.prototype.setModules = function(entries) {
-    this.clear();
-    entries.forEach(function(entry) {
-      this.appendModule({
+  SidebarContent.prototype.createModules = function(entries) {
+    return entries.map(function(entry) {
+      return this.createModule({
         title: entry.label,
         content: entry.description,
         name: entry.name,
       });
     }.bind(this));
+  };
+
+  SidebarContent.prototype.reload = function(entries) {
+    this.modules.forEach(function(module) {
+      module.parentElement(null);
+      module.removeAllListeners();
+    });
+    this.modules = this.createModules(entries).map(function(module) {
+      module.parentElement(this.findElement('.sidebar-module-container'));
+      return module;
+    }.bind(this));
+    this.markDirty();
   };
 
   SidebarContent.prototype.scrollEnabled = function(value) {

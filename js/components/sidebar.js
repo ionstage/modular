@@ -32,8 +32,7 @@
   };
 
   Sidebar.prototype.search = function(text) {
-    var entries = this.entryCollection.search(text);
-    this.content.setModules(entries);
+    this.content.reload(this.entryCollection.search(text));
   };
 
   Sidebar.prototype.loadEntries = function() {
