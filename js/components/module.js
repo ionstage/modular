@@ -79,10 +79,6 @@
     return this.portList.ports.slice();
   };
 
-  Module.prototype.containsPort = function(port) {
-    return (this.ports.indexOf(port) !== -1);
-  };
-
   Module.prototype.portFromSocketPosition = function(x, y) {
     if (this.ports.length === 0) {
       return null;
