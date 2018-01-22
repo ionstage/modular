@@ -18,10 +18,6 @@
     return el;
   };
 
-  dom.append = function(parent, el) {
-    parent.appendChild(el);
-  };
-
   dom.contains = function(el, other) {
     return el.contains(other);
   };
@@ -80,14 +76,6 @@
 
   dom.selectAll = function(el) {
     el.setSelectionRange(0, el.value.length);
-  };
-
-  dom.width = function(el) {
-    return el.getBoundingClientRect().width;
-  };
-
-  dom.height = function(el) {
-    return el.getBoundingClientRect().height;
   };
 
   dom.offsetLeft = function(el) {
