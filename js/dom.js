@@ -14,16 +14,12 @@
 
   dom.render = function(s) {
     var el = document.createRange().createContextualFragment(s).firstChild;
-    dom.remove(el);
+    el.parentNode.removeChild(el);
     return el;
   };
 
   dom.append = function(parent, el) {
     parent.appendChild(el);
-  };
-
-  dom.remove = function(el) {
-    el.parentNode.removeChild(el);
   };
 
   dom.contains = function(el, other) {
