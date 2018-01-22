@@ -84,7 +84,7 @@
       module.isActive(true);
       if (dom.supportsTouch()) {
         context.dragging = false;
-        context.timer = setTimeout(this.ondragstart.bind(this), 300, module, x, y, event, context);
+        context.timeoutID = setTimeout(this.ondragstart.bind(this), 300, module, x, y, event, context);
       } else {
         dom.cancel(event);
         this.ondragstart(module, x, y, event, context);
@@ -94,10 +94,10 @@
     Draggable.prototype.onmove = function(module, dx, dy, event, context) {
       if (context.dragging) {
         this.ondragmove(module, dx, dy, event, context);
-      } else if (context.timer && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+      } else if (context.timeoutID && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
         module.isActive(false);
-        clearTimeout(context.timer);
-        context.timer = null;
+        clearTimeout(context.timeoutID);
+        context.timeoutID = 0;
       }
     };
 
@@ -105,15 +105,15 @@
       module.isActive(false);
       if (context.dragging) {
         this.ondragend(module, dx, dy, event, context);
-      } else if (context.timer) {
-        clearTimeout(context.timer);
-        context.timer = null;
+      } else if (context.timeoutID) {
+        clearTimeout(context.timeoutID);
+        context.timeoutID = 0;
       }
     };
 
     Draggable.prototype.ondragstart = function(module, x, y, event, context) {
       context.dragging = true;
-      context.timer = null;
+      context.timeoutID = 0;
       context.x = dom.offsetLeft(module.element());
       context.y = dom.offsetTop(module.element());
       context.clone = module.createClone({ x: context.x, y: context.y });
