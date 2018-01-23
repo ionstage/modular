@@ -2,42 +2,49 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1">
+  <meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Modular</title>
   <meta name="description" content="Visual programming environment">
   <link rel="stylesheet" href="css/app.min.css">
+  <link rel="icon" sizes="192x192" href="images/icon.png">
+  <link rel="apple-touch-icon-precomposed" href="images/icon.png">
 </head>
-<body class="unselectable">
-  <div class="sidebar">
+<body>
+  <div class="sidebar disabled">
     <div class="sidebar-header">
-      <input class="search-input" type="search" placeholder="Search" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" disabled>
+      <input class="search-input" type="search" placeholder="Search" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
     </div>
     <div class="sidebar-content">
-      <div class="scroller"></div>
+      <div class="sidebar-module-container"></div>
     </div>
   </div>
-  <div class="content">
-    <div class="content-header">
-      <div class="button sidebar-toggle-button">
-        <img class="icon angle-double-left" src="images/angle-double-left.svg">
-        <img class="icon angle-double-right" src="images/angle-double-right.svg">
+  <div class="main disabled">
+    <div class="main-header main-item button-group-container">
+      <div class="button-group left">
+        <div class="sidebar-toggle-button button button-toggle-icon-container" data-type="collapse">
+          <img class="button-toggle-icon icon-collapse button-item" src="images/angle-double-left.svg">
+          <img class="button-toggle-icon icon-expand button-item" src="images/angle-double-right.svg">
+        </div>
       </div>
-      <div class="button load-button">
-        <input type="file">
-        <img class="icon" src="images/file-o.svg">
-        <span>Load</span>
-      </div>
-      <div class="button save-button">
-        <img class="icon" src="images/floppy-o.svg">
-        <span>Save</span>
+      <div class="button-group right">
+        <div class="load-button button">
+          <img class="button-icon icon-load button-item" src="images/file-o.svg">
+          <span class="button-label button-item">Load</span>
+          <input class="button-input button-item" type="file">
+        </div>
+        <div class="save-button button">
+          <img class="button-icon icon-save button-item" src="images/floppy-o.svg">
+          <span class="button-label button-item">Save</span>
+        </div>
       </div>
     </div>
-    <div class="module-container">
-      <div class="retainer"></div>
-      <div class="module-wire-container"></div>
-      <div class="module-container-content"></div>
-      <div class="module-wire-handle-container"></div>
+    <div class="main-content main-item">
+      <div class="module-container main-content-item">
+        <div class="module-container-retainer"></div>
+      </div>
+      <div class="wire-container main-content-item"></div>
+      <div class="wire-handle-container main-content-item"></div>
     </div>
   </div>
   <script src="js/bundle.min.js"></script>
