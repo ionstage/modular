@@ -94,13 +94,6 @@
     return iframe.contentWindow;
   };
 
-  dom.writeContent = function(iframe, s) {
-    var doc = iframe.contentDocument;
-    doc.open();
-    doc.write(s);
-    doc.close();
-  };
-
   dom.contentHeight = function(iframe) {
     return iframe.contentDocument.documentElement.scrollHeight;
   };

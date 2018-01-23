@@ -401,22 +401,16 @@
     };
 
     Component.prototype.load = function(url) {
-      return dom.ajax({
-        type: 'GET',
-        url: url,
-      }).then(function(text) {
-        dom.writeContent(this.element(), text);
-        this.height(dom.contentHeight(this.element()));
-        dom.css(this.element(), { height: this.height() + 'px' });
-        dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
-      }.bind(this)).then(function() {
-        return new Promise(function(resolve, reject) {
-          var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
-          dom.once(this.contentWindow(), 'load', function() {
-            clearTimeout(timeoutID);
-            resolve();
-          });
+      return new Promise(function(resolve, reject) {
+        var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
+        dom.once(this.element(), 'load', function() {
+          clearTimeout(timeoutID);
+          this.height(dom.contentHeight(this.element()));
+          dom.css(this.element(), { height: this.height() + 'px' });
+          dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
+          resolve();
         }.bind(this));
+        dom.attr(this.element(), { src: url });
       }.bind(this)).then(function() {
         this.members = this.contentWindow().modular.exports.getAll();
         this.eventMembers = this.createEventCircuitModule().getAll();
