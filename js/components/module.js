@@ -374,6 +374,11 @@
       return dom.contentWindow(this.element());
     };
 
+    Component.prototype.circuitModule = function() {
+      var modular = this.contentWindow().modular;
+      return (modular && modular.exports);
+    };
+
     Component.prototype.member = function(name) {
       return helper.findLast(this.members, function(member) {
         return (member.name === name);
@@ -405,14 +410,17 @@
         var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
         dom.once(this.element(), 'load', function() {
           clearTimeout(timeoutID);
-          this.height(dom.contentHeight(this.element()));
-          dom.css(this.element(), { height: this.height() + 'px' });
-          dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
-          resolve();
+          resolve(this.circuitModule());
         }.bind(this));
         dom.attr(this.element(), { src: url });
-      }.bind(this)).then(function() {
-        this.members = this.contentWindow().modular.exports.getAll();
+      }.bind(this)).then(function(circuitModule) {
+        if (!circuitModule) {
+          throw new Error('Invalid circuit element');
+        }
+        this.height(dom.contentHeight(this.element()));
+        dom.css(this.element(), { height: this.height() + 'px' });
+        dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
+        this.members = circuitModule.getAll();
         this.eventMembers = this.createEventCircuitModule().getAll();
         this.bindEventMembers();
         return this;
