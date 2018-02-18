@@ -7,7 +7,7 @@
   var MainContent = app.MainContent || require('./main-content.js');
   var MainHeader = app.MainHeader || require('./main-header.js');
 
-  var Main = jCore.Component.inherits(function(props) {
+  var Main = jCore.Component.inherits(function() {
     this.disabled = this.prop(true);
     this.isFullWidth = this.prop(false);
     this.header = new MainHeader({ element: this.findElement('.main-header') });

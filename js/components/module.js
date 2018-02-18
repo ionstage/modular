@@ -478,7 +478,7 @@
   })();
 
   Module.PortSelect = (function() {
-    var PortSelect = jCore.Component.inherits(function(props) {
+    var PortSelect = jCore.Component.inherits(function() {
       this.ports = [];
       this.options = [];
       this.onchange = this.onchange.bind(this);

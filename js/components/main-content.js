@@ -10,7 +10,7 @@
   var Wire = app.Wire || require('./wire.js');
   var WireHandle = app.WireHandle || require('./wire-handle.js');
 
-  var MainContent = jCore.Component.inherits(function(props) {
+  var MainContent = jCore.Component.inherits(function() {
     this.moduleContainer = new MainContent.ModuleContainer({ element: this.findElement('.module-container') });
     this.wireContainer = new MainContent.WireContainer({ element: this.findElement('.wire-container') });
     this.wireHandleContainer = new MainContent.WireHandleContainer({ element: this.findElement('.wire-handle-container') });

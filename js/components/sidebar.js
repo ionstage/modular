@@ -7,7 +7,7 @@
   var SidebarContent = app.SidebarContent || require('./sidebar-content.js');
   var SidebarHeader = app.SidebarHeader || require('./sidebar-header.js');
 
-  var Sidebar = jCore.Component.inherits(function(props) {
+  var Sidebar = jCore.Component.inherits(function() {
     this.disabled = this.prop(true);
     this.dragCount = this.prop(0);
     this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });

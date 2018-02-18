@@ -6,7 +6,7 @@
   var Main = app.Main || require('./main.js');
   var Sidebar = app.Sidebar || require('./sidebar.js');
 
-  var Body = jCore.Component.inherits(function(props) {
+  var Body = jCore.Component.inherits(function() {
     this.hoverDisabled = this.prop(false);
     this.dragCount = this.prop(0);
     this.sidebar = new Sidebar({ element: this.findElement('.sidebar') });

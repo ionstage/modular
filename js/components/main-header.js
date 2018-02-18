@@ -6,7 +6,7 @@
   var LoadButton = app.LoadButton || require('./load-button.js');
   var ToggleButton = app.ToggleButton || require('./toggle-button.js');
 
-  var MainHeader = jCore.Component.inherits(function(props) {
+  var MainHeader = jCore.Component.inherits(function() {
     this.sidebarToggleButton = new ToggleButton({ element: this.findElement('.sidebar-toggle-button') });
     this.loadButton = new LoadButton({ element: this.findElement('.load-button') });
     this.saveButton = new Button({ element: this.findElement('.save-button') });

@@ -4,7 +4,7 @@
   var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
 
-  var Button = jCore.Component.inherits(function(props) {
+  var Button = jCore.Component.inherits(function() {
     this.isActive = this.prop(false);
     this.disabled = this.prop(false);
     this.draggable = new Button.Draggable(this);
