@@ -415,7 +415,7 @@
         dom.attr(this.element(), { src: url });
       }.bind(this)).then(function(circuitModule) {
         if (!circuitModule) {
-          throw new Error('Invalid circuit element');
+          throw new Error('Invalid circuit module');
         }
         this.height(dom.contentHeight(this.element()));
         dom.css(this.element(), { height: this.height() + 'px' });
