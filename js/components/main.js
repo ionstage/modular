@@ -1,8 +1,8 @@
 (function(app) {
   'use strict';
 
-  var jCore = require('jcore');
   var FileSaver = require('file-saver');
+  var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
   var MainContent = app.MainContent || require('./main-content.js');
   var MainHeader = app.MainHeader || require('./main-header.js');
