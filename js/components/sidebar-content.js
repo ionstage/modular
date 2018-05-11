@@ -31,8 +31,8 @@
 
   SidebarContent.prototype.reload = function(entries) {
     this.modules.forEach(function(module) {
-      module.parentElement(null);
       module.removeAllListeners();
+      module.parentElement(null);
     });
     this.modules = this.createModules(entries).map(function(module) {
       module.parentElement(this.findElement('.sidebar-module-container'));
