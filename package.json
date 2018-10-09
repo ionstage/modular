@@ -1,6 +1,6 @@
 {
   "name": "modular",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "scripts": {
     "build": "npm run build:bundle && npm run build:js && npm run build:css",
     "build:bundle": "uglifyjs js/bundle.js -o docs/js/bundle.min.js --comments '/^\\!|^@preserve|^@cc_on|\\bMIT\\b|\\bMPL\\b|\\bGPL\\b|\\(c\\)|License|Copyright/' -c -m",
