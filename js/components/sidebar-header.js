@@ -24,12 +24,12 @@
 
     SearchInput.prototype.oninit = function() {
       this.isFocused(dom.isFocused(this.element()));
-      dom.on(this.element(), dom.eventType('start'), this.onstart.bind(this));
+      dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
       dom.on(this.element(), 'click', this.onclick.bind(this));
       dom.on(this.element(), 'input', this.oninput.bind(this));
     };
 
-    SearchInput.prototype.onstart = function() {
+    SearchInput.prototype.onpoint = function() {
       this.isFocused(dom.isFocused(this.element()));
     };
 
