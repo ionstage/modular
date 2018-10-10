@@ -63,7 +63,6 @@
     Scrollable.prototype.options = function() {
       return {
         disableMouse: true,
-        disablePointer: true,
         fadeScrollbars: dom.supportsTouch(),
         interactiveScrollbars: !dom.supportsTouch(),
         mouseWheel: true,
