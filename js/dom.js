@@ -166,6 +166,10 @@
     event.preventDefault();
   };
 
+  dom.stop = function(event) {
+    event.stopPropagation();
+  };
+
   dom.eventType = function(name) {
     switch (name) {
       case 'start':

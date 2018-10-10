@@ -225,6 +225,7 @@
     this.draggable.enable();
     this.component.on('point', this.emit.bind(this, 'point', this));
     this.component.on('event', this.onportevent.bind(this));
+    this.portSelect.on('point', this.emit.bind(this, 'point', this));
     this.portSelect.on('select', this.onselect.bind(this));
     this.portSelect.onappend();
   };
@@ -481,6 +482,7 @@
     var PortSelect = jCore.Component.inherits(function() {
       this.ports = [];
       this.options = [];
+      this.onpoint = this.onpoint.bind(this);
       this.onchange = this.onchange.bind(this);
     });
 
@@ -511,10 +513,12 @@
     };
 
     PortSelect.prototype.onappend = function() {
+      dom.on(this.element(), dom.eventType('start'), this.onpoint);
       dom.on(this.element(), 'change', this.onchange);
     };
 
     PortSelect.prototype.onremove = function() {
+      dom.off(this.element(), dom.eventType('start'), this.onpoint);
       dom.off(this.element(), 'change', this.onchange);
     };
 
@@ -537,6 +541,11 @@
 
       // deselect option
       dom.value(this.element(), '');
+    };
+
+    PortSelect.prototype.onpoint = function(event) {
+      dom.stop(event);
+      this.emit('point');
     };
 
     PortSelect.prototype.onchange = function(event) {
