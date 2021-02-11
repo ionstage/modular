@@ -20,6 +20,7 @@
     "browser-sync": "^2.18.13",
     "browserify": "^14.5.0",
     "clean-css-cli": "^4.1.10",
+    "eslint": "^7.19.0",
     "font-awesome-svg-png": "^1.2.2",
     "uglify-js": "^3.2.1"
   },
