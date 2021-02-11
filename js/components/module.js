@@ -638,7 +638,7 @@
         module.moveX(context.x + dx);
         module.moveY(context.y + dy);
       },
-      onend: function(module, dx, dy, event, context) {
+      onend: function(module, dx, dy, event, context) { // eslint-disable-line no-unused-vars
         module.isMoving(false);
       },
     };
