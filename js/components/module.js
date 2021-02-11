@@ -417,12 +417,13 @@
     };
 
     Component.prototype.serialize = function() {
-      return this.options.serialize();
+      var s = this.options.serialize();
+      return (s != null ? String(s) : null);
     };
 
     Component.prototype.deserialize = function(s) {
       if (s != null) {
-        this.options.deserialize(s);
+        this.options.deserialize(String(s));
       }
     };
 
