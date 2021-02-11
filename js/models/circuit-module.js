@@ -5,9 +5,9 @@
   var helper = app.helper || require('../helper.js');
   var Wrapper = helper.wrapper();
 
-  var CircuitModule = function(members) {
+  var CircuitModule = function(members, options) {
     this.members = members;
-    return this.wrapper();
+    return this.wrapper(options);
   };
 
   CircuitModule.prototype.get = function(name) {
@@ -20,10 +20,11 @@
     return this.members.slice();
   };
 
-  CircuitModule.prototype.wrapper = function() {
+  CircuitModule.prototype.wrapper = function(options) {
     return {
       get: this.get.bind(this),
       getAll: this.getAll.bind(this),
+      options: options,
     };
   };
 
@@ -62,7 +63,7 @@
     return Member;
   })();
 
-  CircuitModule.ModularModule = function(members) {
+  CircuitModule.ModularModule = function(members, options) {
     return new CircuitModule(members.map(function(member) {
       return new CircuitModule.Member({
         label: member.label,
@@ -72,7 +73,7 @@
         plugDisabled: !!member.plugDisabled,
         socketDisabled: !!member.socketDisabled,
       });
-    }));
+    }), options || {});
   };
 
   CircuitModule.modular = function() {

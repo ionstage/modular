@@ -116,6 +116,7 @@
       }).map(function(port) {
         return port.name();
       }),
+      serializedValue: this.component.serialize(),
     };
   };
 
@@ -151,11 +152,12 @@
     });
   };
 
-  Module.prototype.load = function(visiblePortNames) {
+  Module.prototype.load = function(visiblePortNames, serializedValue) {
     this.isLoading(true);
     this.redraw();
     return this.component.load(this.url()).then(function(component) {
       this.setPorts(this.createPorts(component.members), visiblePortNames);
+      this.component.deserialize(serializedValue);
       this.isLoading(false);
       return this;
     }.bind(this)).catch(function(e) {
@@ -364,6 +366,7 @@
       this.height = this.prop(0);
       this.members = [];
       this.eventMembers = [];
+      this.options = this.createDefaultOptions();
       this.onpoint = this.emit.bind(this, 'point');
     });
 
@@ -406,6 +409,23 @@
       }.bind(this));
     };
 
+    Component.prototype.createDefaultOptions = function() {
+      return {
+        serialize: function() { return null; },
+        deserialize: function() { /* do nothing */ },
+      };
+    };
+
+    Component.prototype.serialize = function() {
+      return this.options.serialize();
+    };
+
+    Component.prototype.deserialize = function(s) {
+      if (s != null) {
+        this.options.deserialize(s);
+      }
+    };
+
     Component.prototype.load = function(url) {
       return new Promise(function(resolve, reject) {
         var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
@@ -424,6 +444,7 @@
         this.members = circuitModule.getAll();
         this.eventMembers = this.createEventCircuitModule().getAll();
         this.bindEventMembers();
+        helper.extend(this.options, circuitModule.options);
         return this;
       }.bind(this));
     };

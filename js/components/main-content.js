@@ -33,7 +33,7 @@
   };
 
   MainContent.prototype.loadModule = function(props, visiblePortNames) {
-    return this.moduleContainer.loadModule(props, visiblePortNames);
+    return this.moduleContainer.loadModule(props, visiblePortNames, null);
   };
 
   MainContent.prototype.clear = function() {
@@ -158,17 +158,17 @@
       }.bind(this));
     };
 
-    ModuleContainer.prototype.loadModule = function(props, visiblePortNames) {
+    ModuleContainer.prototype.loadModule = function(props, visiblePortNames, serializedValue) {
       var module = this.createModule(props);
       module.parentElement(this.element());
       this.modules.push(module);
       this.refresh();
-      return module.load(visiblePortNames);
+      return module.load(visiblePortNames, serializedValue);
     };
 
     ModuleContainer.prototype.loadModules = function(modulesData) {
       return Promise.all(modulesData.map(function(moduleData) {
-        return this.loadModule(moduleData.props, moduleData.visiblePortNames);
+        return this.loadModule(moduleData.props, moduleData.visiblePortNames, moduleData.serializedValue);
       }.bind(this)));
     };
 
