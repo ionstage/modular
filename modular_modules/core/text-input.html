@@ -21,7 +21,7 @@
 </head>
 <body>
   <input id="text-input" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
-  <script src="/modular/js/modular-module.js"></script>
+  <script src="../../js/modular-module.js"></script>
   <script>
     (function() {
       var text = '';
@@ -42,7 +42,15 @@
       var module = new modular.Module([
         { label: 'Text', name: 'text', type: 'prop', arg: props.text },
         { label: 'Change', name: 'change', type: 'event', socketDisabled: true },
-      ]);
+      ], {
+        serialize: function() {
+          return text;
+        },
+        deserialize: function(s) {
+          text = s;
+          textInputElement.value = s;
+        },
+      });
 
       textInputElement.addEventListener('input', function(event) {
         var value = event.target.value;
