@@ -2,7 +2,7 @@
 
 Visual programming environment
 
-![Screen Shot](assets/screenshot.png)
+[<img src="assets/screenshot.png" alt="Screen Shot">](https://www.ionstage.org/modular/)
 
 ## Features
 
@@ -12,7 +12,7 @@ Visual programming environment
 
 ## Demo
 
-- Counter: [Try it out](http://www.ionstage.org/modular/?demo=counter) | [Video](https://youtu.be/fnvV3ylTCN0)
+- Counter: [Try it out](https://www.ionstage.org/modular/?demo=counter) | [Video](https://youtu.be/fnvV3ylTCN0)
 
 ## Running locally
 
