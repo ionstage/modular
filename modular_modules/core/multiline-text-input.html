@@ -13,14 +13,16 @@
       box-sizing: border-box;
       color: #212121;
       font-size: 14px;
-      height: 28px;
-      padding: 0 4px;
+      height: 117px;
+      padding: 4px;
+      resize: none;
+      vertical-align: middle;
       width: 100%;
     }
   </style>
 </head>
 <body>
-  <input id="text-input" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
+  <textarea id="text-input" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
   <script src="../../js/modular-module.js"></script>
   <script>
     (function() {
@@ -29,7 +31,7 @@
 
       var props = {
         text: function(value) {
-          value = (value != null ? String(value).replace(/\n/g, '') : text);
+          value = (value != null ? String(value) : text);
           if (value !== text) {
             module.get('change')();
             text = value;
