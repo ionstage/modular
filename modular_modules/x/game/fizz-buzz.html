@@ -44,7 +44,7 @@
             output = '';
           } else if (n % 15 === 0) {
             module.get('fizz-buzz')();
-            output = 'Fizz Buzz';
+            output = 'FizzBuzz';
           } else if (n % 3 === 0) {
             module.get('fizz')();
             output = 'Fizz';
@@ -65,7 +65,7 @@
         { label: 'Value', name: 'value', type: 'prop', arg: props.value },
         { label: 'Fizz', name: 'fizz', type: 'event', socketDisabled: true },
         { label: 'Buzz', name: 'buzz', type: 'event', socketDisabled: true },
-        { label: 'Fizz Buzz', name: 'fizz-buzz', type: 'event', socketDisabled: true },
+        { label: 'FizzBuzz', name: 'fizz-buzz', type: 'event', socketDisabled: true },
       ]);
 
       modular.exports = module;
