@@ -7,6 +7,7 @@
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var LockRelation = app.LockRelation || require('../relations/lock-relation.js');
   var Module = app.Module || require('./module.js');
+  var ModulePort = app.ModulePort || require('./module-port.js');
   var Wire = app.Wire || require('./wire.js');
   var WireHandle = app.WireHandle || require('./wire-handle.js');
 
@@ -264,6 +265,10 @@
 
     ModuleContainer.prototype.unbind = function(sourcePort, targetPort) {
       CircuitModule.unbind(sourcePort.member, targetPort.member);
+      if (targetPort.type() === ModulePort.TYPE_PROP) {
+        // send empty value to disconnected 'prop' port
+        targetPort.member(null);
+      }
       helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {
         return (binding.sourcePort === sourcePort && binding.targetPort === targetPort);
       }));
