@@ -12,6 +12,13 @@
     "visiblePortNames": ["count", "up"]
   },
   {
+    "label": "Integer Input",
+    "description": "Input integer data",
+    "src": "integer-input",
+    "visiblePortNames": ["number"],
+    "tags": ["number"]
+  },
+  {
     "label": "Multiline Text Input",
     "description": "Input multiline text data",
     "src": "multiline-text-input",

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #number-input {
+      border-radius: 0;
+      box-sizing: border-box;
+      color: #212121;
+      font-size: 14px;
+      height: 28px;
+      padding: 0 4px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <input id="number-input" type="number" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
+  <script src="../../js/modular-module.js"></script>
+  <script>
+    (function() {
+      function isNumber(obj) {
+        return Object.prototype.toString.call(obj) === '[object Number]';
+      }
+
+      function toNumber(value) {
+        if (value == null) {
+          return NaN;
+        }
+        if (isNumber(value)) {
+          return value;
+        }
+        try {
+          value = JSON.parse(String(value));
+          return (isNumber(value) ? value : NaN);
+        } catch (e) {
+          return NaN;
+        }
+      }
+
+      function toInteger(value) {
+        var n = toNumber(value);
+        return (isFinite(n) ? parseInt(n, 10) : NaN);
+      }
+
+      function toIntegerOrNull(value) {
+        var n = toInteger(value);
+        return (isFinite(n) ? n : null);
+      }
+
+      var number = null;
+      var numberInputElement = document.getElementById('number-input');
+
+      var props = {
+        number: function(value) {
+          value = (value != null ? toIntegerOrNull(value) : number);
+          if (value !== number) {
+            module.get('change')();
+            number = value;
+            numberInputElement.value = (value !== null ? value : '');
+          }
+          return number;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Number', name: 'number', type: 'prop', arg: props.number },
+        { label: 'Change', name: 'change', type: 'event', socketDisabled: true },
+      ], {
+        serialize: function() {
+          return (number !== null ? String(number) : 'NaN');
+        },
+        deserialize: function(s) {
+          var n = (s !== 'NaN' ? toIntegerOrNull(s) : null);
+          number = n;
+          numberInputElement.value = (n !== null ? n : '');
+        },
+      });
+
+      numberInputElement.addEventListener('input', function(event) {
+        var n = toIntegerOrNull(event.target.value);
+        if (n !== number) {
+          module.get('change')();
+          number = n;
+          module.get('number')(number);
+        }
+      });
+
+      numberInputElement.value = '';
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
