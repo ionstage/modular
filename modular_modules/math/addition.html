@@ -41,20 +41,20 @@
             a = toNumber(value);
             module.get('result')(a + b);
           }
-          return (!isNaN(a) ? a : null);
+          return (isFinite(a) ? a : null);
         },
         b: function(value) {
           if (typeof value !== 'undefined') {
             b = toNumber(value);
             module.get('result')(a + b);
           }
-          return (!isNaN(b) ? b : null);
+          return (isFinite(b) ? b : null);
         },
         result: function(value) {
           if (typeof value === 'undefined') {
             value = a + b;
           }
-          return (!isNaN(value) ? value : null);
+          return (isFinite(value) ? value : null);
         },
       };
 
