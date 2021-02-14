@@ -25,7 +25,7 @@
   <script>
     (function() {
       function isNumber(obj) {
-        return Object.prototype.toString.call(obj) === '[object Number]';
+        return (Object.prototype.toString.call(obj) === '[object Number]');
       }
 
       function toNumber(value) {
