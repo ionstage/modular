@@ -34,9 +34,9 @@
 
       var props = {
         count: function(value) {
-          value = parseInt((!isNaN(value) ? Number(value) : count), 10);
-          if (value !== count) {
-            count = value;
+          var n = parseInt(value, 10);
+          if (n === Number(n) && n !== count) {
+            count = n;
             contentElement.textContent = count;
           }
           return count;
