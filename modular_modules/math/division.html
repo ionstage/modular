@@ -39,18 +39,31 @@
       var a = NaN;
       var b = NaN;
 
+      var update = (function() {
+        var t = 0;
+        return function() {
+          if (t) {
+            clearTimeout(t);
+          }
+          t = setTimeout(() => {
+            module.get('result')(divide(a, b));
+            t = 0;
+          }, 0);
+        };
+      })();
+
       var props = {
         a: function(value) {
           if (typeof value !== 'undefined') {
             a = toNumber(value);
-            module.get('result')(divide(a, b));
+            update();
           }
           return (isFinite(a) ? a : null);
         },
         b: function(value) {
           if (typeof value !== 'undefined') {
             b = toNumber(value);
-            module.get('result')(divide(a, b));
+            update();
           }
           return (isFinite(b) ? b : null);
         },
