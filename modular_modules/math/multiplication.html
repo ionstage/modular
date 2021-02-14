@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../js/modular-module.js"></script>
+  <script>
+    (function() {
+      function isNumber(obj) {
+        return Object.prototype.toString.call(obj) === '[object Number]';
+      }
+
+      function toNumber(value) {
+        if (value == null) {
+          return NaN;
+        }
+        if (isNumber(value)) {
+          return value;
+        }
+        try {
+          value = JSON.parse(String(value));
+          return (isNumber(value) ? value : NaN);
+        } catch (e) {
+          return NaN;
+        }
+      }
+
+      var a = NaN;
+      var b = NaN;
+
+      var props = {
+        a: function(value) {
+          if (typeof value !== 'undefined') {
+            a = toNumber(value);
+            module.get('result')(a * b);
+          }
+          return (!isNaN(a) ? a : null);
+        },
+        b: function(value) {
+          if (typeof value !== 'undefined') {
+            b = toNumber(value);
+            module.get('result')(a * b);
+          }
+          return (!isNaN(b) ? b : null);
+        },
+        result: function(value) {
+          if (typeof value === 'undefined') {
+            value = a * b;
+          }
+          return (!isNaN(value) ? value : null);
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'A', name: 'a', type: 'prop', arg: props.a, plugDisabled: true },
+        { label: 'B', name: 'b', type: 'prop', arg: props.b, plugDisabled: true },
+        { label: 'A × B', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

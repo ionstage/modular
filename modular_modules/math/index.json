@@ -1,0 +1,37 @@
+[
+  {
+    "label": "+",
+    "description": "Sum of two numbers",
+    "src": "addition",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["add", "plus"]
+  },
+  {
+    "label": "÷",
+    "description": "Division of two numbers",
+    "src": "division",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["/", "quotient"]
+  },
+  {
+    "label": "mod",
+    "description": "Modulo operation",
+    "src": "modulo-operation",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["%", "remainder"]
+  },
+  {
+    "label": "×",
+    "description": "Product of two numbers",
+    "src": "multiplication",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["*", "multiply"]
+  },
+  {
+    "label": "-",
+    "description": "Difference between two numbers",
+    "src": "subtraction",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["subtract", "minus"]
+  }
+]
