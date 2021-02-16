@@ -84,7 +84,7 @@ The following code is the whole HTML code with comments on the points to keep in
   <div id="content"></div>
 
   <!-- must load this JavaScript source -->
-  <script src="/js/modular-module.js"></script>
+  <script src="../modular-module.js"></script>
 
   <script>
     (function() {
