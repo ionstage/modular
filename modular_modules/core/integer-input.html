@@ -22,29 +22,13 @@
 <body>
   <input id="number-input" type="number" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
   <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
   <script>
     (function() {
-      function isNumber(obj) {
-        return (Object.prototype.toString.call(obj) === '[object Number]');
-      }
-
-      function toNumber(value) {
-        if (value == null) {
-          return NaN;
-        }
-        if (isNumber(value)) {
-          return value;
-        }
-        try {
-          value = JSON.parse(String(value));
-          return (isNumber(value) ? value : NaN);
-        } catch (e) {
-          return NaN;
-        }
-      }
+      var util = modular.util;
 
       function toInteger(value) {
-        var n = toNumber(value);
+        var n = util.toNumber(value);
         return (isFinite(n) ? parseInt(n, 10) : NaN);
       }
 

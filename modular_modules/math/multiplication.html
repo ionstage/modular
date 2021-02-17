@@ -11,54 +11,29 @@
 </head>
 <body>
   <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
   <script>
     (function() {
-      function isNumber(obj) {
-        return (Object.prototype.toString.call(obj) === '[object Number]');
-      }
-
-      function toNumber(value) {
-        if (value == null) {
-          return NaN;
-        }
-        if (isNumber(value)) {
-          return value;
-        }
-        try {
-          value = JSON.parse(String(value));
-          return (isNumber(value) ? value : NaN);
-        } catch (e) {
-          return NaN;
-        }
-      }
+      var util = modular.util;
 
       var a = NaN;
       var b = NaN;
 
-      var update = (function() {
-        var t = 0;
-        return function() {
-          if (t) {
-            clearTimeout(t);
-          }
-          t = setTimeout(() => {
-            module.get('result')(a * b);
-            t = 0;
-          }, 0);
-        };
-      })();
+      var update = util.debounce(function() {
+        module.get('result')(a * b);
+      }, 0);
 
       var props = {
         a: function(value) {
           if (typeof value !== 'undefined') {
-            a = toNumber(value);
+            a = util.toNumber(value);
             update();
           }
           return (isFinite(a) ? a : null);
         },
         b: function(value) {
           if (typeof value !== 'undefined') {
-            b = toNumber(value);
+            b = util.toNumber(value);
             update();
           }
           return (isFinite(b) ? b : null);
