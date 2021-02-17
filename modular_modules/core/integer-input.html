@@ -27,18 +27,18 @@
     (function() {
       var util = modular.util;
 
-      function toInteger(value) {
-        var n = util.toNumber(value);
-        return (isFinite(n) ? parseInt(n, 10) : NaN);
-      }
-
-      function toIntegerOrNull(value) {
-        var n = toInteger(value);
-        return (isFinite(n) ? n : null);
-      }
-
       var number = null;
       var numberInputElement = document.getElementById('number-input');
+
+      var toInteger = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? parseInt(n, 10) : NaN);
+      };
+
+      var toIntegerOrNull = function(value) {
+        var n = toInteger(value);
+        return (isFinite(n) ? n : null);
+      };
 
       var props = {
         number: function(value) {

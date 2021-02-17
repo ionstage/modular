@@ -16,12 +16,12 @@
     (function() {
       var util = modular.util;
 
-      function divide(a, b) {
-        return (b !== 0 ? a / b : NaN);
-      }
-
       var a = NaN;
       var b = NaN;
+
+      var divide = function(a, b) {
+        return (b !== 0 ? a / b : NaN);
+      };
 
       var update = util.debounce(function() {
         module.get('result')(divide(a, b));
