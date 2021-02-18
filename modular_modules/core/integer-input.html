@@ -44,9 +44,9 @@
         number: function(value) {
           value = (value != null ? toIntegerOrNull(value) : number);
           if (value !== number) {
-            module.get('change')();
             number = value;
             numberInputElement.value = (value !== null ? value : '');
+            module.get('change')();
           }
           return number;
         },
@@ -69,9 +69,9 @@
       numberInputElement.addEventListener('input', function(event) {
         var n = toIntegerOrNull(event.target.value);
         if (n !== number) {
-          module.get('change')();
           number = n;
           module.get('number')(number);
+          module.get('change')();
         }
       });
 

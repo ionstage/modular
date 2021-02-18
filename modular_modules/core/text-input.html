@@ -31,9 +31,9 @@
         text: function(value) {
           value = (value != null ? String(value).replace(/\n/g, '') : text);
           if (value !== text) {
-            module.get('change')();
             text = value;
             textInputElement.value = value;
+            module.get('change')();
           }
           return text;
         },
@@ -55,9 +55,9 @@
       textInputElement.addEventListener('input', function(event) {
         var value = event.target.value;
         if (value !== text) {
-          module.get('change')();
           text = value;
           module.get('text')(text);
+          module.get('change')();
         }
       });
 
