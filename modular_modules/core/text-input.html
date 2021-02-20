@@ -33,7 +33,8 @@
           if (value == null || value === text) {
             return text;
           }
-          var s = String(value).replace(/\n/g, '');
+          // get the first line
+          var s = String(value).match(/.*/)[0];
           if (s !== text) {
             text = s;
             textInputElement.value = text;
