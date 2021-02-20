@@ -20,7 +20,8 @@
       var b = NaN;
 
       var divide = function(a, b) {
-        return (b !== 0 ? a / b : NaN);
+        var n = (b !== 0 ? a / b : NaN);
+        return (isFinite(n) ? n : null);
       };
 
       var update = util.debounce(function() {
@@ -44,9 +45,9 @@
         },
         result: function(value) {
           if (typeof value === 'undefined') {
-            value = divide(a, b);
+            return divide(a, b);
           }
-          return (isFinite(value) ? value : null);
+          return value;
         },
       };
 

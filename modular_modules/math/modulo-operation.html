@@ -19,8 +19,13 @@
       var a = NaN;
       var b = NaN;
 
+      var mod = function(a, b) {
+        var n = a % b;
+        return (isFinite(n) ? n : null);
+      };
+
       var update = util.debounce(function() {
-        module.get('result')(a % b);
+        module.get('result')(mod(a, b));
       }, 0);
 
       var props = {
@@ -40,9 +45,9 @@
         },
         result: function(value) {
           if (typeof value === 'undefined') {
-            value = a % b;
+            return mod(a, b);
           }
-          return (isFinite(value) ? value : null);
+          return value;
         },
       };
 

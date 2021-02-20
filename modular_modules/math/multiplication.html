@@ -19,8 +19,13 @@
       var a = NaN;
       var b = NaN;
 
+      var multiply = function(a, b) {
+        var n = a * b;
+        return (isFinite(n) ? n : null);
+      };
+
       var update = util.debounce(function() {
-        module.get('result')(a * b);
+        module.get('result')(multiply(a, b));
       }, 0);
 
       var props = {
@@ -40,9 +45,9 @@
         },
         result: function(value) {
           if (typeof value === 'undefined') {
-            value = a * b;
+            return multiply(a, b);
           }
-          return (isFinite(value) ? value : null);
+          return value;
         },
       };
 
