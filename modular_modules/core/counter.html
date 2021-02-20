@@ -34,9 +34,8 @@
 
       var props = {
         count: function(value) {
-          var n = parseInt(value, 10);
-          if (n === Number(n) && n !== count) {
-            count = n;
+          if (typeof value !== 'undefined' && value !== count) {
+            count = value;
             contentElement.textContent = count;
           }
           return count;
