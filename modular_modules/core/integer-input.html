@@ -43,10 +43,13 @@
 
       var props = {
         number: function(value) {
-          value = (value != null ? toIntegerOrNull(value) : number);
-          if (value !== number) {
-            number = value;
-            numberInputElement.value = (value !== null ? value : '');
+          if (value == null || value === number) {
+            return number;
+          }
+          var n = toIntegerOrNull(value);
+          if (n !== number) {
+            number = n;
+            numberInputElement.value = (number !== null ? number : '');
             module.get('change')();
           }
           return number;
