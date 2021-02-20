@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../modular-module.js"></script>
+  <script>
+    (function() {
+      var events = {
+        a: function() {
+          module.get('output')();
+        },
+        b: function() {
+          module.get('output')();
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'A', name: 'a', type: 'event', arg: events.a, plugDisabled: true },
+        { label: 'B', name: 'b', type: 'event', arg: events.b, plugDisabled: true },
+        { label: 'A or B', name: 'output', type: 'event', socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

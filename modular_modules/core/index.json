@@ -19,6 +19,13 @@
     "tags": ["="]
   },
   {
+    "label": "Event Dual Socket",
+    "description": "Emit both sides of events",
+    "src": "event-dual-socket",
+    "visiblePortNames": ["a", "b", "output"],
+    "tags": ["double", "two", "2"]
+  },
+  {
     "label": "Integer Input",
     "description": "Input integer data",
     "src": "integer-input",
