@@ -16,10 +16,18 @@
     (function() {
       var util = modular.util;
 
-      var a = NaN;
-      var b = NaN;
+      var a = null;
+      var b = null;
+
+      var toNumberOrNull = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? n : null);
+      };
 
       var subtract = function() {
+        if (a === null || b === null) {
+          return null;
+        }
         var n = a - b;
         return (isFinite(n) ? n : null);
       };
@@ -30,18 +38,26 @@
 
       var props = {
         a: function(value) {
-          if (typeof value !== 'undefined') {
-            a = util.toNumber(value);
+          if (typeof value === 'undefined') {
+            return a;
+          }
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (n !== a) {
+            a = n;
             update();
           }
-          return (isFinite(a) ? a : null);
+          return a;
         },
         b: function(value) {
-          if (typeof value !== 'undefined') {
-            b = util.toNumber(value);
+          if (typeof value === 'undefined') {
+            return b;
+          }
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (n !== b) {
+            b = n;
             update();
           }
-          return (isFinite(b) ? b : null);
+          return b;
         },
         result: function(value) {
           if (typeof value === 'undefined') {
