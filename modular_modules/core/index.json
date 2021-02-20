@@ -12,6 +12,13 @@
     "visiblePortNames": ["count", "up"]
   },
   {
+    "label": "Equal",
+    "description": "Compare two values for equality",
+    "src": "equal",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["="]
+  },
+  {
     "label": "Integer Input",
     "description": "Input integer data",
     "src": "integer-input",

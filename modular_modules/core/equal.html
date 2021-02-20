@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var a = null;
+      var b = null;
+
+      var equal = function(a, b) {
+        if (a === null || b === null) {
+          return null;
+        }
+        return (a === b ? 1 : 0);
+      };
+
+      var update = util.debounce(function() {
+        var result = equal(a, b);
+        module.get('result')(result);
+        if (result === 1) {
+          module.get('equal')();
+        } else if (result === 0) {
+          module.get('not-equal')();
+        }
+      }, 0);
+
+      var props = {
+        a: function(value) {
+          if (typeof value === 'undefined') {
+            return a;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== a) {
+            a = s;
+            update();
+          }
+          return a;
+        },
+        b: function(value) {
+          if (typeof value === 'undefined') {
+            return b;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== b) {
+            b = s;
+            update();
+          }
+          return b;
+        },
+        result: function(value) {
+          if (typeof value === 'undefined') {
+            return equal(a, b);
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'A', name: 'a', type: 'prop', arg: props.a, plugDisabled: true },
+        { label: 'B', name: 'b', type: 'prop', arg: props.b, plugDisabled: true },
+        { label: '(A = B) → 1, (A ≠ B) → 0', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+        { label: 'A = B', name: 'equal', type: 'event', socketDisabled: true },
+        { label: 'A ≠ B', name: 'not-equal', type: 'event', socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
