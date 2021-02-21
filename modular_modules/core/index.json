@@ -39,6 +39,13 @@
     "visiblePortNames": ["text"]
   },
   {
+    "label": "Text Concatenation",
+    "description": "Join two texts end-to-end",
+    "src": "text-concatenation",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["+"]
+  },
+  {
     "label": "Text Input",
     "description": "Input text data",
     "src": "text-input",
