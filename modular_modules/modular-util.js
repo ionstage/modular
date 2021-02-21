@@ -22,16 +22,6 @@
     }
   };
 
-  util.delay = function(func, delay) {
-    return function() {
-      var ctx = this;
-      var args = arguments;
-      setTimeout(function() {
-        func.apply(ctx, args);
-      }, delay);
-    };
-  };
-
   util.debounce = function(func, delay) {
     var t = 0;
     var ctx = null;
