@@ -32,8 +32,8 @@
         return (isFinite(n) ? n : null);
       };
 
-      var update = util.delay(function(result) {
-        module.get('result')(result);
+      var update = util.debounce(function() {
+        module.get('result')(subtract(a, b));
       }, 0);
 
       var props = {
@@ -44,7 +44,7 @@
           var n = (value !== null ? toNumberOrNull(value) : null);
           if (n !== a) {
             a = n;
-            update(subtract(a, b));
+            update();
           }
           return a;
         },
@@ -55,7 +55,7 @@
           var n = (value !== null ? toNumberOrNull(value) : null);
           if (n !== b) {
             b = n;
-            update(subtract(a, b));
+            update();
           }
           return b;
         },
