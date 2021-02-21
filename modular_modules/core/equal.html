@@ -26,8 +26,13 @@
         return (a === b ? 1 : 0);
       };
 
-      var update = util.debounce(function() {
-        module.get('result')(equal(a, b));
+      var update = util.delay(function(result) {
+        module.get('result')(result);
+        if (result === 1) {
+          module.get('equal')();
+        } else if (result === 0) {
+          module.get('not-equal')();
+        }
       }, 0);
 
       var props = {
@@ -38,7 +43,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== a) {
             a = s;
-            update();
+            update(equal(a, b));
           }
           return a;
         },
@@ -49,7 +54,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== b) {
             b = s;
-            update();
+            update(equal(a, b));
           }
           return b;
         },
@@ -65,6 +70,8 @@
         { label: 'A', name: 'a', type: 'prop', arg: props.a, plugDisabled: true },
         { label: 'B', name: 'b', type: 'prop', arg: props.b, plugDisabled: true },
         { label: '(A = B) → 1, (A ≠ B) → 0', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+        { label: 'A = B', name: 'equal', type: 'event', socketDisabled: true },
+        { label: 'A ≠ B', name: 'not-equal', type: 'event', socketDisabled: true },
       ]);
 
       modular.exports = module;
