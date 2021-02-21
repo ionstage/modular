@@ -26,8 +26,8 @@
         return a + b;
       };
 
-      var update = util.debounce(function() {
-        module.get('result')(concat(a, b));
+      var update = util.delay(function(result) {
+        module.get('result')(result);
       }, 0);
 
       var props = {
@@ -38,7 +38,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== a) {
             a = s;
-            update();
+            update(concat(a, b));
           }
           return a;
         },
@@ -49,7 +49,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== b) {
             b = s;
-            update();
+            update(concat(a, b));
           }
           return b;
         },
