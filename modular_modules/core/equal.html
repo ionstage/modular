@@ -26,7 +26,8 @@
         return (a === b ? 1 : 0);
       };
 
-      var update = util.delay(function(result) {
+      var update = util.debounce(function() {
+        var result = equal(a, b);
         module.get('result')(result);
         if (result === 1) {
           module.get('equal')();
@@ -43,7 +44,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== a) {
             a = s;
-            update(equal(a, b));
+            update();
           }
           return a;
         },
@@ -54,7 +55,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== b) {
             b = s;
-            update(equal(a, b));
+            update();
           }
           return b;
         },
