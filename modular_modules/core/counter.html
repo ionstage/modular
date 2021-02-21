@@ -33,21 +33,24 @@
       var contentElement = document.getElementById('content');
 
       var props = {
-        count: function(value) {
-          if (typeof value !== 'undefined' && value !== count) {
-            count = value;
-            contentElement.textContent = count;
-          }
+        count: function() {
           return count;
         },
       };
 
       var events = {
         up: function() {
-          module.get('count')(count + 1);
+          count += 1;
+          contentElement.textContent = count;
+          module.get('count')(count);
         },
         reset: function() {
-          module.get('count')(0);
+          if (count === 0) {
+            return;
+          }
+          count = 0;
+          contentElement.textContent = count;
+          module.get('count')(count);
         },
       };
 
