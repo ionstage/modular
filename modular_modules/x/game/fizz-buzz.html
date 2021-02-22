@@ -60,7 +60,7 @@
 
       var update = util.debounce(function() {
         var word = fizzBuzz(number);
-        contentElement.textContent = word;
+        contentElement.textContent = (word !== null ? word : '');
         module.get('word')(word);
         if (word === 'FizzBuzz') {
           module.get('fizz-buzz')();
