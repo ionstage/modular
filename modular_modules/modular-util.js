@@ -16,10 +16,10 @@
     }
     try {
       value = JSON.parse(String(value));
-      return (util.isNumber(value) ? value : NaN);
     } catch (e) {
       return NaN;
     }
+    return (util.isNumber(value) ? value : NaN);
   };
 
   util.debounce = function(func, delay) {
