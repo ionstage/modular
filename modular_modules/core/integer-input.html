@@ -74,6 +74,10 @@
         var n = toIntegerOrNull(event.target.value);
         if (n !== number) {
           number = n;
+          if (util.isNumber(number)) {
+            // don't show the floating point number
+            numberInputElement.value = (number !== null ? number : '');
+          }
           module.get('number')(number);
           module.get('change')();
         }
