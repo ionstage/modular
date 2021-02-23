@@ -69,7 +69,8 @@
         deserialize: function(s) {
           var n = (s !== 'NaN' ? toIntegerOrNull(s) : null);
           number = n;
-          numberInputElement.value = (n !== null ? n : '');
+          numberInputElement.value = (number !== null ? number : '');
+          module.get('number')(number);
         },
       });
 

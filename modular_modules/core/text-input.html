@@ -56,7 +56,8 @@
         },
         deserialize: function(s) {
           text = s;
-          textInputElement.value = s;
+          textInputElement.value = text;
+          module.get('text')(text);
         },
       });
 
