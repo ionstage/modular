@@ -10,6 +10,7 @@
   height: 30px;
   outline: 0;
   padding: 1px 4px 1px 6px;
+  touch-action: manipulation;
   width: 100%;
 }
 

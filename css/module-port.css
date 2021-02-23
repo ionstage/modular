@@ -114,5 +114,6 @@
 .module-port-select {
   border-radius: 3px;
   opacity: 0;
+  touch-action: manipulation;
   width: 100%;
 }
