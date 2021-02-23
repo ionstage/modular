@@ -36,7 +36,10 @@
 
       var toInteger = function(value) {
         var n = util.toNumber(value);
-        return (isFinite(n) ? parseInt(n, 10) : NaN);
+        if (!isFinite(n)) {
+          return NaN;
+        }
+        return (n - n % 1) || (n < 0 ? -0 : n === 0 ? n : 0);
       };
 
       var toIntegerOrNull = function(value) {
