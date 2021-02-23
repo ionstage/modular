@@ -110,19 +110,25 @@
       var updateSelection = function(list, number, autoScroll) {
         var options = selectElement.options;
         var numbers = selectedNumbers(list, number);
-        for (var i = 0, len = options.length; i < len; i++) {
-          options[i].selected = (numbers !== null ? (numbers.indexOf(i + 1) !== -1) : false);
-        }
+
+        var scrollTop = 0;
         if (autoScroll && options.length > 0 && numbers !== null && numbers.length > 0) {
           var optionHeight = options[0].getBoundingClientRect().height;
           var firstIndex = numbers[0] - 1;
-          var scrollTop = Math.round(firstIndex * optionHeight);
-
-          // call 'requestAnimationFrame()' to update scroll position for Chrome
-          requestAnimationFrame(function() {
-            selectElement.scrollTop = scrollTop;
-          });
+          scrollTop = Math.round(firstIndex * optionHeight);
+        } else {
+          // keep scroll position before updating selection
+          scrollTop = selectElement.scrollTop;
         }
+
+        for (var i = 0, len = options.length; i < len; i++) {
+          options[i].selected = (numbers !== null ? (numbers.indexOf(i + 1) !== -1) : false);
+        }
+
+        // call 'requestAnimationFrame()' to update scroll position for Chrome
+        requestAnimationFrame(function() {
+          selectElement.scrollTop = scrollTop;
+        });
       };
 
       var props = {
