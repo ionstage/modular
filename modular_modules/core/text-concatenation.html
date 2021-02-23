@@ -32,7 +32,7 @@
 
       var props = {
         a: function(value) {
-          if (typeof value === 'undefined') {
+          if (typeof value === 'undefined' || value === a) {
             return a;
           }
           var s = (value !== null ? String(value) : null);
@@ -43,7 +43,7 @@
           return a;
         },
         b: function(value) {
-          if (typeof value === 'undefined') {
+          if (typeof value === 'undefined' || value === b) {
             return b;
           }
           var s = (value !== null ? String(value) : null);

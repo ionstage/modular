@@ -73,7 +73,7 @@
 
       var props = {
         count: function(value) {
-          if (typeof value === 'undefined') {
+          if (typeof value === 'undefined' || value === number) {
             return number;
           }
           var n = (value !== null ? toNumberOrNull(value) : null);
