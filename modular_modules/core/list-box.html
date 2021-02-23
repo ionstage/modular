@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+      touch-action: manipulation;
+    }
+
+    #select {
+      border: 0;
+      color: #212121;
+      font-size: 14px;
+      height: 117px;
+      padding: 4px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <select id="select" multiple></select>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var list = null;
+      var number = null;
+      var selectElement = document.getElementById('select');
+
+      var toNumberOrNull = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? n : null);
+      };
+
+      var isInteger = function(value) {
+        return (util.isNumber(value) && isFinite(value) && Math.floor(value) === value);
+      };
+
+      var validNumbers = function(list, number) {
+        if (list === null || number === null) {
+          return null;
+        }
+        var items = list.split('\n');
+        var ret = [];
+        var numbers = number.split('\n');
+        for (var i = 0, len = numbers.length; i < len; i++) {
+          var n = toNumberOrNull(numbers[i]);
+          if (!isInteger(n) || n < 1 || n > items.length || ret.indexOf(n) !== -1) {
+            return null;
+          }
+          ret.push(n);
+        }
+        return ret;
+      };
+
+      var validNumber = function(list, number) {
+        var numbers = validNumbers(list, number);
+        return (numbers !== null ? numbers.join('\n') : null);
+      };
+
+      var selectedItem = function(list, number) {
+        var numbers = validNumbers(list, number);
+        if (numbers === null) {
+          return null;
+        }
+        var items = list.split('\n');
+        return numbers.map(function(n) {
+          return items[n - 1];
+        }).join('\n');
+      };
+
+      var listSize = function(list) {
+        return (list !== null ? list.split('\n').length : null);
+      };
+
+      var update = util.debounce(function() {
+        module.get('number')(number);
+        module.get('item')(selectedItem(list, number));
+        module.get('size')(listSize(list));
+      }, 0);
+
+      var updateSelectElement = function(list, number) {
+        selectElement.innerHTML = '';
+        if (list === null) {
+          return;
+        }
+        var items = list.split('\n');
+        var fragment = document.createDocumentFragment();
+        items.forEach(function(item, index) {
+          var option = document.createElement('option');
+          option.textContent = String(index + 1) + '. ' + item;
+          fragment.appendChild(option);
+        });
+        selectElement.appendChild(fragment);
+        selectOptionElement(list, number, false);
+      };
+
+      var selectOptionElement = function(list, number, autoScroll) {
+        var options = selectElement.options;
+        var indices = [];
+        var numbers = validNumbers(list, number);
+        if (numbers !== null) {
+          indices = numbers.map(function(n) {
+            return n - 1;
+          });
+        }
+        for (var i = 0, len = options.length; i < len; i++) {
+          options[i].selected = (indices.indexOf(i) !== -1);
+        }
+        if (autoScroll && indices.length > 0) {
+          var firstIndex = indices[0];
+          var optionHeight = options[0].getBoundingClientRect().height;
+          var scrollTop = Math.round(firstIndex * optionHeight);
+          requestAnimationFrame(function() {
+            selectElement.scrollTop = scrollTop;
+          });
+        }
+      };
+
+      var props = {
+        list: function(value) {
+          if (typeof value === 'undefined' || value === list) {
+            return list;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== list) {
+            list = s;
+            updateSelectElement(list, number);
+            update();
+          }
+          return list;
+        },
+        item: function(value) {
+          if (typeof value === 'undefined') {
+            return selectedItem(list, number);
+          }
+          return value;
+        },
+        number: function(value) {
+          if (typeof value === 'undefined' || value === number) {
+            return validNumber(list, number);
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== number) {
+            number = s;
+            selectOptionElement(list, number, true);
+            update();
+          }
+          return validNumber(list, number);
+        },
+        size: function(value) {
+          if (typeof value === 'undefined') {
+            return listSize(list);
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'List', name: 'list', type: 'prop', arg: props.list, plugDisabled: true },
+        { label: 'Item', name: 'item', type: 'prop', arg: props.item, socketDisabled: true },
+        { label: 'Number', name: 'number', type: 'prop', arg: props.number },
+        { label: 'Size', name: 'size', type: 'prop', arg: props.size, socketDisabled: true },
+      ]);
+
+      selectElement.addEventListener('change', function(event) {
+        var options = event.target.options;
+        var numbers = [];
+        for (var i = 0, len = options.length; i < len; i++) {
+          if (options[i].selected) {
+            numbers.push(i + 1);
+          }
+        }
+        var n = (numbers.length > 0 ? numbers.join('\n') : null);
+        if (n !== number) {
+          number = n;
+          update();
+        }
+      });
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

@@ -33,6 +33,12 @@
     "tags": ["number"]
   },
   {
+    "label": "List Box",
+    "description": "Select an item from a list",
+    "src": "list-box",
+    "visiblePortNames": ["list", "item", "number"]
+  },
+  {
     "label": "Multiline Text Input",
     "description": "Input multiline text data",
     "src": "multiline-text-input",
