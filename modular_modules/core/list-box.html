@@ -44,23 +44,25 @@
         if (list === null || number === null) {
           return null;
         }
-        var items = list.split('\n');
-        var validNumbers = [];
         var numbers = number.split('\n');
+        var size = list.split('\n').length;
+        var ret = [];
         for (var i = 0, len = numbers.length; i < len; i++) {
           var n = toNumberOrNull(numbers[i]);
           if (!util.isInteger(n)) {
             return null;
           }
-          if (n < 1 || n > items.length) {
+          if (n < 1 || n > size) {
+            // out of range
             return null;
           }
-          if (validNumbers.indexOf(n) !== -1) {
+          if (ret.indexOf(n) !== -1) {
+            // don't allow duplicate numbers
             return null;
           }
-          validNumbers.push(n);
+          ret.push(n);
         }
-        return validNumbers;
+        return ret;
       };
 
       var numberValue = function(list, number) {
@@ -115,7 +117,7 @@
         if (autoScroll && options.length > 0 && numbers !== null && numbers.length > 0) {
           var optionHeight = options[0].getBoundingClientRect().height;
           var firstIndex = numbers[0] - 1;
-          scrollTop = Math.round(firstIndex * optionHeight);
+          scrollTop = Math.round(optionHeight * firstIndex);
         } else {
           // keep scroll position before updating selection
           scrollTop = selectElement.scrollTop;
