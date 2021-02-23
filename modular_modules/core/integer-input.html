@@ -52,7 +52,9 @@
           if (value == null || value === number) {
             return number;
           }
-          var n = toIntegerOrNull(value);
+          // get the first line
+          var s = String(value).match(/.*/)[0];
+          var n = toIntegerOrNull(s);
           if (n !== number) {
             number = n;
             numberInputElement.value = (number !== null ? number : '');
