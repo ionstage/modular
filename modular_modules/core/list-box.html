@@ -39,30 +39,36 @@
         return (isFinite(n) ? n : null);
       };
 
-      var validNumbers = function(list, number) {
+      var selectedNumbers = function(list, number) {
         if (list === null || number === null) {
           return null;
         }
         var items = list.split('\n');
-        var ret = [];
+        var validNumbers = [];
         var numbers = number.split('\n');
         for (var i = 0, len = numbers.length; i < len; i++) {
           var n = toNumberOrNull(numbers[i]);
-          if (!util.isInteger(n) || n < 1 || n > items.length || ret.indexOf(n) !== -1) {
+          if (!util.isInteger(n)) {
             return null;
           }
-          ret.push(n);
+          if (n < 1 || n > items.length) {
+            return null;
+          }
+          if (validNumbers.indexOf(n) !== -1) {
+            return null;
+          }
+          validNumbers.push(n);
         }
-        return ret;
+        return validNumbers;
       };
 
-      var validNumber = function(list, number) {
-        var numbers = validNumbers(list, number);
+      var numberValue = function(list, number) {
+        var numbers = selectedNumbers(list, number);
         return (numbers !== null ? numbers.join('\n') : null);
       };
 
-      var selectedItem = function(list, number) {
-        var numbers = validNumbers(list, number);
+      var itemValue = function(list, number) {
+        var numbers = selectedNumbers(list, number);
         if (numbers === null) {
           return null;
         }
@@ -72,14 +78,16 @@
         }).join('\n');
       };
 
-      var listSize = function(list) {
+      var sizeValue = function(list) {
         return (list !== null ? list.split('\n').length : null);
       };
 
       var update = util.debounce(function() {
+        // update 'number' prop which has input value in first for recursive process
         module.get('number')(number);
-        module.get('item')(selectedItem(list, number));
-        module.get('size')(listSize(list));
+
+        module.get('item')(itemValue(list, number));
+        module.get('size')(sizeValue(list));
       }, 0);
 
       var updateSelectElement = function(list, number) {
@@ -95,25 +103,21 @@
           fragment.appendChild(option);
         });
         selectElement.appendChild(fragment);
-        selectOptionElement(list, number, false);
+        updateSelection(list, number, false);
       };
 
-      var selectOptionElement = function(list, number, autoScroll) {
+      var updateSelection = function(list, number, autoScroll) {
         var options = selectElement.options;
-        var indices = [];
-        var numbers = validNumbers(list, number);
-        if (numbers !== null) {
-          indices = numbers.map(function(n) {
-            return n - 1;
-          });
-        }
+        var numbers = selectedNumbers(list, number);
         for (var i = 0, len = options.length; i < len; i++) {
-          options[i].selected = (indices.indexOf(i) !== -1);
+          options[i].selected = (numbers !== null ? (numbers.indexOf(i + 1) !== -1) : false);
         }
-        if (autoScroll && indices.length > 0) {
-          var firstIndex = indices[0];
+        if (autoScroll && options.length > 0 && numbers !== null && numbers.length > 0) {
           var optionHeight = options[0].getBoundingClientRect().height;
+          var firstIndex = numbers[0] - 1;
           var scrollTop = Math.round(firstIndex * optionHeight);
+
+          // call 'requestAnimationFrame()' to update scroll position for Chrome
           requestAnimationFrame(function() {
             selectElement.scrollTop = scrollTop;
           });
@@ -135,25 +139,25 @@
         },
         item: function(value) {
           if (typeof value === 'undefined') {
-            return selectedItem(list, number);
+            return itemValue(list, number);
           }
           return value;
         },
         number: function(value) {
           if (typeof value === 'undefined' || value === number) {
-            return validNumber(list, number);
+            return numberValue(list, number);
           }
           var s = (value !== null ? String(value) : null);
           if (s !== number) {
             number = s;
-            selectOptionElement(list, number, true);
+            updateSelection(list, number, true);
             update();
           }
-          return validNumber(list, number);
+          return numberValue(list, number);
         },
         size: function(value) {
           if (typeof value === 'undefined') {
-            return listSize(list);
+            return sizeValue(list);
           }
           return value;
         },
