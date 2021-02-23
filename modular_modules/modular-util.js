@@ -7,6 +7,10 @@
     return (Object.prototype.toString.call(obj) === '[object Number]');
   };
 
+  util.isInteger = function(value) {
+    return (util.isNumber(value) && isFinite(value) && Math.floor(value) === value);
+  };
+
   util.toNumber = function(value) {
     if (value == null) {
       return NaN;

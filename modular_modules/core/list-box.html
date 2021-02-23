@@ -38,10 +38,6 @@
         return (isFinite(n) ? n : null);
       };
 
-      var isInteger = function(value) {
-        return (util.isNumber(value) && isFinite(value) && Math.floor(value) === value);
-      };
-
       var validNumbers = function(list, number) {
         if (list === null || number === null) {
           return null;
@@ -51,7 +47,7 @@
         var numbers = number.split('\n');
         for (var i = 0, len = numbers.length; i < len; i++) {
           var n = toNumberOrNull(numbers[i]);
-          if (!isInteger(n) || n < 1 || n > items.length || ret.indexOf(n) !== -1) {
+          if (!util.isInteger(n) || n < 1 || n > items.length || ret.indexOf(n) !== -1) {
             return null;
           }
           ret.push(n);

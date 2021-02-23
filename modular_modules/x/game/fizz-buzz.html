@@ -38,10 +38,6 @@
         return (isFinite(n) ? n : null);
       };
 
-      var isInteger = function(value) {
-        return (util.isNumber(value) && isFinite(value) && Math.floor(value) === value);
-      };
-
       var fizzBuzz = function(value) {
         if (value === null || value <= 0) {
           return null;
@@ -77,7 +73,7 @@
             return number;
           }
           var n = (value !== null ? toNumberOrNull(value) : null);
-          if (!isInteger(n)) {
+          if (!util.isInteger(n)) {
             n = null;
           }
           if (n !== number) {
