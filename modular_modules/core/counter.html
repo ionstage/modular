@@ -33,8 +33,11 @@
       var contentElement = document.getElementById('content');
 
       var props = {
-        count: function() {
-          return count;
+        count: function(value) {
+          if (typeof value === 'undefined') {
+            return count;
+          }
+          return value;
         },
       };
 
