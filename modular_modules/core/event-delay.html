@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var delay = null;
+
+      var toNumberOrNull = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? n : null);
+      };
+
+      var props = {
+        delay: function(value) {
+          if (typeof value === 'undefined' || value === delay) {
+            return delay;
+          }
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (n !== delay) {
+            delay = n;
+          }
+          return delay;
+        },
+      };
+
+      var events = {
+        event: function(event) {
+          event.cancel();
+          setTimeout(function() {
+            event.dispatch();
+          }, (delay !== null && delay > 0 ? delay : 0));
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Event', name: 'event', type: 'event', arg: events.event },
+        { label: 'Delay [ms]', name: 'delay', type: 'prop', arg: props.delay, plugDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

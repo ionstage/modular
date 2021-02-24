@@ -19,6 +19,12 @@
     "tags": ["="]
   },
   {
+    "label": "Event Delay",
+    "description": "Emit delayed event",
+    "src": "event-delay",
+    "visiblePortNames": ["event", "delay"]
+  },
+  {
     "label": "Event Dual Socket",
     "description": "Emit both sides of events",
     "src": "event-dual-socket",
