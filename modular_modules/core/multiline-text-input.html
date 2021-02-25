@@ -86,9 +86,13 @@
         var start = target.selectionStart;
         var end = target.selectionEnd;
 
-        target.value = value.substring(0, start) + '\t' + value.substring(end);
+        text = value.substring(0, start) + '\t' + value.substring(end);
+        target.value = text;
         target.selectionStart = start + 1;
         target.selectionEnd = start + 1;
+
+        module.get('text')(text);
+        module.get('change')();
       });
 
       textInputElement.value = text;
