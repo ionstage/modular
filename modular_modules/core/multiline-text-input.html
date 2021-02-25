@@ -73,28 +73,6 @@
         }
       });
 
-      textInputElement.addEventListener('keydown', function(event) {
-        if (event.which !== 9) {
-          return;
-        }
-
-        // use tab to indent
-        event.preventDefault();
-
-        var target = event.target;
-        var value = target.value;
-        var start = target.selectionStart;
-        var end = target.selectionEnd;
-
-        text = value.substring(0, start) + '\t' + value.substring(end);
-        target.value = text;
-        target.selectionStart = start + 1;
-        target.selectionEnd = start + 1;
-
-        module.get('text')(text);
-        module.get('change')();
-      });
-
       textInputElement.value = text;
 
       modular.exports = module;
