@@ -118,6 +118,10 @@
         var scrollTop = 0;
         if (autoScroll && options.length > 0 && numbers !== null && numbers.length > 0) {
           var optionHeight = options[0].getBoundingClientRect().height;
+          if (optionHeight === 0) {
+            // calculate height for IE
+            optionHeight = Math.round(selectElement.scrollHeight / options.length);
+          }
           var firstIndex = numbers[0] - 1;
           scrollTop = Math.round(optionHeight * firstIndex);
         } else {
