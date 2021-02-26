@@ -79,13 +79,6 @@
   width: 100%;
 }
 
-@media screen\0 {
-  .module-component {
-    display: inline-block;
-    vertical-align: middle;
-  }
-}
-
 .module-footer {
   background-color: #212121;
   border-radius: 0 0 3px 3px;
