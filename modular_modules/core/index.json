@@ -45,6 +45,12 @@
     "tags": ["number"]
   },
   {
+    "label": "Key-value Map",
+    "description": "Lookup a value associated with a key",
+    "src": "key-value-map",
+    "visiblePortNames": ["key-list", "value-list", "key", "value"]
+  },
+  {
     "label": "List Box",
     "description": "Select an item from a list",
     "src": "list-box",
