@@ -35,6 +35,7 @@
 
       var list = null;
       var number = null;
+      var numberFromProp = null;
       var selectElement = document.getElementById('select');
 
       var toNumberOrNull = function(value) {
@@ -147,6 +148,10 @@
           var s = (value !== null ? String(value) : null);
           if (s !== list) {
             list = s;
+            if (list === null) {
+              // reset selection from the value of the `number` prop
+              number = numberFromProp;
+            }
             updateSelectElement(list, number);
             update();
           }
@@ -165,6 +170,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== number) {
             number = s;
+            numberFromProp = number;
             updateSelection(list, number, true);
             update();
           }
