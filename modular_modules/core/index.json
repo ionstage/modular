@@ -45,9 +45,9 @@
     "visiblePortNames": ["list", "item", "number"]
   },
   {
-    "label": "Multiline Text Input",
-    "description": "Input multiline text data",
-    "src": "multiline-text-input",
+    "label": "Multi-line Text Input",
+    "description": "Input multi-line text data",
+    "src": "multi-line-text-input",
     "visiblePortNames": ["text"]
   },
   {
