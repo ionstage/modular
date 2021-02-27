@@ -12,6 +12,12 @@
     "visiblePortNames": ["count", "up"]
   },
   {
+    "label": "Data Shift",
+    "description": "Output previous input data",
+    "src": "data-shift",
+    "visiblePortNames": ["input", "output", "shift"]
+  },
+  {
     "label": "Equal",
     "description": "Compare two values for equality",
     "src": "equal",
