@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #content {
+      box-sizing: border-box;
+      color: #212121;
+      font-family: monospace;
+      font-size: 42px;
+      height: 48px;
+      line-height: 48px;
+      overflow: hidden;
+      text-align: center;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    #content.initial {
+      background-color: #d5d5d5;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="content" class="initial"></div>
+  <script src="../modular-module.js"></script>
+  <script>
+    (function() {
+      var number = null;
+      var contentElement = document.getElementById('content');
+
+      var randomNumber = function() {
+        // random integer between 0 and 9
+        return Math.floor(Math.random() * 10);
+      };
+
+      var props = {
+        number: function(value) {
+          if (typeof value === 'undefined') {
+            return number;
+          }
+          return value;
+        },
+      };
+
+      var events = {
+        generate: function() {
+          if (number === null) {
+            contentElement.className = '';
+          }
+          number = randomNumber();
+          contentElement.textContent = number;
+          module.get('number')(number);
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Number', name: 'number', type: 'prop', arg: props.number, socketDisabled: true },
+        { label: 'Generate', name: 'generate', type: 'event', arg: events.generate },
+      ]);
+
+      contentElement.textContent = 'Not yet generated';
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

@@ -28,6 +28,12 @@
     "tags": ["*", "multiply"]
   },
   {
+    "label": "Random Number",
+    "description": "Generate a random number",
+    "src": "random-number",
+    "visiblePortNames": ["number", "generate"]
+  },
+  {
     "label": "-",
     "description": "Difference between two numbers",
     "src": "subtraction",
