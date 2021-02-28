@@ -1,6 +1,6 @@
 if (typeof globalThis === 'undefined') {
   // define `globalThis` for IE
-  self.globalThis = self;
+  self.globalThis = this;
 }
 
 self.importScripts('opal.min.js');
