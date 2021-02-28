@@ -7,14 +7,9 @@
     body {
       margin: 0;
     }
-
-    #frame {
-      display: none;
-    }
   </style>
 </head>
 <body>
-  <iframe id="frame" src="opal/opal.html" sandbox="allow-scripts"></iframe>
   <script src="../../modular-module.js"></script>
   <script>
     (function() {
@@ -23,7 +18,7 @@
       var output = null;
       var error = null;
       var exception = null;
-      var frameElement = document.getElementById('frame');
+      var worker = new Worker('opal/opal-worker.js');
 
       var props = {
         code: function(value) {
@@ -71,10 +66,10 @@
           if (code === null) {
             return;
           }
-          frameElement.contentWindow.postMessage({
+          worker.postMessage({
             code: code,
             input: input,
-          }, '*');
+          });
         },
       };
 
@@ -88,7 +83,7 @@
         { label: 'Exception', name: 'exception', type: 'prop', arg: props.exception, socketDisabled: true },
       ]);
 
-      window.addEventListener('message', function(event) {
+      worker.addEventListener('message', function(event) {
         var data = event.data;
         output = data.output;
         error = data.error;
@@ -99,7 +94,7 @@
         if (!exception) {
           module.get('done')();
         }
-      });
+      }, false);
 
       modular.exports = module;
     })();
