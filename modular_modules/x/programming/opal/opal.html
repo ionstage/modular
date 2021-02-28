@@ -43,20 +43,21 @@
         output = '';
         error = '';
 
-        var exception = '';
-
         try {
           Opal.eval(data.code);
         } catch (e) {
-          output = '';
-          error = '';
-          exception = e.toString() || 'undefined exception';
+          window.parent.postMessage({
+            output: null,
+            error: null,
+            exception: e.toString() || 'undefined exception',
+          }, location.origin);
+          return;
         }
 
         window.parent.postMessage({
           output: output,
           error: error,
-          exception: exception,
+          exception: '',
         }, location.origin);
       });
     })();
