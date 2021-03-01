@@ -9,6 +9,7 @@ self.importScripts('opal.min.js');
 self.importScripts = null;
 self.XMLHttpRequest = null;
 self.fetch = null;
+self.WebSocket = null;
 
 var Opal = self.Opal;
 
