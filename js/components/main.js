@@ -85,7 +85,7 @@
   Main.prototype.onsave = function() {
     var text = JSON.stringify(this.content.toData());
     var blob = new Blob([text], { type: 'application/json' });
-    FileSaver.saveAs(blob, 'download.json');
+    FileSaver.saveAs(blob, 'Untitled.json');
   };
 
   if (typeof module !== 'undefined' && module.exports) {
