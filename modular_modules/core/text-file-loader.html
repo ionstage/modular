@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      color: #212121;
+      font-family: Helvetica, Arial, sans-serif;
+      margin: 0;
+      touch-action: manipulation;
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    #label {
+      display: none;
+      float: left;
+      font-size: 13px;
+      line-height: 27px;
+      overflow: hidden;
+      padding-left: 6px;
+      padding-top: 1px;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      white-space: nowrap;
+      width: 156px;
+    }
+
+    .loaded #label {
+      display: block;
+    }
+
+    #button {
+      -webkit-appearance: none;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 2px solid #d5d5d5;
+      box-sizing: border-box;
+      color: inherit;
+      display: block;
+      float: left;
+      font-family: inherit;
+      font-size: 13px;
+      height: 28px;
+      outline: 0;
+      width: 100%;
+    }
+
+    .loaded #button {
+      width: 72px;
+    }
+
+    #button:active {
+      background-color: #dcdcdc;
+      background-image: none;
+      border-color: #b5b5b5;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    #button::-moz-focus-inner {
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <input id="file-input" type="file">
+  <div id="label"></div>
+  <button id="button">Load</button>
+  <script src="../modular-module.js"></script>
+  <script>
+    (function() {
+      var text = null;
+      var fileInputElement = document.getElementById('file-input');
+      var labelElement = document.getElementById('label');
+      var buttonElement = document.getElementById('button');
+
+      var props = {
+        text: function(value) {
+          if (typeof value === 'undefined') {
+            return text;
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Text', name: 'text', type: 'prop', arg: props.text, socketDisabled: true },
+      ]);
+
+      fileInputElement.addEventListener('change', function(event) {
+        var target = event.target;
+        var file = target.files[0];
+        if (!file) {
+          return;
+        }
+        var name = file.name;
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          text = event.target.result;
+          labelElement.textContent = name;
+          document.body.className = 'loaded';
+          module.get('text')(text);
+        };
+        reader.readAsText(file);
+
+        // reset file to reload the same file
+        target.value = '';
+      });
+
+      buttonElement.addEventListener('click', function() {
+        fileInputElement.click();
+      });
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

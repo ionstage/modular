@@ -70,6 +70,12 @@
     "tags": ["+"]
   },
   {
+    "label": "Text File Loader",
+    "description": "Load text data from a file",
+    "src": "text-file-loader",
+    "visiblePortNames": ["text"]
+  },
+  {
     "label": "Text Input",
     "description": "Input text data",
     "src": "text-input",
