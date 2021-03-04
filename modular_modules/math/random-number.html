@@ -9,12 +9,11 @@
     }
 
     #content {
-      box-sizing: border-box;
       color: #212121;
-      font-family: monospace;
-      font-size: 42px;
-      height: 48px;
-      line-height: 48px;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      height: 28px;
+      line-height: 28px;
       overflow: hidden;
       text-align: center;
       text-overflow: ellipsis;
@@ -24,7 +23,7 @@
 
     #content.initial {
       background-color: #d5d5d5;
-      font-size: 14px;
+      font-size: 12px;
     }
   </style>
 </head>
@@ -35,11 +34,6 @@
     (function() {
       var number = null;
       var contentElement = document.getElementById('content');
-
-      var randomNumber = function() {
-        // random integer between 0 and 9
-        return Math.floor(Math.random() * 10);
-      };
 
       var props = {
         number: function(value) {
@@ -55,7 +49,7 @@
           if (number === null) {
             contentElement.className = '';
           }
-          number = randomNumber();
+          number = Math.random();
           contentElement.textContent = number;
           module.get('number')(number);
         },

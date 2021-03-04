@@ -29,7 +29,7 @@
   },
   {
     "label": "Random Number",
-    "description": "Generate a random number",
+    "description": "Generate a pseudo-random number",
     "src": "random-number",
     "visiblePortNames": ["number", "generate"]
   },
