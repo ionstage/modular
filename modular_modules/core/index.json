@@ -76,6 +76,12 @@
     "visiblePortNames": ["text"]
   },
   {
+    "label": "Text File Saver",
+    "description": "Save text data to a file",
+    "src": "text-file-saver",
+    "visiblePortNames": ["text"]
+  },
+  {
     "label": "Text Input",
     "description": "Input text data",
     "src": "text-input",
