@@ -26,10 +26,14 @@
         padding-top: 8px;
       }
     }
+
+    #content.invalid {
+      background-color: #d5d5d5;
+    }
   </style>
 </head>
 <body>
-  <div id="content"></div>
+  <div id="content" class="invalid"></div>
   <script src="../../modular-module.js"></script>
   <script src="../../modular-util.js"></script>
   <script>
@@ -63,6 +67,7 @@
       var update = util.debounce(function() {
         var word = fizzBuzz(number);
         contentElement.textContent = (word !== null ? word : '');
+        contentElement.className = (word !== null ? '' : 'invalid');
         module.get('word')(word);
         if (word === 'FizzBuzz') {
           module.get('fizz-buzz')();
