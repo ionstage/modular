@@ -51,5 +51,11 @@
     "src": "subtraction",
     "visiblePortNames": ["a", "b", "result"],
     "tags": ["subtract", "minus"]
+  },
+  {
+    "label": "tan",
+    "description": "Compute the tangent of a number",
+    "src": "tangent",
+    "visiblePortNames": ["theta", "result"]
   }
 ]
