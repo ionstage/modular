@@ -139,8 +139,8 @@
         if (text === null) {
           return;
         }
-        var file = new File([text], fileName(text, isWindowsOS), { type: 'text/plain;charset=utf-8' });
-        saveAs(file);
+        var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, fileName(text, isWindowsOS));
       });
 
       modular.exports = module;
