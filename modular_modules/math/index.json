@@ -34,6 +34,12 @@
     "visiblePortNames": ["number", "generate"]
   },
   {
+    "label": "sin",
+    "description": "Compute the sine of a number",
+    "src": "sine",
+    "visiblePortNames": ["theta", "result"]
+  },
+  {
     "label": "-",
     "description": "Difference between two numbers",
     "src": "subtraction",
