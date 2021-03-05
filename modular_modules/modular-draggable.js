@@ -15,6 +15,7 @@
     this.identifier = null;
     this.startPageX = 0;
     this.startPageY = 0;
+    this.context = null;
   };
 
   Draggable.supportsTouch = function() {
@@ -31,6 +32,7 @@
   };
 
   Draggable.prototype.enable = function() {
+    this.context = {};
     var type = (Draggable.supportsTouch() ? 'touchstart' : 'mousedown');
     this.element.addEventListener(type, this['on' + type], { passive: false });
   };
@@ -43,15 +45,16 @@
     this.element.removeEventListener(startType, this['on' + startType], { passive: false });
     document.removeEventListener(moveType, this['on' + moveType]);
     document.removeEventListener(endType, this['on' + endType]);
+    this.context = null;
   };
 
   Draggable.prototype.onmousedown = function(event) {
     var offset = Draggable.getOffset(event.target);
-    var x = event.pageX - offset.x;
-    var y = event.pageY - offset.y;
+    var x = event.clientX - offset.x;
+    var y = event.clientY - offset.y;
     this.startPageX = event.pageX;
     this.startPageY = event.pageY;
-    this.onstart.call(null, { x: x, y: y, event: event });
+    this.onstart.call(null, x, y, event, this.context);
     document.addEventListener('mousemove', this.onmousemove);
     document.addEventListener('mouseup', this.onmouseup);
   };
@@ -59,13 +62,15 @@
   Draggable.prototype.onmousemove = function(event) {
     var dx = event.pageX - this.startPageX;
     var dy = event.pageY - this.startPageY;
-    this.onmove.call(null, { dx: dx, dy: dy, event: event });
+    this.onmove.call(null, dx, dy, event, this.context);
   };
 
   Draggable.prototype.onmouseup = function(event) {
     document.removeEventListener('mousemove', this.onmousemove);
     document.removeEventListener('mouseup', this.onmouseup);
-    this.onend.call(null, { event: event });
+    var dx = event.pageX - this.startPageX;
+    var dy = event.pageY - this.startPageY;
+    this.onend.call(null, dx, dy, event, this.context);
   };
 
   Draggable.prototype.ontouchstart = function(event) {
@@ -74,12 +79,12 @@
     }
     var touch = event.changedTouches[0];
     var offset = Draggable.getOffset(event.target);
-    var x = touch.pageX - offset.x;
-    var y = touch.pageY - offset.y;
+    var x = touch.clientX - offset.x;
+    var y = touch.clientY - offset.y;
     this.identifier = touch.identifier;
     this.startPageX = touch.pageX;
     this.startPageY = touch.pageY;
-    this.onstart.call(null, { x: x, y: y, event: event });
+    this.onstart.call(null, x, y, event, this.context);
     document.addEventListener('touchmove', this.ontouchmove);
     document.addEventListener('touchend', this.ontouchend);
   };
@@ -91,7 +96,7 @@
     }
     var dx = touch.pageX - this.startPageX;
     var dy = touch.pageY - this.startPageY;
-    this.onmove.call(null, { dx: dx, dy: dy, event: event });
+    this.onmove.call(null, dx, dy, event, this.context);
   };
 
   Draggable.prototype.ontouchend = function(event) {
@@ -101,7 +106,9 @@
     }
     document.removeEventListener('touchmove', this.ontouchmove);
     document.removeEventListener('touchend', this.ontouchend);
-    this.onend.call(null, { event: event });
+    var dx = touch.pageX - this.startPageX;
+    var dy = touch.pageY - this.startPageY;
+    this.onend.call(null, dx, dy, event, this.context);
   };
 
   Object.defineProperty(window.modular, 'Draggable', { value: Draggable });
