@@ -7,6 +7,12 @@
     "tags": ["add", "plus"]
   },
   {
+    "label": "cos",
+    "description": "Compute the cosine of a number",
+    "src": "cosine",
+    "visiblePortNames": ["theta", "result"]
+  },
+  {
     "label": "÷",
     "description": "Division of two numbers",
     "src": "division",
