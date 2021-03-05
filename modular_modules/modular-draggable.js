@@ -1,11 +1,11 @@
 (function(window) {
   'use strict';
 
-  var Draggable = function(props) {
-    this.element = props.element;
-    this.onstart = props.onstart;
-    this.onmove = props.onmove;
-    this.onend = props.onend;
+  var Draggable = function(element) {
+    this.element = element;
+    this.onstart = null;
+    this.onmove = null;
+    this.onend = null;
     this.onmousedown = this.onmousedown.bind(this);
     this.onmousemove = this.onmousemove.bind(this);
     this.onmouseup = this.onmouseup.bind(this);
@@ -67,7 +67,10 @@
     return { x: x, y: y };
   };
 
-  Draggable.prototype.enable = function() {
+  Draggable.prototype.enable = function(listeners) {
+    this.onstart = listeners.onstart;
+    this.onmove = listeners.onmove;
+    this.onend = listeners.onend;
     this.context = {};
     var type = (Draggable.supportsTouch() ? 'touchstart' : 'mousedown');
     this.element.addEventListener(type, this['on' + type], { passive: false });
