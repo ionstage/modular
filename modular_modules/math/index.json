@@ -57,5 +57,11 @@
     "description": "Compute the tangent of a number",
     "src": "tangent",
     "visiblePortNames": ["theta", "result"]
+  },
+  {
+    "label": "Unit Circle",
+    "description": "Circle of unit radius",
+    "src": "unit-circle",
+    "visiblePortNames": ["theta", "x", "y"]
   }
 ]
