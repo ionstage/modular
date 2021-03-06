@@ -40,6 +40,12 @@
     "visiblePortNames": ["number", "generate"]
   },
   {
+    "label": "Real-time Line Chart",
+    "description": "Display a series of numerical value",
+    "src": "real-time-line-chart",
+    "visiblePortNames": ["number"]
+  },
+  {
     "label": "sin",
     "description": "Compute the sine of a number",
     "src": "sine",
