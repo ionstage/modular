@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../modular-module.js"></script>
+  <script>
+    (function() {
+      // XXX: hard coding
+      var list = [
+        'Film & Animation',
+        'Autos & Vehicles',
+        'Music',
+        'Pets & Animals',
+        'Sports',
+        'Short Movies',
+        'Travel & Events',
+        'Gaming',
+        'Videoblogging',
+        'People & Blogs',
+        'Comedy',
+        'Entertainment',
+        'News & Politics',
+        'Howto & Style',
+        'Education',
+        'Science & Technology',
+        'Nonprofits & Activism',
+        'Movies',
+        'Anime/Animation',
+        'Action/Adventure',
+        'Classics',
+        'Comedy',
+        'Documentary',
+        'Drama',
+        'Family',
+        'Foreign',
+        'Horror',
+        'Sci-Fi/Fantasy',
+        'Thriller',
+        'Shorts',
+        'Shows',
+        'Trailers',
+      ].join('\n');
+
+      var module = new modular.Module([
+        { label: 'List', name: 'list', type: 'prop', arg: list, socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
