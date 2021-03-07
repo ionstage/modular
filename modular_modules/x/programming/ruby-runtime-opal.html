@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../modular-module.js"></script>
+  <script>
+    (function() {
+      var code = null;
+      var input = null;
+      var output = null;
+      var error = null;
+      var exception = null;
+      var worker = new Worker('opal/opal-worker.js');
+
+      var props = {
+        code: function(value) {
+          if (typeof value === 'undefined' || value === code) {
+            return code;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== code) {
+            code = s;
+          }
+          return code;
+        },
+        output: function(value) {
+          if (typeof value === 'undefined') {
+            return output;
+          }
+          return value;
+        },
+        input: function(value) {
+          if (typeof value === 'undefined' || value === input) {
+            return input;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== input) {
+            input = s;
+          }
+          return input;
+        },
+        error: function(value) {
+          if (typeof value === 'undefined') {
+            return error;
+          }
+          return value;
+        },
+        exception: function(value) {
+          if (typeof value === 'undefined') {
+            return exception;
+          }
+          return value;
+        },
+      };
+
+      var events = {
+        run: function() {
+          if (code === null) {
+            return;
+          }
+          worker.postMessage({
+            code: code,
+            input: input,
+          });
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Code', name: 'code', type: 'prop', arg: props.code, plugDisabled: true },
+        { label: 'Run', name: 'run', type: 'event', arg: events.run, plugDisabled: true },
+        { label: 'Output', name: 'output', type: 'prop', arg: props.output, socketDisabled: true },
+        { label: 'Done', name: 'done', type: 'event', socketDisabled: true },
+        { label: 'Input', name: 'input', type: 'prop', arg: props.input, plugDisabled: true },
+        { label: 'Error', name: 'error', type: 'prop', arg: props.error, socketDisabled: true },
+        { label: 'Exception', name: 'exception', type: 'prop', arg: props.exception, socketDisabled: true },
+      ]);
+
+      worker.addEventListener('message', function(event) {
+        var data = event.data;
+        output = data.output;
+        error = data.error;
+        exception = data.exception;
+        module.get('output')(output);
+        module.get('error')(error);
+        module.get('exception')(exception);
+        if (!exception) {
+          module.get('done')();
+        }
+      }, false);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

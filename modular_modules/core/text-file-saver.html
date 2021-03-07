@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      background-color: #212121;
+      margin: 0;
+      touch-action: manipulation;
+    }
+
+    #button {
+      -webkit-appearance: none;
+      background-color: #eee;
+      background-image: linear-gradient(#fcfcfc, #eee);
+      border: 2px solid #d5d5d5;
+      box-sizing: border-box;
+      color: #212121;
+      display: block;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 13px;
+      height: 28px;
+      outline: 0;
+      width: 100%;
+    }
+
+    #button:enabled:active {
+      background-color: #dcdcdc;
+      background-image: none;
+      border-color: #b5b5b5;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, .15);
+    }
+
+    #button::-moz-focus-inner {
+      border: 0;
+    }
+
+    #button:disabled {
+      color: #b5b5b5;
+      opacity: .6;
+    }
+  </style>
+</head>
+<body>
+  <button id="button" disabled>Save</button>
+  <script src="file-saver/FileSaver.min.js"></script>
+  <script src="../modular-module.js"></script>
+  <script>
+    (function() {
+      /*---------------------------------------------------------------------------------------------
+       *  Copyright (c) Microsoft Corporation. All rights reserved.
+       *  Licensed under the MIT License.
+       *  source: https://github.com/microsoft/vscode/blob/main/src/vs/base/common/extpath.ts
+       *--------------------------------------------------------------------------------------------*/
+      // Reference: https://en.wikipedia.org/wiki/Filename
+      var WINDOWS_INVALID_FILE_CHARS = /[\\/:\*\?"<>\|]/g;
+      var UNIX_INVALID_FILE_CHARS = /[\\/]/g;
+      var WINDOWS_FORBIDDEN_NAMES = /^(con|prn|aux|clock\$|nul|lpt[0-9]|com[0-9])(\.(.*?))?$/i;
+      var isValidBasename = function(name, isWindowsOS) {
+        var invalidFileChars = isWindowsOS ? WINDOWS_INVALID_FILE_CHARS : UNIX_INVALID_FILE_CHARS;
+        if (!name || name.length === 0 || /^\s+$/.test(name)) {
+          return false; // require a name that is not just whitespace
+        }
+        invalidFileChars.lastIndex = 0; // the holy grail of software development
+        if (invalidFileChars.test(name)) {
+          return false; // check for certain invalid file characters
+        }
+        if (isWindowsOS && WINDOWS_FORBIDDEN_NAMES.test(name)) {
+          return false; // check for certain invalid file names
+        }
+        if (name === '.' || name === '..') {
+          return false; // check for reserved values
+        }
+        if (isWindowsOS && name[name.length - 1] === '.') {
+          return false; // Windows: file cannot end with a "."
+        }
+        if (isWindowsOS && name.length !== name.trim().length) {
+          return false; // Windows: file cannot end with a whitespace
+        }
+        if (name.length > 255) {
+          return false; // most file systems do not allow files > 255 length
+        }
+        return true;
+      };
+
+      window.isValidBasename = isValidBasename;
+    })();
+  </script>
+  <script>
+    (function() {
+      var text = null;
+      var buttonElement = document.getElementById('button');
+
+      var isWindowsOS = (navigator.userAgent.toLowerCase().indexOf('windows nt') !== -1);
+
+      var fileName = function(text, isWindowsOS) {
+        // get the first line
+        var s = String(text).match(/.*/)[0];
+
+        // normalize multiple whitespaces
+        s = s.trim().replace(/\s+/g, ' ');
+
+        // find index of the end with a valid charactor
+        for (var i = 39; i >= 0; i--) {
+          try {
+            encodeURI(s.charAt(i));
+          } catch (e) {
+            continue;
+          }
+          break;
+        }
+
+        // trim at 40 characters max
+        s = s.substring(0, i + 1);
+
+        return (window.isValidBasename(s, isWindowsOS) ? s + '.txt' : 'Untitled.txt');
+      };
+
+      var props = {
+        text: function(value) {
+          if (typeof value === 'undefined' || value === text) {
+            return text;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== text) {
+            text = s;
+            buttonElement.disabled = (text === null);
+          }
+          return text;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Text', name: 'text', type: 'prop', arg: props.text, plugDisabled: true },
+      ]);
+
+      buttonElement.addEventListener('click', function() {
+        if (text === null) {
+          return;
+        }
+        var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, fileName(text, isWindowsOS));
+      });
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

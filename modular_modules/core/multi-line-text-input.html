@@ -17,15 +17,18 @@
       color: #212121;
       font-family: Helvetica, Arial, sans-serif;
       font-size: 14px;
-      height: 28px;
+      height: 117px;
+      margin: 0;
       outline: 0;
-      padding: 0 4px;
+      padding: 4px;
+      resize: none;
+      vertical-align: middle;
       width: 100%;
     }
   </style>
 </head>
 <body>
-  <input id="text-input" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
+  <textarea id="text-input" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea>
   <script src="../modular-module.js"></script>
   <script>
     (function() {
@@ -37,8 +40,7 @@
           if (value == null || value === text) {
             return text;
           }
-          // get the first line
-          var s = String(value).match(/.*/)[0];
+          var s = String(value);
           if (s !== text) {
             text = s;
             textInputElement.value = text;

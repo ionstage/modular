@@ -12,6 +12,76 @@
     "visiblePortNames": ["count", "up"]
   },
   {
+    "label": "Data Shift",
+    "description": "Output previous input data",
+    "src": "data-shift",
+    "visiblePortNames": ["input", "output", "shift"]
+  },
+  {
+    "label": "Equal",
+    "description": "Compare two values for equality",
+    "src": "equal",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["="]
+  },
+  {
+    "label": "Event Delay",
+    "description": "Emit delayed event",
+    "src": "event-delay",
+    "visiblePortNames": ["event", "delay"]
+  },
+  {
+    "label": "Event Dual Socket",
+    "description": "Emit both sides of events",
+    "src": "event-dual-socket",
+    "visiblePortNames": ["a", "b", "output"],
+    "tags": ["double", "two", "2"]
+  },
+  {
+    "label": "Integer Input",
+    "description": "Input integer data",
+    "src": "integer-input",
+    "visiblePortNames": ["number"],
+    "tags": ["number"]
+  },
+  {
+    "label": "Key-value Map",
+    "description": "Lookup a value associated with a key",
+    "src": "key-value-map",
+    "visiblePortNames": ["key-list", "value-list", "key", "value"]
+  },
+  {
+    "label": "List Box",
+    "description": "Select an item from a list",
+    "src": "list-box",
+    "visiblePortNames": ["list", "item", "number"]
+  },
+  {
+    "label": "Multi-line Text Input",
+    "description": "Input multi-line text data",
+    "src": "multi-line-text-input",
+    "visiblePortNames": ["text"]
+  },
+  {
+    "label": "Text Concatenation",
+    "description": "Join two texts end-to-end",
+    "src": "text-concatenation",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["+"]
+  },
+  {
+    "label": "Text File Loader",
+    "description": "Load text data from a file",
+    "src": "text-file-loader",
+    "visiblePortNames": ["text"]
+  },
+  {
+    "label": "Text File Saver",
+    "description": "Save text data to a file",
+    "src": "text-file-saver",
+    "visiblePortNames": ["text"]
+  },
+  {
     "label": "Text Input",
     "description": "Input text data",
     "src": "text-input",

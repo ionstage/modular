@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../../modular-module.js"></script>
+  <script src="../../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var query = null;
+      var videoIdList = null;
+      var videoCategoryId = null;
+      var relatedToVideoId = null;
+      var error = null;
+
+      var API_KEY = 'AIzaSyAgGbdWrEy2OrbXaJgQYUAsTvf-_QsbKss';
+
+      var requstURL = function(query, videoCategoryId, relatedToVideoId) {
+        var url = 'https://youtube.googleapis.com/youtube/v3/search?maxResults=5&order=relevance&safeSearch=strict&type=video&videoEmbeddable=true';
+        if (query !== null) {
+          url += '&q=' + encodeURIComponent(query).replace(/-/g, '%7C');
+        }
+        if (videoCategoryId !== null) {
+          url += '&videoCategoryId=' + encodeURIComponent(videoCategoryId);
+        }
+        if (relatedToVideoId !== null) {
+          url += '&relatedToVideoId=' + encodeURIComponent(relatedToVideoId);
+        }
+        return url + '&key=' + API_KEY;
+      };
+
+      var ajax = function(opt) {
+        var type = opt.type;
+        var url = opt.url;
+        var onsuccess = opt.onsuccess;
+        var onerror = opt.onerror;
+        var req = new XMLHttpRequest();
+        var onfailed = function() {
+          onerror(new Error('Failed to load resource'));
+        };
+        req.onload = function() {
+          if (req.status >= 200 && req.status < 400) {
+            onsuccess(req.response);
+          } else {
+            onfailed();
+          }
+        };
+        req.onerror = onfailed;
+        req.onabort = onfailed;
+        req.open(type, url, true);
+        req.send();
+      };
+
+      var search = util.debounce(function(event) {
+        ajax({
+          type: 'GET',
+          url: requstURL(query, videoCategoryId, relatedToVideoId),
+          onsuccess: function(res) {
+            try {
+              var list = JSON.parse(res).items.map(function(item) {
+                return item.id.videoId;
+              });
+              videoIdList = list.join('\n');
+            } catch (e) {
+              error = e.toString();
+              module.get('error')(error);
+              return;
+            }
+            error = '';
+            module.get('video-id-list')(videoIdList);
+            module.get('error')(error);
+            event.dispatch();
+          },
+          onerror: function(e) {
+            error = e.toString();
+            module.get('error')(error);
+          },
+        });
+      }, 100 /* load reduction */);
+
+      var props = {
+        query: function(value) {
+          if (typeof value === 'undefined' || value === query) {
+            return query;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== query) {
+            query = s;
+          }
+          return query;
+        },
+        videoIdList: function(value) {
+          if (typeof value === 'undefined') {
+            return videoIdList;
+          }
+          return value;
+        },
+        videoCategoryId: function(value) {
+          if (typeof value === 'undefined' || value === videoCategoryId) {
+            return videoCategoryId;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== videoCategoryId) {
+            videoCategoryId = s;
+          }
+          return videoCategoryId;
+        },
+        relatedToVideoId: function(value) {
+          if (typeof value === 'undefined' || value === relatedToVideoId) {
+            return relatedToVideoId;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== relatedToVideoId) {
+            relatedToVideoId = s;
+          }
+          return relatedToVideoId;
+        },
+        error: function(value) {
+          if (typeof value === 'undefined') {
+            return error;
+          }
+          return value;
+        },
+      };
+
+      var events = {
+        search: function(event) {
+          event.cancel();
+          search(event);
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Query', name: 'query', type: 'prop', arg: props.query, plugDisabled: true },
+        { label: 'Search', name: 'search', type: 'event', arg: events.search },
+        { label: 'Video ID list', name: 'video-id-list', type: 'prop', arg: props.videoIdList, socketDisabled: true },
+        { label: 'Video category ID', name: 'video-category-id', type: 'prop', arg: props.videoCategoryId, plugDisabled: true },
+        { label: 'Related to video ID', name: 'related-to-video-id', type: 'prop', arg: props.relatedToVideoId, plugDisabled: true },
+        { label: 'Error', name: 'error', type: 'prop', arg: props.error, socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

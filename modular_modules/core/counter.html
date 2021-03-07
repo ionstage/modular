@@ -26,7 +26,7 @@
 </head>
 <body>
   <div id="content"></div>
-  <script src="../../js/modular-module.js"></script>
+  <script src="../modular-module.js"></script>
   <script>
     (function() {
       var count = 0;
@@ -34,21 +34,26 @@
 
       var props = {
         count: function(value) {
-          value = parseInt((!isNaN(value) ? Number(value) : count), 10);
-          if (value !== count) {
-            count = value;
-            contentElement.textContent = count;
+          if (typeof value === 'undefined') {
+            return count;
           }
-          return count;
+          return value;
         },
       };
 
       var events = {
         up: function() {
-          module.get('count')(count + 1);
+          count += 1;
+          contentElement.textContent = count;
+          module.get('count')(count);
         },
         reset: function() {
-          module.get('count')(0);
+          if (count === 0) {
+            return;
+          }
+          count = 0;
+          contentElement.textContent = count;
+          module.get('count')(count);
         },
       };
 

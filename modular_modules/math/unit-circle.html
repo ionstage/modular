@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #content {
+      display: block;
+      height: 234px;
+      overflow: hidden;
+    }
+
+    #content > * {
+      pointer-events: none;
+    }
+
+    .invalid #angle,
+    .invalid #angle-full,
+    .invalid #opposite,
+    .invalid #hypotenuse,
+    .invalid #point {
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+  <svg id="content" class="invalid" viewBox="0 0 234 234">
+    <path d="M 117 0 v 234" stroke="#212121"/>
+    <path d="M 0 117 h 234" stroke="#212121"/>
+    <circle cx="117" cy="117" r="96" fill="none" stroke="#212121"/>
+    <path id="angle" fill="none" stroke="#212121"/>
+    <circle id="angle-full" cx="117" cy="117" r="16" fill="none" stroke="#212121"/>
+    <path id="opposite" stroke="#212121"/>
+    <path id="hypotenuse" stroke="#212121"/>
+    <circle id="point" r="3" fill="#212121"/>
+  </svg>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script src="../modular-draggable.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var theta = null;
+      var cx = 117;
+      var cy = 117;
+      var contentElement = document.getElementById('content');
+      var angleElement = document.getElementById('angle');
+      var angleFullElement = document.getElementById('angle-full');
+      var oppositeElement = document.getElementById('opposite');
+      var hypotenuseElement = document.getElementById('hypotenuse');
+      var pointElement = document.getElementById('point');
+
+      var toNumberOrNull = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? n : null);
+      };
+
+      var clamp = function(number, lower, upper) {
+        return Math.min(Math.max(number, lower), upper);
+      };
+
+      var update = util.debounce(function() {
+        updateCircle(theta);
+        module.get('theta')(theta);
+        module.get('x')(theta !== null ? Math.cos(theta) : null);
+        module.get('y')(theta !== null ? Math.sin(theta) : null);
+      }, 0);
+
+      var updateCircle = (function() {
+        var r = 96;
+        var ar = 16;
+        return function(theta) {
+          if (theta === null) {
+            contentElement.setAttribute('class', 'invalid');
+            return;
+          }
+          var x = cx + r * Math.cos(theta);
+          var y = cy - r * Math.sin(theta);
+          var atheta = clamp(theta, -Math.PI * 2, Math.PI * 2);
+
+          if (Math.abs(theta) < (Math.PI * 2 - 0.01)) {
+            var ax = cx + ar * Math.cos(atheta);
+            var ay = cy - ar * Math.sin(atheta);
+            var f1 = (Math.abs(atheta) >= Math.PI ? 1 : 0);
+            var f2 = (atheta >= 0 ? 0 : 1);
+            angleElement.setAttribute('d', 'M ' + (cx + ar) +' ' + cy +' A ' + ar + ' ' + ar + ' 0 ' + f1 + ' ' + f2 + ' ' + ax + ' ' + ay);
+            angleElement.setAttribute('visibility', 'visible');
+            angleFullElement.setAttribute('visibility', 'hidden');
+          } else {
+            angleElement.setAttribute('visibility', 'hidden');
+            angleFullElement.setAttribute('visibility', 'visible');
+          }
+
+          oppositeElement.setAttribute('d', 'M ' + x + ' ' + cy + ' L ' + x + ' ' + y);
+          hypotenuseElement.setAttribute('d', 'M ' + cx + ' ' + cy + ' L ' + x + ' ' + y);
+          pointElement.setAttribute('cx', x);
+          pointElement.setAttribute('cy', y);
+          contentElement.setAttribute('class', '');
+        };
+      })();
+
+      var changeTheta = function(x, y) {
+        if (x === 0 && y === 0) {
+          return;
+        }
+        var r = Math.sqrt(x * x + y * y);
+        var cos = x / r;
+        var rad = Math.acos(cos);
+        var n = (isFinite(rad) ? rad : null);
+        if (n !== null && y < 0) {
+          n = Math.PI * 2 - n;
+        }
+        if (theta !== n) {
+          theta = n;
+          update();
+        }
+      };
+
+      var props = {
+        theta: function(value) {
+          if (typeof value === 'undefined' || value === theta) {
+            return theta;
+          }
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (n !== theta) {
+            theta = n;
+            update();
+          }
+          return theta;
+        },
+        x: function(value) {
+          if (typeof value === 'undefined') {
+            return (theta !== null ? Math.cos(theta) : null);
+          }
+          return value;
+        },
+        y: function(value) {
+          if (typeof value === 'undefined') {
+            return (theta !== null ? Math.sin(theta) : null);
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'θ [rad]', name: 'theta', type: 'prop', arg: props.theta },
+        { label: 'x', name: 'x', type: 'prop', arg: props.x, socketDisabled: true },
+        { label: 'y', name: 'y', type: 'prop', arg: props.y, socketDisabled: true },
+      ]);
+
+      new modular.Draggable(contentElement).enable({
+        onstart: function(x, y, event, context) {
+          context.x = x;
+          context.y = y;
+          changeTheta(x - cx, -(y - cy));
+        },
+        onmove: function(dx, dy, event, context) {
+          changeTheta(context.x + dx - cx, -(context.y + dy - cy));
+        },
+        onend: function() { /* do nothing */ },
+      });
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var theta = null;
+
+      var toNumberOrNull = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? n : null);
+      };
+
+      var update = util.debounce(function() {
+        module.get('result')(theta !== null ? Math.tan(theta) : null);
+      }, 0);
+
+      var props = {
+        theta: function(value) {
+          if (typeof value === 'undefined' || value === theta) {
+            return theta;
+          }
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (n !== theta) {
+            theta = n;
+            update();
+          }
+          return theta;
+        },
+        result: function(value) {
+          if (typeof value === 'undefined') {
+            return (theta !== null ? Math.tan(theta) : null);
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'θ [rad]', name: 'theta', type: 'prop', arg: props.theta, plugDisabled: true },
+        { label: 'tanθ', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

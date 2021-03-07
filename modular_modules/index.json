@@ -1,4 +1,7 @@
 [
   "core",
-  "x/game"
+  "math",
+  "x/game",
+  "x/programming",
+  "x/youtube"
 ]

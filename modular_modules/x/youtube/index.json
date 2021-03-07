@@ -1,0 +1,20 @@
+[
+  {
+    "label": "YouTube Player",
+    "description": "Play YouTube video",
+    "src": "youtube-player",
+    "visiblePortNames": ["video-id", "cue", "play", "pause"]
+  },
+  {
+    "label": "YouTube Search",
+    "description": "Search YouTube video",
+    "src": "youtube-search",
+    "visiblePortNames": ["query", "search", "video-id-list"]
+  },
+  {
+    "label": "YouTube Video Category",
+    "description": "List of YouTube video category",
+    "src": "youtube-video-category",
+    "visiblePortNames": ["title-list", "id-list"]
+  }
+]

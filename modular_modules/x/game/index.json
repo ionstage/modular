@@ -3,7 +3,7 @@
     "label": "Fizz Buzz",
     "description": "Group word game with counting",
     "src": "fizz-buzz",
-    "visiblePortNames": ["value"],
+    "visiblePortNames": ["count", "word"],
     "tags": ["fizzbuzz", "fizz-buzz"]
   }
 ]

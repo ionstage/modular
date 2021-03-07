@@ -1,0 +1,73 @@
+[
+  {
+    "label": "+",
+    "description": "Sum of two numbers",
+    "src": "addition",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["add", "plus"]
+  },
+  {
+    "label": "cos",
+    "description": "Compute the cosine of a number",
+    "src": "cosine",
+    "visiblePortNames": ["theta", "result"]
+  },
+  {
+    "label": "÷",
+    "description": "Division of two numbers",
+    "src": "division",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["/", "quotient"]
+  },
+  {
+    "label": "mod",
+    "description": "Modulo operation",
+    "src": "modulo-operation",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["%", "remainder", "number"]
+  },
+  {
+    "label": "×",
+    "description": "Product of two numbers",
+    "src": "multiplication",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["*", "multiply"]
+  },
+  {
+    "label": "Random Number",
+    "description": "Generate a pseudo-random number",
+    "src": "random-number",
+    "visiblePortNames": ["number", "generate"]
+  },
+  {
+    "label": "Real-time Line Chart",
+    "description": "Display a series of numerical value",
+    "src": "real-time-line-chart",
+    "visiblePortNames": ["number"]
+  },
+  {
+    "label": "sin",
+    "description": "Compute the sine of a number",
+    "src": "sine",
+    "visiblePortNames": ["theta", "result"]
+  },
+  {
+    "label": "-",
+    "description": "Difference between two numbers",
+    "src": "subtraction",
+    "visiblePortNames": ["a", "b", "result"],
+    "tags": ["subtract", "minus"]
+  },
+  {
+    "label": "tan",
+    "description": "Compute the tangent of a number",
+    "src": "tangent",
+    "visiblePortNames": ["theta", "result"]
+  },
+  {
+    "label": "Unit Circle",
+    "description": "Circle of unit radius",
+    "src": "unit-circle",
+    "visiblePortNames": ["theta", "x", "y"]
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "label": "Ruby Runtime (Opal)",
+    "description": "Run Ruby code",
+    "src": "ruby-runtime-opal",
+    "visiblePortNames": ["code", "run", "output", "done"]
+  }
+]

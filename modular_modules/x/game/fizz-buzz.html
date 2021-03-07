@@ -20,52 +20,93 @@
       white-space: nowrap;
       width: 100%;
     }
+
+    @media screen\0 {
+      #content {
+        padding-top: 8px;
+      }
+    }
+
+    #content.invalid {
+      background-color: #d5d5d5;
+    }
   </style>
 </head>
 <body>
-  <div id="content"></div>
-  <script src="../../../js/modular-module.js"></script>
+  <div id="content" class="invalid"></div>
+  <script src="../../modular-module.js"></script>
+  <script src="../../modular-util.js"></script>
   <script>
     (function() {
+      var util = modular.util;
+
+      var number = null;
       var contentElement = document.getElementById('content');
 
+      var toNumberOrNull = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? n : null);
+      };
+
+      var fizzBuzz = function(value) {
+        if (value === null || value <= 0) {
+          return null;
+        }
+        if (value % 15 === 0) {
+          return 'FizzBuzz';
+        }
+        if (value % 3 === 0) {
+          return 'Fizz';
+        }
+        if (value % 5 === 0) {
+          return 'Buzz';
+        }
+        return String(value);
+      };
+
+      var update = util.debounce(function() {
+        var word = fizzBuzz(number);
+        contentElement.textContent = (word !== null ? word : '');
+        contentElement.className = (word !== null ? '' : 'invalid');
+        module.get('word')(word);
+        if (word === 'FizzBuzz') {
+          module.get('fizz-buzz')();
+        } else if (word === 'Fizz') {
+          module.get('fizz')();
+        } else if (word === 'Buzz') {
+          module.get('buzz')();
+        }
+      }, 0);
+
       var props = {
-        value: function(input) {
-          var n = parseFloat(input);
-
-          if (n !== Number(input)) {
-            contentElement.textContent = '';
-            return null;
+        count: function(value) {
+          if (typeof value === 'undefined' || value === number) {
+            return number;
           }
-
-          var output;
-
-          if (n <= 0) {
-            output = '';
-          } else if (n % 15 === 0) {
-            module.get('fizz-buzz')();
-            output = 'Fizz Buzz';
-          } else if (n % 3 === 0) {
-            module.get('fizz')();
-            output = 'Fizz';
-          } else if (n % 5 === 0) {
-            module.get('buzz')();
-            output = 'Buzz';
-          } else {
-            output = String(n);
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (!util.isInteger(n)) {
+            n = null;
           }
-
-          contentElement.textContent = output;
-
-          return output;
+          if (n !== number) {
+            number = n;
+            update();
+          }
+          return number;
+        },
+        word: function(value) {
+          if (typeof value === 'undefined') {
+            return fizzBuzz(number);
+          }
+          return value;
         },
       };
 
       var module = new modular.Module([
-        { label: 'Value', name: 'value', type: 'prop', arg: props.value },
+        { label: 'Count', name: 'count', type: 'prop', arg: props.count, plugDisabled: true },
+        { label: 'Word', name: 'word', type: 'prop', arg: props.word, socketDisabled: true },
         { label: 'Fizz', name: 'fizz', type: 'event', socketDisabled: true },
         { label: 'Buzz', name: 'buzz', type: 'event', socketDisabled: true },
-        { label: 'Fizz Buzz', name: 'fizz-buzz', type: 'event', socketDisabled: true },
+        { label: 'FizzBuzz', name: 'fizz-buzz', type: 'event', socketDisabled: true },
       ]);
 
       modular.exports = module;

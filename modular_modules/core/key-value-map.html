@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var keyList = null;
+      var valueList = null;
+      var key = null;
+
+      var valueValue = function(keyList, valueList, key) {
+        if (keyList === null || valueList === null || key === null) {
+          return null;
+        }
+        var keys = keyList.split('\n');
+        var values = valueList.split('\n');
+        if (keys.length !== values.length) {
+          return null;
+        }
+        if (/\n/.test(key)) {
+          // key must not be multi-line
+          return null;
+        }
+        return values.filter(function(value, index) {
+          return (keys[index] === key);
+        }).join('\n');
+      };
+
+      var update = util.debounce(function() {
+        module.get('value')(valueValue(keyList, valueList, key));
+      }, 0);
+
+      var props = {
+        keyList: function(value) {
+          if (typeof value === 'undefined' || value === keyList) {
+            return keyList;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== keyList) {
+            keyList = s;
+            update();
+          }
+          return keyList;
+        },
+        valueList: function(value) {
+          if (typeof value === 'undefined' || value === valueList) {
+            return valueList;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== valueList) {
+            valueList = s;
+            update();
+          }
+          return valueList;
+        },
+        key: function(value) {
+          if (typeof value === 'undefined' || value === key) {
+            return key;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== key) {
+            key = s;
+            update();
+          }
+          return key;
+        },
+        value: function(value) {
+          if (typeof value === 'undefined') {
+            return valueValue(keyList, valueList, key);
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Key List', name: 'key-list', type: 'prop', arg: props.keyList, plugDisabled: true },
+        { label: 'Value List', name: 'value-list', type: 'prop', arg: props.valueList, plugDisabled: true },
+        { label: 'Key', name: 'key', type: 'prop', arg: props.key, plugDisabled: true },
+        { label: 'Value', name: 'value', type: 'prop', arg: props.value, socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

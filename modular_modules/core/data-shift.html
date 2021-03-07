@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      background-color: #d5d5d5;
+      color: #212121;
+      font-family: Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 5px 6px 8px;
+    }
+
+    .label {
+      font-size: 11px;
+      line-height: 16px;
+    }
+
+    #input,
+    #output {
+      background-color: #fff;
+      box-sizing: border-box;
+      font-size: 14px;
+      height: 24px;
+      line-height: 24px;
+      overflow: hidden;
+      padding: 0 4px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .spacer {
+      height: 7px;
+    }
+  </style>
+</head>
+<body>
+  <div class="label">Input</div>
+  <div id="input"></div>
+  <div class="spacer"></div>
+  <div class="label">Output</div>
+  <div id="output"></div>
+  <script src="../modular-module.js"></script>
+  <script>
+    (function() {
+      var input = null;
+      var output = null;
+
+      var inputElement = document.getElementById('input');
+      var outputElement = document.getElementById('output');
+
+      var props = {
+        input: function(value) {
+          if (typeof value === 'undefined' || value === input) {
+            return input;
+          }
+          input = value;
+          inputElement.textContent = (input !== null ? String(input) : '');
+          return input;
+        },
+        output: function(value) {
+          if (typeof value === 'undefined') {
+            return output;
+          }
+          return value;
+        },
+      };
+
+      var events = {
+        shift: function() {
+          output = input;
+          outputElement.textContent = (output !== null ? String(output) : '');
+          module.get('output')(output);
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Input', name: 'input', type: 'prop', arg: props.input, plugDisabled: true },
+        { label: 'Output', name: 'output', type: 'prop', arg: props.output, socketDisabled: true },
+        { label: 'Shift', name: 'shift', type: 'event', arg: events.shift },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

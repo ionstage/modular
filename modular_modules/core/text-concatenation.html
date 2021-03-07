@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var a = null;
+      var b = null;
+
+      var concat = function(a, b) {
+        if (a === null || b === null) {
+          return null;
+        }
+        return a + b;
+      };
+
+      var update = util.debounce(function() {
+        module.get('result')(concat(a, b));
+      }, 0);
+
+      var props = {
+        a: function(value) {
+          if (typeof value === 'undefined' || value === a) {
+            return a;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== a) {
+            a = s;
+            update();
+          }
+          return a;
+        },
+        b: function(value) {
+          if (typeof value === 'undefined' || value === b) {
+            return b;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== b) {
+            b = s;
+            update();
+          }
+          return b;
+        },
+        result: function(value) {
+          if (typeof value === 'undefined') {
+            return concat(a, b);
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'A', name: 'a', type: 'prop', arg: props.a, plugDisabled: true },
+        { label: 'B', name: 'b', type: 'prop', arg: props.b, plugDisabled: true },
+        { label: 'AB', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

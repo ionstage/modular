@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <script src="../modular-module.js"></script>
+  <script src="../modular-util.js"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var a = null;
+      var b = null;
+
+      var toNumberOrNull = function(value) {
+        var n = util.toNumber(value);
+        return (isFinite(n) ? n : null);
+      };
+
+      var mod = function(a, b) {
+        if (a === null || b === null) {
+          return null;
+        }
+        var n = a % b;
+        return (isFinite(n) ? n : null);
+      };
+
+      var update = util.debounce(function() {
+        module.get('result')(mod(a, b));
+      }, 0);
+
+      var props = {
+        a: function(value) {
+          if (typeof value === 'undefined' || value === a) {
+            return a;
+          }
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (n !== a) {
+            a = n;
+            update();
+          }
+          return a;
+        },
+        b: function(value) {
+          if (typeof value === 'undefined' || value === b) {
+            return b;
+          }
+          var n = (value !== null ? toNumberOrNull(value) : null);
+          if (n !== b) {
+            b = n;
+            update();
+          }
+          return b;
+        },
+        result: function(value) {
+          if (typeof value === 'undefined') {
+            return mod(a, b);
+          }
+          return value;
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'A', name: 'a', type: 'prop', arg: props.a, plugDisabled: true },
+        { label: 'B', name: 'b', type: 'prop', arg: props.b, plugDisabled: true },
+        { label: 'A mod B', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+      ]);
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>
