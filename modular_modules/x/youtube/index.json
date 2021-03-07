@@ -1,5 +1,11 @@
 [
   {
+    "label": "YouTube Search",
+    "description": "Search YouTube video",
+    "src": "youtube-search",
+    "visiblePortNames": ["query", "search", "video-id-list"]
+  },
+  {
     "label": "YouTube Video Category",
     "description": "List of YouTube video category",
     "src": "youtube-video-category",
