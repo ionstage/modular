@@ -7,7 +7,10 @@ You can create your own modules and implement them locally.
 ## Packages
 
 - **core**: base components (button, text-input...)
+- **math**: mathematical functions
 - **x/game**: particular form of playing games
+- **x/programming**: programming environment
+- **x/youtube**: interaction with YouTube service
 
 ## How to make your own modules
 
