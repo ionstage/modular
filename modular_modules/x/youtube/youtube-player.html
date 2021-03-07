@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #player {
+      display: block;
+      height: 200px;
+      width: 234px;
+    }
+  </style>
+</head>
+<body>
+  <div id="player"></div>
+  <script src="../../modular-module.js"></script>
+  <script src="../../modular-util.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    (function() {
+      var util = modular.util;
+
+      var videoId = null;
+      var player = null;
+      var isReady = false;
+      var autoCue = false;
+
+      var onPlayerReady = function(event) {
+        isReady = true;
+        if (autoCue && videoId !== null) {
+          cue(videoId);
+        }
+      };
+
+      var onPlayerStateChange = function(event) {
+        var data = event.data;
+        switch (data) {
+          case YT.PlayerState.CUED:
+            module.get('cue')({ _internal: true });
+            break;
+          case YT.PlayerState.PLAYING:
+            module.get('play')({ _internal: true });
+            break;
+          case YT.PlayerState.PAUSED:
+            module.get('pause')({ _internal: true });
+            break;
+          case YT.PlayerState.ENDED:
+            module.get('end')();
+            break;
+          default:
+            break;
+        }
+      };
+
+      var cue = util.debounce(function(videoId) {
+        player.cueVideoById(encodeURIComponent(videoId));
+      }, 100 /* load reduction */);
+
+      var props = {
+        videoId: function(value) {
+          if (typeof value === 'undefined' || value === videoId) {
+            return videoId;
+          }
+          var s = (value !== null ? String(value) : null);
+          if (s !== videoId) {
+            videoId = s;
+          }
+          return videoId;
+        },
+      };
+
+      var events = {
+        cue: function(event) {
+          var context = event.context();
+          if (context && context._internal) {
+            // dispatch only
+            event.context(null);
+            return;
+          }
+          event.cancel();
+          if (!isReady) {
+            autoCue = true;
+            return;
+          }
+          cue(videoId);
+        },
+        play: function(event) {
+          var context = event.context();
+          if (context && context._internal) {
+            // dispatch only
+            event.context(null);
+            return;
+          }
+          event.cancel();
+          if (!isReady) {
+            return;
+          }
+          player.playVideo();
+        },
+        pause: function(event) {
+          var context = event.context();
+          if (context && context._internal) {
+            // dispatch only
+            event.context(null);
+            return;
+          }
+          event.cancel();
+          if (!isReady) {
+            return;
+          }
+          player.pauseVideo();
+        },
+      };
+
+      var module = new modular.Module([
+        { label: 'Video ID', name: 'video-id', type: 'prop', arg: props.videoId, plugDisabled: true },
+        { label: 'Cue', name: 'cue', type: 'event', arg: events.cue },
+        { label: 'Play', name: 'play', type: 'event', arg: events.play },
+        { label: 'Pause', name: 'pause', type: 'event', arg: events.pause },
+        { label: 'End', name: 'end', type: 'event', socketDisabled: true },
+      ]);
+
+      window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player('player', {
+          height: '100%',
+          width: '100%',
+          videoId: '',
+          playerVars: {
+            modestbranding: 1,
+            origin: location.origin,
+            playsinline: 1,
+            rel: 0,
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
+          },
+        });
+      };
+
+      modular.exports = module;
+    })();
+  </script>
+</body>
+</html>

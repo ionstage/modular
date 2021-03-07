@@ -1,5 +1,11 @@
 [
   {
+    "label": "YouTube Player",
+    "description": "Play YouTube video",
+    "src": "youtube-player",
+    "visiblePortNames": ["video-id", "cue", "play", "pause"]
+  },
+  {
     "label": "YouTube Search",
     "description": "Search YouTube video",
     "src": "youtube-search",
