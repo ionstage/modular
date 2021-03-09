@@ -14,6 +14,22 @@ Visual programming environment
 
 - Counter: [Try it out](https://www.ionstage.org/modular/?demo=counter) | [Video](https://youtu.be/fnvV3ylTCN0)
 
+- Fibonacci number: [Try it out](https://www.ionstage.org/modular/?demo=fibonacci_number)
+
+- FizzBuzz: [Try it out](https://www.ionstage.org/modular/?demo=fizz_buzz)
+
+- Real-time line chart: [Try it out](https://www.ionstage.org/modular/?demo=real_time_line_chart)
+
+- Sine wave: [Try it out](https://www.ionstage.org/modular/?demo=sine_wave)
+
+- Ruby programming (Hello world): [Try it out](https://www.ionstage.org/modular/?demo=ruby_programming_hello_world)
+
+- Ruby programming (FizzBuzz): [Try it out](https://www.ionstage.org/modular/?demo=ruby_programming_fizz_buzz)
+
+- Play YouTube Video: [Try it out](https://www.ionstage.org/modular/?demo=play_youtube_video)
+
+- YouTube Music Player: [Try it out](https://www.ionstage.org/modular/?demo=youtube_music_player)
+
 ## Running locally
 
 - Install [Node](https://nodejs.org/en/download/)
