@@ -155,6 +155,7 @@
 
       new modular.Draggable(contentElement).enable({
         onstart: function(x, y, event, context) {
+          event.preventDefault();
           context.x = x;
           context.y = y;
           changeTheta(x - cx, -(y - cy));
