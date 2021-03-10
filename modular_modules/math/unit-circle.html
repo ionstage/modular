@@ -64,8 +64,21 @@
         return Math.min(Math.max(number, lower), upper);
       };
 
+      var redraw = (function() {
+        var requestID = 0;
+        return function() {
+          if (requestID) {
+            cancelAnimationFrame(requestID);
+          }
+          requestID = requestAnimationFrame(function() {
+            updateCircle(theta);
+            requestID = 0;
+          });
+        };
+      })();
+
       var update = util.debounce(function() {
-        updateCircle(theta);
+        redraw();
         module.get('theta')(theta);
         module.get('x')(theta !== null ? Math.cos(theta) : null);
         module.get('y')(theta !== null ? Math.sin(theta) : null);
