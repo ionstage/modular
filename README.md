@@ -26,7 +26,7 @@ Visual programming environment
 
 - [Ruby programming (FizzBuzz)](https://www.ionstage.org/modular/?demo=ruby_programming_fizz_buzz)
 
-- [Play YouTube Video](https://www.ionstage.org/modular/?demo=play_youtube_video)
+- [Play YouTube video](https://www.ionstage.org/modular/?demo=play_youtube_video)
 
 - [YouTube Music Player](https://www.ionstage.org/modular/?demo=youtube_music_player)
 
