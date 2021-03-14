@@ -111,6 +111,10 @@
   pointer-events: none;
 }
 
+.module-port-hide-button-content {
+  pointer-events: none;
+}
+
 .module-port-select {
   border-radius: 3px;
   opacity: 0;

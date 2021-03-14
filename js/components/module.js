@@ -294,7 +294,7 @@
         '<div class="module-port-list module-content-item"></div>',
       '</div>',
       '<div class="module-footer">',
-        '<img class="module-footer-icon module-footer-item" src="images/caret-down.svg">',
+        '<svg class="module-footer-icon module-footer-item" width="1792" height="1792" viewBox="0 0 1792 1792"><path d="M1408 704q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45z" fill="#fff"/></svg>',
         '<select class="module-port-select module-footer-item">',
           '<optgroup data-type="prop" label="Property"></optgroup>',
           '<optgroup data-type="event" label="Event"></optgroup>',
