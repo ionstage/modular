@@ -68,7 +68,7 @@
         var requestID = 0;
         return function() {
           if (requestID) {
-            cancelAnimationFrame(requestID);
+            return;
           }
           requestID = requestAnimationFrame(function() {
             updateCircle(theta);
