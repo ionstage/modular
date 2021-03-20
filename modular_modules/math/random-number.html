@@ -35,7 +35,7 @@
       var number = null;
       var contentElement = document.getElementById('content');
 
-      var props = {
+      var dataArgs = {
         number: function(value) {
           if (typeof value === 'undefined') {
             return number;
@@ -44,7 +44,7 @@
         },
       };
 
-      var events = {
+      var eventArgs = {
         generate: function() {
           if (number === null) {
             contentElement.className = '';
@@ -56,8 +56,8 @@
       };
 
       var module = new modular.Module([
-        { label: 'Number', name: 'number', type: 'prop', arg: props.number, socketDisabled: true },
-        { label: 'Generate', name: 'generate', type: 'event', arg: events.generate },
+        { label: 'Number', name: 'number', type: 'data', arg: dataArgs.number, socketDisabled: true },
+        { label: 'Generate', name: 'generate', type: 'event', arg: eventArgs.generate },
       ]);
 
       contentElement.textContent = 'Not yet generated';

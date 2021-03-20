@@ -27,7 +27,7 @@
         module.get('result')(theta !== null ? Math.cos(theta) : null);
       }, 0);
 
-      var props = {
+      var dataArgs = {
         theta: function(value) {
           if (typeof value === 'undefined' || value === theta) {
             return theta;
@@ -48,8 +48,8 @@
       };
 
       var module = new modular.Module([
-        { label: 'θ [rad]', name: 'theta', type: 'prop', arg: props.theta, plugDisabled: true },
-        { label: 'cosθ', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+        { label: 'θ [rad]', name: 'theta', type: 'data', arg: dataArgs.theta, plugDisabled: true },
+        { label: 'cosθ', name: 'result', type: 'data', arg: dataArgs.result, socketDisabled: true },
       ]);
 
       modular.exports = module;

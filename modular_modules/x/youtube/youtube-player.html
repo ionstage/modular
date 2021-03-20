@@ -60,7 +60,7 @@
         player.cueVideoById(encodeURIComponent(videoId));
       }, 100 /* load reduction */);
 
-      var props = {
+      var dataArgs = {
         videoId: function(value) {
           if (typeof value === 'undefined' || value === videoId) {
             return videoId;
@@ -73,7 +73,7 @@
         },
       };
 
-      var events = {
+      var eventArgs = {
         cue: function(event) {
           var context = event.context();
           if (context && context._internal) {
@@ -117,10 +117,10 @@
       };
 
       var module = new modular.Module([
-        { label: 'Video ID', name: 'video-id', type: 'prop', arg: props.videoId, plugDisabled: true },
-        { label: 'Cue', name: 'cue', type: 'event', arg: events.cue },
-        { label: 'Play', name: 'play', type: 'event', arg: events.play },
-        { label: 'Pause', name: 'pause', type: 'event', arg: events.pause },
+        { label: 'Video ID', name: 'video-id', type: 'data', arg: dataArgs.videoId, plugDisabled: true },
+        { label: 'Cue', name: 'cue', type: 'event', arg: eventArgs.cue },
+        { label: 'Play', name: 'play', type: 'event', arg: eventArgs.play },
+        { label: 'Pause', name: 'pause', type: 'event', arg: eventArgs.pause },
         { label: 'End', name: 'end', type: 'event', socketDisabled: true },
       ]);
 

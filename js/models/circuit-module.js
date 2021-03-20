@@ -68,7 +68,7 @@
       return new CircuitModule.Member({
         label: member.label,
         name: member.name,
-        type: member.type,
+        type: (member.type !== 'prop' ? member.type : 'data'),  // for backward compatibility
         arg: (Object.prototype.hasOwnProperty.call(member, 'arg') ? member.arg : void 0),
         plugDisabled: !!member.plugDisabled,
         socketDisabled: !!member.socketDisabled,

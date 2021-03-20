@@ -35,7 +35,7 @@
 
       var list = null;
       var number = null;
-      var numberFromProp = null;
+      var numberFromPort = null;
       var selectElement = document.getElementById('select');
 
       var toNumberOrNull = function(value) {
@@ -89,7 +89,7 @@
       };
 
       var update = util.debounce(function() {
-        // update 'number' prop which has input value in first for recursive process
+        // update 'number' data which has input value in first for recursive process
         module.get('number')(number);
 
         module.get('item')(itemValue(list, number));
@@ -140,7 +140,7 @@
         });
       };
 
-      var props = {
+      var dataArgs = {
         list: function(value) {
           if (typeof value === 'undefined' || value === list) {
             return list;
@@ -149,8 +149,8 @@
           if (s !== list) {
             list = s;
             if (list === null) {
-              // reset selection from the value of the `number` prop
-              number = numberFromProp;
+              // reset selection from the value of the `number` port
+              number = numberFromPort;
             }
             updateSelectElement(list, number);
             update();
@@ -170,7 +170,7 @@
           var s = (value !== null ? String(value) : null);
           if (s !== number) {
             number = s;
-            numberFromProp = number;
+            numberFromPort = number;
             updateSelection(list, number, true);
             update();
           }
@@ -185,10 +185,10 @@
       };
 
       var module = new modular.Module([
-        { label: 'List', name: 'list', type: 'prop', arg: props.list, plugDisabled: true },
-        { label: 'Item', name: 'item', type: 'prop', arg: props.item, socketDisabled: true },
-        { label: 'Number', name: 'number', type: 'prop', arg: props.number },
-        { label: 'Size', name: 'size', type: 'prop', arg: props.size, socketDisabled: true },
+        { label: 'List', name: 'list', type: 'data', arg: dataArgs.list, plugDisabled: true },
+        { label: 'Item', name: 'item', type: 'data', arg: dataArgs.item, socketDisabled: true },
+        { label: 'Number', name: 'number', type: 'data', arg: dataArgs.number },
+        { label: 'Size', name: 'size', type: 'data', arg: dataArgs.size, socketDisabled: true },
       ]);
 
       selectElement.addEventListener('change', function(event) {

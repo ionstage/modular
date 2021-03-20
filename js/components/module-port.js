@@ -123,7 +123,7 @@
     });
   };
 
-  ModulePort.TYPE_PROP = 'prop';
+  ModulePort.TYPE_DATA = 'data';
   ModulePort.TYPE_EVENT = 'event';
 
   ModulePort.HTML_TEXT = [

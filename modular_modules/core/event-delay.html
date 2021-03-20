@@ -23,7 +23,7 @@
         return (isFinite(n) ? n : null);
       };
 
-      var props = {
+      var dataArgs = {
         delay: function(value) {
           if (typeof value === 'undefined' || value === delay) {
             return delay;
@@ -36,7 +36,7 @@
         },
       };
 
-      var events = {
+      var eventArgs = {
         event: function(event) {
           event.cancel();
           setTimeout(function() {
@@ -46,8 +46,8 @@
       };
 
       var module = new modular.Module([
-        { label: 'Event', name: 'event', type: 'event', arg: events.event },
-        { label: 'Delay [ms]', name: 'delay', type: 'prop', arg: props.delay, plugDisabled: true },
+        { label: 'Event', name: 'event', type: 'event', arg: eventArgs.event },
+        { label: 'Delay [ms]', name: 'delay', type: 'data', arg: dataArgs.delay, plugDisabled: true },
       ]);
 
       modular.exports = module;

@@ -48,7 +48,7 @@
         return (isFinite(n) ? n : null);
       };
 
-      var props = {
+      var dataArgs = {
         number: function(value) {
           if (value == null || value === number) {
             return number;
@@ -66,7 +66,7 @@
       };
 
       var module = new modular.Module([
-        { label: 'Number', name: 'number', type: 'prop', arg: props.number },
+        { label: 'Number', name: 'number', type: 'data', arg: dataArgs.number },
         { label: 'Change', name: 'change', type: 'event', socketDisabled: true },
       ], {
         serialize: function() {

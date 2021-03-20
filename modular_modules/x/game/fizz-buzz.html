@@ -78,7 +78,7 @@
         }
       }, 0);
 
-      var props = {
+      var dataArgs = {
         count: function(value) {
           if (typeof value === 'undefined' || value === number) {
             return number;
@@ -102,8 +102,8 @@
       };
 
       var module = new modular.Module([
-        { label: 'Count', name: 'count', type: 'prop', arg: props.count, plugDisabled: true },
-        { label: 'Word', name: 'word', type: 'prop', arg: props.word, socketDisabled: true },
+        { label: 'Count', name: 'count', type: 'data', arg: dataArgs.count, plugDisabled: true },
+        { label: 'Word', name: 'word', type: 'data', arg: dataArgs.word, socketDisabled: true },
         { label: 'Fizz', name: 'fizz', type: 'event', socketDisabled: true },
         { label: 'Buzz', name: 'buzz', type: 'event', socketDisabled: true },
         { label: 'FizzBuzz', name: 'fizz-buzz', type: 'event', socketDisabled: true },

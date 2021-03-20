@@ -122,7 +122,7 @@
         }
       };
 
-      var props = {
+      var dataArgs = {
         number: function(value) {
           if (typeof value === 'undefined' || value === number) {
             return number;
@@ -167,9 +167,9 @@
       };
 
       var module = new modular.Module([
-        { label: 'Number', name: 'number', type: 'prop', arg: props.number, plugDisabled: true },
-        { label: 'Maximum', name: 'maximum', type: 'prop', arg: props.maximum, plugDisabled: true },
-        { label: 'Minimum', name: 'minimum', type: 'prop', arg: props.minimum, plugDisabled: true },
+        { label: 'Number', name: 'number', type: 'data', arg: dataArgs.number, plugDisabled: true },
+        { label: 'Maximum', name: 'maximum', type: 'data', arg: dataArgs.maximum, plugDisabled: true },
+        { label: 'Minimum', name: 'minimum', type: 'data', arg: dataArgs.minimum, plugDisabled: true },
       ]);
 
       requestAnimationFrame(draw);

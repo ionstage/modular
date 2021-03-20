@@ -42,7 +42,7 @@
         module.get('value')(valueValue(keyList, valueList, key));
       }, 0);
 
-      var props = {
+      var dataArgs = {
         keyList: function(value) {
           if (typeof value === 'undefined' || value === keyList) {
             return keyList;
@@ -85,10 +85,10 @@
       };
 
       var module = new modular.Module([
-        { label: 'Key list', name: 'key-list', type: 'prop', arg: props.keyList, plugDisabled: true },
-        { label: 'Value list', name: 'value-list', type: 'prop', arg: props.valueList, plugDisabled: true },
-        { label: 'Key', name: 'key', type: 'prop', arg: props.key, plugDisabled: true },
-        { label: 'Value', name: 'value', type: 'prop', arg: props.value, socketDisabled: true },
+        { label: 'Key list', name: 'key-list', type: 'data', arg: dataArgs.keyList, plugDisabled: true },
+        { label: 'Value list', name: 'value-list', type: 'data', arg: dataArgs.valueList, plugDisabled: true },
+        { label: 'Key', name: 'key', type: 'data', arg: dataArgs.key, plugDisabled: true },
+        { label: 'Value', name: 'value', type: 'data', arg: dataArgs.value, socketDisabled: true },
       ]);
 
       modular.exports = module;

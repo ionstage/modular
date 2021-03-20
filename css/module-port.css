@@ -33,7 +33,7 @@
   width: 24px;
 }
 
-.module-port[data-type='prop'] .module-port-handle {
+.module-port[data-type='data'] .module-port-handle {
   border-radius: 3px;
 }
 
@@ -66,7 +66,7 @@
   width: 24px;
 }
 
-.module-port[data-type='prop'] > .module-port-socket {
+.module-port[data-type='data'] > .module-port-socket {
   border-radius: 6px;
 }
 

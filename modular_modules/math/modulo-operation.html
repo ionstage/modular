@@ -36,7 +36,7 @@
         module.get('result')(mod(a, b));
       }, 0);
 
-      var props = {
+      var dataArgs = {
         a: function(value) {
           if (typeof value === 'undefined' || value === a) {
             return a;
@@ -68,9 +68,9 @@
       };
 
       var module = new modular.Module([
-        { label: 'A', name: 'a', type: 'prop', arg: props.a, plugDisabled: true },
-        { label: 'B', name: 'b', type: 'prop', arg: props.b, plugDisabled: true },
-        { label: 'A mod B', name: 'result', type: 'prop', arg: props.result, socketDisabled: true },
+        { label: 'A', name: 'a', type: 'data', arg: dataArgs.a, plugDisabled: true },
+        { label: 'B', name: 'b', type: 'data', arg: dataArgs.b, plugDisabled: true },
+        { label: 'A mod B', name: 'result', type: 'data', arg: dataArgs.result, socketDisabled: true },
       ]);
 
       modular.exports = module;

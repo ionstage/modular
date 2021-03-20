@@ -50,7 +50,7 @@
       var inputElement = document.getElementById('input');
       var outputElement = document.getElementById('output');
 
-      var props = {
+      var dataArgs = {
         input: function(value) {
           if (typeof value === 'undefined' || value === input) {
             return input;
@@ -67,7 +67,7 @@
         },
       };
 
-      var events = {
+      var eventArgs = {
         shift: function() {
           output = input;
           outputElement.textContent = (output !== null ? String(output) : '');
@@ -76,9 +76,9 @@
       };
 
       var module = new modular.Module([
-        { label: 'Input', name: 'input', type: 'prop', arg: props.input, plugDisabled: true },
-        { label: 'Output', name: 'output', type: 'prop', arg: props.output, socketDisabled: true },
-        { label: 'Shift', name: 'shift', type: 'event', arg: events.shift },
+        { label: 'Input', name: 'input', type: 'data', arg: dataArgs.input, plugDisabled: true },
+        { label: 'Output', name: 'output', type: 'data', arg: dataArgs.output, socketDisabled: true },
+        { label: 'Shift', name: 'shift', type: 'event', arg: eventArgs.shift },
       ]);
 
       modular.exports = module;

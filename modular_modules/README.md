@@ -46,10 +46,10 @@ This file represents the list of package names.
 
 ### 4. Design your custom module
 
-Creating Modular module is to design functionality of the module's `prop` ports and `event` ports.
+Creating Modular module is to design functionality of the module's `data` ports and `event` ports.
 Each port has an input-socket and an output-plug.
 
-A `prop` port's input-socket and output-plug have a square shape.
+A `data` port's input-socket and output-plug have a square shape.
 You can construct a data-flow by connecting a square output-plug(■) to a square input-socket(□).
 
 An `event` port's input-socket and output-plug have a round shape.
@@ -57,7 +57,7 @@ You can construct a event-flow by connecting a round output-plug(●) to a round
 
 In this example, create `Lucky 7` module. The function of each port is as follows.
 
-- **prop**
+- **data**
   - `Value`: output the word "Lucky" if the input value contains the word "7"
 - **event**
   - `Lucky`: dispatch event if the output value is changed to "Lucky"
@@ -94,8 +94,8 @@ The following code is the whole HTML code with comments on the points to keep in
       var isLucky = false;
       var contentElement = document.getElementById('content');
 
-      // function for `Value` prop
-      var valueProp = function(input) {
+      // function for `Value` data
+      var valueData = function(input) {
         // argument `input` is an input value
         var word = String(input || '');
         var output;
@@ -133,13 +133,13 @@ The following code is the whole HTML code with comments on the points to keep in
        * as follows.
        *   - label: title of the port
        *   - name: key for `module.get` method
-       *   - type: type of the port (`prop` or `event`)
+       *   - type: type of the port (`data` or `event`)
        *   - arg: function or an initial value for the port
        *   - plugDisabled: setting to disable the plug (default: false)
        *   - socketDisabled: setting to disable the socket (default: false)
        */
       var module = new modular.Module([
-        { label: 'Value', name: 'value', type: 'prop', arg: valueProp },
+        { label: 'Value', name: 'value', type: 'data', arg: valueData },
         { label: 'Lucky', name: 'lucky', type: 'event', socketDisabled: true },
         { label: '777', name: '777', type: 'event', socketDisabled: true },
       ]);

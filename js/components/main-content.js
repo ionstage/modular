@@ -265,8 +265,8 @@
 
     ModuleContainer.prototype.unbind = function(sourcePort, targetPort) {
       CircuitModule.unbind(sourcePort.member, targetPort.member);
-      if (targetPort.type() === ModulePort.TYPE_PROP) {
-        // send empty value to disconnected 'prop' port
+      if (targetPort.type() === ModulePort.TYPE_DATA) {
+        // send empty value to disconnected 'data' port
         targetPort.member(null);
       }
       helper.remove(this.bindings, helper.findLast(this.bindings, function(binding) {

@@ -13,7 +13,7 @@
   <script src="../modular-module.js"></script>
   <script>
     (function() {
-      var events = {
+      var eventArgs = {
         a: function() {
           module.get('output')();
         },
@@ -23,8 +23,8 @@
       };
 
       var module = new modular.Module([
-        { label: 'A', name: 'a', type: 'event', arg: events.a, plugDisabled: true },
-        { label: 'B', name: 'b', type: 'event', arg: events.b, plugDisabled: true },
+        { label: 'A', name: 'a', type: 'event', arg: eventArgs.a, plugDisabled: true },
+        { label: 'B', name: 'b', type: 'event', arg: eventArgs.b, plugDisabled: true },
         { label: 'A or B', name: 'output', type: 'event', socketDisabled: true },
       ]);
 
