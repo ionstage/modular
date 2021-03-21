@@ -3729,7 +3729,7 @@ if ( typeof module != 'undefined' && module.exports ) {
 
 },{}],"jcore":[function(require,module,exports){
 /**
- * jCore v0.4.0
+ * jCore v0.4.1
  * (c) 2016 iOnStage
  * Released under the MIT License.
  */
@@ -3814,7 +3814,7 @@ if ( typeof module != 'undefined' && module.exports ) {
     Draggable.getScrollOffset = function(el) {
       var x = 0;
       var y = 0;
-      var el = el.parentNode;
+      el = el.parentNode;
       while (el) {
         x += el.scrollLeft || 0;
         y += el.scrollTop || 0;
