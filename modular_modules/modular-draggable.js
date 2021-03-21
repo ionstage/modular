@@ -1,8 +1,8 @@
 (function(window) {
   'use strict';
 
-  var Draggable = function(element) {
-    this.element = element;
+  var Draggable = function(el) {
+    this.el = el;
     this.onstart = null;
     this.onmove = null;
     this.onend = null;
@@ -46,19 +46,19 @@
     return 'ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch);
   };
 
-  Draggable.getOffset = function(element) {
-    var rect = element.getBoundingClientRect();
+  Draggable.getOffset = function(el) {
+    var rect = el.getBoundingClientRect();
     var bodyRect = document.body.getBoundingClientRect();
     var bodyStyle = window.getComputedStyle(document.body);
-    var x = rect.left - element.scrollLeft - bodyRect.left + parseInt(bodyStyle.marginLeft, 10);
-    var y = rect.top - element.scrollTop - bodyRect.top + parseInt(bodyStyle.marginTop, 10);
+    var x = rect.left - el.scrollLeft - bodyRect.left + parseInt(bodyStyle.marginLeft, 10);
+    var y = rect.top - el.scrollTop - bodyRect.top + parseInt(bodyStyle.marginTop, 10);
     return { x: x, y: y };
   };
 
-  Draggable.getScrollOffset = function(element) {
+  Draggable.getScrollOffset = function(el) {
     var x = 0;
     var y = 0;
-    var el = element.parentNode;
+    el = el.parentNode;
     while (el) {
       x += el.scrollLeft || 0;
       y += el.scrollTop || 0;
@@ -73,7 +73,7 @@
     this.onend = listeners.onend;
     this.context = {};
     var type = (Draggable.supportsTouch() ? 'touchstart' : 'mousedown');
-    this.element.addEventListener(type, this['on' + type], { passive: false });
+    this.el.addEventListener(type, this['on' + type], { passive: false });
   };
 
   Draggable.prototype.disable = function() {
@@ -81,7 +81,7 @@
     var startType = (supportsTouch ? 'touchstart' : 'mousedown');
     var moveType = (supportsTouch ? 'touchmove' : 'mousemove');
     var endType = (supportsTouch ? 'touchend' : 'mouseup');
-    this.element.removeEventListener(startType, this['on' + startType], { passive: false });
+    this.el.removeEventListener(startType, this['on' + startType], { passive: false });
     document.removeEventListener(moveType, this['on' + moveType]);
     document.removeEventListener(endType, this['on' + endType]);
     document.removeEventListener('scroll', this.onscroll, true);
@@ -166,7 +166,7 @@
   };
 
   Draggable.prototype.onscroll = function() {
-    var scrollOffset = Draggable.getScrollOffset(this.element);
+    var scrollOffset = Draggable.getScrollOffset(this.el);
     this.dScrollX = scrollOffset.x - this.startScrollX;
     this.dScrollY = scrollOffset.y - this.startScrollY;
   };
