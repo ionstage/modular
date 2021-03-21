@@ -5,7 +5,7 @@
   var dom = app.dom || require('../dom.js');
 
   var SidebarHeader = jCore.Component.inherits(function() {
-    this.searchInput = new SidebarHeader.SearchInput({ element: this.findElement('.search-input') });
+    this.searchInput = new SidebarHeader.SearchInput(dom.find(this.el, '.search-input'));
   });
 
   SidebarHeader.prototype.loadSearchText = function() {

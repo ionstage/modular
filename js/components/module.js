@@ -7,7 +7,7 @@
   var CircuitModule = app.CircuitModule || require('../models/circuit-module.js');
   var ModulePort = app.ModulePort || require('./module-port.js');
 
-  var Module = jCore.Component.inherits(function(props) {
+  var Module = jCore.Component.inherits(function(_, props) {
     this.title = this.prop(props.title);
     this.name = this.prop(props.name);
     this.x = this.prop(props.x);
@@ -19,11 +19,11 @@
     this.isMoving = this.prop(false);
     this.isDeleting = this.prop(false);
     this.ports = [];
-    this.header = new Module.Header({ element: this.findElement('.module-header') });
-    this.footer = new Module.Footer({ element: this.findElement('.module-footer') });
-    this.component = new Module.Component({ element: this.findElement('.module-component') });
-    this.portList = new Module.PortList({ element: this.findElement('.module-port-list') });
-    this.portSelect = new Module.PortSelect({ element: this.findElement('.module-port-select') });
+    this.header = new Module.Header(dom.find(this.el, '.module-header'));
+    this.footer = new Module.Footer(dom.find(this.el, '.module-footer'));
+    this.component = new Module.Component(dom.find(this.el, '.module-component'));
+    this.portList = new Module.PortList(dom.find(this.el, '.module-port-list'));
+    this.portSelect = new Module.PortSelect(dom.find(this.el, '.module-port-select'));
     this.draggable = new Module.Draggable(this);
   });
 
@@ -121,7 +121,7 @@
   };
 
   Module.prototype.createPort = function(props) {
-    var port = new ModulePort(props);
+    var port = new ModulePort(null, props);
     port.on('highlight', this.onporthighlight.bind(this));
     port.on('unhighlight', this.onportunhighlight.bind(this));
     return port;
@@ -311,11 +311,11 @@
     });
 
     Header.prototype.titleElement = function() {
-      return this.findElement('.module-title');
+      return dom.find(this.el, '.module-title');
     };
 
     Header.prototype.deleteButtonElement = function() {
-      return this.findElement('.module-delete-button');
+      return dom.find(this.el, '.module-delete-button');
     };
 
     Header.prototype.deleteButtonDisabled = function() {
@@ -509,7 +509,7 @@
     });
 
     PortSelect.prototype.optGroupElement = function(type) {
-      return this.findElement('optgroup[data-type="' + type + '"]');
+      return dom.find(this.el, 'optgroup[data-type="' + type + '"]');
     };
 
     PortSelect.prototype.set = function(ports) {
@@ -528,7 +528,7 @@
     };
 
     PortSelect.prototype.createOption = function(port) {
-      return new PortSelect.Option({
+      return new PortSelect.Option(null, {
         label: port.label(),
         name: port.name(),
       });
@@ -576,7 +576,7 @@
     };
 
     PortSelect.Option = (function() {
-      var Option = jCore.Component.inherits(function(props) {
+      var Option = jCore.Component.inherits(function(_, props) {
         this.label = this.prop(props.label);
         this.name = this.prop(props.name);
       });

@@ -5,9 +5,9 @@
   var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
 
-  var LoadButton = jCore.Component.inherits(function(props) {
-    this.button = new Button({ element: props.element });
-    this.input = new LoadButton.Input({ element: this.findElement('.button-input') });
+  var LoadButton = jCore.Component.inherits(function() {
+    this.button = new Button(this.el);
+    this.input = new LoadButton.Input(dom.find(this.el, '.button-input'));
   });
 
   LoadButton.prototype.oninit = function() {

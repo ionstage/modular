@@ -18,6 +18,10 @@
     return el;
   };
 
+  dom.find = function(el, selectors) {
+    return el.querySelector(selectors);
+  };
+
   dom.contains = function(el, other) {
     return el.contains(other);
   };

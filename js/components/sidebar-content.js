@@ -6,13 +6,13 @@
   var dom = app.dom || require('../dom.js');
   var SidebarModule = app.SidebarModule || require('./sidebar-module.js');
 
-  var SidebarContent = jCore.Component.inherits(function(props) {
+  var SidebarContent = jCore.Component.inherits(function() {
     this.modules = [];
-    this.scrollable = new SidebarContent.Scrollable({ element: props.element });
+    this.scrollable = new SidebarContent.Scrollable(this.el);
   });
 
   SidebarContent.prototype.createModule = function(props) {
-    var module = new SidebarModule(props);
+    var module = new SidebarModule(null, props);
     module.on('dragstart', this.emit.bind(this, 'dragstart'));
     module.on('dragend', this.emit.bind(this, 'dragend'));
     module.on('drop', this.emit.bind(this, 'drop'));
@@ -35,7 +35,7 @@
       module.parentElement(null);
     });
     this.modules = this.createModules(entries).map(function(module) {
-      module.parentElement(this.findElement('.sidebar-module-container'));
+      module.parentElement(dom.find(this.el, '.sidebar-module-container'));
       return module;
     }.bind(this));
     this.markDirty();
@@ -56,8 +56,8 @@
   };
 
   SidebarContent.Scrollable = (function() {
-    var Scrollable = function(props) {
-      this.iScroll = new IScroll(props.element, this.options());
+    var Scrollable = function(el) {
+      this.iScroll = new IScroll(el, this.options());
     };
 
     Scrollable.prototype.options = function() {

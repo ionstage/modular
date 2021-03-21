@@ -4,7 +4,7 @@
   var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
 
-  var Wire = jCore.Component.inherits(function(props) {
+  var Wire = jCore.Component.inherits(function(_, props) {
     this.sourceX = this.prop(props.sourceX);
     this.sourceY = this.prop(props.sourceY);
     this.targetX = this.prop(props.targetX);
@@ -13,7 +13,7 @@
   });
 
   Wire.prototype.pathElement = function() {
-    return this.findElement('path');
+    return dom.find(this.el, 'path');
   };
 
   Wire.prototype.render = function() {

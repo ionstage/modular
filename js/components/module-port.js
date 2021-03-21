@@ -4,7 +4,7 @@
   var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
 
-  var ModulePort = jCore.Component.inherits(function(props) {
+  var ModulePort = jCore.Component.inherits(function(_, props) {
     this.label = this.prop(props.label);
     this.name = this.prop(props.name);
     this.type = this.prop(props.type);
@@ -22,14 +22,14 @@
     this.socketWidth = this.prop(50);
     this.member = props.member;
     this.module = props.module;
-    this.plug = new ModulePort.Handle({ element: this.findElement('.module-port-plug') });
-    this.socket = new ModulePort.Socket({ element: this.findElement('.module-port-socket') });
-    this.socketHandle = new ModulePort.Handle({ element: this.findElement('.module-port-socket-handle') });
-    this.content = new ModulePort.Content({ element: this.findElement('.module-port-content') });
+    this.plug = new ModulePort.Handle(dom.find(this.el, '.module-port-plug'));
+    this.socket = new ModulePort.Socket(dom.find(this.el, '.module-port-socket'));
+    this.socketHandle = new ModulePort.Handle(dom.find(this.el, '.module-port-socket-handle'));
+    this.content = new ModulePort.Content(dom.find(this.el, '.module-port-content'));
   });
 
   ModulePort.prototype.hideButtonElement = function() {
-    return this.findElement('.module-port-hide-button');
+    return dom.find(this.el, '.module-port-hide-button');
   };
 
   ModulePort.prototype.visible = function() {

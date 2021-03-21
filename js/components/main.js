@@ -10,8 +10,8 @@
   var Main = jCore.Component.inherits(function() {
     this.disabled = this.prop(true);
     this.isFullWidth = this.prop(false);
-    this.header = new MainHeader({ element: this.findElement('.main-header') });
-    this.content = new MainContent({ element: this.findElement('.main-content') });
+    this.header = new MainHeader(dom.find(this.el, '.main-header'));
+    this.content = new MainContent(dom.find(this.el, '.main-content'));
   });
 
   Main.prototype.contentOffsetLeft = function() {

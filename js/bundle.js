@@ -3729,7 +3729,7 @@ if ( typeof module != 'undefined' && module.exports ) {
 
 },{}],"jcore":[function(require,module,exports){
 /**
- * jCore v0.3.3
+ * jCore v0.4.0
  * (c) 2016 iOnStage
  * Released under the MIT License.
  */
@@ -3757,8 +3757,8 @@ if ( typeof module != 'undefined' && module.exports ) {
   var dom = {};
 
   dom.Draggable = (function() {
-    var Draggable = function(element) {
-      this.element = element;
+    var Draggable = function(el) {
+      this.el = el;
       this.onstart = null;
       this.onmove = null;
       this.onend = null;
@@ -3802,19 +3802,19 @@ if ( typeof module != 'undefined' && module.exports ) {
       return 'ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch);
     };
 
-    Draggable.getOffset = function(element) {
-      var rect = element.getBoundingClientRect();
+    Draggable.getOffset = function(el) {
+      var rect = el.getBoundingClientRect();
       var bodyRect = document.body.getBoundingClientRect();
       var bodyStyle = window.getComputedStyle(document.body);
-      var x = rect.left - element.scrollLeft - bodyRect.left + parseInt(bodyStyle.marginLeft, 10);
-      var y = rect.top - element.scrollTop - bodyRect.top + parseInt(bodyStyle.marginTop, 10);
+      var x = rect.left - el.scrollLeft - bodyRect.left + parseInt(bodyStyle.marginLeft, 10);
+      var y = rect.top - el.scrollTop - bodyRect.top + parseInt(bodyStyle.marginTop, 10);
       return { x: x, y: y };
     };
 
-    Draggable.getScrollOffset = function(element) {
+    Draggable.getScrollOffset = function(el) {
       var x = 0;
       var y = 0;
-      var el = element.parentNode;
+      var el = el.parentNode;
       while (el) {
         x += el.scrollLeft || 0;
         y += el.scrollTop || 0;
@@ -3829,7 +3829,7 @@ if ( typeof module != 'undefined' && module.exports ) {
       this.onend = listeners.onend;
       this.context = {};
       var type = (Draggable.supportsTouch() ? 'touchstart' : 'mousedown');
-      this.element.addEventListener(type, this['on' + type], { passive: false });
+      this.el.addEventListener(type, this['on' + type], { passive: false });
     };
 
     Draggable.prototype.disable = function() {
@@ -3837,7 +3837,7 @@ if ( typeof module != 'undefined' && module.exports ) {
       var startType = (supportsTouch ? 'touchstart' : 'mousedown');
       var moveType = (supportsTouch ? 'touchmove' : 'mousemove');
       var endType = (supportsTouch ? 'touchend' : 'mouseup');
-      this.element.removeEventListener(startType, this['on' + startType], { passive: false });
+      this.el.removeEventListener(startType, this['on' + startType], { passive: false });
       document.removeEventListener(moveType, this['on' + moveType]);
       document.removeEventListener(endType, this['on' + endType]);
       document.removeEventListener('scroll', this.onscroll, true);
@@ -3922,7 +3922,7 @@ if ( typeof module != 'undefined' && module.exports ) {
     };
 
     Draggable.prototype.onscroll = function() {
-      var scrollOffset = Draggable.getScrollOffset(this.element);
+      var scrollOffset = Draggable.getScrollOffset(this.el);
       this.dScrollX = scrollOffset.x - this.startScrollX;
       this.dScrollY = scrollOffset.y - this.startScrollY;
     };
@@ -3930,16 +3930,28 @@ if ( typeof module != 'undefined' && module.exports ) {
     return Draggable;
   })();
 
-  var Component = function(props) {
-    this.element = this.prop(props.element || this.render());
-    this.parentElement = this.prop(this.element().parentNode);
-    this.relations = [];
-    this.cache = {};
-    this.listeners = {};
+  var Component = function(el) {
+    this.el = el || this.render();
+    this.parentElement = this.prop(this.el.parentNode);
+    this._relations = [];
+    this._cache = {};
+    this._listeners = {};
   };
 
-  Component.prototype.findElement = function(selectors) {
-    return this.element().querySelector(selectors);
+  Component.prototype.element = function(el) {
+    if (typeof el === 'undefined') {
+      return this.el;
+    }
+    if (el === this.el) {
+      return;
+    }
+    if (!el) {
+      throw new Error('missing element');
+    }
+    this.el = el;
+    this.parentElement(this.el.parentNode);
+    this._cache = {};
+    this.markDirty();
   };
 
   Component.prototype.prop = function(initialValue) {
@@ -3957,29 +3969,39 @@ if ( typeof module != 'undefined' && module.exports ) {
   };
 
   Component.prototype.addRelation = function(relation) {
-    if (this.relations.indexOf(relation) === -1) {
-      this.relations.push(relation);
+    if (this._relations.indexOf(relation) === -1) {
+      this._relations.push(relation);
     }
   };
 
   Component.prototype.removeRelation = function(relation) {
-    var index = this.relations.indexOf(relation);
+    var index = this._relations.indexOf(relation);
     if (index !== -1) {
-      this.relations.splice(index, 1);
+      this._relations.splice(index, 1);
     }
   };
 
   Component.prototype.on = function(type, listener) {
-    if (!this.listeners[type]) {
-      this.listeners[type] = [];
+    if (!this._listeners[type]) {
+      this._listeners[type] = [];
     }
-    this.listeners[type].push(listener);
+    this._listeners[type].push(listener);
+  };
+
+  Component.prototype.off = function(type, listener) {
+    if (!this._listeners[type]) {
+      return;
+    }
+    var index = this._listeners[type].lastIndexOf(listener);
+    if (index !== -1) {
+      this._listeners[type].splice(index, 1);
+    }
   };
 
   Component.prototype.emit = function() {
     var args = Array.prototype.slice.call(arguments);
     var type = args.shift();
-    var listeners = this.listeners[type];
+    var listeners = this._listeners[type];
     if (!listeners) {
       return;
     }
@@ -3989,23 +4011,23 @@ if ( typeof module != 'undefined' && module.exports ) {
   };
 
   Component.prototype.removeAllListeners = function(type) {
-    if (this.listeners[type]) {
-      delete this.listeners[type];
+    if (this._listeners[type]) {
+      delete this._listeners[type];
     } else {
-      this.listeners = {};
+      this._listeners = {};
     }
   };
 
   Component.prototype.redraw = function() {
-    var element = this.element();
+    var el = this.el;
     var parentElement = this.parentElement();
     this.onredraw();
-    if (parentElement && parentElement !== element.parentNode) {
+    if (parentElement && parentElement !== el.parentNode) {
       this.onappend();
-      parentElement.appendChild(element);
-    } else if (!parentElement && element.parentNode) {
+      parentElement.appendChild(el);
+    } else if (!parentElement && el.parentNode) {
       this.onremove();
-      element.parentNode.removeChild(element);
+      el.parentNode.removeChild(el);
     }
   };
 
@@ -4017,8 +4039,8 @@ if ( typeof module != 'undefined' && module.exports ) {
     for (var i = 0, len = args.length; i < len; i++) {
       var key = args[i];
       var value = this[key]();
-      if (value !== this.cache[key]) {
-        this.cache[key] = value;
+      if (value !== this._cache[key]) {
+        this._cache[key] = value;
         isChanged = true;
       }
       values.push(value);
@@ -4063,7 +4085,7 @@ if ( typeof module != 'undefined' && module.exports ) {
     Main.prototype.update = function(index) {
       for (var ci = index, clen = this.dirtyComponents.length; ci < clen; ci++) {
         var component = this.dirtyComponents[ci];
-        var relations = component.relations;
+        var relations = component._relations;
         for (var ri = 0, rlen = relations.length; ri < rlen; ri++) {
           relations[ri].update(component);
         }
@@ -4090,10 +4112,9 @@ if ( typeof module != 'undefined' && module.exports ) {
   Component.inherits = function(initializer) {
     var superCtor = this;
     var ctor = function() {
-      var props = (arguments.length !== 0 ? arguments[0] : {});
-      superCtor.call(this, props);
+      superCtor.apply(this, arguments);
       if (typeof initializer === 'function') {
-        initializer.call(this, props);
+        initializer.apply(this, arguments);
       }
       if (this.constructor === ctor) {
         this.oninit();
@@ -4112,8 +4133,7 @@ if ( typeof module != 'undefined' && module.exports ) {
     var superCtor = this;
     var ctor = function() {
       if (typeof initializer === 'function') {
-        var props = (arguments.length !== 0 ? arguments[0] : {});
-        initializer.call(this, props);
+        initializer.apply(this, arguments);
       }
     };
     inherits(ctor, superCtor);
@@ -4121,20 +4141,20 @@ if ( typeof module != 'undefined' && module.exports ) {
   };
 
   var Draggable = function(component) {
-    this.component = component;
-    this.draggable = new dom.Draggable(component.element());
+    this._component = component;
+    this._draggable = new dom.Draggable(component.el);
   };
 
   Draggable.prototype.enable = function() {
-    this.draggable.enable({
-      onstart: this.onstart.bind(this, this.component),
-      onmove: this.onmove.bind(this, this.component),
-      onend: this.onend.bind(this, this.component),
+    this._draggable.enable({
+      onstart: this.onstart.bind(this, this._component),
+      onmove: this.onmove.bind(this, this._component),
+      onend: this.onend.bind(this, this._component),
     });
   };
 
   Draggable.prototype.disable = function() {
-    this.draggable.disable();
+    this._draggable.disable();
   };
 
   Draggable.prototype.onstart = function(component, x, y, event, context) {};
@@ -4145,8 +4165,8 @@ if ( typeof module != 'undefined' && module.exports ) {
 
   Draggable.inherits = function() {
     var superCtor = this;
-    var ctor = function(component) {
-      superCtor.call(this, component);
+    var ctor = function() {
+      superCtor.apply(this, arguments);
     };
     inherits(ctor, superCtor);
     return ctor;

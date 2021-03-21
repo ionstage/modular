@@ -2,10 +2,9 @@
   'use strict';
 
   var jCore = require('jcore');
-  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
 
-  var SidebarModule = jCore.Component.inherits(function(props) {
+  var SidebarModule = jCore.Component.inherits(function(_, props) {
     this.title = this.prop(props.title);
     this.content = this.prop(props.content);
     this.name = this.prop(props.name);
@@ -14,15 +13,15 @@
   });
 
   SidebarModule.prototype.headerElement = function() {
-    return this.findElement('.sidebar-module-header');
+    return dom.find(this.el, '.sidebar-module-header');
   };
 
   SidebarModule.prototype.contentElement = function() {
-    return this.findElement('.sidebar-module-content');
+    return dom.find(this.el, '.sidebar-module-content');
   };
 
-  SidebarModule.prototype.createClone = function(props) {
-    return new SidebarModule.Clone(helper.extend({ element: dom.clone(this.element()) }, props));
+  SidebarModule.prototype.createClone = function(x, y) {
+    return new SidebarModule.Clone(dom.clone(this.element()), x, y);
   };
 
   SidebarModule.prototype.render = function() {
@@ -59,9 +58,9 @@
   ].join('');
 
   SidebarModule.Clone = (function() {
-    var Clone = jCore.Component.inherits(function(props) {
-      this.x = this.prop(props.x);
-      this.y = this.prop(props.y);
+    var Clone = jCore.Component.inherits(function(_, x, y) {
+      this.x = this.prop(x);
+      this.y = this.prop(y);
     });
 
     Clone.prototype.oninit = function() {
@@ -116,7 +115,7 @@
       context.timeoutID = 0;
       context.x = dom.offsetLeft(module.element());
       context.y = dom.offsetTop(module.element());
-      context.clone = module.createClone({ x: context.x, y: context.y });
+      context.clone = module.createClone(context.x, context.y);
       context.clone.parentElement(dom.body());
       module.emit('dragstart');
     };

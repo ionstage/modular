@@ -4,7 +4,7 @@
   var jCore = require('jcore');
   var dom = app.dom || require('../dom.js');
 
-  var WireHandle = jCore.Component.inherits(function(props) {
+  var WireHandle = jCore.Component.inherits(function(_, props) {
     this.cx = this.prop(props.cx);
     this.cy = this.prop(props.cy);
     this.type = this.prop(props.type);

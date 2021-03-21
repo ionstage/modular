@@ -11,8 +11,8 @@
     this.disabled = this.prop(true);
     this.dragCount = this.prop(0);
     this.entryCollection = new EntryCollection({ jsonLoader: dom.loadJSON });
-    this.header = new SidebarHeader({ element: this.findElement('.sidebar-header') });
-    this.content = new SidebarContent({ element: this.findElement('.sidebar-content') });
+    this.header = new SidebarHeader(dom.find(this.el, '.sidebar-header'));
+    this.content = new SidebarContent(dom.find(this.el, '.sidebar-content'));
   });
 
   Sidebar.prototype.scrollEnabled = function() {

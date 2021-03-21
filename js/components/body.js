@@ -9,8 +9,8 @@
   var Body = jCore.Component.inherits(function() {
     this.hoverDisabled = this.prop(false);
     this.dragCount = this.prop(0);
-    this.sidebar = new Sidebar({ element: this.findElement('.sidebar') });
-    this.main = new Main({ element: this.findElement('.main') });
+    this.sidebar = new Sidebar(dom.find(this.el, '.sidebar'));
+    this.main = new Main(dom.find(this.el, '.main'));
   });
 
   Body.prototype.isDragging = function() {

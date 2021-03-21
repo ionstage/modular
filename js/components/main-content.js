@@ -12,9 +12,9 @@
   var WireHandle = app.WireHandle || require('./wire-handle.js');
 
   var MainContent = jCore.Component.inherits(function() {
-    this.moduleContainer = new MainContent.ModuleContainer({ element: this.findElement('.module-container') });
-    this.wireContainer = new MainContent.WireContainer({ element: this.findElement('.wire-container') });
-    this.wireHandleContainer = new MainContent.WireHandleContainer({ element: this.findElement('.wire-handle-container') });
+    this.moduleContainer = new MainContent.ModuleContainer(dom.find(this.el, '.module-container'));
+    this.wireContainer = new MainContent.WireContainer(dom.find(this.el, '.wire-container'));
+    this.wireHandleContainer = new MainContent.WireHandleContainer(dom.find(this.el, '.wire-handle-container'));
   });
 
   MainContent.prototype.offsetLeft = function() {
@@ -83,7 +83,7 @@
     var ModuleContainer = jCore.Component.inherits(function() {
       this.modules = [];
       this.bindings = [];
-      this.retainer = new ModuleContainer.Retainer({ element: this.findElement('.module-container-retainer') });
+      this.retainer = new ModuleContainer.Retainer(dom.find(this.el, '.module-container-retainer'));
     });
 
     ModuleContainer.prototype.bottomRightX = function() {
@@ -136,7 +136,7 @@
     };
 
     ModuleContainer.prototype.createModule = function(props) {
-      var module = new Module(props);
+      var module = new Module(null, props);
       module.on('delete', this.ondelete.bind(this));
       module.on('point', this.onpoint.bind(this));
       module.on('portshow', this.onportshow.bind(this));
@@ -466,7 +466,7 @@
     };
 
     WireContainer.prototype.createWire = function(sourcePort, targetPort) {
-      return new Wire({
+      return new Wire(null, {
         sourceX: sourcePort.plugX(),
         sourceY: sourcePort.plugY(),
         targetX: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
@@ -550,7 +550,7 @@
     });
 
     WireHandleContainer.prototype.createWireHandle = function(sourcePort, targetPort) {
-      return new WireHandle({
+      return new WireHandle(null, {
         cx: (targetPort ? targetPort.socketX() : sourcePort.plugX()),
         cy: (targetPort ? targetPort.socketY() : sourcePort.plugY()),
         type: sourcePort.type(),
