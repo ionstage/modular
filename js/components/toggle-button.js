@@ -26,7 +26,7 @@
 
   ToggleButton.prototype.onredraw = function() {
     this.redrawBy('currentIndex', function(currentIndex) {
-      dom.data(this.element(), 'type', this.types[currentIndex]);
+      dom.data(this.el, 'type', this.types[currentIndex]);
     });
   };
 

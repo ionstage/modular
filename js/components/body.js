@@ -81,11 +81,11 @@
 
   Body.prototype.onredraw = function() {
     this.redrawBy('hoverDisabled', function(hoverDisabled) {
-      dom.toggleClass(this.element(), 'hover-disabled', hoverDisabled);
+      dom.toggleClass(this.el, 'hover-disabled', hoverDisabled);
     });
 
     this.redrawBy('isDragging', function(isDragging) {
-      dom.toggleClass(this.element(), 'dragging', isDragging);
+      dom.toggleClass(this.el, 'dragging', isDragging);
     });
   };
 

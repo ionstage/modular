@@ -21,7 +21,7 @@
   };
 
   SidebarModule.prototype.createClone = function(x, y) {
-    return new SidebarModule.Clone(dom.clone(this.element()), x, y);
+    return new SidebarModule.Clone(dom.clone(this.el), x, y);
   };
 
   SidebarModule.prototype.render = function() {
@@ -38,7 +38,7 @@
 
   SidebarModule.prototype.onredraw = function() {
     this.redrawBy('isActive', function(isActive) {
-      dom.toggleClass(this.element(), 'active', isActive);
+      dom.toggleClass(this.el, 'active', isActive);
     });
 
     this.redrawBy('title', function(title) {
@@ -64,12 +64,12 @@
     });
 
     Clone.prototype.oninit = function() {
-      dom.addClass(this.element(), 'clone');
+      dom.addClass(this.el, 'clone');
     };
 
     Clone.prototype.onredraw = function() {
       this.redrawBy('x', 'y', function(x, y) {
-        dom.translate(this.element(), x, y);
+        dom.translate(this.el, x, y);
       });
     };
 
@@ -113,8 +113,8 @@
     Draggable.prototype.ondragstart = function(module, x, y, event, context) {
       context.dragging = true;
       context.timeoutID = 0;
-      context.x = dom.offsetLeft(module.element());
-      context.y = dom.offsetTop(module.element());
+      context.x = dom.offsetLeft(module.el);
+      context.y = dom.offsetTop(module.el);
       context.clone = module.createClone(context.x, context.y);
       context.clone.parentElement(dom.body());
       module.emit('dragstart');

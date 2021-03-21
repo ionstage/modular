@@ -23,15 +23,15 @@
     var Input = jCore.Component.inherits();
 
     Input.prototype.click = function() {
-      dom.click(this.element());
+      dom.click(this.el);
     };
 
     Input.prototype.reset = function() {
-      dom.value(this.element(), '');
+      dom.value(this.el, '');
     };
 
     Input.prototype.oninit = function() {
-      dom.on(this.element(), 'change', this.onchange.bind(this));
+      dom.on(this.el, 'change', this.onchange.bind(this));
     };
 
     Input.prototype.onchange = function(event) {

@@ -46,7 +46,7 @@
   };
 
   SidebarContent.prototype.oninit = function() {
-    dom.on(this.element(), dom.eventType('start'), function() {
+    dom.on(this.el, dom.eventType('start'), function() {
       dom.removeFocus();
     });
   };

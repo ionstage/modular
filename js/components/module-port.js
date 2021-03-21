@@ -104,22 +104,22 @@
 
   ModulePort.prototype.onredraw = function() {
     this.redrawBy('type', function(type) {
-      dom.data(this.element(), 'type', type);
+      dom.data(this.el, 'type', type);
     });
 
     this.redrawBy('top', function(top) {
-      dom.translateY(this.element(), top);
+      dom.translateY(this.el, top);
     });
 
     this.redrawBy('highlighted', function(highlighted) {
-      dom.toggleClass(this.element(), 'highlighted', highlighted);
+      dom.toggleClass(this.el, 'highlighted', highlighted);
 
       // don't hide highlighted port
       dom.toggleClass(this.hideButtonElement(), 'disabled', highlighted);
     });
 
     this.redrawBy('isMoving', function(isMoving) {
-      dom.toggleClass(this.element(), 'moving', isMoving);
+      dom.toggleClass(this.el, 'moving', isMoving);
     });
   };
 
@@ -145,11 +145,11 @@
 
     Handle.prototype.onredraw = function() {
       this.redrawBy('visible', function(visible) {
-        dom.toggleClass(this.element(), 'hide', !visible);
+        dom.toggleClass(this.el, 'hide', !visible);
       });
 
       this.redrawBy('highlighted', function(highlighted) {
-        dom.toggleClass(this.element(), 'highlighted', highlighted);
+        dom.toggleClass(this.el, 'highlighted', highlighted);
       });
     };
 
@@ -166,7 +166,7 @@
 
     Content.prototype.onredraw = function() {
       this.redrawBy('label', function(label) {
-        dom.text(this.element(), label);
+        dom.text(this.el, label);
       });
     };
 

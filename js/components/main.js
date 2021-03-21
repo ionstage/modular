@@ -57,18 +57,18 @@
 
   Main.prototype.onredraw = function() {
     this.redrawBy('disabled', function(disabled) {
-      dom.toggleClass(this.element(), 'disabled', disabled);
+      dom.toggleClass(this.el, 'disabled', disabled);
     });
 
     this.redrawBy('isFullWidth', function(isFullWidth) {
-      dom.toggleClass(this.element(), 'full-width', isFullWidth);
+      dom.toggleClass(this.el, 'full-width', isFullWidth);
     });
   };
 
   Main.prototype.onsidebartoggle = function(done) {
     this.toggleSidebar();
     this.emit('sidebartoggle');
-    dom.once(this.element(), 'transitionend', function() {
+    dom.once(this.el, 'transitionend', function() {
       done();
     });
   };

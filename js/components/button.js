@@ -16,11 +16,11 @@
 
   Button.prototype.onredraw = function() {
     this.redrawBy('isActive', function(isActive) {
-      dom.toggleClass(this.element(), 'active', isActive);
+      dom.toggleClass(this.el, 'active', isActive);
     });
 
     this.redrawBy('disabled', function(disabled) {
-      dom.toggleClass(this.element(), 'disabled', disabled);
+      dom.toggleClass(this.el, 'disabled', disabled);
     });
   };
 

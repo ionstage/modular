@@ -71,7 +71,7 @@
 
   Module.prototype.targetPort = function(target) {
     return helper.find(this.ports, function(port) {
-      return dom.contains(port.element(), target);
+      return dom.contains(port.el, target);
     });
   };
 
@@ -243,27 +243,27 @@
 
   Module.prototype.onredraw = function() {
     this.redrawBy('x', 'y', function(x, y) {
-      dom.translate(this.element(), x, y);
+      dom.translate(this.el, x, y);
     });
 
     this.redrawBy('zIndex', function(zIndex) {
-      dom.css(this.element(), { zIndex: zIndex });
+      dom.css(this.el, { zIndex: zIndex });
     });
 
     this.redrawBy('isLoading', function(isLoading) {
-      dom.toggleClass(this.element(), 'loading', isLoading);
+      dom.toggleClass(this.el, 'loading', isLoading);
     });
 
     this.redrawBy('isError', function(isError) {
-      dom.toggleClass(this.element(), 'error', isError);
+      dom.toggleClass(this.el, 'error', isError);
     });
 
     this.redrawBy('isMoving', function(isMoving) {
-      dom.toggleClass(this.element(), 'moving', isMoving);
+      dom.toggleClass(this.el, 'moving', isMoving);
     });
 
     this.redrawBy('isDeleting', function(isDeleting) {
-      dom.toggleClass(this.element(), 'deleting', isDeleting);
+      dom.toggleClass(this.el, 'deleting', isDeleting);
     });
   };
 
@@ -354,7 +354,7 @@
 
     Footer.prototype.onredraw = function() {
       this.redrawBy('disabled', function(disabled) {
-        dom.toggleClass(this.element(), 'hide', disabled);
+        dom.toggleClass(this.el, 'hide', disabled);
       });
     };
 
@@ -375,7 +375,7 @@
     };
 
     Component.prototype.contentWindow = function() {
-      return dom.contentWindow(this.element());
+      return dom.contentWindow(this.el);
     };
 
     Component.prototype.circuitModule = function() {
@@ -430,17 +430,17 @@
     Component.prototype.load = function(url) {
       return new Promise(function(resolve, reject) {
         var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
-        dom.once(this.element(), 'load', function() {
+        dom.once(this.el, 'load', function() {
           clearTimeout(timeoutID);
           resolve(this.circuitModule());
         }.bind(this));
-        dom.attr(this.element(), { src: url });
+        dom.attr(this.el, { src: url });
       }.bind(this)).then(function(circuitModule) {
         if (!circuitModule) {
           throw new Error('Invalid circuit module');
         }
-        this.height(dom.contentHeight(this.element()));
-        dom.css(this.element(), { height: this.height() + 'px' });
+        this.height(dom.contentHeight(this.el));
+        dom.css(this.el, { height: this.height() + 'px' });
         dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
         this.members = circuitModule.getAll();
         this.eventMembers = this.createEventCircuitModule().getAll();
@@ -472,7 +472,7 @@
     PortList.prototype.add = function(port) {
       // add the port to the end of the list
       port.top(this.height());
-      port.parentElement(this.element());
+      port.parentElement(this.el);
       this.ports.push(port);
       this.markDirty();
     };
@@ -493,7 +493,7 @@
 
     PortList.prototype.onredraw = function() {
       this.redrawBy('height', function(height) {
-        dom.css(this.element(), { height: height + 'px' });
+        dom.css(this.el, { height: height + 'px' });
       });
     };
 
@@ -535,13 +535,13 @@
     };
 
     PortSelect.prototype.onappend = function() {
-      dom.on(this.element(), dom.eventType('start'), this.onpoint);
-      dom.on(this.element(), 'change', this.onchange);
+      dom.on(this.el, dom.eventType('start'), this.onpoint);
+      dom.on(this.el, 'change', this.onchange);
     };
 
     PortSelect.prototype.onremove = function() {
-      dom.off(this.element(), dom.eventType('start'), this.onpoint);
-      dom.off(this.element(), 'change', this.onchange);
+      dom.off(this.el, dom.eventType('start'), this.onpoint);
+      dom.off(this.el, 'change', this.onchange);
     };
 
     PortSelect.prototype.onredraw = function() {
@@ -562,7 +562,7 @@
       }.bind(this));
 
       // deselect option
-      dom.value(this.element(), '');
+      dom.value(this.el, '');
     };
 
     PortSelect.prototype.onpoint = function(event) {
@@ -587,11 +587,11 @@
 
       Option.prototype.onredraw = function() {
         this.redrawBy('label', function(label) {
-          dom.text(this.element(), label);
+          dom.text(this.el, label);
         });
 
         this.redrawBy('name', function(name) {
-          dom.value(this.element(), name);
+          dom.value(this.el, name);
         });
       };
 

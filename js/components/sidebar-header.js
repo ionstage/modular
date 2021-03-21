@@ -23,24 +23,24 @@
     });
 
     SearchInput.prototype.oninit = function() {
-      this.isFocused(dom.isFocused(this.element()));
-      dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
-      dom.on(this.element(), 'click', this.onclick.bind(this));
-      dom.on(this.element(), 'input', this.oninput.bind(this));
+      this.isFocused(dom.isFocused(this.el));
+      dom.on(this.el, dom.eventType('start'), this.onpoint.bind(this));
+      dom.on(this.el, 'click', this.onclick.bind(this));
+      dom.on(this.el, 'input', this.oninput.bind(this));
     };
 
     SearchInput.prototype.onpoint = function() {
-      this.isFocused(dom.isFocused(this.element()));
+      this.isFocused(dom.isFocused(this.el));
     };
 
     SearchInput.prototype.onclick = function() {
-      if (!this.isFocused() && !dom.hasSelection(this.element())) {
-        dom.selectAll(this.element());
+      if (!this.isFocused() && !dom.hasSelection(this.el)) {
+        dom.selectAll(this.el);
       }
     };
 
     SearchInput.prototype.oninput = function() {
-      this.emit('input', dom.value(this.element()));
+      this.emit('input', dom.value(this.el));
     };
 
     return SearchInput;

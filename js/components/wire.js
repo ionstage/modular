@@ -25,7 +25,7 @@
       var x = Math.min(sourceX, targetX);
       var y = Math.min(sourceY, targetY);
       var d = ['M', sourceX - x, sourceY - y, 'L', targetX - x, targetY - y].join(' ');
-      dom.translate(this.element(), x, y);
+      dom.translate(this.el, x, y);
       dom.attr(this.pathElement(), { d: d });
     });
 

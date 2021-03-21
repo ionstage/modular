@@ -18,11 +18,11 @@
   });
 
   MainContent.prototype.offsetLeft = function() {
-    return dom.offsetLeft(this.element())
+    return dom.offsetLeft(this.el)
   };
 
   MainContent.prototype.offsetTop = function() {
-    return dom.offsetTop(this.element());
+    return dom.offsetTop(this.el);
   };
 
   MainContent.prototype.toData = function() {
@@ -49,7 +49,7 @@
   };
 
   MainContent.prototype.oninit = function() {
-    dom.on(this.element(), dom.eventType('start'), this.onpoint.bind(this));
+    dom.on(this.el, dom.eventType('start'), this.onpoint.bind(this));
     this.moduleContainer.on('connect', this.wireContainer.onconnect.bind(this.wireContainer));
     this.moduleContainer.on('disconnect', this.wireContainer.ondisconnect.bind(this.wireContainer));
     this.moduleContainer.on('portevent', this.onportevent.bind(this));
@@ -69,7 +69,7 @@
 
   MainContent.prototype.onpoint = function(event) {
     // remove keyboard focus when pointing background
-    if (dom.target(event) === this.element()) {
+    if (dom.target(event) === this.el) {
       dom.removeFocus();
     }
   };
@@ -161,7 +161,7 @@
 
     ModuleContainer.prototype.loadModule = function(props, visiblePortNames, serializedValue) {
       var module = this.createModule(props);
-      module.parentElement(this.element());
+      module.parentElement(this.el);
       this.modules.push(module);
       this.refresh();
       return module.load(visiblePortNames, serializedValue);
@@ -438,7 +438,7 @@
 
       Retainer.prototype.onredraw = function() {
         this.redrawBy('x', 'y', function(x, y) {
-          dom.translate(this.element(), x, y);
+          dom.translate(this.el, x, y);
         });
       };
 
@@ -501,7 +501,7 @@
 
     WireContainer.prototype.onconnect = function(sourcePort, targetPort) {
       var wire = this.createWire(sourcePort, targetPort);
-      wire.parentElement(this.element());
+      wire.parentElement(this.el);
       this.lock(LockRelation.TYPE_PLUG, sourcePort, wire);
       this.lock(LockRelation.TYPE_SOCKET, targetPort, wire);
     };
@@ -516,7 +516,7 @@
     WireContainer.prototype.onhandlestart = function(sourcePort, targetPort, context) {
       context.wire = (targetPort ? this.attachedWire(targetPort) : this.createWire(sourcePort, null));
       if (!targetPort) {
-        context.wire.parentElement(this.element());
+        context.wire.parentElement(this.el);
         this.lock(LockRelation.TYPE_PLUG, sourcePort, context.wire);
       }
     };
@@ -570,7 +570,7 @@
 
     WireHandleContainer.prototype.onhandlestart = function(sourcePort, targetPort, context) {
       context.wireHandle = this.createWireHandle(sourcePort, targetPort);
-      context.wireHandle.parentElement(this.element());
+      context.wireHandle.parentElement(this.el);
       this.wireHandles.push(context.wireHandle);
     };
 

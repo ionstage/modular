@@ -21,19 +21,19 @@
 
   WireHandle.prototype.onredraw = function() {
     this.redrawBy('cx', 'cy', function(cx, cy) {
-      dom.translate(this.element(), cx - this.width() / 2, cy - this.height() / 2);
+      dom.translate(this.el, cx - this.width() / 2, cy - this.height() / 2);
     });
 
     this.redrawBy('type', function(type) {
-      dom.data(this.element(), 'type', type);
+      dom.data(this.el, 'type', type);
     });
 
     this.redrawBy('visible', function(visible) {
-      dom.toggleClass(this.element(), 'hide', !visible);
+      dom.toggleClass(this.el, 'hide', !visible);
     });
 
     this.redrawBy('highlighted', function(highlighted) {
-      dom.toggleClass(this.element(), 'highlighted', highlighted);
+      dom.toggleClass(this.el, 'highlighted', highlighted);
     });
   };
 

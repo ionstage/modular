@@ -50,7 +50,7 @@
 
   Sidebar.prototype.onredraw = function() {
     this.redrawBy('disabled', function(disabled) {
-      dom.toggleClass(this.element(), 'disabled', disabled);
+      dom.toggleClass(this.el, 'disabled', disabled);
     });
 
     this.redrawBy('scrollEnabled', function(scrollEnabled) {
