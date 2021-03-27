@@ -91,7 +91,7 @@
 
     return helper.findLast(this.ports, function(port) {
       return (Math.abs(y - port.socketY()) <= 18 && port.visible() && !port.socketDisabled());
-    }.bind(this));
+    });
   };
 
   Module.prototype.url = function() {
