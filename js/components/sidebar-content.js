@@ -26,7 +26,7 @@
         content: entry.description,
         name: entry.name,
       });
-    }.bind(this));
+    }, this);
   };
 
   SidebarContent.prototype.reload = function(entries) {
@@ -37,7 +37,7 @@
     this.modules = this.createModules(entries).map(function(module) {
       module.parentElement(dom.find(this.el, '.sidebar-module-container'));
       return module;
-    }.bind(this));
+    }, this);
     this.markDirty();
   };
 

@@ -135,7 +135,7 @@
         member: member,
         module: this,
       }, member));
-    }.bind(this));
+    }, this);
   };
 
   Module.prototype.setPorts = function(ports, visiblePortNames) {
@@ -143,7 +143,7 @@
     this.portSelect.set(ports);
     visiblePortNames.forEach(function(name) {
       this.showPort(name);
-    }.bind(this));
+    }, this);
   };
 
   Module.prototype.removePortsAllListeners = function() {
@@ -171,7 +171,7 @@
 
     this.visiblePorts().forEach(function(port) {
       port.offsetX(this.portOffsetX());
-    }.bind(this));
+    }, this);
   };
 
   Module.prototype.moveY = function(value) {
@@ -179,7 +179,7 @@
 
     this.visiblePorts().forEach(function(port) {
       port.offsetY(this.portOffsetY());
-    }.bind(this));
+    }, this);
   };
 
   Module.prototype.showPort = function(name) {
@@ -394,19 +394,19 @@
         return (member.type === 'event');
       }).map(function(member) {
         return helper.extend({ arg: this.emit.bind(this, 'event', member) }, member);
-      }.bind(this)));
+      }, this));
     };
 
     Component.prototype.bindEventMembers = function() {
       this.eventMembers.forEach(function(member) {
         CircuitModule.bind(this.member(member.name), member);
-      }.bind(this));
+      }, this);
     };
 
     Component.prototype.unbindEventMembers = function() {
       this.eventMembers.forEach(function(member) {
         CircuitModule.unbind(this.member(member.name), member);
-      }.bind(this));
+      }, this);
     };
 
     Component.prototype.createDefaultOptions = function() {
@@ -559,7 +559,7 @@
         option.parentElement(this.optGroupElement(port.type()));
         option.redraw();
         return option;
-      }.bind(this));
+      }, this);
 
       // deselect option
       dom.value(this.el, '');

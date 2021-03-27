@@ -131,7 +131,7 @@
         }),
         connections: this.bindings.map(function(binding) {
          return binding.toData(this.modules);
-        }.bind(this)),
+        }, this),
       };
     };
 
@@ -170,7 +170,7 @@
     ModuleContainer.prototype.loadModules = function(modulesData) {
       return Promise.all(modulesData.map(function(moduleData) {
         return this.loadModule(moduleData.props, moduleData.visiblePortNames, moduleData.serializedValue);
-      }.bind(this)));
+      }, this));
     };
 
     ModuleContainer.prototype.loadConnections = function(connectionsData, modules) {
@@ -182,7 +182,7 @@
             throw new Error('Invalid connection');
           }
           this.connect(binding.sourcePort, binding.targetPort);
-        }.bind(this));
+        }, this);
       }.bind(this));
     };
 
@@ -197,7 +197,7 @@
     ModuleContainer.prototype.clear = function() {
       this.modules.slice().reverse().forEach(function(module) {
         this.removeModule(module);
-      }.bind(this));
+      }, this);
     };
 
     ModuleContainer.prototype.canConnect = function(sourcePort, targetPort) {
@@ -232,7 +232,7 @@
     ModuleContainer.prototype.disconnectByModule = function(module) {
       module.ports.forEach(function(port) {
         this.disconnectByPort(port);
-      }.bind(this));
+      }, this);
     };
 
     ModuleContainer.prototype.disconnectByPort = function(port) {
@@ -240,7 +240,7 @@
         if (binding.sourcePort === port || binding.targetPort === port) {
           this.disconnect(binding.sourcePort, binding.targetPort);
         }
-      }.bind(this));
+      }, this);
     };
 
     ModuleContainer.prototype.attach = function(sourcePort, targetPort) {
