@@ -51,7 +51,6 @@
 
 .module-port-plug {
   position: absolute;
-  -webkit-transform: translate(246px, 9px);
   transform: translate(246px, 9px);
 }
 
@@ -61,7 +60,6 @@
   padding: 2px;
   pointer-events: none;
   position: absolute;
-  -webkit-transform: translate(-44px, 5px);
   transform: translate(-44px, 5px);
   width: 24px;
 }
