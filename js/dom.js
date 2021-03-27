@@ -114,19 +114,12 @@
     return el.cloneNode(true);
   };
 
-  dom.transform = function(el, value) {
-    dom.css(el, {
-      transform: value,
-      webkitTransform: value,
-    });
-  };
-
   dom.translate = function(el, x, y) {
-    dom.transform(el, 'translate(' + x + 'px, ' + y + 'px)');
+    el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
   };
 
   dom.translateY = function(el, y) {
-    dom.transform(el, 'translateY(' + y + 'px)');
+    el.style.transform = 'translateY(' + y + 'px)';
   };
 
   dom.on = function(el, type, listener, useCapture) {
