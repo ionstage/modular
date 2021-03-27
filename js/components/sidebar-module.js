@@ -80,12 +80,12 @@
     var Draggable = jCore.Draggable.inherits();
 
     Draggable.prototype.onstart = function(module, x, y, event, context) {
+      dom.cancel(event);
       module.isActive(true);
       if (dom.supportsTouch()) {
         context.dragging = false;
         context.timeoutID = setTimeout(this.ondragstart.bind(this), 300, module, x, y, event, context);
       } else {
-        dom.cancel(event);
         this.ondragstart(module, x, y, event, context);
       }
     };
