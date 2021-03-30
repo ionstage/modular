@@ -604,12 +604,15 @@
   })();
 
   Module.Draggable = (function() {
-    var Draggable = jCore.Draggable.inherits();
+    var Draggable = jCore.Draggable.inherits(function() {
+      this.listenersList = [];
+    });
 
     Draggable.prototype.onstart = function(module, x, y, event, context) {
       module.emit('point', module);
-      context.listeners = Draggable.listenersByTarget(dom.target(event));
+      context.listeners = Draggable.listenersByTarget(dom.target(event), this.listenersList);
       if (context.listeners) {
+        this.listenersList.push(context.listeners);
         dom.cancel(event);
         module.emit('dragstart');
         context.listeners.onstart(module, x, y, event, context);
@@ -624,6 +627,7 @@
 
     Draggable.prototype.onend = function(module, dx, dy, event, context) {
       if (context.listeners) {
+        helper.remove(this.listenersList, context.listeners);
         module.emit('dragend');
         context.listeners.onend(module, dx, dy, event, context);
       }
@@ -764,20 +768,65 @@
       },
     };
 
+    Draggable.isListenersAllowed = {
+      move: function(listenersList) {
+        return (listenersList.length === 0 || listenersList.every(function(listeners) {
+          // allow when changing connection
+          return (listeners === Draggable.portPlugListeners ||
+                  listeners === Draggable.portSocketHandleListeners);
+        }));
+      },
+      remove: function(listenersList) {
+        // disallow other listeners in multi-touch
+        return (listenersList.length === 0);
+      },
+      change: function(listenersList) {
+        return (listenersList.length === 0 || listenersList.every(function(listeners) {
+          // disallow when module or port is being removed
+          return (listeners !== Draggable.deleteButtonListeners &&
+                  listeners !== Draggable.portHideButtonListeners);
+        }));
+      },
+    };
+
     Draggable.listenersByTarget = (function() {
       var entries = [
-        { className: 'module-title', listeners: Draggable.titleListeners },
-        { className: 'module-delete-button', listeners: Draggable.deleteButtonListeners },
-        { className: 'module-port-hide-button', listeners: Draggable.portHideButtonListeners },
-        { className: 'module-port-content', listeners: Draggable.portContentListeners },
-        { className: 'module-port-plug', listeners: Draggable.portPlugListeners },
-        { className: 'module-port-socket-handle', listeners: Draggable.portSocketHandleListeners },
+        {
+          className: 'module-title',
+          listeners: Draggable.titleListeners,
+          isAllowed: Draggable.isListenersAllowed.move,
+        },
+        {
+          className: 'module-delete-button',
+          listeners: Draggable.deleteButtonListeners,
+          isAllowed: Draggable.isListenersAllowed.remove,
+        },
+        {
+          className: 'module-port-hide-button',
+          listeners: Draggable.portHideButtonListeners,
+          isAllowed: Draggable.isListenersAllowed.remove,
+        },
+        {
+          className: 'module-port-content',
+          listeners: Draggable.portContentListeners,
+          isAllowed: Draggable.isListenersAllowed.move,
+        },
+        {
+          className: 'module-port-plug',
+          listeners: Draggable.portPlugListeners,
+          isAllowed: Draggable.isListenersAllowed.change,
+        },
+        {
+          className: 'module-port-socket-handle',
+          listeners: Draggable.portSocketHandleListeners,
+          isAllowed: Draggable.isListenersAllowed.change,
+        },
       ];
-      return function(target) {
+      return function(target, listenersList) {
         var entry = helper.find(entries, function(entry) {
           return dom.hasClass(target, entry.className);
         });
-        return (entry ? entry.listeners : null);
+        return (entry && entry.isAllowed(listenersList) ? entry.listeners : null);
       };
     })();
 
