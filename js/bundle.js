@@ -3729,7 +3729,7 @@ if ( typeof module != 'undefined' && module.exports ) {
 
 },{}],"jcore":[function(require,module,exports){
 /**
- * jCore v0.4.3
+ * jCore v0.4.5
  * (c) 2016 iOnStage
  * Released under the MIT License.
  */
@@ -3757,22 +3757,6 @@ if ( typeof module != 'undefined' && module.exports ) {
   var dom = {};
 
   dom.Draggable = (function() {
-    var IDENTIFIER_MOUSE = 0;
-
-    var Pointer = function(identifier, pageX, pageY, scroll, onscroll) {
-      this.identifier = identifier;
-      this.startPageX = pageX;
-      this.startPageY = pageY;
-      this.startScrollX = scroll.x;
-      this.startScrollY = scroll.y;
-      this.startScrollWidth = scroll.width;
-      this.startScrollHeight = scroll.height;
-      this.dScrollX = 0;
-      this.dScrollY = 0;
-      this.context = {};
-      this.onscroll = onscroll;
-    };
-
     var Draggable = function(el) {
       this.el = el;
       this.onstart = null;
@@ -3785,6 +3769,22 @@ if ( typeof module != 'undefined' && module.exports ) {
       this.ontouchmove = this.ontouchmove.bind(this);
       this.ontouchend = this.ontouchend.bind(this);
       this.pointers = {};
+    };
+
+    Draggable.IDENTIFIER_MOUSE = 0;
+
+    Draggable.Pointer = function(identifier, pageX, pageY, scroll, onscroll) {
+      this.identifier = identifier;
+      this.startPageX = pageX;
+      this.startPageY = pageY;
+      this.startScrollX = scroll.x;
+      this.startScrollY = scroll.y;
+      this.startScrollWidth = scroll.width;
+      this.startScrollHeight = scroll.height;
+      this.dScrollX = 0;
+      this.dScrollY = 0;
+      this.context = {};
+      this.onscroll = onscroll;
     };
 
     Draggable.debounce = function(func, delay) {
@@ -3840,26 +3840,27 @@ if ( typeof module != 'undefined' && module.exports ) {
       };
     };
 
-    Draggable.prototype.createPointer = function(identifier, event, onscroll) {
+    Draggable.prototype.createPointer = function(identifier, event) {
       var scroll = Draggable.getScrollOffset(event.target);
-      return new Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
+      var onscroll = Draggable.debounce(this.onscroll.bind(this, identifier), 0);
+      return new Draggable.Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
     };
 
     Draggable.prototype.addPointer = function(p) {
       document.addEventListener('scroll', p.onscroll, true);
-      this.pointers[p.identifier] = p;
+      this.pointers[String(p.identifier)] = p;
     };
 
     Draggable.prototype.removePointer = function(p) {
       document.removeEventListener('scroll', p.onscroll, true);
       p.context = null;
       p.onscroll = null;
-      delete this.pointers[p.identifier];
+      delete this.pointers[String(p.identifier)];
     };
 
     Draggable.prototype.removeAllPointers = function() {
-      Object.keys(this.pointers).forEach(function(identifier) {
-        this.removePointer(this.pointers[identifier]);
+      Object.keys(this.pointers).forEach(function(id) {
+        this.removePointer(this.pointers[id]);
       }, this);
     };
 
@@ -3868,22 +3869,22 @@ if ( typeof module != 'undefined' && module.exports ) {
     };
 
     Draggable.prototype.findPointer = function(identifier) {
-      return this.pointers[identifier] || null;
+      return this.pointers[String(identifier)] || null;
     };
 
     Draggable.prototype.resolveUnhandledTouches = function(event) {
-      var identifiers = Object.keys(this.pointers);
-      if (identifiers.length === 0) {
+      var ids = Object.keys(this.pointers);
+      if (ids.length === 0) {
         return;
       }
-      identifiers.forEach(function(identifier) {
+      ids.forEach(function(id) {
+        var p = this.pointers[id];
         for (var i = 0, len = event.touches.length; i < len; i++) {
-          if (event.touches[i].identifier === identifier) {
+          if (event.touches[i].identifier === p.identifier) {
             return;
           }
         }
-        // unhandled pointer
-        var p = this.pointers[identifier];
+        // pointer is unhandled
         var dx = event.pageX - p.startPageX + p.dScrollX;
         var dy = event.pageY - p.startPageY + p.dScrollY;
         this.onend.call(null, dx, dy, event, p.context);
@@ -3914,8 +3915,7 @@ if ( typeof module != 'undefined' && module.exports ) {
       var offset = Draggable.getOffset(event.target);
       var x = event.clientX - offset.x;
       var y = event.clientY - offset.y;
-      var onscroll = Draggable.debounce(this.onscroll.bind(this, IDENTIFIER_MOUSE), 0);
-      var p = this.createPointer(IDENTIFIER_MOUSE, event, onscroll);
+      var p = this.createPointer(Draggable.IDENTIFIER_MOUSE, event);
       this.addPointer(p);
       this.onstart.call(null, x, y, event, p.context);
       document.addEventListener('mousemove', this.onmousemove);
@@ -3923,14 +3923,14 @@ if ( typeof module != 'undefined' && module.exports ) {
     };
 
     Draggable.prototype.onmousemove = function(event) {
-      var p = this.findPointer(IDENTIFIER_MOUSE);
+      var p = this.findPointer(Draggable.IDENTIFIER_MOUSE);
       var dx = event.pageX - p.startPageX + p.dScrollX;
       var dy = event.pageY - p.startPageY + p.dScrollY;
       this.onmove.call(null, dx, dy, event, p.context);
     };
 
     Draggable.prototype.onmouseup = function(event) {
-      var p = this.findPointer(IDENTIFIER_MOUSE);
+      var p = this.findPointer(Draggable.IDENTIFIER_MOUSE);
       var dx = event.pageX - p.startPageX + p.dScrollX;
       var dy = event.pageY - p.startPageY + p.dScrollY;
       document.removeEventListener('mousemove', this.onmousemove);
@@ -3948,8 +3948,7 @@ if ( typeof module != 'undefined' && module.exports ) {
         var offset = Draggable.getOffset(touch.target);
         var x = touch.clientX - offset.x;
         var y = touch.clientY - offset.y;
-        var onscroll = Draggable.debounce(this.onscroll.bind(this, touch.identifier), 0);
-        var p = this.createPointer(touch.identifier, touch, onscroll);
+        var p = this.createPointer(touch.identifier, touch);
         this.addPointer(p);
         this.onstart.call(null, x, y, event, p.context);
       }

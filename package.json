@@ -14,7 +14,7 @@
     "es6-promise": "^4.2.8",
     "file-saver": "^2.0.5",
     "iscroll": "^5.2.0",
-    "jcore": "^0.4.3"
+    "jcore": "^0.4.5"
   },
   "devDependencies": {
     "browser-sync": "^2.18.13",
