@@ -157,7 +157,7 @@
   })();
 
   // socket has the same properties as handle
-  ModulePort.Socket = ModulePort.Handle.inherits();
+  ModulePort.Socket = ModulePort.Handle;
 
   ModulePort.Content = (function() {
     var Content = jCore.Component.inherits(function() {
