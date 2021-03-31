@@ -82,6 +82,10 @@
     el.setSelectionRange(0, el.value.length);
   };
 
+  dom.clearSelection = function(el) {
+    el.setSelectionRange(el.selectionStart, el.selectionStart);
+  };
+
   dom.offsetLeft = function(el) {
     return el.getBoundingClientRect().left - el.scrollLeft - document.body.getBoundingClientRect().left;
   };

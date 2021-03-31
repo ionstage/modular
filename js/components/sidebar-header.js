@@ -27,6 +27,7 @@
       dom.on(this.el, dom.eventType('start'), this.onpoint.bind(this));
       dom.on(this.el, 'click', this.onclick.bind(this));
       dom.on(this.el, 'input', this.oninput.bind(this));
+      dom.on(this.el, 'focus', this.onfocus.bind(this));
     };
 
     SearchInput.prototype.onpoint = function() {
@@ -41,6 +42,12 @@
 
     SearchInput.prototype.oninput = function() {
       this.emit('input', dom.value(this.el));
+    };
+
+    SearchInput.prototype.onfocus = function() {
+      if (dom.hasSelection(this.el)) {
+        dom.clearSelection(this.el);
+      }
     };
 
     return SearchInput;
