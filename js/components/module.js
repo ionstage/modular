@@ -290,7 +290,9 @@
         '<div class="module-delete-button module-header-item"></div>',
       '</div>',
       '<div class="module-content">',
-        '<iframe class="module-component module-content-item embed"></iframe>',
+        '<div class="module-component module-content-item embed">',
+          '<iframe class="module-component-content"></iframe>',
+        '</div>',
         '<div class="module-port-list module-content-item"></div>',
       '</div>',
       '<div class="module-footer">',
@@ -370,12 +372,16 @@
       this.onpoint = this.emit.bind(this, 'point');
     });
 
+    Component.prototype.contentElement = function() {
+      return dom.find(this.el, '.module-component-content');
+    };
+
     Component.prototype.outerHeight = function() {
       return this.height() + 1;
     };
 
     Component.prototype.contentWindow = function() {
-      return dom.contentWindow(this.el);
+      return dom.contentWindow(this.contentElement());
     };
 
     Component.prototype.circuitModule = function() {
@@ -429,17 +435,20 @@
 
     Component.prototype.load = function(url) {
       return new Promise(function(resolve, reject) {
+        var contentElement = this.contentElement();
         var timeoutID = setTimeout(reject, 30 * 1000, new Error('Load timeout for content'));
-        dom.once(this.el, 'load', function() {
+        dom.once(contentElement, 'load', function() {
           clearTimeout(timeoutID);
           resolve(this.circuitModule());
         }.bind(this));
-        dom.attr(this.el, { src: url });
+        dom.attr(contentElement, { src: url });
       }.bind(this)).then(function(circuitModule) {
         if (!circuitModule) {
           throw new Error('Invalid circuit module');
         }
-        this.height(dom.contentHeight(this.el));
+        var contentElement = this.contentElement();
+        this.height(dom.contentHeight(contentElement));
+        dom.css(contentElement, { height: this.height() + 'px' });
         dom.css(this.el, { height: this.height() + 'px' });
         dom.on(this.contentWindow(), dom.eventType('start'), this.onpoint, true);
         this.members = circuitModule.getAll();
