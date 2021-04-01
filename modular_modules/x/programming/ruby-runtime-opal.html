@@ -20,7 +20,7 @@
       var exception = null;
       var worker = new Worker('opal/opal-worker.js');
 
-      var props = {
+      var dataArgs = {
         code: function(value) {
           if (typeof value === 'undefined' || value === code) {
             return code;
@@ -61,7 +61,7 @@
         },
       };
 
-      var events = {
+      var eventArgs = {
         run: function() {
           if (code === null) {
             return;
@@ -74,13 +74,13 @@
       };
 
       var module = new modular.Module([
-        { label: 'Code', name: 'code', type: 'prop', arg: props.code, plugDisabled: true },
-        { label: 'Run', name: 'run', type: 'event', arg: events.run, plugDisabled: true },
-        { label: 'Output', name: 'output', type: 'prop', arg: props.output, socketDisabled: true },
+        { label: 'Code', name: 'code', type: 'data', arg: dataArgs.code, plugDisabled: true },
+        { label: 'Run', name: 'run', type: 'event', arg: eventArgs.run, plugDisabled: true },
+        { label: 'Output', name: 'output', type: 'data', arg: dataArgs.output, socketDisabled: true },
         { label: 'Done', name: 'done', type: 'event', socketDisabled: true },
-        { label: 'Input', name: 'input', type: 'prop', arg: props.input, plugDisabled: true },
-        { label: 'Error', name: 'error', type: 'prop', arg: props.error, socketDisabled: true },
-        { label: 'Exception', name: 'exception', type: 'prop', arg: props.exception, socketDisabled: true },
+        { label: 'Input', name: 'input', type: 'data', arg: dataArgs.input, plugDisabled: true },
+        { label: 'Error', name: 'error', type: 'data', arg: dataArgs.error, socketDisabled: true },
+        { label: 'Exception', name: 'exception', type: 'data', arg: dataArgs.exception, socketDisabled: true },
       ]);
 
       worker.addEventListener('message', function(event) {

@@ -64,8 +64,21 @@
         return Math.min(Math.max(number, lower), upper);
       };
 
+      var redraw = (function() {
+        var requestID = 0;
+        return function() {
+          if (requestID) {
+            return;
+          }
+          requestID = requestAnimationFrame(function() {
+            updateCircle(theta);
+            requestID = 0;
+          });
+        };
+      })();
+
       var update = util.debounce(function() {
-        updateCircle(theta);
+        redraw();
         module.get('theta')(theta);
         module.get('x')(theta !== null ? Math.cos(theta) : null);
         module.get('y')(theta !== null ? Math.sin(theta) : null);
@@ -121,7 +134,7 @@
         }
       };
 
-      var props = {
+      var dataArgs = {
         theta: function(value) {
           if (typeof value === 'undefined' || value === theta) {
             return theta;
@@ -148,9 +161,9 @@
       };
 
       var module = new modular.Module([
-        { label: 'θ [rad]', name: 'theta', type: 'prop', arg: props.theta },
-        { label: 'x', name: 'x', type: 'prop', arg: props.x, socketDisabled: true },
-        { label: 'y', name: 'y', type: 'prop', arg: props.y, socketDisabled: true },
+        { label: 'θ [rad]', name: 'theta', type: 'data', arg: dataArgs.theta },
+        { label: 'x', name: 'x', type: 'data', arg: dataArgs.x, socketDisabled: true },
+        { label: 'y', name: 'y', type: 'data', arg: dataArgs.y, socketDisabled: true },
       ]);
 
       new modular.Draggable(contentElement).enable({

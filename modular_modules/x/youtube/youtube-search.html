@@ -87,7 +87,7 @@
         });
       }, 100 /* load reduction */);
 
-      var props = {
+      var dataArgs = {
         query: function(value) {
           if (typeof value === 'undefined' || value === query) {
             return query;
@@ -132,7 +132,7 @@
         },
       };
 
-      var events = {
+      var eventArgs = {
         search: function(event) {
           event.cancel();
           search(event);
@@ -140,12 +140,12 @@
       };
 
       var module = new modular.Module([
-        { label: 'Query', name: 'query', type: 'prop', arg: props.query, plugDisabled: true },
-        { label: 'Search', name: 'search', type: 'event', arg: events.search },
-        { label: 'Video ID list', name: 'video-id-list', type: 'prop', arg: props.videoIdList, socketDisabled: true },
-        { label: 'Video category ID', name: 'video-category-id', type: 'prop', arg: props.videoCategoryId, plugDisabled: true },
-        { label: 'Related to video ID', name: 'related-to-video-id', type: 'prop', arg: props.relatedToVideoId, plugDisabled: true },
-        { label: 'Error', name: 'error', type: 'prop', arg: props.error, socketDisabled: true },
+        { label: 'Query', name: 'query', type: 'data', arg: dataArgs.query, plugDisabled: true },
+        { label: 'Search', name: 'search', type: 'event', arg: eventArgs.search },
+        { label: 'Video ID list', name: 'video-id-list', type: 'data', arg: dataArgs.videoIdList, socketDisabled: true },
+        { label: 'Video category ID', name: 'video-category-id', type: 'data', arg: dataArgs.videoCategoryId, plugDisabled: true },
+        { label: 'Related to video ID', name: 'related-to-video-id', type: 'data', arg: dataArgs.relatedToVideoId, plugDisabled: true },
+        { label: 'Error', name: 'error', type: 'data', arg: dataArgs.error, socketDisabled: true },
       ]);
 
       modular.exports = module;

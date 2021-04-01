@@ -117,7 +117,7 @@
         return (window.isValidBasename(s, isWindowsOS) ? s + '.txt' : 'Untitled.txt');
       };
 
-      var props = {
+      var dataArgs = {
         text: function(value) {
           if (typeof value === 'undefined' || value === text) {
             return text;
@@ -132,7 +132,7 @@
       };
 
       var module = new modular.Module([
-        { label: 'Text', name: 'text', type: 'prop', arg: props.text, plugDisabled: true },
+        { label: 'Text', name: 'text', type: 'data', arg: dataArgs.text, plugDisabled: true },
       ]);
 
       buttonElement.addEventListener('click', function() {

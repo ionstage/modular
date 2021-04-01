@@ -32,7 +32,7 @@
       var text = '';
       var textInputElement = document.getElementById('text-input');
 
-      var props = {
+      var dataArgs = {
         text: function(value) {
           if (value == null || value === text) {
             return text;
@@ -49,7 +49,7 @@
       };
 
       var module = new modular.Module([
-        { label: 'Text', name: 'text', type: 'prop', arg: props.text },
+        { label: 'Text', name: 'text', type: 'data', arg: dataArgs.text },
         { label: 'Change', name: 'change', type: 'event', socketDisabled: true },
       ], {
         serialize: function() {

@@ -58,8 +58,8 @@
       }).join('\n');
 
       var module = new modular.Module([
-        { label: 'Title list', name: 'title-list', type: 'prop', arg: titleList, socketDisabled: true },
-        { label: 'ID list', name: 'id-list', type: 'prop', arg: idList, socketDisabled: true },
+        { label: 'Title list', name: 'title-list', type: 'data', arg: titleList, socketDisabled: true },
+        { label: 'ID list', name: 'id-list', type: 'data', arg: idList, socketDisabled: true },
       ]);
 
       modular.exports = module;
