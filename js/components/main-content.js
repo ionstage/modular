@@ -81,6 +81,7 @@
 
   MainContent.ModuleContainer = (function() {
     var ModuleContainer = jCore.Component.inherits(function() {
+      this.dragCount = this.prop(0);
       this.modules = [];
       this.bindings = [];
       this.retainer = new ModuleContainer.Retainer(dom.find(this.el, '.module-container-retainer'));
@@ -142,7 +143,7 @@
       module.on('portshow', this.onportshow.bind(this));
       module.on('porthide', this.onporthide.bind(this));
       module.on('portevent', this.emit.bind(this, 'portevent'));
-      module.on('dragstart', this.emit.bind(this, 'dragstart'));
+      module.on('dragstart', this.ondragstart.bind(this));
       module.on('dragend', this.ondragend.bind(this));
       module.on('plugdragstart', this.onplugdragstart.bind(this));
       module.on('plugdragmove', this.onplugdragmove.bind(this));
@@ -288,9 +289,11 @@
         module.zIndex(index);
       });
 
-      // move retainer to the proper position
-      this.retainer.x(this.retainerX());
-      this.retainer.y(this.retainerY());
+      if (this.dragCount() === 0) {
+        // move retainer to the proper position
+        this.retainer.x(this.retainerX());
+        this.retainer.y(this.retainerY());
+      }
     };
 
     ModuleContainer.prototype.handlestart = function(sourcePort, targetPort, context) {
@@ -362,7 +365,13 @@
       this.refresh();
     };
 
+    ModuleContainer.prototype.ondragstart = function() {
+      this.dragCount(this.dragCount() + 1);
+      this.emit('dragstart');
+    };
+
     ModuleContainer.prototype.ondragend = function() {
+      this.dragCount(this.dragCount() - 1);
       this.refresh();
       this.emit('dragend');
     };
