@@ -3729,7 +3729,7 @@ if ( typeof module != 'undefined' && module.exports ) {
 
 },{}],"jcore":[function(require,module,exports){
 /**
- * jCore v0.4.5
+ * jCore v0.4.6
  * (c) 2016 iOnStage
  * Released under the MIT License.
  */
@@ -3841,7 +3841,7 @@ if ( typeof module != 'undefined' && module.exports ) {
     };
 
     Draggable.prototype.createPointer = function(identifier, event) {
-      var scroll = Draggable.getScrollOffset(event.target);
+      var scroll = Draggable.getScrollOffset(this.el);
       var onscroll = Draggable.debounce(this.onscroll.bind(this, identifier), 0);
       return new Draggable.Pointer(identifier, event.pageX, event.pageY, scroll, onscroll);
     };
