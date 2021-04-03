@@ -103,7 +103,8 @@
   };
 
   dom.contentHeight = function(iframe) {
-    return iframe.contentDocument.documentElement.scrollHeight;
+    var doc = iframe.contentDocument;
+    return Math.max(doc.documentElement.scrollHeight, doc.body.scrollHeight);
   };
 
   dom.isFocused = function(el) {
