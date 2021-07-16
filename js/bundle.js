@@ -3729,7 +3729,7 @@ if ( typeof module != 'undefined' && module.exports ) {
 
 },{}],"jcore":[function(require,module,exports){
 /**
- * jCore v0.4.6
+ * jCore v0.4.7
  * (c) 2016 iOnStage
  * Released under the MIT License.
  */
@@ -3825,7 +3825,7 @@ if ( typeof module != 'undefined' && module.exports ) {
       var width = 0;
       var height = 0;
       el = el.parentNode;
-      while (el) {
+      while (el && el !== document && el !== document.documentElement) {
         x += el.scrollLeft || 0;
         y += el.scrollTop || 0;
         width += (el.scrollWidth - el.clientWidth) || 0;
