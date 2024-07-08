@@ -32,9 +32,7 @@
         if (videoCategoryId !== null) {
           url += '&videoCategoryId=' + encodeURIComponent(videoCategoryId);
         }
-        if (relatedToVideoId !== null) {
-          url += '&relatedToVideoId=' + encodeURIComponent(relatedToVideoId);
-        }
+        // relatedToVideoId parameter is no longer supported in YouTube Data API
         return url + '&key=' + API_KEY;
       };
 
@@ -144,7 +142,7 @@
         { label: 'Search', name: 'search', type: 'event', arg: eventArgs.search },
         { label: 'Video ID list', name: 'video-id-list', type: 'data', arg: dataArgs.videoIdList, socketDisabled: true },
         { label: 'Video category ID', name: 'video-category-id', type: 'data', arg: dataArgs.videoCategoryId, plugDisabled: true },
-        { label: 'Related to video ID', name: 'related-to-video-id', type: 'data', arg: dataArgs.relatedToVideoId, plugDisabled: true },
+        { label: '(Obsolete) Related to video ID', name: 'related-to-video-id', type: 'data', arg: dataArgs.relatedToVideoId, plugDisabled: true },
         { label: 'Error', name: 'error', type: 'data', arg: dataArgs.error, socketDisabled: true },
       ]);
 
